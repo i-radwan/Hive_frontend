@@ -1,6 +1,6 @@
 body {
     height: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
     -webkit-app-region: drag;
     padding: 25px;
     background-color: #393c3e;
@@ -11,7 +11,7 @@ body {
 
 .left-menu-tiles {
     height: 640px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     padding: 0;
     background-color: #282b2d;
 }
@@ -28,7 +28,7 @@ body {
 }
 
 .left-menu-tiles-list li:hover {
-    background-color: #1d1d1e;
+    background-color: #323234;
     cursor: pointer;
 }
 
@@ -47,6 +47,37 @@ body {
 }
 
 .left-menu-details {
+    overflow-y: scroll;
+    height: 640px;
     /*padding: 20px;*/
     background-color: #1d1d1e;
+    padding-bottom: 20px;
+}
+
+.left-menu-details-temps img {
+    cursor: pointer;
+    opacity: 0.8;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.left-menu-details-temps img:hover {
+    animation: fade-in 1s ease;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 0.9;
+    }
+    100% {
+        opacity: 1;
+    }
 }
