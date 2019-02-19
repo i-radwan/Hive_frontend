@@ -7,11 +7,11 @@ body {
 }
 
 .left-menu {
+    box-shadow: 0 0 10px black;
 }
 
 .left-menu-tiles {
     height: 640px;
-    /*overflow: hidden;*/
     padding: 0;
     background-color: #282b2d;
 }
@@ -49,7 +49,6 @@ body {
 .left-menu-details {
     overflow-y: scroll;
     height: 640px;
-    /*padding: 20px;*/
     background-color: #1d1d1e;
     padding-bottom: 20px;
 }
@@ -65,11 +64,220 @@ body {
     animation: fade-in 1s ease;
 }
 
+.left-menu-details-map {
+    padding: 0;
+}
+
+.left-menu-details-map .form-group {
+    margin-top: 20px;
+}
+
+.left-menu-details-map label {
+    font-size: 17px;
+    color: #bababa;
+}
+
+.left-menu-details-map input {
+    border-color: transparent;
+    color: #bababa !important;
+}
+
+.left-menu-details-map-actions {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 15px;
+}
+
+/*.left-menu-details-map-left-actions {*/
+    /*display: inline;*/
+    /*position: relative;*/
+    /*left: 0;*/
+/*}*/
+
+/*.left-menu-details-map-right-actions {*/
+    /*display: inline;*/
+    /*position: relative;*/
+    /*right: 0;*/
+    /*float: right;*/
+/*}*/
+
+.left-menu-details-map-actions i {
+    position: relative;
+    left: 0;
+    color: #bababa;
+    margin-right: 9px;
+    cursor: pointer;
+    font-size: 13px;
+    border-radius: 30px;
+    border: 2px solid #bababa;
+    padding: 0.4em 0.4em;
+}
+
+.left-menu-details-map-actions i:hover {
+    color: #e09500;
+    border: 2px solid #e09500;
+    box-shadow: 0 0 5px #e09500;
+}
+
+.left-menu-details-map-actions .apply {
+    color: #bababa;
+    margin-right: 9px;
+    cursor: pointer;
+    font-size: 22px;
+    border-radius: 30px;
+    border: 2px solid #bababa;
+    padding: 0.4em 0.4em;
+    margin-left: 65px;
+}
+
+.left-menu-details-rack {
+    padding: 0;
+}
+
+.left-menu-details-rack .form-group {
+    margin-top: 20px;
+}
+
+.left-menu-details-rack label {
+    font-size: 17px;
+    color: #bababa;
+}
+
+.left-menu-details-rack input {
+    border-color: transparent;
+    color: #bababa !important;
+}
+
+.left-menu-details-robot {
+    padding: 0;
+}
+
+.left-menu-details-robot .form-group {
+    margin-top: 20px;
+}
+
+.left-menu-details-robot label {
+    font-size: 17px;
+    color: #bababa;
+}
+
+.left-menu-details-robot input {
+    border-color: transparent;
+    color: #bababa !important;
+}
+
+.orders-separator {
+    background-color: #818181;
+    margin: 0;
+}
+
+.left-menu-details-order label {
+    font-size: 17px;
+    color: #bababa;
+}
+
+.left-menu-details-order {
+    padding: 0;
+}
+
+.left-menu-details-order .form-group {
+    margin-top: 20px;
+}
+
+.left-menu-details-order input {
+    border-color: transparent;
+    color: #bababa !important;
+}
+
+.quantity-container div {
+    display: inline;
+}
+
+.quantity-container input {
+    width: 50%;
+    float: left;
+    margin: 0;
+    padding-right: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.quantity-container-fields {
+    padding-right: 5px !important;
+}
+
+.quantity-container-icon {
+    padding-top: 8px !important;
+    padding-left: 5px;
+}
+
+.quantity-container-icon i {
+    cursor: pointer;
+    color: #bababa;
+    font-size: 20px;
+}
+
+.quantity-container-icon i:hover {
+    color: lawngreen;
+}
+
+.order-items-container i:hover {
+    color: red;
+}
+
+.left-menu-details-order-actions {
+    position: absolute;
+    bottom: 20px;
+    right: 17px;
+}
+
+.left-menu-details-order-actions i {
+    color: #bababa;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 30px;
+    border: 2px solid #bababa;
+    padding: 0.45em 0.4em;
+}
+
+.left-menu-details-order-actions i:hover {
+    color: #e09500;
+    border: 2px solid #e09500;
+    box-shadow: 0 0 5px #e09500;
+}
+
+/**
+General
+ */
+.mirror {
+    -moz-transform: scale(-1, 1) !important;
+    -webkit-transform: scale(-1, 1) !important;;
+    -o-transform: scale(-1, 1) !important;;
+    -ms-transform: scale(-1, 1) !important;;
+    transform: scale(-1, 1) !important;;
+}
+
+.hidden {
+    display: none;
+}
+
 ::-webkit-scrollbar {
     width: 0;
     background: transparent;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/**
+Keyframes
+ */
 @keyframes fade-in {
     0% {
         opacity: 0.8;

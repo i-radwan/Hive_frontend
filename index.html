@@ -46,13 +46,13 @@
                     </li>
                     <li>
                         <div>
-                            <i class="fas fa-charging-station"></i>
-                            <span>Foyer</span>
+                            <i class="fas fa-charging-station mirror"></i>
+                            <span>Park</span>
                         </div>
                     </li>
                     <li>
                         <div>
-                            <i class="far fa-hand-paper"></i>
+                            <i class="fas fa-exclamation-triangle"></i>
                             <span>Obstacle</span>
                         </div>
                     </li>
@@ -65,13 +65,118 @@
                 </ul>
             </div>
             <div class="col-md-9 left-menu-details">
-                <div class="left-menu-details-temps">
+                <div class="left-menu-details-temps hidden">
                     <img src="images/hold.png">
                     <img src="images/hold.png">
                     <img src="images/hold.png">
                     <img src="images/hold.png">
                     <img src="images/hold.png">
                     <img src="images/hold.png">
+                </div>
+                <div class="left-menu-details-map">
+                    <div class="form-group">
+                        <label for="map_height">Height</label>
+                        <input type="number" class="form-control bg-dark text-light" id="map_height" name="map_height"
+                               placeholder="Height (#cells)" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="map_height">Width</label>
+                        <input type="number" class="form-control bg-dark text-light" id="map_width" name="map_width"
+                               placeholder="Width (#cells)" value="17">
+                    </div>
+                    <div class="left-menu-details-map-actions">
+                        <i class="fas fa-save save"></i>
+                        <i class="fas fa-download load"></i>
+                        <i class="fas fa-check apply"></i>
+                    </div>
+                </div>
+                <div class="left-menu-details-rack hidden">
+                    <div class="form-group">
+                        <label for="rack_item_number">Item Number</label>
+                        <input type="number" class="form-control bg-dark text-light" id="rack_item_number"
+                               name="rack_item_number" placeholder="Item number">
+                    </div>
+                    <div class="form-group">
+                        <label for="rack_quantity">Quantity</label>
+                        <input type="number" class="form-control bg-dark text-light" id="rack_quantity"
+                               name="rack_quantity" placeholder="Quantity">
+                    </div>
+                    <div class="form-group">
+                        <label for="rack_item_weight">Item Weight</label>
+                        <input type="number" class="form-control bg-dark text-light" id="rack_item_weight"
+                               name="rack_item_weight" placeholder="Item Weight (kg)">
+                    </div>
+                </div>
+                <div class="left-menu-details-robot hidden">
+                    <div class="form-group">
+                        <label for="robot_id">Robot ID</label>
+                        <input type="number" class="form-control bg-dark text-light" id="robot_id"
+                               name="robot_id" placeholder="Robot ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="robot_color">Robot Color</label>
+                        <input type="text" class="form-control bg-dark text-light" id="robot_color"
+                               name="robot_color" placeholder="#FFFFFF">
+                    </div>
+                    <div class="form-group">
+                        <label for="robot_cap">Load Capacity</label>
+                        <input type="number" class="form-control bg-dark text-light" id="robot_cap"
+                               name="robot_cap" placeholder="Load Capacity (kg)">
+                    </div>
+                    <div class="form-group">
+                        <label for="robot_battery">Battery Capacity</label>
+                        <input type="number" class="form-control bg-dark text-light" id="robot_battery"
+                               name="robot_battery" placeholder="Battery Capacity (mAh)">
+                    </div>
+                    <div class="form-group">
+                        <label for="robot_ip">Robot IP</label>
+                        <input type="text" class="form-control bg-dark text-light" id="robot_ip"
+                               name="robot_ip" placeholder="Robot IP">
+                    </div>
+                </div>
+                <div class="left-menu-details-order hidden">
+                    <div class="form-group">
+                        <label for="order_name">Order Name</label>
+                        <input type="number" class="form-control bg-dark text-light" id="order_name"
+                               name="order_name" placeholder="Order Name">
+                    </div>
+                    <hr class="orders-separator">
+                    <div class="order-items-container">
+                        <div class="form-group">
+                            <label>Items</label>
+                            <div class="row quantity-container">
+                                <div class="col-md-10 quantity-container-fields">
+                                    <input type="number" class="form-control bg-dark text-light"
+                                           id="order_item_number_1"
+                                           name="order_item_number" placeholder="Number">
+                                    <input type="number" class="form-control bg-dark text-light"
+                                           id="order_item_quantity_1"
+                                           name="order_item_quantity" placeholder="Quantity">
+                                </div>
+                                <div class="col-md-2 quantity-container-icon">
+                                    <i class="fas fa-minus"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="orders-separator">
+                    <div class="form-group">
+                        <label for="order_item_number">Add Item</label>
+                        <div class="row quantity-container">
+                            <div class="col-md-10 quantity-container-fields">
+                                <input type="number" class="form-control bg-dark text-light" id="order_item_number"
+                                       name="order_item_number" placeholder="Number">
+                                <input type="number" class="form-control bg-dark text-light" id="order_item_quantity"
+                                       name="order_item_quantity" placeholder="Quantity">
+                            </div>
+                            <div class="col-md-2 quantity-container-icon">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="left-menu-details-order-actions">
+                        <i class="fas fa-check"></i>
+                    </div>
                 </div>
             </div>
         </div>
