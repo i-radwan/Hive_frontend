@@ -89,7 +89,14 @@ let leftMenuViewModel = function (shouter) {
 
     // Listen for mode change
     shouter.subscribe(function (runningMode) {
-        self.runningMode = runningMode;
+        if (runningMode) {
+            self.activeMenu(LEFT_MENU.ORDER);
+        }
+        else {
+            self.activeMenu(LEFT_MENU.TEMPS);
+        }
+
+        self.runningMode(runningMode);
     }, self, SHOUT_RUNNING_MODE);
 };
 

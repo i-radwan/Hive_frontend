@@ -38,17 +38,21 @@ let mapViewModel = function (shouter) {
         shouter.notifySubscribers(self.mapGrid, SHOUT_MAP_SIZE_CHANGED);
     };
 
+    self.saveMap = function () {
+        // TODO
+    };
+
+    self.loadMap = function () {
+        // TODO
+    };
+
+    self.applyMapSize = function () {
+        self.updateMap(self.mapHeight(), self.mapWidth(), self.mapGrid);
+    };
+
     self.mapWidth = ko.observable(MAP_INIT_WIDTH);
     self.mapHeight = ko.observable(MAP_INIT_HEIGHT);
     self.mapGrid = self.updateMap(self.mapHeight(), self.mapWidth());
-
-    self.mapWidth.subscribe(function (newWidth) {
-        self.updateMap(self.mapHeight(), newWidth, self.mapGrid);
-    });
-
-    self.mapHeight.subscribe(function (newHeight) {
-        self.updateMap(newHeight, self.mapWidth(), self.mapGrid);
-    });
 
     // Events
     shouter.subscribe(function (map) {

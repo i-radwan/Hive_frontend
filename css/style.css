@@ -437,7 +437,6 @@ Control
     cursor: pointer;
     font-size: 40px;
     color: #E09500;
-    padding: 15px 15px 15px 20px;
     background: #050506;
     border: 1px solid #E09500;
     border-radius: 50px;
@@ -445,6 +444,14 @@ Control
 
 .controls .play-pause:hover {
     box-shadow: 0 0 10px #E09500;
+}
+
+.controls .play {
+    padding: 15px 15px 15px 20px;
+}
+
+.controls .pause {
+    padding: 15px 18px 15px 17px;
 }
 
 .controls .stop {

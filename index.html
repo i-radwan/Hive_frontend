@@ -89,9 +89,9 @@
                                placeholder="Width (#cells)" data-bind="textInput: mapWidth">
                     </div>
                     <div class="left-menu-details-map-actions">
-                        <i class="fas fa-save save"></i>
-                        <i class="fas fa-download load"></i>
-                        <i class="fas fa-check apply"></i>
+                        <i class="fas fa-save save" data-bind="click: saveMap"></i>
+                        <i class="fas fa-download load" data-bind="click: loadMap"></i>
+                        <i class="fas fa-check apply" data-bind="click: applyMapSize"></i>
                     </div>
                 </div>
                 <div class="left-menu-details-rack" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.RACK}">
@@ -187,13 +187,12 @@
     </div>
     <div class="col-md-7 center-col">
         <div class="row map-row">Map</div>
-        <div class="row control-row">
+        <div class="row control-row" id="control-console">
             <div class="controls">
-                <i class="fas fa-stop stop"></i>
-                <i class="fas fa-play play-pause"></i>
-                <div class="deploy-switch">
-                    Deploy
-                </div>
+                <i class="fas fa-stop stop" data-bind="click: stopClicked"></i>
+                <i class="fas play-pause"
+                   data-bind="click: playClicked, css: {'fa-play play': !playing(), 'fa-pause pause': playing()}"></i>
+                <div class="deploy-switch" data-bind="click: deployClicked">Deploy</div>
             </div>
         </div>
     </div>

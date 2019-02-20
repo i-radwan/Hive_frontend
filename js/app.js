@@ -9,6 +9,7 @@ require("./utils/constants");
 // ViewModels
 //
 let leftMenuVM = require("./view_models/left_menu");
+let controlConsoleViewModel = require("./view_models/control_console");
 
 let toggle = document.getElementById('container');
 let toggleContainer = document.getElementById('toggle-container');
@@ -28,4 +29,5 @@ toggle.addEventListener('click', function () {
 $(document).ready(() => {
     let shouter = new ko.subscribable();
     ko.applyBindings(new leftMenuVM(shouter), $("#left-menu")[0]);
+    ko.applyBindings(new controlConsoleViewModel(shouter), $("#control-console")[0]);
 });
