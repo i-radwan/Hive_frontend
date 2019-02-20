@@ -1,13 +1,31 @@
-const Utils = require("./utils");
+//
+// Includes
+//
+let $ = require('jquery');
+let ko = require('knockout');
+require("./utils/constants.js");
 
-let App = {
-    init: function () {
-        Utils.log("Init. the system!", 0);
-    },
+//
+// ViewModels
+//
+leftMenuVM = require("./view_models/left_menu.js");
 
-    run: function () {
-        this.init();
+let toggle = document.getElementById('container');
+let toggleContainer = document.getElementById('toggle-container');
+let toggleNumber = 1;
+
+toggle.addEventListener('click', function () {
+    toggleNumber = !toggleNumber;
+    if (toggleNumber) {
+        toggleContainer.style.clipPath = 'inset(0 50% 0 0)';
     }
-};
+    else {
+        toggleContainer.style.clipPath = 'inset(0 0 0 50%)';
+    }
+});
 
-module.exports = App;
+// Apply the binding
+$(document).ready(() => {
+    let shouter = new ko.subscribable();
+    ko.applyBindings(new leftMenuVM(shouter), $("#left-menu")[0]);
+});

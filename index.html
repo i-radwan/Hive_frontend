@@ -6,59 +6,59 @@
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3" id="left-menu">
         <div class="row left-menu">
             <div class="col-md-3 left-menu-tiles">
                 <ul class="left-menu-tiles-list">
-                    <li>
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.TEMPS, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.TEMPS)}">
                         <div>
                             <i class="fas fa-star"></i>
                             <span>Temp's</span>
                         </div>
                     </li>
-                    <li>
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.MAP, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.MAP)}">
                         <div>
                             <i class="fas fa-th-large"></i>
                             <span>Map</span>
                         </div>
                     </li>
-                    <li>
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.ENTRY, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.ENTRY)}">
                         <div>
                             <i class="fas fa-door-open"></i>
                             <span>Entry</span>
                         </div>
                     </li>
-                    <li class="inactive">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.ROBOT, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.ROBOT)}">
                         <div>
                             <i class="fas fa-truck-loading"></i>
                             <span>Robot</span>
                         </div>
                     </li>
-                    <li>
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.RACK, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.RACK)}">
                         <div>
                             <i class="fas fa-boxes"></i>
                             <span>Rack</span>
                         </div>
                     </li>
-                    <li>
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.PARK, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.PARK)}">
                         <div>
                             <i class="fas fa-charging-station mirror"></i>
                             <span>Park</span>
                         </div>
                     </li>
-                    <li>
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.OBSTACLE, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.OBSTACLE)}">
                         <div>
                             <i class="fas fa-exclamation-triangle"></i>
                             <span>Obstacle</span>
                         </div>
                     </li>
-                    <li class="active">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.ORDER, inactive: runningMode() === RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.ORDER)}">
                         <div>
                             <i class="fas fa-box"></i>
                             <span>Order</span>
@@ -67,10 +67,12 @@
                 </ul>
             </div>
             <div class="col-md-9 left-menu-details">
-                <div class="left-menu-details-empty hidden">
+                <div class="left-menu-details-empty"
+                     data-bind="css: {hidden: activeMenu() !== LEFT_MENU.ENTRY && activeMenu() !== LEFT_MENU.PARK &&
+                            activeMenu() !== LEFT_MENU.OBSTACLE}">
                     <p class="text-light text-muted text-center">No specs!</p>
                 </div>
-                <div class="left-menu-details-temps hidden">
+                <div class="left-menu-details-temps" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.TEMPS}">
                     <img src="images/hold.png">
                     <img src="images/hold.png">
                     <img src="images/hold.png">
@@ -78,16 +80,16 @@
                     <img src="images/hold.png">
                     <img src="images/hold.png">
                 </div>
-                <div class="left-menu-details-map hidden">
+                <div class="left-menu-details-map" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.MAP}">
                     <div class="form-group">
                         <label for="map_height">Height</label>
                         <input type="number" class="form-control bg-dark text-light" id="map_height" name="map_height"
-                               placeholder="Height (#cells)" value="10">
+                               placeholder="Height (#cells)" data-bind="textInput: mapHeight">
                     </div>
                     <div class="form-group">
                         <label for="map_height">Width</label>
                         <input type="number" class="form-control bg-dark text-light" id="map_width" name="map_width"
-                               placeholder="Width (#cells)" value="17">
+                               placeholder="Width (#cells)" data-bind="textInput: mapWidth">
                     </div>
                     <div class="left-menu-details-map-actions">
                         <i class="fas fa-save save"></i>
@@ -95,7 +97,7 @@
                         <i class="fas fa-check apply"></i>
                     </div>
                 </div>
-                <div class="left-menu-details-rack hidden">
+                <div class="left-menu-details-rack" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.RACK}">
                     <div class="form-group">
                         <label for="rack_item_number">Item Number</label>
                         <input type="number" class="form-control bg-dark text-light" id="rack_item_number"
@@ -112,7 +114,7 @@
                                name="rack_item_weight" placeholder="Item Weight (kg)">
                     </div>
                 </div>
-                <div class="left-menu-details-robot hidden">
+                <div class="left-menu-details-robot" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.ROBOT}">
                     <div class="form-group">
                         <label for="robot_id">Robot ID</label>
                         <input type="number" class="form-control bg-dark text-light" id="robot_id"
@@ -139,7 +141,7 @@
                                name="robot_ip" placeholder="Robot IP">
                     </div>
                 </div>
-                <div class="left-menu-details-order">
+                <div class="left-menu-details-order" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.ORDER}">
                     <div class="form-group">
                         <label for="order_name">Order Name</label>
                         <input type="number" class="form-control bg-dark text-light" id="order_name"
@@ -153,10 +155,10 @@
                                 <div class="col-md-10 quantity-container-fields">
                                     <input type="number" class="form-control bg-dark text-light"
                                            id="order_item_number_1"
-                                           name="order_item_number" placeholder="Number">
+                                           name="order_item_number_1" placeholder="Number">
                                     <input type="number" class="form-control bg-dark text-light"
                                            id="order_item_quantity_1"
-                                           name="order_item_quantity" placeholder="Quantity">
+                                           name="order_item_quantity_1" placeholder="Quantity">
                                 </div>
                                 <div class="col-md-2 quantity-container-icon">
                                     <i class="fas fa-minus"></i>
@@ -308,28 +310,15 @@
                 </div>
             </div>
             <div class="right-menu-stats hidden">
-
             </div>
         </div>
     </div>
 </div>
+<!--<script src="node_modules/jquery/dist/jquery.min.js"></script>-->
+<!--<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>-->
+<!--<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>-->
 <script>
-    let toggle = document.getElementById('container');
-    let toggleContainer = document.getElementById('toggle-container');
-    let toggleNumber = 1;
-
-    toggle.addEventListener('click', function () {
-        toggleNumber = !toggleNumber;
-        if (toggleNumber) {
-            toggleContainer.style.clipPath = 'inset(0 50% 0 0)';
-        }
-        else {
-            toggleContainer.style.clipPath = 'inset(0 0 0 50%)';
-        }
-    });
+    require("./js/app.js");
 </script>
-<script src="node_modules/jquery/dist/jquery.min.js"></script>
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

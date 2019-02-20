@@ -126,9 +126,9 @@ body {
 
 .left-menu-details-map-actions {
     position: absolute;
-    bottom: 0;
+    bottom: 20px;
     width: 100%;
-    padding: 0 15px;
+    padding: 0 0px;
 }
 
 .left-menu-details-map-actions i {
@@ -157,7 +157,7 @@ body {
     border-radius: 30px;
     border: 2px solid #bababa;
     padding: 0.4em 0.4em;
-    margin-left: 65px;
+    margin-left: 82px;
 }
 
 .left-menu-details-rack {
