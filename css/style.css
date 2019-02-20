@@ -1,19 +1,28 @@
+/**
+Fonts
+ */
+@import url('https://fonts.googleapis.com/css?family=Asap:400,500,700');
+
+/**
+Styles
+ */
+
 body {
     height: 100%;
-    /*overflow: hidden;*/
     -webkit-app-region: drag;
-    padding: 25px;
+    padding: 15px 30px;
     background-color: #393c3e;
 }
 
 .left-menu {
     box-shadow: 0 0 10px black;
+    background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
 }
 
 .left-menu-tiles {
+    overflow: hidden;
     height: 640px;
     padding: 0;
-    background-color: #282b2d;
 }
 
 .left-menu-tiles-list {
@@ -24,12 +33,22 @@ body {
 }
 
 .left-menu-tiles-list li {
+    background-color: #282b2d;
     padding: 15px 0;
 }
 
 .left-menu-tiles-list li:hover {
     background-color: #323234;
     cursor: pointer;
+}
+
+.left-menu-tiles-list li.active {
+    background-color: transparent;
+    color: #e09500;
+}
+
+.left-menu-tiles-list li.active:hover {
+    background-color: transparent;
 }
 
 .left-menu-tiles-list li div {
@@ -49,8 +68,21 @@ body {
 .left-menu-details {
     overflow-y: scroll;
     height: 640px;
-    background-color: #1d1d1e;
     padding-bottom: 20px;
+}
+
+.left-menu-details-empty {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.left-menu-details-empty p {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .left-menu-details-temps img {
@@ -86,21 +118,8 @@ body {
     position: absolute;
     bottom: 0;
     width: 100%;
-    padding: 15px;
+    padding: 0 15px;
 }
-
-/*.left-menu-details-map-left-actions {*/
-    /*display: inline;*/
-    /*position: relative;*/
-    /*left: 0;*/
-/*}*/
-
-/*.left-menu-details-map-right-actions {*/
-    /*display: inline;*/
-    /*position: relative;*/
-    /*right: 0;*/
-    /*float: right;*/
-/*}*/
 
 .left-menu-details-map-actions i {
     position: relative;
@@ -237,7 +256,7 @@ body {
 .left-menu-details-order-actions i {
     color: #bababa;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 22px;
     border-radius: 30px;
     border: 2px solid #bababa;
     padding: 0.45em 0.4em;
@@ -247,6 +266,178 @@ body {
     color: #e09500;
     border: 2px solid #e09500;
     box-shadow: 0 0 5px #e09500;
+}
+
+/**
+Right menu.
+ */
+.right-menu {
+    box-shadow: 0 0 10px black;
+    background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
+}
+
+.right-menu-empty {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.right-menu-empty p {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.right-menu-stats {
+    padding: 15px 0;
+}
+
+.right-menu-logs {
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 570px;
+    color: #bababa;
+    font-size: 11px;
+}
+
+.right-menu-log-item {
+    height: 40px;
+    margin-top: 20px;
+    padding: 0 16px;
+}
+
+.right-menu-log-item-icon {
+    padding: 0;
+}
+
+.right-menu-log-item i.info {
+    color: #3972bf;
+}
+
+.right-menu-log-item i.warning {
+    color: #7ba428;
+}
+
+.right-menu-log-item i.error {
+    color: #8b0000;
+}
+
+.right-menu-log-item i.large {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 35px;
+}
+
+.right-menu-log-item i.small {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 10px;
+    padding: 4px;
+    border-radius: 50px;
+    background: #1d1d1e;
+}
+
+.right-menu-log-item i.fa-truck-loading {
+    font-size: 8px;
+}
+
+.right-menu-log-item i.fa-boxes {
+    font-size: 8px;
+}
+
+.right-menu-log-item-text {
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.right-menu-log-item-text span {
+    display: block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.right-menu-log-sep {
+    margin: 15px 0;
+    vertical-align: middle;
+    color: #8b8b8b;
+}
+
+.right-menu-log-sep span {
+    display: block;
+    transform: translateY(25%);
+    padding: 0 2%;
+    width: 70%;
+    text-align: center;
+}
+
+.right-menu-log-sep hr {
+    color: #8b8b8b;
+    background: #8b8b8b;
+    width: 15%;
+}
+
+/**
+Components
+ */
+
+/*Toggle Button*/
+.right-menu-stats-toggle #container {
+    font-family: 'Asap', sans-serif;
+    width: 180px;
+    height: 36px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    cursor: pointer;
+}
+
+.right-menu-stats-toggle .inner-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: inherit;
+    height: inherit;
+    text-transform: uppercase;
+    font-size: .7em;
+    letter-spacing: .2em;
+}
+
+.right-menu-stats-toggle .inner-container:first-child {
+    background: transparent;
+    border-bottom: 1px #bababa solid;
+    color: #bababa;
+}
+
+.right-menu-stats-toggle .inner-container:nth-child(2) {
+    background: transparent;
+    color: #e09500;
+    border-bottom: 1px #e09500 solid;
+    font-weight: bolder;
+    transition: .3s cubic-bezier(0, 0, 0, 1);
+    clip-path: inset(0 50% 0 0);
+}
+
+.right-menu-stats-toggle .toggle {
+    width: 50%;
+    position: absolute;
+    height: inherit;
+    display: flex;
+    box-sizing: border-box;
+}
+
+.right-menu-stats-toggle .toggle p {
+    margin: auto;
+}
+
+.right-menu-stats-toggle .toggle:nth-child(2) {
+    right: 0;
 }
 
 /**
@@ -276,7 +467,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /**
-Keyframes
+Animations
  */
 @keyframes fade-in {
     0% {

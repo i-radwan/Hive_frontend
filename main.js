@@ -1,3 +1,5 @@
+const App = require("./js/app.js");
+
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron');
 
@@ -9,8 +11,8 @@ function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 1280,
-        height: 713,
-        // frame: false,
+        height: 670,
+        frame: false,
         resizable: false,
         webPreferences: {
             nodeIntegration: true
@@ -30,6 +32,8 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null
     });
+
+    App.run();
 }
 
 // This method will be called when Electron has finished
