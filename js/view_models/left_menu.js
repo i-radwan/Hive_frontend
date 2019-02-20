@@ -1,66 +1,13 @@
-require("../utils/constants.js");
+require("../utils/constants");
 let ko = require('knockout');
-
-let mapViewModel = function (shouter) {
-    let self = this;
-
-    /**
-     * Changes map size.
-     *
-     * @param height    The new map height.
-     * @param width     The new map width.
-     * @param oldMap    The old map to take its cells values (the ones in the new grids area from top-left).
-     */
-    self.updateMap = function (height, width, oldMap = null) {
-        let newMap = new Array(height);
-
-        for (let i = 0; i < height; i++) {
-            newMap[i] = new Array(width);
-            for (let j = 0; j < width; j++) {
-                newMap[i][j] = MAP_CELL.EMPTY;
-            }
-        }
-
-        if (oldMap !== null) {
-            for (let i = 0; i < Math.min(height, oldMap.length); i++) {
-                for (let j = 0; j < Math.min(width, oldMap[i].length); j++) {
-                    newMap[i][j] = oldMap[i][j];
-                }
-            }
-        }
-
-        self.mapGrid = newMap;
-
-        shouter.notifySubscribers(self.mapGrid, SHOUT_MAP_CHANGED);
-    };
-
-    self.mapWidth = ko.observable(MAP_INIT_WIDTH);
-    self.mapHeight = ko.observable(MAP_INIT_HEIGHT);
-    self.mapGrid = self.updateMap(self.mapHeight, self.mapWidth);
-
-    self.mapWidth.subscribe(function (newWidth) {
-        self.updateMap(self.mapHeight, newWidth, self.mapGrid);
-    });
-
-    self.mapHeight.subscribe(function (newHeight) {
-        self.updateMap(newHeight, self.mapWidth, self.mapGrid);
-    });
-};
+let mapViewModel = require('./map_menu');
+let tempViewModel = require('./temps_menu');
 
 let leftMenuViewModel = function (shouter) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
     self.runningMode = ko.observable(RUNNING_MODE.DESIGN);
-
-    // Listen for mode change
-    shouter.subscribe(function (runningMode) {
-        self.runningMode = runningMode;
-    }, self, SHOUT_RUNNING_MODE);
-
-    //
-    // Click events
-    //
 
     /**
      * Handles menu tiles clicks.
@@ -138,6 +85,12 @@ let leftMenuViewModel = function (shouter) {
 
     // Sub view models
     mapViewModel(shouter);
+    tempViewModel(shouter);
+
+    // Listen for mode change
+    shouter.subscribe(function (runningMode) {
+        self.runningMode = runningMode;
+    }, self, SHOUT_RUNNING_MODE);
 };
 
 module.exports = leftMenuViewModel;

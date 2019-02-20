@@ -16,49 +16,49 @@
         <div class="row left-menu">
             <div class="col-md-3 left-menu-tiles">
                 <ul class="left-menu-tiles-list">
-                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.TEMPS, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.TEMPS)}">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.TEMPS, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: menuItemClicked.bind($data, LEFT_MENU.TEMPS)">
                         <div>
                             <i class="fas fa-star"></i>
                             <span>Temp's</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.MAP, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.MAP)}">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.MAP, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: menuItemClicked.bind($data, LEFT_MENU.MAP)">
                         <div>
                             <i class="fas fa-th-large"></i>
                             <span>Map</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.ENTRY, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.ENTRY)}">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.ENTRY, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: menuItemClicked.bind($data, LEFT_MENU.ENTRY)">
                         <div>
                             <i class="fas fa-door-open"></i>
                             <span>Entry</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.ROBOT, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.ROBOT)}">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.ROBOT, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: menuItemClicked.bind($data, LEFT_MENU.ROBOT)">
                         <div>
                             <i class="fas fa-truck-loading"></i>
                             <span>Robot</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.RACK, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.RACK)}">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.RACK, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: menuItemClicked.bind($data, LEFT_MENU.RACK)">
                         <div>
                             <i class="fas fa-boxes"></i>
                             <span>Rack</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.PARK, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.PARK)}">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.PARK, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: menuItemClicked.bind($data, LEFT_MENU.PARK)">
                         <div>
                             <i class="fas fa-charging-station mirror"></i>
                             <span>Park</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.OBSTACLE, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.OBSTACLE)}">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.OBSTACLE, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: menuItemClicked.bind($data, LEFT_MENU.OBSTACLE)">
                         <div>
                             <i class="fas fa-exclamation-triangle"></i>
                             <span>Obstacle</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.ORDER, inactive: runningMode() === RUNNING_MODE.DESIGN}, click: function(){menuItemClicked(LEFT_MENU.ORDER)}">
+                    <li data-bind="css: {active: activeMenu() === LEFT_MENU.ORDER, inactive: runningMode() === RUNNING_MODE.DESIGN}, click: menuItemClicked.bind($data, LEFT_MENU.ORDER)">
                         <div>
                             <i class="fas fa-box"></i>
                             <span>Order</span>
@@ -73,12 +73,9 @@
                     <p class="text-light text-muted text-center">No specs!</p>
                 </div>
                 <div class="left-menu-details-temps" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.TEMPS}">
-                    <img src="images/hold.png">
-                    <img src="images/hold.png">
-                    <img src="images/hold.png">
-                    <img src="images/hold.png">
-                    <img src="images/hold.png">
-                    <img src="images/hold.png">
+                    <span data-bind="foreach: temps">
+                        <img data-bind="attr: {src: img}, click: tempClicked.bind($data, $index)">
+                    </span>
                 </div>
                 <div class="left-menu-details-map" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.MAP}">
                     <div class="form-group">

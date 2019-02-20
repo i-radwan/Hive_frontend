@@ -3,12 +3,12 @@
 //
 let $ = require('jquery');
 let ko = require('knockout');
-require("./utils/constants.js");
+require("./utils/constants");
 
 //
 // ViewModels
 //
-leftMenuVM = require("./view_models/left_menu.js");
+let leftMenuVM = require("./view_models/left_menu");
 
 let toggle = document.getElementById('container');
 let toggleContainer = document.getElementById('toggle-container');
