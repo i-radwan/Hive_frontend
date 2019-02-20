@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -33,7 +34,7 @@
                             <span>Entry</span>
                         </div>
                     </li>
-                    <li>
+                    <li class="inactive">
                         <div>
                             <i class="fas fa-truck-loading"></i>
                             <span>Robot</span>
@@ -185,8 +186,17 @@
             </div>
         </div>
     </div>
-    <div class="col-md-7">
-        Map
+    <div class="col-md-7 center-col">
+        <div class="row map-row">Map</div>
+        <div class="row control-row">
+            <div class="controls">
+                <i class="fas fa-stop stop"></i>
+                <i class="fas fa-play play-pause"></i>
+                <div class="deploy-switch">
+                    Deploy
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-md-2 right-menu">
         <div class="right-menu-empty hidden">
