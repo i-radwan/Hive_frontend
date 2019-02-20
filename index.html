@@ -144,23 +144,27 @@
                         <input type="number" class="form-control bg-dark text-light" id="order_name"
                                name="order_name" placeholder="Order Name">
                     </div>
-                    <hr class="orders-separator">
-                    <div class="order-items-container">
+                    <hr class="orders-separator" data-bind="css: {hidden: items().length == 0}">
+                    <div class="order-items-container" data-bind="css: {hidden: items().length == 0}">
                         <div class="form-group">
                             <label>Items</label>
-                            <div class="row quantity-container">
-                                <div class="col-md-10 quantity-container-fields">
-                                    <input type="number" class="form-control bg-dark text-light"
-                                           id="order_item_number_1"
-                                           name="order_item_number_1" placeholder="Number">
-                                    <input type="number" class="form-control bg-dark text-light"
-                                           id="order_item_quantity_1"
-                                           name="order_item_quantity_1" placeholder="Quantity">
+                            <span data-bind="foreach: items">
+                                <div class="row quantity-container">
+                                    <div class="col-md-10 quantity-container-fields">
+                                        <input type="number" class="form-control bg-dark text-light"
+                                               id="order_item_number_1"
+                                               name="order_item_number_1" placeholder="Number"
+                                               data-bind="textInput: item_number">
+                                        <input type="number" class="form-control bg-dark text-light"
+                                               id="order_item_quantity_1"
+                                               name="order_item_quantity_1" placeholder="Quantity"
+                                               data-bind="textInput: quantity">
+                                    </div>
+                                    <div class="col-md-2 quantity-container-icon">
+                                        <i class="fas fa-minus" data-bind="click: removeItem"></i>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 quantity-container-icon">
-                                    <i class="fas fa-minus"></i>
-                                </div>
-                            </div>
+                            </span>
                         </div>
                     </div>
                     <hr class="orders-separator">
@@ -169,12 +173,13 @@
                         <div class="row quantity-container">
                             <div class="col-md-10 quantity-container-fields">
                                 <input type="number" class="form-control bg-dark text-light" id="order_item_number"
-                                       name="order_item_number" placeholder="Number">
+                                       name="order_item_number" placeholder="Number" data-bind="textInput: itemNumber">
                                 <input type="number" class="form-control bg-dark text-light" id="order_item_quantity"
-                                       name="order_item_quantity" placeholder="Quantity">
+                                       name="order_item_quantity" placeholder="Quantity"
+                                       data-bind="textInput: quantity">
                             </div>
                             <div class="col-md-2 quantity-container-icon">
-                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-plus" data-bind="click: addItem"></i>
                             </div>
                         </div>
                     </div>

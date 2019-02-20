@@ -47,7 +47,9 @@ let mapViewModel = function (shouter) {
     };
 
     self.applyMapSize = function () {
-        self.updateMap(self.mapHeight(), self.mapWidth(), self.mapGrid);
+        if (self.mapHeight() > 0 && self.mapWidth() > 0) {
+            self.updateMap(self.mapHeight(), self.mapWidth(), self.mapGrid);
+        }
     };
 
     self.mapWidth = ko.observable(MAP_INIT_WIDTH);

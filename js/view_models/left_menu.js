@@ -2,6 +2,7 @@ require("../utils/constants");
 let ko = require('knockout');
 let mapViewModel = require('./map_menu');
 let tempViewModel = require('./temps_menu');
+let orderViewModel = require('./order_menu');
 
 let leftMenuViewModel = function (shouter) {
     let self = this;
@@ -86,6 +87,7 @@ let leftMenuViewModel = function (shouter) {
     // Sub view models
     mapViewModel(shouter);
     tempViewModel(shouter);
+    orderViewModel(shouter);
 
     // Listen for mode change
     shouter.subscribe(function (runningMode) {
