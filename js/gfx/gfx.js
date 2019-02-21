@@ -4,7 +4,7 @@ let $ = require('jquery');
 let ko = require('knockout');
 let camera;
 
-let gfx = function () {
+let gfx = function (shouter) {
     let mapRow = $('.map-row');
 
     let two = new Two({
