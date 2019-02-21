@@ -2,7 +2,7 @@ require('two.js');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let gfx = function () {
+let gfx = function (shouter) {
     let mapRow = $('.map-row');
 
     let two = new Two({
