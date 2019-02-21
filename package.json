@@ -1,18 +1,16 @@
 {
-  "name": "electron-quick-start",
+  "name": "Hive_frontend",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "A frontend for the Hive system",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/i-radwan/Hive_frontend.git",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Hive",
+    "Multi-Agent Path Planning",
+    "Fronend"
   ],
   "author": "GitHub",
   "license": "CC0-1.0",
