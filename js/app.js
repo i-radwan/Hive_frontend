@@ -2,6 +2,7 @@
 require("./utils/constants");
 let $ = require('jquery');
 let ko = require('knockout');
+let GFX = require('./gfx/gfx');
 
 // ViewModels
 let mainViewModel = require("./view_models/main");
@@ -23,6 +24,7 @@ $(document).ready(() => {
     });
 
     // GFX code
+    let gfx = new GFX();
 
     // Communication logic
 
