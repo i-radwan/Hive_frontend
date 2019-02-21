@@ -253,11 +253,6 @@ body {
     color: lawngreen;
 }
 
-.order-items-container {
-    max-height: 350px;
-    overflow-y: scroll;
-}
-
 .order-items-container i:hover {
     color: red;
 }

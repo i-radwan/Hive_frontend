@@ -8,26 +8,14 @@ require("./utils/constants");
 //
 // ViewModels
 //
-let leftMenuVM = require("./view_models/left_menu");
+let leftMenuViewModel = require("./view_models/left_menu");
 let controlConsoleViewModel = require("./view_models/control_console");
-
-let toggle = document.getElementById('container');
-let toggleContainer = document.getElementById('toggle-container');
-let toggleNumber = 1;
-
-toggle.addEventListener('click', function () {
-    toggleNumber = !toggleNumber;
-    if (toggleNumber) {
-        toggleContainer.style.clipPath = 'inset(0 50% 0 0)';
-    }
-    else {
-        toggleContainer.style.clipPath = 'inset(0 0 0 50%)';
-    }
-});
+let rightMenuViewModel = require("./view_models/right_menu");
 
 // Apply the binding
 $(document).ready(() => {
     let shouter = new ko.subscribable();
-    ko.applyBindings(new leftMenuVM(shouter), $("#left-menu")[0]);
+    ko.applyBindings(new leftMenuViewModel(shouter), $("#left-menu")[0]);
     ko.applyBindings(new controlConsoleViewModel(shouter), $("#control-console")[0]);
+    ko.applyBindings(new rightMenuViewModel(shouter), $("#right-menu")[0]);
 });

@@ -22,7 +22,11 @@ let orderViewModel = function (shouter) {
 
     self.removeItem = function () {
         self.items.remove(this);
-    }
+    };
+
+    self.addOrder = function () {
+
+    };
 };
 
 module.exports = orderViewModel;

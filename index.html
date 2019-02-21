@@ -184,7 +184,7 @@
                         </div>
                     </div>
                     <div class="left-menu-details-order-actions">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-check" data-bind="click: addOrder"></i>
                     </div>
                 </div>
             </div>
@@ -201,12 +201,12 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2 right-menu">
-        <div class="right-menu-empty hidden">
+    <div class="col-md-2 right-menu" id="right-menu">
+        <div class="right-menu-empty" data-bind="css: {hidden: runningMode() !== RUNNING_MODE.DESIGN}">
             <p class="text-light text-muted text-center">No info!</p>
         </div>
-        <div class="right-menu-stats">
-            <div class="right-menu-stats-toggle">
+        <div class="right-menu-stats" data-bind="css: {hidden: runningMode() === RUNNING_MODE.DESIGN}">
+            <div class="right-menu-stats-toggle" data-bind="click: toggleActiveList">
                 <div id="container">
                     <div class="inner-container">
                         <div class="toggle">
@@ -216,7 +216,8 @@
                             <p>Stats</p>
                         </div>
                     </div>
-                    <div class="inner-container" id='toggle-container'>
+                    <div class="inner-container" id='toggle-container'
+                         data-bind="style: {'clip-path': activeMenu() === RIGHT_MENU.LOGS ? 'inset(0 50% 0 0)' : 'inset(0 0 0 50%)' }">
                         <div class="toggle">
                             <p>Logs</p>
                         </div>
@@ -226,91 +227,34 @@
                     </div>
                 </div>
             </div>
-            <div class="right-menu-logs">
-                <div class="row right-menu-log-item">
-                    <div class="col-md-3 right-menu-log-item-icon">
-                        <i class="fas fa-info-circle large info"></i>
-                        <i class="fas fa-truck-loading small" style="color: #17b611"></i>
-                    </div>
-                    <div class="col-md-9 right-menu-log-item-text">
-                        <span>Robot <b>(#3)</b> loaded <b>(6)</b> of item <b>(#2)</b>.</span>
-                    </div>
+            <div class="right-menu-stats-container">
+                <div class="right-menu-logs" id="right-menu-logs"
+                     data-bind="css: {hidden: activeMenu() !== RIGHT_MENU.LOGS}">
+                    <span data-bind="foreach: logs">
+                        <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
+                            <div class="row right-menu-log-item">
+                                <div class="col-md-3 right-menu-log-item-icon">
+                                    <i class="fas large" data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
+                                    <i class="fas small" data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style{color: color}"></i>
+                                </div>
+                                <div class="col-md-9 right-menu-log-item-text">
+                                    <span data-bind="html: msg"></span>
+                                </div>
+                            </div>
+                        </span>
+                        <span data-bind="if: object === LOG_OBJECT_SIMULATION">
+                            <div class="row right-menu-log-sep">
+                                <hr>
+                                <span data-bind="text: msg"></span>
+                                <hr>
+                            </div>
+                        </span>
+                    </span>
                 </div>
-                <div class="row right-menu-log-item">
-                    <div class="col-md-3 right-menu-log-item-icon">
-                        <i class="fas fa-info-circle large warning"></i>
-                        <i class="fas fa-truck-loading small" style="color: #007302"></i>
-                    </div>
-                    <div class="col-md-9 right-menu-log-item-text">
-                        <span>Robot <b>(#3)</b> battery is low.</span>
-                    </div>
+                <div class="right-menu-stats" id="right-menu-stats"
+                     data-bind="css: {hidden: activeMenu() !== RIGHT_MENU.STATS}">
+                    <p class="text-light">Throughtput : 123</p>
                 </div>
-                <div class="row right-menu-log-item">
-                    <div class="col-md-3 right-menu-log-item-icon">
-                        <i class="fas fa-times-circle large error"></i>
-                        <i class="fas fa-truck-loading small" style="color: #007302"></i>
-                    </div>
-                    <div class="col-md-9 right-menu-log-item-text">
-                        <span>Robot <b>(#3)</b> is disconnected.</span>
-                    </div>
-                </div>
-                <div class="row right-menu-log-item">
-                    <div class="col-md-3 right-menu-log-item-icon">
-                        <i class="fas fa-info-circle large info"></i>
-                        <i class="fas fa-box small"></i>
-                    </div>
-                    <div class="col-md-9 right-menu-log-item-text">
-                        <span>Order <b>(xyz)</b> is fulfilled.</span>
-                    </div>
-                </div>
-                <div class="row right-menu-log-sep">
-                    <hr>
-                    <span>Simulation Paused</span>
-                    <hr>
-                </div>
-                <div class="row right-menu-log-sep">
-                    <hr>
-                    <span>Simulation Resumed</span>
-                    <hr>
-                </div>
-                <div class="row right-menu-log-item">
-                    <div class="col-md-3 right-menu-log-item-icon">
-                        <i class="fas fa-info-circle large info"></i>
-                        <i class="fas fa-box small"></i>
-                    </div>
-                    <div class="col-md-9 right-menu-log-item-text">
-                        <span>Order <b>(abc)</b> is fulfilled.</span>
-                    </div>
-                </div>
-                <div class="row right-menu-log-item">
-                    <div class="col-md-3 right-menu-log-item-icon">
-                        <i class="fas fa-info-circle large info"></i>
-                        <i class="fas fa-truck-loading small" style="color: #626678"></i>
-                    </div>
-                    <div class="col-md-9 right-menu-log-item-text">
-                        <span>Robot <b>(#6)</b> loaded <b>(4)</b> of item <b>(#1)</b>.</span>
-                    </div>
-                </div>
-                <div class="row right-menu-log-item">
-                    <div class="col-md-3 right-menu-log-item-icon">
-                        <i class="fas fa-info-circle large warning"></i>
-                        <i class="fas fa-truck-loading small" style="color: #731121"></i>
-                    </div>
-                    <div class="col-md-9 right-menu-log-item-text">
-                        <span>Robot <b>(#2)</b> battery is low.</span>
-                    </div>
-                </div>
-                <div class="row right-menu-log-item">
-                    <div class="col-md-3 right-menu-log-item-icon">
-                        <i class="fas fa-times-circle large error"></i>
-                        <i class="fas fa-boxes small"></i>
-                    </div>
-                    <div class="col-md-9 right-menu-log-item-text">
-                        <span>Rack <b>(#4)</b> is empty.</span>
-                    </div>
-                </div>
-            </div>
-            <div class="right-menu-stats hidden">
             </div>
         </div>
     </div>
