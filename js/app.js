@@ -2,6 +2,7 @@
 require("./utils/constants");
 let $ = require('jquery');
 let ko = require('knockout');
+let GFX = require('./gfx/gfx');
 
 // Models
 let Map = require('./models/map');
@@ -17,7 +18,6 @@ $(document).ready(() => {
     let map = new Map();
 
     let shouter = new ko.subscribable();
-
     let leftMenuVM = new leftMenuViewModel(shouter, map);
     let controlConsoleVM = new controlConsoleViewModel(shouter, map);
     let rightMenuVM = new rightMenuViewModel(shouter, map);
@@ -27,6 +27,7 @@ $(document).ready(() => {
     ko.applyBindings(rightMenuVM, $("#right-menu")[0]);
 
     // GFX code
+    let gfx = new GFX(shouter);
 
     // Communication logic
 
