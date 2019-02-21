@@ -2,6 +2,7 @@
 require("./utils/constants");
 let $ = require('jquery');
 let ko = require('knockout');
+let GFX = require('./gfx/gfx');
 
 // ViewModels
 let mainViewModel = require("./view_models/main");
@@ -9,7 +10,6 @@ let mainViewModel = require("./view_models/main");
 // Apply the binding
 $(document).ready(() => {
     let mainVM = new mainViewModel();
-
     ko.applyBindings(mainVM, $("#main")[0]);
 
     // TESTING CODE
@@ -23,6 +23,7 @@ $(document).ready(() => {
     });
 
     // GFX code
+    let gfx = new GFX();
 
     // Communication logic
 
