@@ -16,5 +16,5 @@ $(document).ready(() => {
     ko.applyBindings(new controlConsoleViewModel(shouter), $("#control-console")[0]);
     ko.applyBindings(new rightMenuViewModel(shouter), $("#right-menu")[0]);
 
-    let gfx = new GFX();
+    let gfx = new GFX(shouter);
 });
