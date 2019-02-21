@@ -1,7 +1,8 @@
 // Includes
+require("./utils/constants");
 let $ = require('jquery');
 let ko = require('knockout');
-require("./utils/constants");
+let GFX = require('./gfx/gfx');
 
 // ViewModels
 let leftMenuViewModel = require("./view_models/left_menu");
@@ -14,4 +15,6 @@ $(document).ready(() => {
     ko.applyBindings(new leftMenuViewModel(shouter), $("#left-menu")[0]);
     ko.applyBindings(new controlConsoleViewModel(shouter), $("#control-console")[0]);
     ko.applyBindings(new rightMenuViewModel(shouter), $("#right-menu")[0]);
+
+    let gfx = new GFX();
 });
