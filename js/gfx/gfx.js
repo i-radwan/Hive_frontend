@@ -6,7 +6,7 @@ let camera;
 
 let arrow = {left: 37, up: 38, right: 39, down: 40};
 
-let gfx = function (shouter) {
+let gfx = function () {
     let mapRow = $('.map-row');
 
     let two = new Two({
