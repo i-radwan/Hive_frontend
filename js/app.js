@@ -27,5 +27,4 @@ $(document).ready(() => {
     // Communication logic
 
     // Simulation logic
-
 });
