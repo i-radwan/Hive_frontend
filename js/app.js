@@ -4,6 +4,7 @@ let $ = require('jquery');
 let ko = require('knockout');
 let communicator = require('./comm/comm');
 let serverMiddleWare = require('./comm/server_middleware');
+let GFX = require('./gfx/gfx');
 
 // ViewModels
 let mainViewModel = require("./view_models/main");
@@ -37,6 +38,7 @@ $(document).ready(() => {
     });
 
     // GFX code
+    let gfx = new GFX();
 
     // Communication logic
     let rcv = function (msg) {
