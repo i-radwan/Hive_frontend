@@ -68,14 +68,14 @@
             </div>
             <div class="col-md-9 left-menu-details">
                 <div class="left-menu-details-empty"
-                     data-bind="css: {hidden: activeMenu() !== LEFT_MENU.ENTRY && activeMenu() !== LEFT_MENU.PARK &&
-                            activeMenu() !== LEFT_MENU.OBSTACLE}">
+                     data-bind="css: {hidden: activeMenu() !== LEFT_MENU.EMPTY && activeMenu() !== LEFT_MENU.ENTRY &&
+                     activeMenu() !== LEFT_MENU.PARK && activeMenu() !== LEFT_MENU.OBSTACLE}">
                     <p class="text-light text-muted text-center">No info!</p>
                 </div>
                 <div class="left-menu-details-temps" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.TEMPS}">
-                    <span data-bind="foreach: tempVM.temps">
-                        <img data-bind="attr: {src: img}, click: $parent.tempVM.tempClicked.bind($data, $index)">
-                    </span>
+                     <span data-bind="foreach: tempVM.temps">
+                     <img data-bind="attr: {src: img}, click: $parent.tempVM.tempClicked.bind($data, $index)">
+                     </span>
                 </div>
                 <div class="left-menu-details-map" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.MAP}">
                     <div class="form-group">
@@ -98,17 +98,17 @@
                     <div class="form-group">
                         <label for="rack_item_number">Item Number</label>
                         <input type="number" class="form-control bg-dark text-light" id="rack_item_number"
-                               name="rack_item_number" placeholder="Item number">
+                               name="rack_item_number" placeholder="Item number" data-bind="textInput: itemNumber">
                     </div>
                     <div class="form-group">
                         <label for="rack_quantity">Quantity</label>
                         <input type="number" class="form-control bg-dark text-light" id="rack_quantity"
-                               name="rack_quantity" placeholder="Quantity">
+                               name="rack_quantity" placeholder="Quantity" data-bind="textInput: quantity">
                     </div>
                     <div class="form-group">
                         <label for="rack_item_weight">Item Weight</label>
                         <input type="number" class="form-control bg-dark text-light" id="rack_item_weight"
-                               name="rack_item_weight" placeholder="Item Weight (kg)">
+                               name="rack_item_weight" placeholder="Item Weight (kg)" data-bind="textInput: itemWeight">
                     </div>
                 </div>
                 <div class="left-menu-details-robot" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.ROBOT}">
@@ -130,7 +130,8 @@
                     <div class="form-group">
                         <label for="robot_battery">Battery Capacity</label>
                         <input type="number" class="form-control bg-dark text-light" id="robot_battery"
-                               name="robot_battery" placeholder="Battery Capacity (mAh)" data-bind="textInput: robotVM.batteryCap">
+                               name="robot_battery" placeholder="Battery Capacity (mAh)"
+                               data-bind="textInput: robotVM.batteryCap">
                     </div>
                     <div class="form-group">
                         <label for="robot_ip">Robot IP</label>
@@ -149,22 +150,22 @@
                         <div class="form-group">
                             <label>Items</label>
                             <span data-bind="foreach: orderVM.items">
-                                <div class="row quantity-container">
-                                    <div class="col-md-10 quantity-container-fields">
-                                        <input type="number" class="form-control bg-dark text-light"
-                                               id="order_item_number_1"
-                                               name="order_item_number_1" placeholder="Number"
-                                               data-bind="textInput: item_number">
-                                        <input type="number" class="form-control bg-dark text-light"
-                                               id="order_item_quantity_1"
-                                               name="order_item_quantity_1" placeholder="Quantity"
-                                               data-bind="textInput: quantity">
-                                    </div>
-                                    <div class="col-md-2 quantity-container-icon">
-                                        <i class="fas fa-minus" data-bind="click: $parent.orderVM.removeItem"></i>
-                                    </div>
-                                </div>
-                            </span>
+                              <div class="row quantity-container">
+                                 <div class="col-md-10 quantity-container-fields">
+                                    <input type="number" class="form-control bg-dark text-light"
+                                           id="order_item_number_1"
+                                           name="order_item_number_1" placeholder="Number"
+                                           data-bind="textInput: item_number">
+                                    <input type="number" class="form-control bg-dark text-light"
+                                           id="order_item_quantity_1"
+                                           name="order_item_quantity_1" placeholder="Quantity"
+                                           data-bind="textInput: quantity">
+                                 </div>
+                                 <div class="col-md-2 quantity-container-icon">
+                                    <i class="fas fa-minus" data-bind="click: $parent.orderVM.removeItem"></i>
+                                 </div>
+                              </div>
+                           </span>
                         </div>
                     </div>
                     <hr class="orders-separator">
@@ -173,7 +174,8 @@
                         <div class="row quantity-container">
                             <div class="col-md-10 quantity-container-fields">
                                 <input type="number" class="form-control bg-dark text-light" id="order_item_number"
-                                       name="order_item_number" placeholder="Number" data-bind="textInput: orderVM.itemNumber">
+                                       name="order_item_number" placeholder="Number"
+                                       data-bind="textInput: orderVM.itemNumber">
                                 <input type="number" class="form-control bg-dark text-light" id="order_item_quantity"
                                        name="order_item_quantity" placeholder="Quantity"
                                        data-bind="textInput: orderVM.quantity">
@@ -230,26 +232,28 @@
             <div class="right-menu-stats-container">
                 <div class="right-menu-logs" id="right-menu-logs"
                      data-bind="css: {hidden: activeMenu() !== RIGHT_MENU.LOGS}">
-                    <span data-bind="foreach: logs">
+                     <span data-bind="foreach: logs">
                         <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
-                            <div class="row right-menu-log-item">
-                                <div class="col-md-3 right-menu-log-item-icon">
-                                    <i class="fas large" data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
-                                    <i class="fas small" data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style{color: color}"></i>
-                                </div>
-                                <div class="col-md-9 right-menu-log-item-text">
-                                    <span data-bind="html: msg"></span>
-                                </div>
-                            </div>
+                           <div class="row right-menu-log-item">
+                              <div class="col-md-3 right-menu-log-item-icon">
+                                 <i class="fas large"
+                                    data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
+                                 <i class="fas small"
+                                    data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style{color: color}"></i>
+                              </div>
+                              <div class="col-md-9 right-menu-log-item-text">
+                                 <span data-bind="html: msg"></span>
+                              </div>
+                           </div>
                         </span>
                         <span data-bind="if: object === LOG_OBJECT_SIMULATION">
-                            <div class="row right-menu-log-sep">
-                                <hr>
-                                <span data-bind="text: msg"></span>
-                                <hr>
-                            </div>
+                           <div class="row right-menu-log-sep">
+                              <hr>
+                              <span data-bind="text: msg"></span>
+                              <hr>
+                           </div>
                         </span>
-                    </span>
+                     </span>
                 </div>
                 <div class="right-menu-stats" id="right-menu-stats"
                      data-bind="css: {hidden: activeMenu() !== RIGHT_MENU.STATS}">

@@ -1,13 +1,14 @@
 // Menu tiles
 LEFT_MENU = {
-    TEMPS: 0,
-    MAP: 1,
-    ENTRY: 2,
-    ROBOT: 3,
-    RACK: 4,
-    PARK: 5,
-    OBSTACLE: 6,
-    ORDER: 7
+    EMPTY: 0,
+    TEMPS: 1,
+    MAP: 2,
+    ENTRY: 3,
+    ROBOT: 4,
+    RACK: 5,
+    PARK: 6,
+    OBSTACLE: 7,
+    ORDER: 8
 };
 
 RIGHT_MENU = {
@@ -39,6 +40,7 @@ MAP_CELL = {
 SHOUT_RUNNING_MODE = 0;
 // SHOUT_MAP_SIZE_CHANGED = 1;
 SHOUT_MAP_TEMP_APPLIED = 2;
+SHOUT_ERROR = 3;
 
 // Logs levels
 LOG_LEVEL_INFO = 0;
@@ -49,4 +51,3 @@ LOG_OBJECT_ROBOT = 0;
 LOG_OBJECT_RACK = 1;
 LOG_OBJECT_ORDER = 2;
 LOG_OBJECT_SIMULATION = 3;
-

@@ -9,8 +9,7 @@ let controlConsoleViewModel = function (shouter, map) {
         if (self.playing()) {
             shouter.notifySubscribers(RUNNING_MODE.DESIGN, SHOUT_RUNNING_MODE);
             self.playing(false);
-        }
-        else {
+        } else {
             // TODO: Check if all info is good
             shouter.notifySubscribers(RUNNING_MODE.SIMULATE, SHOUT_RUNNING_MODE);
             self.playing(true);
@@ -26,6 +25,10 @@ let controlConsoleViewModel = function (shouter, map) {
         // TODO: Check if all info is good
         // shouter.notifySubscribers(RUNNING_MODE.DEPLOY, SHOUT_RUNNING_MODE);
     };
+
+    shouter.subscribe(function () {
+        // TODO: show error message
+    }, self, SHOUT_ERROR);
 };
 
 module.exports = controlConsoleViewModel;
