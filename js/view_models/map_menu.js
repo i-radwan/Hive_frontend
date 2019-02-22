@@ -1,6 +1,7 @@
 require("../utils/constants");
 let fs = require('fs');
 let ko = require('knockout');
+const {dialog} = require('electron').remote;
 
 let mapViewModel = function (shouter, map) {
     let self = this;
@@ -11,7 +12,12 @@ let mapViewModel = function (shouter, map) {
     self.saveMap = function () {
         console.log("Save map");
 
-        fs.writeFile('./map.hive', JSON.stringify(map, null, 2), 'utf-8', function () {
+        let path = dialog.showSaveDialog({
+            title: 'Save Hive Map!',
+            defaultPath: '~/map.hive'
+        });
+
+        fs.writeFile(path, JSON.stringify(map, null, 2), 'utf-8', function () {
             console.log("Map has been saved to map.hive");
         });
     };
@@ -19,7 +25,9 @@ let mapViewModel = function (shouter, map) {
     self.loadMap = function () {
         console.log("Load map");
 
-        let newMap = JSON.parse(fs.readFileSync('./map.hive', 'utf-8'));
+        let path = dialog.showOpenDialog()[0];
+
+        let newMap = JSON.parse(fs.readFileSync(path, 'utf-8'));
         map.setMap(newMap.grid);
     };
 

@@ -1,6 +1,6 @@
 {
-  "height": 20,
-  "width": 30,
+  "height": 10,
+  "width": 17,
   "grid": [
     [
       {
@@ -10,136 +10,10 @@
         "type": 0
       },
       {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
         "type": 0
       },
       {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      }
-    ],
-    [
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
+        "type": 0
       },
       {
         "type": 0
@@ -148,22 +22,10 @@
         "type": 0
       },
       {
-        "type": 4
+        "type": 0
       },
       {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
+        "type": 0
       },
       {
         "type": 0
@@ -172,339 +34,22 @@
         "type": 0
       },
       {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
+        "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
+        "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
         "type": 0
       },
       {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      }
-    ],
-    [
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
         "type": 0
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      }
-    ],
-    [
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
       },
       {
         "type": 0
@@ -512,134 +57,55 @@
     ],
     [
       {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
+        "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 4
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
+        "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
+        "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
+        "type": 0
       },
       {
-        "type": 5
+        "type": 0
       },
       {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
+        "type": 0
       },
       {
-        "type": 1
+        "type": 0
       },
       {
-        "type": 5
+        "type": 0
       },
       {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
+        "type": 0
       },
       {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
+        "type": 0
       },
       {
-        "type": 4
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
       }
     ],
     [
@@ -647,209 +113,13 @@
         "type": 0
       },
       {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 5
-      },
-      {
         "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
         "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      }
-    ],
-    [
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
       },
       {
         "type": 0
@@ -861,1513 +131,13 @@
         "type": 0
       },
       {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 0
-      }
-    ],
-    [
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      }
-    ],
-    [
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      }
-    ],
-    [
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      }
-    ],
-    [
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      }
-    ],
-    [
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
         "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      }
-    ],
-    [
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
         "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 5
-      }
-    ],
-    [
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 0
-      }
-    ],
-    [
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      }
-    ],
-    [
-      {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 1
-      }
-    ],
-    [
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 0
-      }
-    ],
-    [
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 0
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 5
-      }
-    ],
-    [
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
       },
       {
         "type": 0
@@ -2379,94 +149,16 @@
         "type": 0
       },
       {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 4
+        "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
         "type": 0
       },
       {
-        "type": 1
-      },
-      {
-        "type": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
-      },
-      {
         "type": 0
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 4
       }
     ],
     [
@@ -2474,48 +166,10 @@
         "type": 0
       },
       {
-        "type": 4
+        "type": 0
       },
       {
-        "type": 4
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
-      },
-      {
-        "type": 5
+        "type": 0
       },
       {
         "type": 0
@@ -2524,70 +178,355 @@
         "type": 0
       },
       {
-        "type": 1
-      },
-      {
-        "type": 4
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
+        "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
+        "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 1
-      },
-      {
-        "type": 5
-      },
-      {
-        "type": 2,
-        "color": "#FF0000",
-        "load_cap": 10,
-        "battery_cap": 1000,
-        "ip": ""
+        "type": 0
       },
       {
         "type": 0
       },
       {
-        "type": 5
+        "type": 0
       },
       {
-        "type": 1
+        "type": 0
       },
       {
-        "type": 4
+        "type": 0
       },
       {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
+        "type": 0
       },
       {
-        "type": 3,
-        "item_number": 1,
-        "quantity": 10,
-        "weight": 1
+        "type": 0
+      },
+      {
+        "type": 0
+      }
+    ],
+    [
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      }
+    ],
+    [
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      }
+    ],
+    [
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      }
+    ],
+    [
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      }
+    ],
+    [
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      }
+    ],
+    [
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
+      },
+      {
+        "type": 0
       },
       {
         "type": 0
