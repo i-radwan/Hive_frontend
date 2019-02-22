@@ -57,6 +57,95 @@ let rightMenuViewModel = function (shouter, map) {
         msg: "Rack <b>(#4)</b> is empty."
     });
 
+    self.stats.push({
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    }, {
+        key: "Throughput",
+        value: 12
+    });
+
     // Click Events
     self.toggleActiveList = function () {
         if (self.activeMenu() === RIGHT_MENU.LOGS) {
