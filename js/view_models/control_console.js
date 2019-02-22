@@ -1,10 +1,9 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let controlConsoleViewModel = function (shouter) {
+let controlConsoleViewModel = function (shouter, map) {
     let self = this;
     self.playing = ko.observable(false);
-    self.map = [];
 
     self.playClicked = function () {
         if (self.playing()) {
@@ -27,15 +26,6 @@ let controlConsoleViewModel = function (shouter) {
         // TODO: Check if all info is good
         // shouter.notifySubscribers(RUNNING_MODE.DEPLOY, SHOUT_RUNNING_MODE);
     };
-
-    // Events
-    shouter.subscribe(function (map) {
-        self.map = map;
-    }, self, SHOUT_MAP_TEMP_APPLIED);
-
-    shouter.subscribe(function (map) {
-        self.map = map;
-    }, self, SHOUT_MAP_SIZE_CHANGED);
 };
 
 module.exports = controlConsoleViewModel;

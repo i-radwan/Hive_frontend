@@ -37,7 +37,7 @@ MAP_CELL = {
 
 // Shouting codes
 SHOUT_RUNNING_MODE = 0;
-SHOUT_MAP_SIZE_CHANGED = 1;
+// SHOUT_MAP_SIZE_CHANGED = 1;
 SHOUT_MAP_TEMP_APPLIED = 2;
 
 // Logs levels

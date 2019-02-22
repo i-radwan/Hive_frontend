@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let tempsViewModel = function (shouter) {
+let tempsViewModel = function (shouter, map) {
     let self = this;
 
     /**
@@ -73,6 +73,8 @@ let tempsViewModel = function (shouter) {
 
     self.tempClicked = function (idx) {
         console.log("Template " + idx() + " applied!");
+
+        map.setMap(self.temps[idx()].temp);
 
         shouter.notifySubscribers(self.temps[idx()].temp, SHOUT_MAP_TEMP_APPLIED);
     };

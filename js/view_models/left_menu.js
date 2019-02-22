@@ -9,7 +9,7 @@ let parkViewModel = require('./park_menu');
 let obstacleViewModel = require('./obstacle_menu');
 let orderViewModel = require('./order_menu');
 
-let leftMenuViewModel = function (shouter) {
+let leftMenuViewModel = function (shouter, map) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
@@ -90,8 +90,8 @@ let leftMenuViewModel = function (shouter) {
     };
 
     // Sub view models
-    self.tempVM = new tempViewModel(shouter);
-    self.mapVM = new mapViewModel(shouter);
+    self.tempVM = new tempViewModel(shouter, map);
+    self.mapVM = new mapViewModel(shouter, map);
     self.entryVM = new entryViewModel(shouter);
     self.robotVM = new robotViewModel(shouter);
     self.rackVM = new rackViewModel(shouter);
