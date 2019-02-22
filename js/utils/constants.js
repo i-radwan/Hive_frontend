@@ -37,10 +37,15 @@ MAP_CELL = {
 };
 
 // Shouting codes
-// SHOUT_RUNNING_MODE = 0;
-// SHOUT_MAP_SIZE_CHANGED = 1;
-SHOUT_MAP_TEMP_APPLIED = 2;
-SHOUT_ERROR = 3;
+SHOUT_MAP_TEMP_APPLIED = 0;
+SHOUT_MSG = 1;
+
+// Msgs configs
+MSG_TIMEOUT = 1500; // ms
+
+// Msgs types
+MSG_ERROR = 0;
+MSG_INFO = 1;
 
 // Logs levels
 LOG_LEVEL_INFO = 0;

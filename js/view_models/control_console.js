@@ -5,6 +5,9 @@ let controlConsoleViewModel = function (runningMode, shouter, map) {
     let self = this;
 
     self.playing = ko.observable(false);
+    self.msg = ko.observable("");
+    self.msgType = ko.observable(MSG_INFO);
+    self.timer = null;
 
     self.playClicked = function () {
         if (self.playing()) {
@@ -27,9 +30,14 @@ let controlConsoleViewModel = function (runningMode, shouter, map) {
         // runningMode(RUNNING_MODE.DEPLOY);
     };
 
-    shouter.subscribe(function () {
-        // TODO: show error message
-    }, self, SHOUT_ERROR);
+    shouter.subscribe(function (msg) {
+        self.msg(msg.text);
+        self.msgType(msg.type);
+
+        // Timer to auto-hide the message
+        clearTimeout(self.timer);
+        self.timer = setTimeout(() => {self.msg("")}, MSG_TIMEOUT);
+    }, self, SHOUT_MSG);
 
     runningMode.subscribe(function (newRunningMode) {
 

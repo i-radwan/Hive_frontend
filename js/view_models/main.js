@@ -21,6 +21,10 @@ let mainViewModel = function () {
     self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.map);
     self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.map);
     self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.map);
+
+    self.handleCellClick = function (row, col) {
+        self.leftMenuVM.handleCellClick(row, col);
+    }
 };
 
 module.exports = mainViewModel;

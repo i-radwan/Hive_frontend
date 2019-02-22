@@ -8,9 +8,11 @@ let obstacleViewModel = function (shouter, map) {
         if (map.grid[row][col].type === MAP_CELL.EMPTY || map.grid[row][col].type === MAP_CELL.OBSTACLE) {
             map.grid[row][col] = {
                 type: MAP_CELL.OBSTACLE
-            }
+            };
+
+            shouter.notifySubscribers({text: "Obstacle placed successfully!", type: MSG_INFO}, SHOUT_MSG);
         } else {
-            shouter.notifySubscribers("(" + row + ", " + col + ") is occupied!", SHOUT_ERROR);
+            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
     };
 
@@ -29,7 +31,7 @@ let obstacleViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             }
         } else {
-            shouter.notifySubscribers("(" + dstRow + ", " + dstCol + ") is occupied!", SHOUT_ERROR);
+            shouter.notifySubscribers({text: "(" + dstRow + ", " + dstCol + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
     };
 };

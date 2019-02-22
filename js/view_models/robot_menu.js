@@ -4,14 +4,18 @@ let ko = require('knockout');
 let robotViewModel = function (shouter, map) {
     let self = this;
 
-    self.id = ko.observable();
-    self.color = ko.observable();
-    self.loadCap = ko.observable();
-    self.batteryCap = ko.observable();
-    self.ip = ko.observable();
+    self.id = ko.observable(1);
+    self.color = ko.observable("#FF0000");
+    self.loadCap = ko.observable(100);
+    self.batteryCap = ko.observable(10000);
+    self.ip = ko.observable("");
 
     self.addRobot = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY || map.grid[row][col].type === MAP_CELL.ROBOT) {
+        if (map.grid[row][col].type === MAP_CELL.EMPTY) {
+            if (!self.checkValid()) {
+                return;
+            }
+
             map.grid[row][col] = {
                 type: MAP_CELL.ROBOT,
                 id: self.id(),
@@ -19,9 +23,13 @@ let robotViewModel = function (shouter, map) {
                 load_cap: self.loadCap(),
                 battery_cap: self.batteryCap(),
                 ip: self.ip()
-            }
+            };
+
+            self.id(parseInt(self.id()) + 1);
+
+            shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_INFO}, SHOUT_MSG);
         } else {
-            shouter.notifySubscribers("(" + row + ", " + col + ") is occupied!", SHOUT_ERROR);
+            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
     };
 
@@ -40,7 +48,10 @@ let robotViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             }
         } else {
-            shouter.notifySubscribers("(" + dstRow + ", " + dstCol + ") is occupied!", SHOUT_ERROR);
+            shouter.notifySubscribers({
+                text: "(" + dstRow + ", " + dstCol + ") is occupied!",
+                type: MSG_ERROR
+            }, SHOUT_MSG);
         }
     };
 
@@ -55,6 +66,35 @@ let robotViewModel = function (shouter, map) {
         self.loadCap(robot.load_cap);
         self.batteryCap(robot.battery_cap);
         self.ip(robot.ip);
+    };
+
+    // TODO: more checks
+    self.checkValid = function () {
+        if (self.id().length === 0) {
+            shouter.notifySubscribers({text: "Robot ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (self.color().length === 0) {
+            shouter.notifySubscribers({text: "Robot color is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (self.loadCap().length === 0) {
+            shouter.notifySubscribers({text: "Robot load capacity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (self.batteryCap().length === 0) {
+            shouter.notifySubscribers({text: "Robot battery capacity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        return true;
     };
 };
 

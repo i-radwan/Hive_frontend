@@ -12,9 +12,15 @@ $(document).ready(() => {
 
     ko.applyBindings(mainVM, $("#main")[0]);
 
-    // $(".map-row")[0].click(function() {
-    //
-    // });
+    // TESTING CODE
+    let map = $(".map-row");
+    let h = map.height();
+    let w = map.width();
+
+    map.click(function(e) {
+        mainVM.handleCellClick(Math.floor(e.offsetY / h * 20), Math.floor(e.offsetX / w * 30));
+        console.log(mainVM.map);
+    });
 
     // GFX code
 

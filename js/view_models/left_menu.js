@@ -110,6 +110,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                     self.robotVM.addRobot(row, col);
                     break;
                 case LEFT_MENU.RACK:
+                    console.log(123);
                     self.rackVM.addRack(row, col);
                     break;
                 case LEFT_MENU.PARK:

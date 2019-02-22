@@ -203,6 +203,7 @@
                    data-bind="click: controlConsoleVM.playClicked, css: {'fa-play play': !controlConsoleVM.playing(), 'fa-pause pause': controlConsoleVM.playing()}"></i>
                 <div class="deploy-switch" data-bind="click: controlConsoleVM.deployClicked">Deploy</div>
             </div>
+            <div class="text-sm-center msg" data-bind="text: controlConsoleVM.msg, css: {'error-msg': controlConsoleVM.msgType() === MSG_ERROR, 'info-msg': controlConsoleVM.msgType() === MSG_INFO}"></div>
         </div>
     </div>
     <div class="col-md-2 right-menu" id="right-menu">

@@ -4,20 +4,24 @@ let ko = require('knockout');
 let rackViewModel = function (shouter, map) {
     let self = this;
 
-    self.itemNumber = ko.observable();
-    self.quantity = ko.observable();
-    self.itemWeight = ko.observable();
+    self.itemNumber = ko.observable(1);
+    self.quantity = ko.observable(10);
+    self.itemWeight = ko.observable(1);
 
     self.addRack = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY || map.grid[row][col].type === MAP_CELL.RACK) {
+        if (map.grid[row][col].type === MAP_CELL.EMPTY) {
             map.grid[row][col] = {
                 type: MAP_CELL.RACK,
                 item_number: self.itemNumber(),
                 quantity: self.quantity(),
                 item_weight: self.itemWeight()
-            }
+            };
+
+            self.itemNumber(parseInt(self.itemNumber()) + 1);
+
+            shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
         } else {
-            shouter.notifySubscribers("(" + row + ", " + col + ") is occupied!", SHOUT_ERROR);
+            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
     };
 
@@ -36,7 +40,10 @@ let rackViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             }
         } else {
-            shouter.notifySubscribers("(" + dstRow + ", " + dstCol + ") is occupied!", SHOUT_ERROR);
+            shouter.notifySubscribers({
+                text: "(" + dstRow + ", " + dstCol + ") is occupied!",
+                type: MSG_ERROR
+            }, SHOUT_MSG);
         }
     };
 

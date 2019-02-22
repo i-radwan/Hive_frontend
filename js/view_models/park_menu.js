@@ -8,9 +8,11 @@ let parkViewModel = function (shouter, map) {
         if (map.grid[row][col].type === MAP_CELL.EMPTY || map.grid[row][col].type === MAP_CELL.PARK) {
             map.grid[row][col] = {
                 type: MAP_CELL.PARK
-            }
+            };
+
+            shouter.notifySubscribers({text: "Park placed successfully!", type: MSG_INFO}, SHOUT_MSG);
         } else {
-            shouter.notifySubscribers("(" + row + ", " + col + ") is occupied!", SHOUT_ERROR);
+            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
     };
 
@@ -29,7 +31,7 @@ let parkViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             }
         } else {
-            shouter.notifySubscribers("(" + dstRow + ", " + dstCol + ") is occupied!", SHOUT_ERROR);
+            shouter.notifySubscribers({text: "(" + dstRow + ", " + dstCol + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
     };
 };

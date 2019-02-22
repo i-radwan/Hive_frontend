@@ -414,7 +414,7 @@ Right menu.
     float: right;
     font-size: 12px;
     width: 50%;
-    color: #E09500;
+    color: #e09500;
     padding: 0;
     margin: 0;
 }
@@ -463,14 +463,14 @@ Control
     margin-top: 4px;
     cursor: pointer;
     font-size: 40px;
-    color: #E09500;
+    color: #e09500;
     background: #050506;
-    border: 1px solid #E09500;
+    border: 1px solid #e09500;
     border-radius: 50px;
 }
 
 .controls .play-pause:hover {
-    box-shadow: 0 0 10px #E09500;
+    box-shadow: 0 0 10px #e09500;
 }
 
 .controls .play {
@@ -492,12 +492,12 @@ Control
     color: #bababa;
     padding: 8px 30px 8px 14px;
     background: #050506;
-    border: 1px solid #E09500;
+    border: 1px solid #e09500;
     border-radius: 20px 0 0 20px;
 }
 
 .controls .stop:hover {
-    box-shadow: 0 0 10px #E09500;
+    box-shadow: 0 0 10px #e09500;
 }
 
 .controls .deploy-switch {
@@ -508,7 +508,7 @@ Control
     top: 50%;
     right: 50%;
     transform: translate(130%, -40%);
-    border: 1px solid #E09500;
+    border: 1px solid #e09500;
     background: #050506;
     border-radius: 0 20px 20px 0;
     padding: 5px 10px 7px 22px;
@@ -516,13 +516,28 @@ Control
 }
 
 .controls .deploy-switch:hover {
-    box-shadow: 0 0 10px #E09500;
+    box-shadow: 0 0 10px #e09500;
 }
 
 .controls .deploy-switch.active {
-    background: #E09500;
+    background: #e09500;
     color: #050506;
     font-weight: bolder;
+}
+
+.msg {
+    width: 100%;
+    margin-top: 30px;
+    font-size: 12px;
+    font-family: 'Asap', sans-serif;
+}
+
+.error-msg {
+    color: #c62a15;
+}
+
+.info-msg {
+    color: #78c631;
 }
 
 /**
