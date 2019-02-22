@@ -1,7 +1,12 @@
 require("../utils/constants");
 let ko = require('knockout');
-let mapViewModel = require('./map_menu');
 let tempViewModel = require('./temps_menu');
+let mapViewModel = require('./map_menu');
+let entryViewModel = require('./entry_menu');
+let robotViewModel = require('./robot_menu');
+let rackViewModel = require('./rack_menu');
+let parkViewModel = require('./park_menu');
+let obstacleViewModel = require('./obstacle_menu');
 let orderViewModel = require('./order_menu');
 
 let leftMenuViewModel = function (shouter) {
@@ -85,9 +90,14 @@ let leftMenuViewModel = function (shouter) {
     };
 
     // Sub view models
-    mapViewModel(shouter);
-    tempViewModel(shouter);
-    orderViewModel(shouter);
+    self.tempVM = new tempViewModel(shouter);
+    self.mapVM = new mapViewModel(shouter);
+    self.entryVM = new entryViewModel(shouter);
+    self.robotVM = new robotViewModel(shouter);
+    self.rackVM = new rackViewModel(shouter);
+    self.parkVM = new parkViewModel(shouter);
+    self.obstacleVM = new obstacleViewModel(shouter);
+    self.orderVM = new orderViewModel(shouter);
 
     // Listen for mode change
     shouter.subscribe(function (runningMode) {

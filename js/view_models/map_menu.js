@@ -39,15 +39,19 @@ let mapViewModel = function (shouter) {
     };
 
     self.saveMap = function () {
+        console.log("Save map");
         // TODO
     };
 
     self.loadMap = function () {
+        console.log("Load map");
         // TODO
     };
 
     self.applyMapSize = function () {
         if (self.mapHeight() > 0 && self.mapWidth() > 0) {
+            console.log("Apply map size");
+
             self.updateMap(self.mapHeight(), self.mapWidth(), self.mapGrid);
         }
     };

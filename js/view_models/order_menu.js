@@ -11,6 +11,8 @@ let orderViewModel = function (shouter) {
     self.addItem = function () {
         if (!self.itemNumber() || !self.quantity()) return;
 
+        console.log("Add item");
+
         self.items.push({
             item_number: ko.observable(self.itemNumber()),
             quantity: ko.observable(self.quantity())
@@ -21,11 +23,13 @@ let orderViewModel = function (shouter) {
     };
 
     self.removeItem = function () {
+        console.log("Remove item");
+
         self.items.remove(this);
     };
 
     self.addOrder = function () {
-
+        console.log("Add order");
     };
 };
 

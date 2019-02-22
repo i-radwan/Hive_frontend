@@ -70,28 +70,28 @@
                 <div class="left-menu-details-empty"
                      data-bind="css: {hidden: activeMenu() !== LEFT_MENU.ENTRY && activeMenu() !== LEFT_MENU.PARK &&
                             activeMenu() !== LEFT_MENU.OBSTACLE}">
-                    <p class="text-light text-muted text-center">No specs!</p>
+                    <p class="text-light text-muted text-center">No info!</p>
                 </div>
                 <div class="left-menu-details-temps" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.TEMPS}">
-                    <span data-bind="foreach: temps">
-                        <img data-bind="attr: {src: img}, click: tempClicked.bind($data, $index)">
+                    <span data-bind="foreach: tempVM.temps">
+                        <img data-bind="attr: {src: img}, click: $parent.tempVM.tempClicked.bind($data, $index)">
                     </span>
                 </div>
                 <div class="left-menu-details-map" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.MAP}">
                     <div class="form-group">
                         <label for="map_height">Height</label>
                         <input type="number" class="form-control bg-dark text-light" id="map_height" name="map_height"
-                               placeholder="Height (#cells)" data-bind="textInput: mapHeight">
+                               placeholder="Height (#cells)" data-bind="textInput: mapVM.mapHeight">
                     </div>
                     <div class="form-group">
                         <label for="map_height">Width</label>
                         <input type="number" class="form-control bg-dark text-light" id="map_width" name="map_width"
-                               placeholder="Width (#cells)" data-bind="textInput: mapWidth">
+                               placeholder="Width (#cells)" data-bind="textInput: mapVM.mapWidth">
                     </div>
                     <div class="left-menu-details-map-actions">
-                        <i class="fas fa-save save" data-bind="click: saveMap"></i>
-                        <i class="fas fa-download load" data-bind="click: loadMap"></i>
-                        <i class="fas fa-check apply" data-bind="click: applyMapSize"></i>
+                        <i class="fas fa-save save" data-bind="click: mapVM.saveMap"></i>
+                        <i class="fas fa-download load" data-bind="click: mapVM.loadMap"></i>
+                        <i class="fas fa-check apply" data-bind="click: mapVM.applyMapSize"></i>
                     </div>
                 </div>
                 <div class="left-menu-details-rack" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.RACK}">
@@ -115,40 +115,40 @@
                     <div class="form-group">
                         <label for="robot_id">Robot ID</label>
                         <input type="number" class="form-control bg-dark text-light" id="robot_id"
-                               name="robot_id" placeholder="Robot ID">
+                               name="robot_id" placeholder="Robot ID" data-bind="textInput: robotVM.id">
                     </div>
                     <div class="form-group">
                         <label for="robot_color">Robot Color</label>
                         <input type="text" class="form-control bg-dark text-light" id="robot_color"
-                               name="robot_color" placeholder="#FFFFFF">
+                               name="robot_color" placeholder="#FFFFFF" data-bind="textInput: robotVM.color">
                     </div>
                     <div class="form-group">
                         <label for="robot_cap">Load Capacity</label>
                         <input type="number" class="form-control bg-dark text-light" id="robot_cap"
-                               name="robot_cap" placeholder="Load Capacity (kg)">
+                               name="robot_cap" placeholder="Load Capacity (kg)" data-bind="textInput: robotVM.loadCap">
                     </div>
                     <div class="form-group">
                         <label for="robot_battery">Battery Capacity</label>
                         <input type="number" class="form-control bg-dark text-light" id="robot_battery"
-                               name="robot_battery" placeholder="Battery Capacity (mAh)">
+                               name="robot_battery" placeholder="Battery Capacity (mAh)" data-bind="textInput: robotVM.batteryCap">
                     </div>
                     <div class="form-group">
                         <label for="robot_ip">Robot IP</label>
                         <input type="text" class="form-control bg-dark text-light" id="robot_ip"
-                               name="robot_ip" placeholder="Robot IP">
+                               name="robot_ip" placeholder="Robot IP" data-bind="textInput: robotVM.ip">
                     </div>
                 </div>
                 <div class="left-menu-details-order" data-bind="css: {hidden: activeMenu() !== LEFT_MENU.ORDER}">
                     <div class="form-group">
                         <label for="order_name">Order Name</label>
-                        <input type="number" class="form-control bg-dark text-light" id="order_name"
+                        <input type="text" class="form-control bg-dark text-light" id="order_name"
                                name="order_name" placeholder="Order Name">
                     </div>
-                    <hr class="orders-separator" data-bind="css: {hidden: items().length == 0}">
-                    <div class="order-items-container" data-bind="css: {hidden: items().length == 0}">
+                    <hr class="orders-separator" data-bind="css: {hidden: orderVM.items().length == 0}">
+                    <div class="order-items-container" data-bind="css: {hidden: orderVM.items().length == 0}">
                         <div class="form-group">
                             <label>Items</label>
-                            <span data-bind="foreach: items">
+                            <span data-bind="foreach: orderVM.items">
                                 <div class="row quantity-container">
                                     <div class="col-md-10 quantity-container-fields">
                                         <input type="number" class="form-control bg-dark text-light"
@@ -161,7 +161,7 @@
                                                data-bind="textInput: quantity">
                                     </div>
                                     <div class="col-md-2 quantity-container-icon">
-                                        <i class="fas fa-minus" data-bind="click: removeItem"></i>
+                                        <i class="fas fa-minus" data-bind="click: $parent.orderVM.removeItem"></i>
                                     </div>
                                 </div>
                             </span>
@@ -173,18 +173,18 @@
                         <div class="row quantity-container">
                             <div class="col-md-10 quantity-container-fields">
                                 <input type="number" class="form-control bg-dark text-light" id="order_item_number"
-                                       name="order_item_number" placeholder="Number" data-bind="textInput: itemNumber">
+                                       name="order_item_number" placeholder="Number" data-bind="textInput: orderVM.itemNumber">
                                 <input type="number" class="form-control bg-dark text-light" id="order_item_quantity"
                                        name="order_item_quantity" placeholder="Quantity"
-                                       data-bind="textInput: quantity">
+                                       data-bind="textInput: orderVM.quantity">
                             </div>
                             <div class="col-md-2 quantity-container-icon">
-                                <i class="fas fa-plus" data-bind="click: addItem"></i>
+                                <i class="fas fa-plus" data-bind="click: orderVM.addItem"></i>
                             </div>
                         </div>
                     </div>
                     <div class="left-menu-details-order-actions">
-                        <i class="fas fa-check" data-bind="click: addOrder"></i>
+                        <i class="fas fa-check" data-bind="click: orderVM.addOrder"></i>
                     </div>
                 </div>
             </div>
