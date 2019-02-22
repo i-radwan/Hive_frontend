@@ -1,11 +1,10 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let rightMenuViewModel = function (shouter, map) {
+let rightMenuViewModel = function (runningMode, shouter, map) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
-    self.runningMode = ko.observable(RUNNING_MODE.DESIGN);
     self.logs = ko.observableArray();
     self.stats = ko.observableArray();
 
@@ -59,94 +58,110 @@ let rightMenuViewModel = function (shouter, map) {
 
     self.stats.push({
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     }, {
         key: "Throughput",
-        value: 12
+        value: ko.observable(12)
     });
 
-    // Click Events
+    self.addLog = function (level, object, msg, color = null) {
+        self.logs.push({
+            level: level,
+            object: object,
+            msg: msg,
+            color: color
+        })
+    };
+
+    self.updateStats = function (key, value) {
+        self.stats().forEach(function (elem) {
+            if (elem.key === key) {
+                elem.value(value);
+            }
+        });
+    };
+
     self.toggleActiveList = function () {
         if (self.activeMenu() === RIGHT_MENU.LOGS) {
             self.activeMenu(RIGHT_MENU.STATS);
@@ -157,16 +172,14 @@ let rightMenuViewModel = function (shouter, map) {
     };
 
     // Listen for mode change
-    shouter.subscribe(function (runningMode) {
-        if (runningMode === RUNNING_MODE.DESIGN) {
+    runningMode.subscribe(function (newRunningMode) {
+        if (newRunningMode === RUNNING_MODE.DESIGN) {
             self.activeMenu(RIGHT_MENU.EMPTY);
         }
         else {
             self.activeMenu(RIGHT_MENU.LOGS);
         }
-
-        self.runningMode(runningMode);
-    }, self, SHOUT_RUNNING_MODE);
+    });
 };
 
 module.exports = rightMenuViewModel;

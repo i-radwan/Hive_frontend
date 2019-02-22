@@ -9,11 +9,10 @@ let parkViewModel = require('./park_menu');
 let obstacleViewModel = require('./obstacle_menu');
 let orderViewModel = require('./order_menu');
 
-let leftMenuViewModel = function (shouter, map) {
+let leftMenuViewModel = function (runningMode, shouter, map) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
-    self.runningMode = ko.observable(RUNNING_MODE.DESIGN);
 
     /**
      * Handles menu tiles clicks.
@@ -21,7 +20,7 @@ let leftMenuViewModel = function (shouter, map) {
      * @param id   The id of the clicked tile from the LEFT_MENU enum.
      */
     self.menuItemClicked = function (id) {
-        if (self.runningMode() === RUNNING_MODE.DESIGN) {
+        if (runningMode() === RUNNING_MODE.DESIGN) {
             if (id === LEFT_MENU.TEMPS) {
                 self.tempsClicked();
             } else if (id === LEFT_MENU.MAP) {
@@ -92,19 +91,17 @@ let leftMenuViewModel = function (shouter, map) {
     self.orderVM = new orderViewModel(shouter, map);
 
     // Listen for mode change
-    shouter.subscribe(function (runningMode) {
-        if (runningMode) {
+    runningMode.subscribe(function (newRunningMode) {
+        if (newRunningMode !== RUNNING_MODE.DESIGN) {
             self.activeMenu(LEFT_MENU.ORDER);
         } else {
             self.activeMenu(LEFT_MENU.TEMPS);
         }
-
-        self.runningMode(runningMode);
-    }, self, SHOUT_RUNNING_MODE);
+    });
 
     // Outside events
     self.handleCellClick = function (row, col) {
-        if (self.runningMode() === RUNNING_MODE.DESIGN) {
+        if (runningMode() === RUNNING_MODE.DESIGN) {
             switch (self.activeMenu()) {
                 case LEFT_MENU.ENTRY:
                     self.entryVM.addEntry(row, col);
