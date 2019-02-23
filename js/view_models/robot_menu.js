@@ -18,10 +18,10 @@ let robotViewModel = function (shouter, map) {
 
             map.grid[row][col] = {
                 type: MAP_CELL.ROBOT,
-                id: self.id(),
+                id: parseInt(self.id()),
                 color: self.color(),
-                load_cap: self.loadCap(),
-                battery_cap: self.batteryCap(),
+                load_cap: parseInt(self.loadCap()),
+                battery_cap: parseInt(self.batteryCap()),
                 ip: self.ip()
             };
 
@@ -68,7 +68,6 @@ let robotViewModel = function (shouter, map) {
         self.ip(robot.ip);
     };
 
-    // TODO: more checks
     self.checkValid = function () {
         if (self.id().length === 0) {
             shouter.notifySubscribers({text: "Robot ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
@@ -90,6 +89,40 @@ let robotViewModel = function (shouter, map) {
 
         if (self.batteryCap().length === 0) {
             shouter.notifySubscribers({text: "Robot battery capacity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // Duplicate ID check
+        for (let i = 0; i < map.height; ++i) {
+            for (let j = 0; j < map.width; ++j) {
+                let c = map.grid[i][j];
+
+                if (c.type === MAP_CELL.ROBOT && c.id === parseInt(self.id())) {
+                    shouter.notifySubscribers({text: "Robot ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+                    return false;
+                }
+            }
+        }
+
+        // -ve values
+        if (parseInt(self.id()) < 0 || parseInt(self.batteryCap()) < 0 || parseInt(self.loadCap()) < 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // HTML color
+        if (!self.color().match(REG_HTML_COLOR)) {
+            shouter.notifySubscribers({text: "Invalid color code!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (self.ip().length > 0 &&
+            !self.ip().match(REG_IP)) {
+            shouter.notifySubscribers({text: "Invalid IP address!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }

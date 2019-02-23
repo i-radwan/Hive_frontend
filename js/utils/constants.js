@@ -56,3 +56,7 @@ LOG_OBJECT_ROBOT = 0;
 LOG_OBJECT_RACK = 1;
 LOG_OBJECT_ORDER = 2;
 LOG_OBJECT_SIMULATION = 3;
+
+// Regex
+REG_HTML_COLOR = "^#([A-Fa-f0-9]{6})$";
+REG_IP = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
