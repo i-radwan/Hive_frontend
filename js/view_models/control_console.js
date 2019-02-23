@@ -26,8 +26,19 @@ let controlConsoleViewModel = function (runningMode, shouter, map) {
     };
 
     self.deployClicked = function () {
-        // TODO: Check if all info is good
-        // runningMode(RUNNING_MODE.DEPLOY);
+        for (let i = 0; i < map.height; ++i) {
+            for (let j = 0; j < map.width; ++j) {
+                let c = map.grid[i][j];
+
+                if (c.type === MAP_CELL.ROBOT && !c.ip.match(REG_IP)) {
+                    shouter.notifySubscribers({text: "Robot IP is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+                    return false;
+                }
+            }
+        }
+
+        runningMode(RUNNING_MODE.DEPLOY);
     };
 
     shouter.subscribe(function (msg) {
