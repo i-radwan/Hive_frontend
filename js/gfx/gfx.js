@@ -159,7 +159,6 @@ let gfx = function (shouter) {
         //console.log('cellRow = ', cellRow, 'cellCol = ', cellCol);
     });
 
-
     // Ex:
     // In case of click
     // shouter.notifySubscribers({row: 0, col: 0}, SHOUT_GRID_CLICK);
