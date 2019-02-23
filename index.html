@@ -72,7 +72,8 @@
                      leftMenuVM.activeMenu() !== LEFT_MENU.PARK && leftMenuVM.activeMenu() !== LEFT_MENU.OBSTACLE}">
                     <p class="text-light text-muted text-center">No info!</p>
                 </div>
-                <div class="left-menu-details-temps" data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.TEMPS}">
+                <div class="left-menu-details-temps"
+                     data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.TEMPS}">
                      <span data-bind="foreach: leftMenuVM.tempVM.temps">
                      <img data-bind="attr: {src: img}, click: $parent.leftMenuVM.tempVM.tempClicked.bind($data, $index)">
                      </span>
@@ -81,12 +82,12 @@
                     <div class="form-group">
                         <label for="map_height">Height</label>
                         <input type="number" class="form-control bg-dark text-light" id="map_height" name="map_height"
-                               placeholder="Height (#cells)" data-bind="textInput: leftMenuVM.mapVM.mapHeight">
+                               placeholder="Height (#cells)" data-bind="textInput: leftMenuVM.mapVM.mapHeight, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="form-group">
                         <label for="map_height">Width</label>
                         <input type="number" class="form-control bg-dark text-light" id="map_width" name="map_width"
-                               placeholder="Width (#cells)" data-bind="textInput: leftMenuVM.mapVM.mapWidth">
+                               placeholder="Width (#cells)" data-bind="textInput: leftMenuVM.mapVM.mapWidth, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="left-menu-details-map-actions">
                         <i class="fas fa-save save" data-bind="click: leftMenuVM.mapVM.saveMap"></i>
@@ -94,61 +95,79 @@
                         <i class="fas fa-check apply" data-bind="click: leftMenuVM.mapVM.applyMapSize"></i>
                     </div>
                 </div>
-                <div class="left-menu-details-rack" data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.RACK}">
+                <div class="left-menu-details-rack"
+                     data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.RACK}">
                     <div class="form-group">
                         <label for="rack_item_number">Item Number</label>
                         <input type="number" class="form-control bg-dark text-light" id="rack_item_number"
                                name="rack_item_number" placeholder="Item number"
-                               data-bind="textInput: leftMenuVM.rackVM.itemNumber">
+                               data-bind="textInput: leftMenuVM.rackVM.itemNumber, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="form-group">
                         <label for="rack_quantity">Quantity</label>
                         <input type="number" class="form-control bg-dark text-light" id="rack_quantity"
-                               name="rack_quantity" placeholder="Quantity" data-bind="textInput: leftMenuVM.rackVM.quantity">
+                               name="rack_quantity" placeholder="Quantity"
+                               data-bind="textInput: leftMenuVM.rackVM.quantity, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="form-group">
                         <label for="rack_item_weight">Item Weight</label>
                         <input type="number" class="form-control bg-dark text-light" id="rack_item_weight"
                                name="rack_item_weight" placeholder="Item Weight (kg)"
-                               data-bind="textInput: leftMenuVM.rackVM.itemWeight">
+                               data-bind="textInput: leftMenuVM.rackVM.itemWeight, enable: runningMode() === RUNNING_MODE.DESIGN"">
+                    </div>
+                    <div class="left-menu-details-bottom-actions"
+                         data-bind="css: {hidden: !leftMenuVM.rackVM.applyVisible()}">
+                        <i class="fas fa-check"
+                           data-bind="click: function(){leftMenuVM.rackVM.updateRack(); leftMenuVM.activeMenu(LEFT_MENU.EMPTY)}"></i>
                     </div>
                 </div>
-                <div class="left-menu-details-robot" data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.ROBOT}">
+                <div class="left-menu-details-robot"
+                     data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.ROBOT}">
                     <div class="form-group">
                         <label for="robot_id">Robot ID</label>
                         <input type="number" class="form-control bg-dark text-light" id="robot_id"
-                               name="robot_id" placeholder="Robot ID" data-bind="textInput: leftMenuVM.robotVM.id">
+                               name="robot_id" placeholder="Robot ID" data-bind="textInput: leftMenuVM.robotVM.id, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="form-group">
                         <label for="robot_color">Robot Color</label>
                         <input type="text" class="form-control bg-dark text-light" id="robot_color"
-                               name="robot_color" placeholder="#FFFFFF" data-bind="textInput: leftMenuVM.robotVM.color">
+                               name="robot_color" placeholder="#FFFFFF" data-bind="textInput: leftMenuVM.robotVM.color, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="form-group">
                         <label for="robot_cap">Load Capacity</label>
                         <input type="number" class="form-control bg-dark text-light" id="robot_cap"
-                               name="robot_cap" placeholder="Load Capacity (kg)" data-bind="textInput: leftMenuVM.robotVM.loadCap">
+                               name="robot_cap" placeholder="Load Capacity (kg)"
+                               data-bind="textInput: leftMenuVM.robotVM.loadCap, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="form-group">
                         <label for="robot_battery">Battery Capacity</label>
                         <input type="number" class="form-control bg-dark text-light" id="robot_battery"
                                name="robot_battery" placeholder="Battery Capacity (mAh)"
-                               data-bind="textInput: leftMenuVM.robotVM.batteryCap">
+                               data-bind="textInput: leftMenuVM.robotVM.batteryCap, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="form-group">
                         <label for="robot_ip">Robot IP</label>
                         <input type="text" class="form-control bg-dark text-light" id="robot_ip"
-                               name="robot_ip" placeholder="Robot IP (192.168.0.1)" data-bind="textInput: leftMenuVM.robotVM.ip">
+                               name="robot_ip" placeholder="Robot IP (192.168.0.1)"
+                               data-bind="textInput: leftMenuVM.robotVM.ip, enable: runningMode() === RUNNING_MODE.DESIGN"">
+                    </div>
+                    <div class="left-menu-details-bottom-actions"
+                         data-bind="css: {hidden: !leftMenuVM.robotVM.applyVisible()}">
+                        <i class="fas fa-check"
+                           data-bind="click: function(){leftMenuVM.robotVM.updateRobot(); leftMenuVM.activeMenu(LEFT_MENU.EMPTY)}"></i>
                     </div>
                 </div>
-                <div class="left-menu-details-order" data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.ORDER}">
+                <div class="left-menu-details-order"
+                     data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.ORDER}">
                     <div class="form-group">
                         <label for="order_name">Order Name</label>
                         <input type="text" class="form-control bg-dark text-light" id="order_name"
-                               name="order_name" placeholder="Order Name" data-bind="textInput: leftMenuVM.orderVM.name">
+                               name="order_name" placeholder="Order Name"
+                               data-bind="textInput: leftMenuVM.orderVM.name">
                     </div>
                     <hr class="orders-separator" data-bind="css: {hidden: leftMenuVM.orderVM.items().length == 0}">
-                    <div class="order-items-container" data-bind="css: {hidden: leftMenuVM.orderVM.items().length == 0}">
+                    <div class="order-items-container"
+                         data-bind="css: {hidden: leftMenuVM.orderVM.items().length == 0}">
                         <div class="form-group">
                             <label>Items</label>
                             <span data-bind="foreach: leftMenuVM.orderVM.items">
@@ -164,7 +183,8 @@
                                            data-bind="textInput: quantity">
                                  </div>
                                  <div class="col-md-2 quantity-container-icon">
-                                    <i class="fas fa-minus" data-bind="click: $parent.leftMenuVM.orderVM.removeItem"></i>
+                                    <i class="fas fa-minus"
+                                       data-bind="click: $parent.leftMenuVM.orderVM.removeItem"></i>
                                  </div>
                               </div>
                            </span>
@@ -187,7 +207,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="left-menu-details-order-actions">
+                    <div class="left-menu-details-bottom-actions">
                         <i class="fas fa-check" data-bind="click: leftMenuVM.orderVM.addOrder"></i>
                     </div>
                 </div>
@@ -206,7 +226,8 @@
                    data-bind="click: controlConsoleVM.playClicked, css: {'fa-play play': !controlConsoleVM.playing(), 'fa-pause pause': controlConsoleVM.playing()}"></i>
                 <div class="deploy-switch" data-bind="click: controlConsoleVM.deployClicked">Deploy</div>
             </div>
-            <div class="text-sm-center msg" data-bind="text: controlConsoleVM.msg, css: {'error-msg': controlConsoleVM.msgType() === MSG_ERROR, 'info-msg': controlConsoleVM.msgType() === MSG_INFO}"></div>
+            <div class="text-sm-center msg"
+                 data-bind="text: controlConsoleVM.msg, css: {'error-msg': controlConsoleVM.msgType() === MSG_ERROR, 'info-msg': controlConsoleVM.msgType() === MSG_INFO}"></div>
         </div>
     </div>
     <div class="col-md-2 right-menu" id="right-menu">

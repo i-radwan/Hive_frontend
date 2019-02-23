@@ -257,13 +257,13 @@ body {
     color: red;
 }
 
-.left-menu-details-order-actions {
+.left-menu-details-bottom-actions {
     position: absolute;
     bottom: 20px;
     right: 17px;
 }
 
-.left-menu-details-order-actions i {
+.left-menu-details-bottom-actions i {
     color: #bababa;
     cursor: pointer;
     font-size: 22px;
@@ -272,7 +272,7 @@ body {
     padding: 0.45em 0.4em;
 }
 
-.left-menu-details-order-actions i:hover {
+.left-menu-details-bottom-actions i:hover {
     color: #e09500;
     border: 2px solid #e09500;
     box-shadow: 0 0 5px #e09500;

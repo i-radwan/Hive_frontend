@@ -10,7 +10,7 @@ let entryViewModel = function (shouter, map) {
                 type: MAP_CELL.ENTRY
             };
 
-            shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Entry placed successfully!", type: MSG_INFO}, SHOUT_MSG);
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }

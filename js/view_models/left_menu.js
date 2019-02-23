@@ -102,41 +102,62 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
     // Outside events
     self.handleCellClick = function (row, col) {
         if (runningMode() === RUNNING_MODE.DESIGN) {
-            switch (self.activeMenu()) {
-                case LEFT_MENU.ENTRY:
-                    self.entryVM.addEntry(row, col);
-                    break;
-                case LEFT_MENU.ROBOT:
-                    self.robotVM.addRobot(row, col);
-                    break;
-                case LEFT_MENU.RACK:
-                    console.log(123);
-                    self.rackVM.addRack(row, col);
-                    break;
-                case LEFT_MENU.PARK:
-                    self.parkVM.addPark(row, col);
-                    break;
-                case LEFT_MENU.OBSTACLE:
-                    self.obstacleVM.addObstacle(row, col);
-                    break;
+            if (map.grid[row][col].type === MAP_CELL.EMPTY) {
+                switch (self.activeMenu()) {
+                    case LEFT_MENU.ENTRY:
+                        self.entryVM.addEntry(row, col);
+                        break;
+                    case LEFT_MENU.ROBOT:
+                        self.robotVM.addRobot(row, col);
+                        break;
+                    case LEFT_MENU.RACK:
+                        self.rackVM.addRack(row, col);
+                        break;
+                    case LEFT_MENU.PARK:
+                        self.parkVM.addPark(row, col);
+                        break;
+                    case LEFT_MENU.OBSTACLE:
+                        self.obstacleVM.addObstacle(row, col);
+                        break;
+                }
+            } else {
+                switch (map.grid[row][col].type) {
+                    case MAP_CELL.ENTRY:
+                        self.activeMenu(LEFT_MENU.EMPTY);
+                        break;
+                    case MAP_CELL.ROBOT:
+                        self.activeMenu(LEFT_MENU.ROBOT);
+                        self.robotVM.editRobot(row, col);
+                        break;
+                    case MAP_CELL.RACK:
+                        self.activeMenu(LEFT_MENU.RACK);
+                        self.rackVM.editRack(row, col);
+                        break;
+                    case MAP_CELL.PARK:
+                        self.activeMenu(LEFT_MENU.EMPTY);
+                        break;
+                    case MAP_CELL.OBSTACLE:
+                        self.activeMenu(LEFT_MENU.EMPTY);
+                        break;
+                }
             }
         } else {
             switch (map.grid[row][col].type) {
                 case MAP_CELL.ENTRY:
                     self.activeMenu(LEFT_MENU.EMPTY);
                     break;
-                case LEFT_MENU.ROBOT:
+                case MAP_CELL.ROBOT:
                     self.activeMenu(LEFT_MENU.ROBOT);
                     self.robotVM.fillFields(row, col);
                     break;
-                case LEFT_MENU.RACK:
+                case MAP_CELL.RACK:
                     self.activeMenu(LEFT_MENU.RACK);
                     self.rackVM.fillFields(row, col);
                     break;
-                case LEFT_MENU.PARK:
+                case MAP_CELL.PARK:
                     self.activeMenu(LEFT_MENU.EMPTY);
                     break;
-                case LEFT_MENU.OBSTACLE:
+                case MAP_CELL.OBSTACLE:
                     self.activeMenu(LEFT_MENU.EMPTY);
                     break;
             }

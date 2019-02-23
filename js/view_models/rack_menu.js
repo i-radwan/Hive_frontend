@@ -8,12 +8,15 @@ let rackViewModel = function (shouter, map) {
     self.quantity = ko.observable(10);
     self.itemWeight = ko.observable(1);
 
+    self.applyVisible = ko.observable(false);
+    self.activeRackRow, self.activeRackRow;
+
     self.addRack = function (row, col) {
         if (map.grid[row][col].type === MAP_CELL.EMPTY) {
             if (!self.checkValid()) {
                 return;
             }
-            
+
             map.grid[row][col] = {
                 type: MAP_CELL.RACK,
                 item_number: parseInt(self.itemNumber()),
@@ -58,6 +61,31 @@ let rackViewModel = function (shouter, map) {
         self.itemNumber(rack.item_number);
         self.quantity(rack.quantity);
         self.itemWeight(rack.item_weight);
+    };
+
+    self.editRack = function (row, col) {
+        self.fillFields(row, col);
+        self.applyVisible(true);
+        self.activeRackRow = row;
+        self.activeRackCol = col;
+    };
+
+    self.updateRack = function () {
+        if (!self.checkValid()) {
+            return;
+        }
+
+        map.grid[self.activeRackRow][self.activeRackRow] = {
+            type: MAP_CELL.RACK,
+            item_number: parseInt(self.itemNumber()),
+            quantity: parseInt(self.quantity()),
+            item_weight: parseFloat(self.itemWeight())
+        };
+
+        shouter.notifySubscribers({text: "Rack updated successfully!", type: MSG_INFO}, SHOUT_MSG);
+
+        self.activeRackRow = self.activeRackCol = -1;
+        self.applyVisible(false);
     };
 
     self.checkValid = function () {

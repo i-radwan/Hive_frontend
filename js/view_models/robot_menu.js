@@ -10,6 +10,9 @@ let robotViewModel = function (shouter, map) {
     self.batteryCap = ko.observable(10000);
     self.ip = ko.observable("");
 
+    self.applyVisible = ko.observable(false);
+    self.activeRobotRow, self.activeRobotRow;
+
     self.addRobot = function (row, col) {
         if (map.grid[row][col].type === MAP_CELL.EMPTY) {
             if (!self.checkValid()) {
@@ -66,6 +69,33 @@ let robotViewModel = function (shouter, map) {
         self.loadCap(robot.load_cap);
         self.batteryCap(robot.battery_cap);
         self.ip(robot.ip);
+    };
+
+    self.editRobot = function (row, col) {
+        self.fillFields(row, col);
+        self.applyVisible(true);
+        self.activeRobotRow = row;
+        self.activeRobotCol = col;
+    };
+
+    self.updateRobot = function () {
+        if (!self.checkValid()) {
+            return;
+        }
+
+        map.grid[self.activeRobotRow][self.activeRobotRow] = {
+            type: MAP_CELL.ROBOT,
+            id: parseInt(self.id()),
+            color: self.color(),
+            load_cap: parseInt(self.loadCap()),
+            battery_cap: parseInt(self.batteryCap()),
+            ip: self.ip()
+        };
+
+        shouter.notifySubscribers({text: "Robot updated successfully!", type: MSG_INFO}, SHOUT_MSG);
+
+        self.activeRobotRow = self.activeRobotCol = -1;
+        self.applyVisible(false);
     };
 
     self.checkValid = function () {
