@@ -540,6 +540,17 @@ Control
     color: #78c631;
 }
 
+.logo {
+    position: absolute;
+    left: 13px;
+    top: 0;
+    transform: translate(0, -13px);
+}
+
+.logo img {
+    height: 100px;
+}
+
 /**
 Components
  */
@@ -597,7 +608,6 @@ Components
 .right-menu-stats-toggle .toggle:nth-child(2) {
     right: 0;
 }
-
 
 /**
 General

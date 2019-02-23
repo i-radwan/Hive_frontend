@@ -17,8 +17,6 @@ let rackViewModel = function (shouter, map) {
                 item_weight: self.itemWeight()
             };
 
-            self.itemNumber(parseInt(self.itemNumber()) + 1);
-
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);

@@ -18,7 +18,7 @@ $(document).ready(() => {
     let w = map.width();
 
     map.click(function(e) {
-        mainVM.handleCellClick(Math.floor(e.offsetY / h * 20), Math.floor(e.offsetX / w * 30));
+        mainVM.handleCellClick(Math.floor(e.offsetY / h * mainVM.map.height), Math.floor(e.offsetX / w * mainVM.map.width));
         console.log(mainVM.map);
     });
 

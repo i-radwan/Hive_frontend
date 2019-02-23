@@ -62,7 +62,7 @@ let tempsViewModel = function (shouter, map) {
 
             temps.push({
                 temp: temp,
-                img: "images/hold.png"
+                img: "images/temps/hold.png"
             });
         }
 
