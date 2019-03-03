@@ -14,7 +14,6 @@ let controlConsoleViewModel = function (runningMode, shouter, map) {
             runningMode(RUNNING_MODE.DESIGN);
             self.playing(false);
         } else {
-            // TODO: Check if all info is good
             runningMode(RUNNING_MODE.SIMULATE);
             self.playing(true);
         }
@@ -39,6 +38,7 @@ let controlConsoleViewModel = function (runningMode, shouter, map) {
         }
 
         runningMode(RUNNING_MODE.DEPLOY);
+        self.playing(true);
     };
 
     shouter.subscribe(function (msg) {

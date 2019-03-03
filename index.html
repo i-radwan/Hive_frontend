@@ -82,12 +82,14 @@
                     <div class="form-group">
                         <label for="map_height">Height</label>
                         <input type="number" class="form-control bg-dark text-light" id="map_height" name="map_height"
-                               placeholder="Height (#cells)" data-bind="textInput: leftMenuVM.mapVM.mapHeight, enable: runningMode() === RUNNING_MODE.DESIGN"">
+                               placeholder="Height (#cells)"
+                               data-bind="textInput: leftMenuVM.mapVM.mapHeight, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="form-group">
                         <label for="map_height">Width</label>
                         <input type="number" class="form-control bg-dark text-light" id="map_width" name="map_width"
-                               placeholder="Width (#cells)" data-bind="textInput: leftMenuVM.mapVM.mapWidth, enable: runningMode() === RUNNING_MODE.DESIGN"">
+                               placeholder="Width (#cells)"
+                               data-bind="textInput: leftMenuVM.mapVM.mapWidth, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="left-menu-details-map-actions">
                         <i class="fas fa-save save" data-bind="click: leftMenuVM.mapVM.saveMap"></i>
@@ -126,12 +128,14 @@
                     <div class="form-group">
                         <label for="robot_id">Robot ID</label>
                         <input type="number" class="form-control bg-dark text-light" id="robot_id"
-                               name="robot_id" placeholder="Robot ID" data-bind="textInput: leftMenuVM.robotVM.id, enable: runningMode() === RUNNING_MODE.DESIGN"">
+                               name="robot_id" placeholder="Robot ID"
+                               data-bind="textInput: leftMenuVM.robotVM.id, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="form-group">
                         <label for="robot_color">Robot Color</label>
                         <input type="text" class="form-control bg-dark text-light" id="robot_color"
-                               name="robot_color" placeholder="#FFFFFF" data-bind="textInput: leftMenuVM.robotVM.color, enable: runningMode() === RUNNING_MODE.DESIGN"">
+                               name="robot_color" placeholder="#FFFFFF"
+                               data-bind="textInput: leftMenuVM.robotVM.color, enable: runningMode() === RUNNING_MODE.DESIGN"">
                     </div>
                     <div class="form-group">
                         <label for="robot_cap">Load Capacity</label>
@@ -296,9 +300,6 @@
         </div>
     </div>
 </div>
-<!--<script src="node_modules/jquery/dist/jquery.min.js"></script>-->
-<!--<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>-->
-<!--<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>-->
 <script>
     require("./js/app.js");
 </script>
