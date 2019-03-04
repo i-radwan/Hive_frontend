@@ -11,7 +11,7 @@ let robotViewModel = function (shouter, map) {
     self.ip = ko.observable("");
 
     self.applyVisible = ko.observable(false);
-    self.activeRobotRow, self.activeRobotRow;
+    self.activeRobotRow, self.activeRobotCol;
 
     self.addRobot = function (row, col) {
         if (map.grid[row][col].type === MAP_CELL.EMPTY) {
@@ -83,7 +83,7 @@ let robotViewModel = function (shouter, map) {
             return;
         }
 
-        map.grid[self.activeRobotRow][self.activeRobotRow] = {
+        map.grid[self.activeRobotRow][self.activeRobotCol] = {
             type: MAP_CELL.ROBOT,
             id: parseInt(self.id()),
             color: self.color(),

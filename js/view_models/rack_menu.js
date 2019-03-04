@@ -9,7 +9,7 @@ let rackViewModel = function (shouter, map) {
     self.itemWeight = ko.observable(1);
 
     self.applyVisible = ko.observable(false);
-    self.activeRackRow, self.activeRackRow;
+    self.activeRackRow, self.activeRackCol;
 
     self.addRack = function (row, col) {
         if (map.grid[row][col].type === MAP_CELL.EMPTY) {
@@ -75,7 +75,7 @@ let rackViewModel = function (shouter, map) {
             return;
         }
 
-        map.grid[self.activeRackRow][self.activeRackRow] = {
+        map.grid[self.activeRackRow][self.activeRackCol] = {
             type: MAP_CELL.RACK,
             item_number: parseInt(self.itemNumber()),
             quantity: parseInt(self.quantity()),
