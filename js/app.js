@@ -27,14 +27,9 @@ $(document).ready(() => {
     let h = map.height();
     let w = map.width();
 
-    map.click(function (e) {
-        mainVM.eventHandler({
-            type: EVENT_FROM_GFX.CELL_CLICK,
-            row: Math.floor(e.offsetY / h * mainVM.state.map.height),
-            col: Math.floor(e.offsetX / w * mainVM.state.map.width)
-        });
-
-        console.log(mainVM.state.map);
+    map.click(function(e) {
+        mainVM.handleCellClick(Math.floor(e.offsetY / h * mainVM.map.height), Math.floor(e.offsetX / w * mainVM.map.width));
+        //console.log(mainVM.map);
     });
 
     // GFX code
