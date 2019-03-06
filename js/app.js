@@ -20,7 +20,7 @@ $(document).ready(() => {
 
     map.click(function(e) {
         mainVM.handleCellClick(Math.floor(e.offsetY / h * mainVM.map.height), Math.floor(e.offsetX / w * mainVM.map.width));
-        console.log(mainVM.map);
+        //console.log(mainVM.map);
     });
 
     // GFX code

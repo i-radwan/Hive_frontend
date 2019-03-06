@@ -4,6 +4,8 @@ let $ = require('jquery');
 let ko = require('knockout');
 let camera;
 
+let arrow = {left: 37, up: 38, right: 39, down: 40};
+
 let gfx = function () {
     let mapRow = $('.map-row');
 
@@ -12,6 +14,9 @@ let gfx = function () {
         height: mapRow.height(),
         autostart: true
     }).appendTo(mapRow[0]);
+
+    let zui = new ZUI(two);
+    zui.addLimits(0.06, 8);
 
     // let rect = two.makeRectangle(two.width / 2, two.height / 2, 150, 150);
     //
@@ -36,7 +41,7 @@ let gfx = function () {
         camera = two.makeGroup();
         for(let i = 0;i < width; i++) {
             for(let j = 0; j < height; j++) {
-                let square = two.makeRectangle(j*gridCellLength + gridCellLength / 2, i*gridCellLength + gridCellLength / 2, gridCellLength, gridCellLength);
+                let square = two.makeRectangle(i*gridCellLength + gridCellLength / 2, j*gridCellLength + gridCellLength / 2, gridCellLength, gridCellLength);
                 square.fill = '#bababa';
                 camera.add(square);
             }
@@ -46,12 +51,13 @@ let gfx = function () {
         camera.add(circle);
 
         //camera.center();
+        zui.translateSurface(two.width / 2, two.height / 2);
         two.scene.translation.addSelf(two.width / 2, two.height / 2);
         camera.translation.addSelf(-(mapWidth * gridCellLength) / 2, -(mapHeight * gridCellLength) / 2);
         //camera.translation.addSelf(-two.width / 2, -two.height / 2);
     };
 
-    let mapWidth = 10;
+    let mapWidth = 17;
     let mapHeight = 10;
 
     drawGrid(mapWidth, mapHeight);
@@ -76,30 +82,91 @@ let gfx = function () {
         //camera.translation.addSelf(0.3, 0);
         //two.scene.scale -= 0.001;
 
+        let verticalDir = 0;
+        let HorizontalDir = 0;
+        if(goingLeft)
+            HorizontalDir = 1;
+        else if(goingRight)
+            HorizontalDir = -1;
+
+        if(goingUp)
+            verticalDir = 1;
+        else if(goingDown)
+            verticalDir = -1;
+
+        zui.translateSurface(4 * HorizontalDir ,4 * verticalDir);
+        two.scene.translation.addSelf(4 * HorizontalDir ,4 * verticalDir);
     });
 
     let map = $('#map-container');
-    two.scene.scale -= 0.4;
+    zui.zoomBy(-0.4, two.width / 2 + map.offset().left,  two.height / 2 + map.offset().top);
 
-    let zui = new ZUI(two);
-    zui.addLimits(0.06, 8);
     //camera.translation.set(two.width / 2, two.height / 2);
 
 
     map.bind('mousewheel', function (e) {
         const delta = e.originalEvent.wheelDelta / 1000;
-        console.log("scrolling with delta = ", delta);
         zui.zoomBy(delta, e.clientX, e.clientY);
     });
 
     map.bind('contextmenu', function (e) {
-        two.scene.translation.addSelf(two.width / 2, two.height / 2);
         x = 0;
     });
 
-    map.bind('keydown', function(e) {
-        let character = String.fromCharCode(e.which);
-        console.log(character);
+    let startDragX = 0;
+    let startDragY = 0;
+    let mouseDown = false;
+
+    map.bind('mousedown', function (e) {
+        mouseDown = true;
+        startDragX = e.clientX - map.offset().left;
+        startDragY = e.clientY - map.offset().top;
+    });
+
+    map.bind('mousemove', function (e) {
+        if(mouseDown) {
+            let dirX = e.clientX - map.offset().left - startDragX;
+            let dirY = e.clientY - map.offset().top - startDragY;
+
+            zui.translateSurface(dirX, dirY);
+            two.scene.translation.addSelf(dirX, dirY);
+
+            startDragX = e.clientX - map.offset().left;
+            startDragY = e.clientY - map.offset().top;
+        }
+    });
+
+    map.bind('mouseup', function (e) {
+        mouseDown = false;
+    });
+
+    let goingLeft = false;
+    let goingRight = false;
+    let goingUp = false;
+    let goingDown = false;
+
+    $(document).on('keydown', function(e) {
+        if(e.which == arrow.left) {
+            goingLeft = true;
+        } else if(e.which == arrow.right) {
+            goingRight = true;
+        } else if(e.which == arrow.up) {
+            goingUp = true;
+        } else if(e.which == arrow.down) {
+            goingDown = true;
+        }
+    });
+
+    $(document).on('keyup', function (e) {
+        if(e.which == arrow.left) {
+            goingLeft = false;
+        } else if(e.which == arrow.right) {
+            goingRight = false;
+        } else if(e.which == arrow.up) {
+            goingUp = false;
+        } else if(e.which == arrow.down) {
+            goingDown = false;
+        }
     });
 
     two.update();
@@ -109,54 +176,17 @@ let gfx = function () {
             cursor: 'pointer'
         })
         .bind('click', function (e) {
-            console.log("Hey oooooh!");
             let mouseX = e.clientX - map.offset().left - camera.getBoundingClientRect().left;
             let mouseY = e.clientY - map.offset().top - camera.getBoundingClientRect().top;
             let cellWidth = (camera.getBoundingClientRect().right - camera.getBoundingClientRect().left) / mapWidth;
 
             let cellRow = parseInt(mouseY / cellWidth);
             let cellCol = parseInt(mouseX / cellWidth);
-
-            console.log('mouseX = ', mouseX, 'mouseY = ', mouseY, 'cellWidth = ', cellWidth);
             console.log('Clicking on Cell = {', cellRow, ', ',cellCol,'}');
-    });
+        });
 
     map.bind('click', function (e) {
-        if(x/100 < 1) {
-            console.log((mapWidth * gridCellLength) / 2, ' ', (mapHeight * gridCellLength) / 2);
-            console.log(camera.getBoundingClientRect());
-            //console.log(camera.children);
-            //camera.translation.addSelf(-(mapWidth * gridCellLength *0.6) / 2, -(mapHeight * gridCellLength * 0.6) / 2);
-            for(let i=0;i<camera.children.length - 1;i++) {
-                camera.children[i].origin.x = 50;
-                camera.children[i].origin.y = 50;
-                //camera.children[i].rotation += 0.1;
 
-            }
-            //two.scene.translation.addSelf(-(mapWidth * gridCellLength *0.6) / 2, -(mapHeight * gridCellLength * 0.6) / 2);
-        }
-        else {
-            two.scene.rotation += 0.1;
-        }
-        /*else {
-            camera.translation.addSelf(two.width / 2, two.height / 2);
-        }*/
-        console.log(two.width, ' ',two.height);
-        x++;
-        //zui.zoomBy(0.1, e.clientX, e.clientY);
-
-
-
-
-
-        let mouseX = e.clientX - map.offset().left;
-        let mouseY = e.clientY - map.offset().top;
-        // console.log('mouseX = ', mouseX, 'mouseY = ', mouseY, 'gridCellLength = ', gridCellLength);
-
-        let cellRow = parseInt(mouseY / gridCellLength);
-        let cellCol = parseInt(mouseX / gridCellLength);
-
-        //console.log('cellRow = ', cellRow, 'cellCol = ', cellCol);
     });
 
 
