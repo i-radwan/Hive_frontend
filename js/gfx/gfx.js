@@ -2,36 +2,51 @@ require('two.js');
 let ZUI = require('./zui');
 let $ = require('jquery');
 let ko = require('knockout');
-let gridMap;
-
-let arrow = {left: 37, up: 38, right: 39, down: 40};
-let key_code = {F5: 116, delete: 46, esc: 27};
 
 let gfx = function (mainVM) {
-    let mapRow = $('.map-row');
-
+    // Canvas & Two & ZUI initialization
+    let canvas = $('.map-row');
     let two = new Two({
-        width: mapRow.width(),
-        height: mapRow.height(),
+        width: canvas.width(),
+        height: canvas.height(),
         autostart: true
-    }).appendTo(mapRow[0]);
-
+    }).appendTo(canvas[0]);
     let zui = new ZUI(two);
-    zui.addLimits(0.06, 8);
+    let gridMap;
+    zui.addLimits(MIN_ZOOM_VAL, MAX_ZOOM_VAL);
 
-    // let rect = two.makeRectangle(two.width / 2, two.height / 2, 150, 150);
-    //
-    // two.bind('update', function () {
-    //     rect.rotation += 0.01;
-    // });
-    let gridCellLength = 50;
+    // all of the scene objects (Racks, Robots...)
     let mapObjects = [];
 
+    // Dragging & Selecting Variables
+    let startDragX = 0;
+    let startDragY = 0;
+    let draggedObject;
+    let selectedObject = -1;
+    let dragging = false;
+    let draggingObject = false;
+
+    // Keyboard Dragging Variables
+    let goingLeft = false;
+    let goingRight = false;
+    let goingUp = false;
+    let goingDown = false;
+
+    // Translate the scene with the given direction (Handles ZUI transformation matrix)
     let translateScene = function (dx, dy) {
         zui.translateSurface(dx ,dy);
         two.scene.translation.addSelf(dx ,dy);
     };
 
+    // Removes all the translations and scale to the scene
+    let resetScene = function () {
+        zui.reset();
+        zui.updateSurface();
+        two.scene.translation.set(0, 0);
+        two.clear();
+    };
+
+    // Gets from the mouse raw position the row and column of the cell that is being clicked (if out of bounds it returns the nearest cell)
     let getMouseCell = function (mouseX, mouseY) {
         mouseX = mouseX - canvas.offset().left - gridMap.getBoundingClientRect().left;
         mouseY = mouseY - canvas.offset().top - gridMap.getBoundingClientRect().top;
@@ -53,6 +68,7 @@ let gfx = function (mainVM) {
         return ret;
     };
 
+    // Gets the idx of the object in the mapObject array (if it doesn't exist returns -1)
     let getMapObjectIdx = function (row, col) {
       for(let i = 0; i < mapObjects.length;i++) {
           if (mapObjects[i].row == row && mapObjects[i].col == col)
@@ -61,26 +77,87 @@ let gfx = function (mainVM) {
       return -1;
     };
 
+    // Gets the object in the mapObject array (if it doesn't exist returns -1)
     let getMapObject = function (row, col) {
         let idx = getMapObjectIdx(row, col);
         return idx == -1 ? -1 : mapObjects[idx];
     };
 
+    // Gets the idx of the object in the mapGrid two.Group
     let getRendererObjectIdx = function (row, col) {
       return col * mainVM.map.height + row;
     };
 
+    // Gets the object in the mapGrid two.Group
     let getRendererObject = function (row, col) {
       return gridMap.children[getRendererObjectIdx(row, col)];
     };
 
+    // Gets the center of the cell in coordinate values (x, y) to draw the objects
+    let getCellCenter = function (row, col) {
+        let cellCenterX = col*GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2;
+        let cellCenterY = row*GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2;
+
+        return {x: cellCenterX, y: cellCenterY};
+    };
+
+    // Creates the object given its type and position and appends it to the mapObjects array
+    let createObject = function (row, col, type) {
+        let cellCenter = getCellCenter(row, col);
+        let object;
+        switch (type) {
+            case MAP_CELL.ENTRY:
+                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
+                object.fill = "#8b0000";
+                break;
+            case MAP_CELL.ROBOT:
+                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
+                object.fill = "#e09500";
+                break;
+            case MAP_CELL.RACK:
+                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
+                object.fill = "#3972bf";
+                break;
+            case MAP_CELL.PARK:
+                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
+                object.fill = "#78c631";
+                break;
+            case MAP_CELL.OBSTACLE:
+                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
+                object.fill = "#1d1d1e";
+                break;
+        }
+        let ret = {twoObject: object, type: type, row: row, col: col, idx: mapObjects.length};
+        mapObjects.push(ret);
+        return ret;
+    };
+
+    // Creates a cell at the given position and creates the objects that this cell contains
+    let createCell = function (row, col, type) {
+        let cellCenter = getCellCenter(row, col);
+        let cellGroup = two.makeGroup();
+
+        let square = two.makeRectangle(cellCenter.x, cellCenter.y, GRID_CELL_LENGTH, GRID_CELL_LENGTH);
+        square.fill = '#bababa';
+        cellGroup.add(square);
+        if (type !== MAP_CELL.EMPTY) {
+            let object = createObject(row, col, type);
+
+            cellGroup.add(object.twoObject);
+        }
+
+        return cellGroup;
+    };
+
+    // Translates a twoObject given its current position and destination
     let translateObject = function (object, srcRow, srcCol, dstRow, dstCol) {
         if (srcRow == dstRow && srcCol == dstCol) return;
+        console.log('Moving from (', srcRow, ', ', srcCol, ') to (', dstRow, ', ',dstCol,')');
 
         getRendererObject(srcRow, srcCol).remove(object.twoObject);
 
-        let cellCenterX = dstCol*gridCellLength + gridCellLength / 2;
-        let cellCenterY = dstRow*gridCellLength + gridCellLength / 2;
+        let cellCenterX = dstCol*GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2;
+        let cellCenterY = dstRow*GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2;
 
         getRendererObject(dstRow, dstCol).add(object.twoObject);
         let childIdx = getRendererObject(dstRow, dstCol).children.length - 1;
@@ -89,74 +166,38 @@ let gfx = function (mainVM) {
         return object;
     };
 
-    let deleteCellObjects = function (cellObject) {
+    // Deletes an object from the scene and removes it from mabObjects array.
+    let deleteCellObject = function (cellObject) {
         getRendererObject(cellObject.row, cellObject.col).remove(cellObject.twoObject);
-        mapObjects.splice(cellObject.idx, 1);
+
+        mapObjects[cellObject.idx] = mapObjects[mapObjects.length - 1];
+        mapObjects[cellObject.idx].idx = cellObject.idx;
+        mapObjects.pop();
     };
 
+    // Draws the grid
     let drawGrid = function (map) {
         mapObjects = [];
-        two.clear();
+        resetScene();
 
         let width = map.width;
         let height = map.height;
 
-        let gridHeight = height * gridCellLength;
-        let gridWidth = width * gridCellLength;
         gridMap = two.makeGroup();
         for(let c = 0;c < width; c++) {
             for(let r = 0; r < height; r++) {
-                let cellCenterX = c*gridCellLength + gridCellLength / 2;
-                let cellCenterY = r*gridCellLength + gridCellLength / 2;
-                let cellGroup = two.makeGroup();
-                let square = two.makeRectangle(cellCenterX, cellCenterY, gridCellLength, gridCellLength);
-                square.fill = '#bababa';
-                cellGroup.add(square);
-
-                let object, makeObject = true;
-                switch (map.grid[r][c].type) {
-                    case MAP_CELL.EMPTY:
-                        makeObject = false;
-                        break;
-                    case MAP_CELL.ENTRY:
-                        object = two.makeCircle(cellCenterX, cellCenterY, 10);
-                        object.fill = "#8b0000";
-                        break;
-                    case MAP_CELL.ROBOT:
-                        object = two.makeCircle(cellCenterX, cellCenterY, 10);
-                        object.fill = "#e09500";
-                        break;
-                    case MAP_CELL.RACK:
-                        object = two.makeCircle(cellCenterX, cellCenterY, 10);
-                        object.fill = "#3972bf";
-                        break;
-                    case MAP_CELL.PARK:
-                        object = two.makeCircle(cellCenterX, cellCenterY, 10);
-                        object.fill = "#78c631";
-                        break;
-                    case MAP_CELL.OBSTACLE:
-                        object = two.makeCircle(cellCenterX, cellCenterY, 10);
-                        object.fill = "#1d1d1e";
-                        break;
-                }
-
-                if (makeObject) {
-                    cellGroup.add(object);
-                    let x = {twoObject: object, type: map.grid[r][c], row: r, col: c, idx: mapObjects.length};
-                    mapObjects.push(x);
-                }
-
-                gridMap.add(cellGroup);
+                gridMap.add(createCell(r, c, mainVM.map.grid[r][c].type));
             }
         }
-        let circle = two.makeCircle(gridWidth / 2, gridHeight / 2, 10);
-        circle.fill = "#FF0000";
-        gridMap.add(circle);
 
-        //translateScene(two.width / 2, two.height / 2);
-        //gridMap.translation.addSelf(-(mapWidth * gridCellLength) / 2, -(mapHeight * gridCellLength) / 2);
+        translateScene(two.width / 2, two.height / 2);
+        translateScene(-(width * GRID_CELL_LENGTH) / 2, -(height * GRID_CELL_LENGTH) / 2);
+
+        // What a magical equation !
+        zui.zoomBy(-Math.pow(mainVM.map.width * mainVM.map.height, 0.5) / 30, two.width / 2 + canvas.offset().left,  two.height / 2 + canvas.offset().top);
+
+
         two.update();
-
         $(gridMap._renderer.elem)
             .css({
                 cursor: 'pointer'
@@ -170,10 +211,7 @@ let gfx = function (mainVM) {
             });
     };
 
-    console.log(mainVM);
-
-    drawGrid(mainVM.map);
-
+    // Translates the scene a tiny amount according to the pressed keys (should only be called in update function)
     let handleKeyboardDrag = function () {
         let verticalDir = 0;
         let horizontalDir = 0;
@@ -187,34 +225,21 @@ let gfx = function (mainVM) {
         else if(goingDown)
             verticalDir = -1;
 
-        translateScene(4 * horizontalDir, 4 * verticalDir);
+        translateScene(KEYBOARD_DRAG_SPEED * horizontalDir, KEYBOARD_DRAG_SPEED * verticalDir);
     };
 
+    // Does the updates required at every time step
     two.bind('update', function () {
         handleKeyboardDrag();
     });
 
-    let canvas = $('#map-container');
-    zui.zoomBy(-0.4, two.width / 2 + canvas.offset().left,  two.height / 2 + canvas.offset().top);
-
-    //gridMap.translation.set(two.width / 2, two.height / 2);
-
-
+    // Handles zooming
     canvas.bind('mousewheel', function (e) {
         const delta = e.originalEvent.wheelDelta / 1000;
         zui.zoomBy(delta, e.clientX, e.clientY);
     });
 
-    canvas.bind('contextmenu', function (e) {
-    });
-
-    let startDragX = 0;
-    let startDragY = 0;
-    let draggedObject;
-    let selectedObject = -1;
-    let dragging = false;
-    let draggingObject = false;
-
+    // Handles initial Dragging click
     canvas.bind('mousedown', function (e) {
         dragging = true;
         startDragX = e.clientX - canvas.offset().left;
@@ -231,120 +256,115 @@ let gfx = function (mainVM) {
                 draggedObject.draggingCol = draggedObject.col;
             } else
                 draggingObject = false;
-
-            console.log('Cell Type = ', cellType);
         }
     });
 
+    // Handles intermediate Dragging move
     canvas.bind('mousemove', function (e) {
         if(!dragging) return;
-        if (!draggingObject) {
-            let dirX = e.clientX - canvas.offset().left - startDragX;
-            let dirY = e.clientY - canvas.offset().top - startDragY;
+        if (draggingObject) {
+            let currentCell = getMouseCell(e.clientX, e.clientY);
+            translateObject(draggedObject, draggedObject.draggingRow, draggedObject.draggingCol, currentCell.row, currentCell.col);
 
-
-            translateScene(dirX, dirY);
-
-            startDragX = e.clientX - canvas.offset().left;
-            startDragY = e.clientY - canvas.offset().top;
+            draggedObject.draggingRow = currentCell.row;
+            draggedObject.draggingCol = currentCell.col;
             return;
         }
-        let currentCell = getMouseCell(e.clientX, e.clientY);
-        translateObject(draggedObject, draggedObject.draggingRow, draggedObject.draggingCol, currentCell.row, currentCell.col);
+        let dirX = e.clientX - canvas.offset().left - startDragX;
+        let dirY = e.clientY - canvas.offset().top - startDragY;
 
-        draggedObject.draggingRow = currentCell.row;
-        draggedObject.draggingCol = currentCell.col;
+
+        translateScene(dirX, dirY);
+
+        startDragX = e.clientX - canvas.offset().left;
+        startDragY = e.clientY - canvas.offset().top;
     });
 
+    // Handles final dragging move and mouse clicks
     canvas.bind('mouseup', function (e) {
         let currentCell = getMouseCell(e.clientX, e.clientY);
-        if(draggingObject && (draggedObject.row != currentCell.row || draggedObject.col != currentCell.col)) {
-            mainVM.handleCellDrag(draggedObject.row, draggedObject.col, currentCell.row, currentCell.col);
+        if (!draggingObject)
+            selectedObject = -1;
+        else {
+            selectedObject = mapObjects[draggedObject.idx];
 
-            if (getMapObjectIdx(draggedObject.draggingRow, draggedObject.draggingCol) !== -1)  { // not empty cell
-                translateObject(draggedObject, draggedObject.draggingRow, draggedObject.draggingCol, draggedObject.row, draggedObject.col);
+            if (draggedObject.row != currentCell.row || draggedObject.col != currentCell.col) {
+                mainVM.handleCellDrag(draggedObject.row, draggedObject.col, currentCell.row, currentCell.col);
+
+                if (getMapObjectIdx(draggedObject.draggingRow, draggedObject.draggingCol) !== -1)  { // not empty cell
+                    translateObject(draggedObject, draggedObject.draggingRow, draggedObject.draggingCol, draggedObject.row, draggedObject.col);
+                }
+                else {
+                    mapObjects[draggedObject.idx].row = draggedObject.draggingRow;
+                    mapObjects[draggedObject.idx].col = draggedObject.draggingCol;
+                }
             }
-            else {
-                mapObjects[draggedObject.idx].row = draggedObject.draggingRow;
-                mapObjects[draggedObject.idx].col = draggedObject.draggingCol;
-            }
-        } else if (currentCell.inBounds) {
-            //mainVM.handleCellClick(currentCell.row, currentCell.col);
         }
 
-        selectedObject = draggedObject;
         dragging = false;
         draggingObject = false;
     });
 
-    let goingLeft = false;
-    let goingRight = false;
-    let goingUp = false;
-    let goingDown = false;
-
+    // Handles Drag arrow keys
     $(document).on('keydown', function(e) {
         switch (e.which) {
-            case arrow.left:
+            case ARROW.LEFT:
                 goingLeft = true;
                 break;
-            case arrow.right:
+            case ARROW.RIGHT:
                 goingRight = true;
                 break;
-            case arrow.up:
+            case ARROW.UP:
                 goingUp = true;
                 break;
-            case arrow.down:
+            case ARROW.DOWN:
                 goingDown = true;
                 break;
         }
     });
 
+    // Handles other keys pressed and stops the dragging arrows
     $(document).on('keyup', function (e) {
         switch (e.which) {
-            case arrow.left:
+            case ARROW.LEFT:
                 goingLeft = false;
                 break;
-            case arrow.right:
+            case ARROW.RIGHT:
                 goingRight = false;
                 break;
-            case arrow.up:
+            case ARROW.UP:
                 goingUp = false;
                 break;
-            case arrow.down:
+            case ARROW.DOWN:
                 goingDown = false;
                 break;
-            case key_code.F5:
+            case KEY_CODE.F5:
                 drawGrid(mainVM.map);
                 break;
-            case key_code.delete:
+            case KEY_CODE.DELETE:
                 if (selectedObject != -1) {
-                    deleteCellObjects(selectedObject);
+                    deleteCellObject(selectedObject);
                     mainVM.handleCellDeleteClick(selectedObject.row, selectedObject.col);
+                    selectedObject = -1;
                 }
                 break;
-            case key_code.esc:
+            case KEY_CODE.ESC:
                 selectedObject = -1;
                 mainVM.handleEsc();
                 break;
         }
     });
 
-    canvas.bind('click', function (e) {
+    // The only line of code in this file :V
+    drawGrid(mainVM.map);
 
-    });
-
-
-    // Ex:
-    // In case of click
-    // shouter.notifySubscribers({row: 0, col: 0}, SHOUT_GRID_CLICK);
-    // In case of drag
-    // shouter.notifySubscribers({row_src: 0, col_src: 0, row_dst: 0, col_dst: 0}, SHOUT_GRID_DRAG);
+    // Redraws the grid in a loop forever (until we find a way to update the map)
     // let updateGrid = function () {
     //   setTimeout(function () {
     //       drawGrid(mainVM.map);
     //       console.log('Updated Map');
     //       updateGrid();
-    //   }, 1000);
+    //   }, 500);
     // };
     //
     // updateGrid();
