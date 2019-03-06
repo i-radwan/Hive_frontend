@@ -169,19 +169,20 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
             case MAP_CELL.ENTRY:
                 self.entryVM.deleteEntry(row, col);
                 break;
-            case LEFT_MENU.ROBOT:
+            case MAP_CELL.ROBOT:
                 self.robotVM.deleteRobot(row, col);
                 break;
-            case LEFT_MENU.RACK:
+            case MAP_CELL.RACK:
                 self.rackVM.deleteRack(row, col);
                 break;
-            case LEFT_MENU.PARK:
+            case MAP_CELL.PARK:
                 self.parkVM.deletePark(row, col);
                 break;
-            case LEFT_MENU.OBSTACLE:
+            case MAP_CELL.OBSTACLE:
                 self.obstacleVM.deleteObstacle(row, col);
                 break;
         }
+        self.activeMenu(LEFT_MENU.EMPTY);
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
@@ -189,16 +190,16 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
             case MAP_CELL.ENTRY:
                 self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
                 break;
-            case LEFT_MENU.ROBOT:
+            case MAP_CELL.ROBOT:
                 self.robotVM.moveRobot(srcRow, srcCol, dstRow, dstCol);
                 break;
-            case LEFT_MENU.RACK:
+            case MAP_CELL.RACK:
                 self.rackVM.moveRack(srcRow, srcCol, dstRow, dstCol);
                 break;
-            case LEFT_MENU.PARK:
+            case MAP_CELL.PARK:
                 self.parkVM.movePark(srcRow, srcCol, dstRow, dstCol);
                 break;
-            case LEFT_MENU.OBSTACLE:
+            case MAP_CELL.OBSTACLE:
                 self.obstacleVM.moveObstacle(srcRow, srcCol, dstRow, dstCol);
                 break;
         }

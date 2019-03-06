@@ -12,18 +12,18 @@ $(document).ready(() => {
     let mainVM = new mainViewModel();
     ko.applyBindings(mainVM, $("#main")[0]);
 
-    // TESTING CODE
-    let map = $(".map-row");
-    let h = map.height();
-    let w = map.width();
-
-    map.click(function(e) {
-        mainVM.handleCellClick(Math.floor(e.offsetY / h * mainVM.map.height), Math.floor(e.offsetX / w * mainVM.map.width));
-        //console.log(mainVM.map);
-    });
+    // // TESTING CODE
+    // let map = $(".map-row");
+    // let h = map.height();
+    // let w = map.width();
+    //
+    // map.click(function(e) {
+    //     mainVM.handleCellClick(Math.floor(e.offsetY / h * mainVM.map.height), Math.floor(e.offsetX / w * mainVM.map.width));
+    //     //console.log(mainVM.map);
+    // });
 
     // GFX code
-    let gfx = new GFX();
+    let gfx = new GFX(mainVM);
 
     // Communication logic
 
