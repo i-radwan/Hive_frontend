@@ -45,6 +45,13 @@ let rackViewModel = function (shouter, map) {
             map.grid[row][col] = {
                 type: MAP_CELL.EMPTY
             }
+
+            return {
+                type: EVENT_TYPE.DELETE_OBJECT,
+                object: MAP_CELL.RACK,
+                row: row,
+                col: col
+            };
         }
     };
 
@@ -54,6 +61,13 @@ let rackViewModel = function (shouter, map) {
             map.grid[srcRow][srcCol] = {
                 type: MAP_CELL.EMPTY
             }
+
+            return {
+                type: EVENT_TYPE.MOVE_OBJECT,
+                object: MAP_CELL.RACK,
+                row: row,
+                col: col
+            };
         } else {
             shouter.notifySubscribers({
                 text: "(" + dstRow + ", " + dstCol + ") is occupied!",

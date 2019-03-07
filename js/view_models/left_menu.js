@@ -170,21 +170,51 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
             switch (map.grid[row][col].type) {
                 case MAP_CELL.ENTRY:
                     self.activeMenu(LEFT_MENU.EMPTY);
-                    break;
+
+                    return {
+                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        object: MAP_CELL.EMPTY,
+                        row: row,
+                        col: col
+                    }
                 case MAP_CELL.ROBOT:
                     self.activeMenu(LEFT_MENU.ROBOT);
                     self.robotVM.fillFields(row, col);
-                    break;
+
+                    return {
+                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        object: MAP_CELL.ROBOT,
+                        row: row,
+                        col: col
+                    }
                 case MAP_CELL.RACK:
                     self.activeMenu(LEFT_MENU.RACK);
                     self.rackVM.fillFields(row, col);
-                    break;
+
+                    return {
+                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        object: MAP_CELL.RACK,
+                        row: row,
+                        col: col
+                    };
                 case MAP_CELL.PARK:
                     self.activeMenu(LEFT_MENU.EMPTY);
-                    break;
+
+                    return {
+                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        object: MAP_CELL.PARK,
+                        row: row,
+                        col: col
+                    };
                 case MAP_CELL.OBSTACLE:
                     self.activeMenu(LEFT_MENU.EMPTY);
-                    break;
+
+                    return {
+                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        object: MAP_CELL.OBSTACLE,
+                        row: row,
+                        col: col
+                    };
             }
         }
     };
@@ -192,42 +222,30 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
     self.handleCellDeleteClick = function (row, col) {
         switch (map.grid[row][col].type) {
             case MAP_CELL.ENTRY:
-                self.entryVM.deleteEntry(row, col);
-                break;
+                return self.entryVM.deleteEntry(row, col);
             case LEFT_MENU.ROBOT:
-                self.robotVM.deleteRobot(row, col);
-                break;
+                return self.robotVM.deleteRobot(row, col);
             case LEFT_MENU.RACK:
-                self.rackVM.deleteRack(row, col);
-                break;
+                return self.rackVM.deleteRack(row, col);
             case LEFT_MENU.PARK:
-                self.parkVM.deletePark(row, col);
-                break;
+                return self.parkVM.deletePark(row, col);
             case LEFT_MENU.OBSTACLE:
-                self.obstacleVM.deleteObstacle(row, col);
-                break;
+                return self.obstacleVM.deleteObstacle(row, col);
         }
-
-
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
         switch (map.grid[srcRow][srcCol].type) {
             case MAP_CELL.ENTRY:
-                self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
             case LEFT_MENU.ROBOT:
-                self.robotVM.moveRobot(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.robotVM.moveRobot(srcRow, srcCol, dstRow, dstCol);
             case LEFT_MENU.RACK:
-                self.rackVM.moveRack(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.rackVM.moveRack(srcRow, srcCol, dstRow, dstCol);
             case LEFT_MENU.PARK:
-                self.parkVM.movePark(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.parkVM.movePark(srcRow, srcCol, dstRow, dstCol);
             case LEFT_MENU.OBSTACLE:
-                self.obstacleVM.moveObstacle(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.obstacleVM.moveObstacle(srcRow, srcCol, dstRow, dstCol);
         }
     };
 

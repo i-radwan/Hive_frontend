@@ -79,9 +79,9 @@ REG_IP = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0
 // GFX Events
 EVENT_TYPE = {
     ADD_OBJECT: 0,
-    DELETE_OBJECT: 0,
-    MOVE_OBJECT: 0,
-    HIGHLIGHT_OBJECT: 0
+    DELETE_OBJECT: 1,
+    MOVE_OBJECT: 2,
+    HIGHLIGHT_OBJECT: 3
 };
 
 // GFX
