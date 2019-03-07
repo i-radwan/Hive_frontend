@@ -25,6 +25,16 @@ let rackViewModel = function (shouter, map) {
             };
 
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+
+            return {
+                type: EVENT_TYPE.ADD_OBJECT,
+                object: MAP_CELL.RACK,
+                row: row,
+                col: col,
+                item_number: parseInt(self.itemNumber()),
+                quantity: parseInt(self.quantity()),
+                item_weight: parseFloat(self.itemWeight())
+            };
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }

@@ -11,6 +11,13 @@ let entryViewModel = function (shouter, map) {
             };
 
             shouter.notifySubscribers({text: "Entry placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+
+            return {
+                type: EVENT_TYPE.ADD_OBJECT,
+                object: MAP_CELL.ENTRY,
+                row: row,
+                col: col
+            };
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }

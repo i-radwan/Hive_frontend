@@ -105,40 +105,65 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
             if (map.grid[row][col].type === MAP_CELL.EMPTY) {
                 switch (self.activeMenu()) {
                     case LEFT_MENU.ENTRY:
-                        self.entryVM.addEntry(row, col);
-                        break;
+                        return self.entryVM.addEntry(row, col);
                     case LEFT_MENU.ROBOT:
-                        self.robotVM.addRobot(row, col);
-                        break;
+                        return self.robotVM.addRobot(row, col);
                     case LEFT_MENU.RACK:
-                        self.rackVM.addRack(row, col);
-                        break;
+                        return self.rackVM.addRack(row, col);
                     case LEFT_MENU.PARK:
-                        self.parkVM.addPark(row, col);
-                        break;
+                        return self.parkVM.addPark(row, col);
                     case LEFT_MENU.OBSTACLE:
-                        self.obstacleVM.addObstacle(row, col);
-                        break;
+                        return self.obstacleVM.addObstacle(row, col);
                 }
             } else {
                 switch (map.grid[row][col].type) {
                     case MAP_CELL.ENTRY:
                         self.activeMenu(LEFT_MENU.EMPTY);
-                        break;
+
+                        return {
+                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            object: MAP_CELL.EMPTY,
+                            row: row,
+                            col: col
+                        }
                     case MAP_CELL.ROBOT:
                         self.activeMenu(LEFT_MENU.ROBOT);
                         self.robotVM.editRobot(row, col);
-                        break;
+
+                        return {
+                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            object: MAP_CELL.ROBOT,
+                            row: row,
+                            col: col
+                        }
                     case MAP_CELL.RACK:
                         self.activeMenu(LEFT_MENU.RACK);
                         self.rackVM.editRack(row, col);
-                        break;
+
+                        return {
+                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            object: MAP_CELL.RACK,
+                            row: row,
+                            col: col
+                        }
                     case MAP_CELL.PARK:
                         self.activeMenu(LEFT_MENU.EMPTY);
-                        break;
+
+                        return {
+                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            object: MAP_CELL.PARK,
+                            row: row,
+                            col: col
+                        }
                     case MAP_CELL.OBSTACLE:
                         self.activeMenu(LEFT_MENU.EMPTY);
-                        break;
+
+                        return {
+                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            object: MAP_CELL.OBSTACLE,
+                            row: row,
+                            col: col
+                        }
                 }
             }
         } else {
@@ -169,21 +194,21 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
             case MAP_CELL.ENTRY:
                 self.entryVM.deleteEntry(row, col);
                 break;
-            case MAP_CELL.ROBOT:
+            case LEFT_MENU.ROBOT:
                 self.robotVM.deleteRobot(row, col);
                 break;
-            case MAP_CELL.RACK:
+            case LEFT_MENU.RACK:
                 self.rackVM.deleteRack(row, col);
                 break;
-            case MAP_CELL.PARK:
+            case LEFT_MENU.PARK:
                 self.parkVM.deletePark(row, col);
                 break;
-            case MAP_CELL.OBSTACLE:
+            case LEFT_MENU.OBSTACLE:
                 self.obstacleVM.deleteObstacle(row, col);
                 break;
         }
 
-        self.activeMenu(LEFT_MENU.EMPTY);
+
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
@@ -191,16 +216,16 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
             case MAP_CELL.ENTRY:
                 self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
                 break;
-            case MAP_CELL.ROBOT:
+            case LEFT_MENU.ROBOT:
                 self.robotVM.moveRobot(srcRow, srcCol, dstRow, dstCol);
                 break;
-            case MAP_CELL.RACK:
+            case LEFT_MENU.RACK:
                 self.rackVM.moveRack(srcRow, srcCol, dstRow, dstCol);
                 break;
-            case MAP_CELL.PARK:
+            case LEFT_MENU.PARK:
                 self.parkVM.movePark(srcRow, srcCol, dstRow, dstCol);
                 break;
-            case MAP_CELL.OBSTACLE:
+            case LEFT_MENU.OBSTACLE:
                 self.obstacleVM.moveObstacle(srcRow, srcCol, dstRow, dstCol);
                 break;
         }

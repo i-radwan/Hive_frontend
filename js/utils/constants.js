@@ -76,7 +76,15 @@ LOG_OBJECT_SIMULATION = 3;
 REG_HTML_COLOR = "^#([A-Fa-f0-9]{6})$";
 REG_IP = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
 
-// Gfx Constants
+// GFX Events
+EVENT_TYPE = {
+    ADD_OBJECT: 0,
+    DELETE_OBJECT: 0,
+    MOVE_OBJECT: 0,
+    HIGHLIGHT_OBJECT: 0
+};
+
+// GFX
 GRID_CELL_LENGTH = 50;
 MAX_ZOOM_VAL = 8;
 MIN_ZOOM_VAL = 0.06;

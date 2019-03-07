@@ -31,6 +31,18 @@ let robotViewModel = function (shouter, map) {
             self.id(parseInt(self.id()) + 1);
 
             shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+
+            return {
+                type: EVENT_TYPE.ADD_OBJECT,
+                object: MAP_CELL.ROBOT,
+                row: row,
+                col: col,
+                id: parseInt(self.id()),
+                load_cap: parseInt(self.loadCap()),
+                battery_cap: parseInt(self.batteryCap()),
+                color: self.color(),
+                ip: self.ip()
+            };
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
