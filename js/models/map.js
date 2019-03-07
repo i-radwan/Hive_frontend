@@ -37,6 +37,8 @@ let Map = function () {
         }
 
         self.grid = newGrid;
+        self.width = width;
+        self.height = height;
     };
 
     /**

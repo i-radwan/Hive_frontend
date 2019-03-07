@@ -24,7 +24,19 @@ let mainViewModel = function () {
 
     self.handleCellClick = function (row, col) {
         self.leftMenuVM.handleCellClick(row, col);
-    }
+    };
+
+    self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
+        self.leftMenuVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
+    };
+
+    self.handleCellDeleteClick = function(row, col) {
+        self.leftMenuVM.handleCellDeleteClick(row, col);
+    };
+
+    self.handleEsc = function () {
+        self.leftMenuVM.handleEsc();
+    };
 };
 
 module.exports = mainViewModel;

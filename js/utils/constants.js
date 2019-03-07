@@ -38,6 +38,14 @@ MAP_CELL = {
 
 // Shouting codes
 SHOUT_MAP_TEMP_APPLIED = 0;
+SHOUT_RUNNING_MODE = 0;
+SHOUT_MAP_SIZE_CHANGED = 1;
+SHOUT_MAP_TEMP_APPLIED = 2;
+SHOUT_GRID_CLICK = 3;
+SHOUT_GRID_DRAG = 4;
+SHOUT_ERROR = 3;
+SHOUT_GRID_CLICK = 3;
+SHOUT_GRID_DRAG = 4;
 SHOUT_MSG = 1;
 
 // Msgs configs
@@ -46,6 +54,13 @@ MSG_TIMEOUT = 1500; // ms
 // Msgs types
 MSG_ERROR = 0;
 MSG_INFO = 1;
+
+SHOUT_RUNNING_MODE = 0;
+SHOUT_MAP_SIZE_CHANGED = 1;
+SHOUT_MAP_TEMP_APPLIED = 2;
+SHOUT_ERROR = 3;
+SHOUT_GRID_CLICK = 3;
+SHOUT_GRID_DRAG = 4;
 
 // Logs levels
 LOG_LEVEL_INFO = 0;
@@ -60,3 +75,22 @@ LOG_OBJECT_SIMULATION = 3;
 // Regex
 REG_HTML_COLOR = "^#([A-Fa-f0-9]{6})$";
 REG_IP = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
+
+// Gfx Constants
+GRID_CELL_LENGTH = 50;
+MAX_ZOOM_VAL = 8;
+MIN_ZOOM_VAL = 0.06;
+KEYBOARD_DRAG_SPEED = 4;
+
+ARROW = {
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40
+};
+
+KEY_CODE = {
+    F5: 116,
+    DELETE: 46,
+    ESC: 27
+};
