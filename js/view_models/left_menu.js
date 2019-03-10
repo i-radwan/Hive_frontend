@@ -49,11 +49,15 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
     };
 
     self.tempsClicked = function () {
-
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.ESC
+        });
     };
 
     self.mapClicked = function () {
-
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.ESC
+        });
     };
 
     self.entryClicked = function () {
@@ -92,7 +96,9 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
     };
 
     self.orderClicked = function () {
-
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.ESC
+        });
     };
 
     // Sub view models

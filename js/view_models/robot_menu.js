@@ -11,10 +11,11 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
     self.ip = ko.observable("");
 
     self.applyVisible = ko.observable(false);
-    self.activeRobotRow, self.activeRobotCol;
+    self.activeRobotRow = -1;
+    self.activeRobotCol = -1;
 
     self.addRobot = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY) {
+        if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
             if (!self.checkValid()) {
                 return;
             }
@@ -143,6 +144,10 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
 
         self.activeRobotRow = self.activeRobotCol = -1;
         self.applyVisible(false);
+
+        gfxEventHandler({
+           type: GFX_EVENT_TYPE.ESC
+        });
     };
 
     self.checkValid = function () {

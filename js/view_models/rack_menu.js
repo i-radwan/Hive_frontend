@@ -9,10 +9,11 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
     self.itemWeight = ko.observable(1);
 
     self.applyVisible = ko.observable(false);
-    self.activeRackRow, self.activeRackCol;
+    self.activeRackRow = -1;
+    self.activeRackCol = -1;
 
     self.addRack = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY) {
+        if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRackRow === -1 && self.activeRackCol === -1) {
             if (!self.checkValid()) {
                 return;
             }

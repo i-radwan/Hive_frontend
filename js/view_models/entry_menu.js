@@ -5,7 +5,7 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
     self.addEntry = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY || map.grid[row][col].type === MAP_CELL.ENTRY) {
+        if (map.grid[row][col].type === MAP_CELL.EMPTY) {
             map.grid[row][col] = {
                 type: MAP_CELL.ENTRY
             };
