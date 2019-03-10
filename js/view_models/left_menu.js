@@ -121,7 +121,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                         self.activeMenu(LEFT_MENU.EMPTY);
 
                         return {
-                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                             object: MAP_CELL.EMPTY,
                             row: row,
                             col: col
@@ -131,7 +131,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                         self.robotVM.editRobot(row, col);
 
                         return {
-                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                             object: MAP_CELL.ROBOT,
                             row: row,
                             col: col
@@ -141,7 +141,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                         self.rackVM.editRack(row, col);
 
                         return {
-                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                             object: MAP_CELL.RACK,
                             row: row,
                             col: col
@@ -150,7 +150,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                         self.activeMenu(LEFT_MENU.EMPTY);
 
                         return {
-                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                             object: MAP_CELL.PARK,
                             row: row,
                             col: col
@@ -159,7 +159,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                         self.activeMenu(LEFT_MENU.EMPTY);
 
                         return {
-                            type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                             object: MAP_CELL.OBSTACLE,
                             row: row,
                             col: col
@@ -172,7 +172,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                     self.activeMenu(LEFT_MENU.EMPTY);
 
                     return {
-                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                         object: MAP_CELL.EMPTY,
                         row: row,
                         col: col
@@ -182,7 +182,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                     self.robotVM.fillFields(row, col);
 
                     return {
-                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                         object: MAP_CELL.ROBOT,
                         row: row,
                         col: col
@@ -192,7 +192,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                     self.rackVM.fillFields(row, col);
 
                     return {
-                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                         object: MAP_CELL.RACK,
                         row: row,
                         col: col
@@ -201,7 +201,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                     self.activeMenu(LEFT_MENU.EMPTY);
 
                     return {
-                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                         object: MAP_CELL.PARK,
                         row: row,
                         col: col
@@ -210,7 +210,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                     self.activeMenu(LEFT_MENU.EMPTY);
 
                     return {
-                        type: EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
                         object: MAP_CELL.OBSTACLE,
                         row: row,
                         col: col
