@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let rightMenuViewModel = function (runningMode, shouter, map) {
+let rightMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);

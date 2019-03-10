@@ -3,7 +3,7 @@ let fs = require('fs');
 let ko = require('knockout');
 const {dialog} = require('electron').remote;
 
-let mapViewModel = function (shouter, map) {
+let mapViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
     self.mapWidth = ko.observable(MAP_INIT_WIDTH);

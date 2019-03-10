@@ -8,7 +8,12 @@ let mainViewModel = require("./view_models/main");
 
 // Apply the binding
 $(document).ready(() => {
-    let mainVM = new mainViewModel();
+    // TODO: replace with GFX
+    let gfxEventHandler = function(event) {
+
+    };
+
+    let mainVM = new mainViewModel(gfxEventHandler);
 
     ko.applyBindings(mainVM, $("#main")[0]);
 

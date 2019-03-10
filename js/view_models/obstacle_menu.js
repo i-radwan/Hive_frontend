@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let obstacleViewModel = function (shouter, map) {
+let obstacleViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
     self.addObstacle = function (row, col) {
@@ -27,14 +27,14 @@ let obstacleViewModel = function (shouter, map) {
         if (map.grid[row][col].type === MAP_CELL.OBSTACLE) {
             map.grid[row][col] = {
                 type: MAP_CELL.EMPTY
-            }
+            };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.DELETE_OBJECT,
                 object: MAP_CELL.OBSTACLE,
                 row: row,
                 col: col
-            };
+            });
         }
     };
 
@@ -45,16 +45,28 @@ let obstacleViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.MOVE_OBJECT,
                 object: MAP_CELL.OBSTACLE,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: dstRow,
                 dst_col: dstCol
-            };
+            });
         } else {
-            shouter.notifySubscribers({text: "(" + dstRow + ", " + dstCol + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({
+                text: "(" + dstRow + ", " + dstCol + ") is occupied!",
+                type: MSG_ERROR
+            }, SHOUT_MSG);
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                object: MAP_CELL.OBSTACLE,
+                src_row: srcRow,
+                src_col: srcCol,
+                dst_row: srcRow,
+                dst_col: srcCol
+            });
         }
     };
 };

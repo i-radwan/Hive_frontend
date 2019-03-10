@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let entryViewModel = function (shouter, map) {
+let entryViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
     self.addEntry = function (row, col) {
@@ -12,12 +12,12 @@ let entryViewModel = function (shouter, map) {
 
             shouter.notifySubscribers({text: "Entry placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.ADD_OBJECT,
                 object: MAP_CELL.ENTRY,
                 row: row,
                 col: col
-            };
+            });
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
@@ -27,14 +27,14 @@ let entryViewModel = function (shouter, map) {
         if (map.grid[row][col].type === MAP_CELL.ENTRY) {
             map.grid[row][col] = {
                 type: MAP_CELL.EMPTY
-            }
+            };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.DELETE_OBJECT,
                 object: MAP_CELL.ENTRY,
                 row: row,
                 col: col
-            };
+            });
         }
     };
 
@@ -45,16 +45,28 @@ let entryViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.MOVE_OBJECT,
                 object: MAP_CELL.ENTRY,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: dstRow,
                 dst_col: dstCol
-            };
+            });
         } else {
-            shouter.notifySubscribers({text: "(" + dstRow + ", " + dstCol + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({
+                text: "(" + dstRow + ", " + dstCol + ") is occupied!",
+                type: MSG_ERROR
+            }, SHOUT_MSG);
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                object: MAP_CELL.ENTRY,
+                src_row: srcRow,
+                src_col: srcCol,
+                dst_row: srcRow,
+                dst_col: srcCol
+            });
         }
     };
 };

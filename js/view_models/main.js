@@ -9,7 +9,7 @@ let leftMenuViewModel = require("./left_menu");
 let controlConsoleViewModel = require("./control_console");
 let rightMenuViewModel = require("./right_menu");
 
-let mainViewModel = function () {
+let mainViewModel = function (gfxEventHandler) {
     let self = this;
 
     self.map = new Map();
@@ -18,38 +18,37 @@ let mainViewModel = function () {
 
     self.runningMode = ko.observable(RUNNING_MODE.DESIGN);
 
-    self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.map);
-    self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.map);
-    self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.map);
+    self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler);
+    self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler);
+    self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler);
+
+    self.eventHandler = function(event) {
+        switch (event.type) {
+            case LOGIC_EVENT_TYPE.CELL_CLICK:
+                self.leftMenuVM.handleCellClick(event.row, event.col);
+                break;
+            case LOGIC_EVENT_TYPE.CELL_DRAG:
+                self.leftMenuVM.handleCellDrag(event.src_row, event.src_col, event.dst_row, event.dst_col);
+                break;
+            case LOGIC_EVENT_TYPE.CELL_DELETE:
+                self.leftMenuVM.handleCellDeleteClick(event.row, event.col);
+                break;
+            case LOGIC_EVENT_TYPE.ESC:
+                self.leftMenuVM.handleEsc();
+                break;
+        }
+    };
 
     self.handleCellClick = function (row, col) {
-        let events = [];
-
-        let e = self.leftMenuVM.handleCellClick(row, col);
-
-        events.push(e);
-
-        return events;
+        self.leftMenuVM.handleCellClick(row, col);
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
-        let events = [];
-
-        let e = self.leftMenuVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
-
-        events.push(e);
-
-        return events;
+        self.leftMenuVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
     };
 
     self.handleCellDeleteClick = function(row, col) {
-        let events = [];
-
-        let e = self.leftMenuVM.handleCellDeleteClick(row, col);
-
-        events.push(e);
-
-        return events;
+        self.leftMenuVM.handleCellDeleteClick(row, col);
     };
 
     self.handleEsc = function () {

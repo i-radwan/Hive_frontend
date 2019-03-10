@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let rackViewModel = function (shouter, map) {
+let rackViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
     self.itemNumber = ko.observable(1);
@@ -26,7 +26,7 @@ let rackViewModel = function (shouter, map) {
 
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.ADD_OBJECT,
                 object: MAP_CELL.RACK,
                 row: row,
@@ -34,7 +34,7 @@ let rackViewModel = function (shouter, map) {
                 item_number: parseInt(self.itemNumber()),
                 quantity: parseInt(self.quantity()),
                 item_weight: parseFloat(self.itemWeight())
-            };
+            });
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
@@ -44,14 +44,14 @@ let rackViewModel = function (shouter, map) {
         if (map.grid[row][col].type === MAP_CELL.RACK) {
             map.grid[row][col] = {
                 type: MAP_CELL.EMPTY
-            }
+            };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.DELETE_OBJECT,
                 object: MAP_CELL.RACK,
                 row: row,
                 col: col
-            };
+            });
         }
     };
 
@@ -62,19 +62,28 @@ let rackViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.MOVE_OBJECT,
                 object: MAP_CELL.RACK,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: dstRow,
                 dst_col: dstCol
-            };
+            });
         } else {
             shouter.notifySubscribers({
                 text: "(" + dstRow + ", " + dstCol + ") is occupied!",
                 type: MSG_ERROR
             }, SHOUT_MSG);
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                object: MAP_CELL.RACK,
+                src_row: srcRow,
+                src_col: srcCol,
+                dst_row: srcRow,
+                dst_col: srcCol
+            });
         }
     };
 

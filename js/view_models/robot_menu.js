@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let robotViewModel = function (shouter, map) {
+let robotViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
     self.id = ko.observable(1);
@@ -32,7 +32,7 @@ let robotViewModel = function (shouter, map) {
 
             shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.ADD_OBJECT,
                 object: MAP_CELL.ROBOT,
                 row: row,
@@ -42,7 +42,7 @@ let robotViewModel = function (shouter, map) {
                 battery_cap: parseInt(self.batteryCap()),
                 color: self.color(),
                 ip: self.ip()
-            };
+            });
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
@@ -54,12 +54,12 @@ let robotViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.DELETE_OBJECT,
                 object: MAP_CELL.ROBOT,
                 row: row,
                 col: col
-            };
+            });
         }
     };
 
@@ -70,19 +70,28 @@ let robotViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.MOVE_OBJECT,
                 object: MAP_CELL.ROBOT,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: dstRow,
                 dst_col: dstCol
-            };
+            });
         } else {
             shouter.notifySubscribers({
                 text: "(" + dstRow + ", " + dstCol + ") is occupied!",
                 type: MSG_ERROR
             }, SHOUT_MSG);
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                object: MAP_CELL.ROBOT,
+                src_row: srcRow,
+                src_col: srcCol,
+                dst_row: srcRow,
+                dst_col: srcCol
+            });
         }
     };
 

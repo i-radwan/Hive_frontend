@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let parkViewModel = function (shouter, map) {
+let parkViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
     self.addPark = function (row, col) {
@@ -12,12 +12,12 @@ let parkViewModel = function (shouter, map) {
 
             shouter.notifySubscribers({text: "Park placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.ADD_OBJECT,
                 object: MAP_CELL.PARK,
                 row: row,
                 col: col
-            };
+            });
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
@@ -27,14 +27,14 @@ let parkViewModel = function (shouter, map) {
         if (map.grid[row][col].type === MAP_CELL.PARK) {
             map.grid[row][col] = {
                 type: MAP_CELL.EMPTY
-            }
+            };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.DELETE_OBJECT,
                 object: MAP_CELL.PARK,
                 row: row,
                 col: col
-            };
+            });
         }
     };
 
@@ -45,16 +45,25 @@ let parkViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             };
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.MOVE_OBJECT,
                 object: MAP_CELL.PARK,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: dstRow,
                 dst_col: dstCol
-            };
+            });
         } else {
             shouter.notifySubscribers({text: "(" + dstRow + ", " + dstCol + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                object: MAP_CELL.PARK,
+                src_row: srcRow,
+                src_col: srcCol,
+                dst_row: srcRow,
+                dst_col: srcCol
+            });
         }
     };
 };

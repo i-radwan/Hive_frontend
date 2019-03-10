@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let controlConsoleViewModel = function (runningMode, shouter, map) {
+let controlConsoleViewModel = function (runningMode, shouter, map, gfxEventHandler) {
     let self = this;
 
     self.playing = ko.observable(false);
