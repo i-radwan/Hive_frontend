@@ -18,9 +18,15 @@ let mainViewModel = function (gfxEventHandler) {
 
     self.runningMode = ko.observable(RUNNING_MODE.DESIGN);
 
+    self.gfxEventHandler = gfxEventHandler;
+
     self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler);
     self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler);
     self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler);
+
+    self.setGFXEventHandler = function (gfxEventHandler) {
+        self.gfxEventHandler = gfxEventHandler;
+    };
 
     self.eventHandler = function(event) {
         switch (event.type) {
