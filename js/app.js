@@ -9,27 +9,14 @@ let mainViewModel = require("./view_models/main");
 
 // Apply the binding
 $(document).ready(() => {
-    // TODO: replace with GFX
-    let gfxEventHandler = function(event) {
-        console.log(event);
-    };
+    let gfx = new GFX();
 
-    let mainVM = new mainViewModel(gfxEventHandler);
+    let mainVM = new mainViewModel(gfx.eventHandler);
 
     ko.applyBindings(mainVM, $("#main")[0]);
 
-    // // TESTING CODE
-    // let map = $(".map-row");
-    // let h = map.height();
-    // let w = map.width();
-    //
-    // map.click(function(e) {
-    //     mainVM.handleCellClick(Math.floor(e.offsetY / h * mainVM.map.height), Math.floor(e.offsetX / w * mainVM.map.width));
-    //     //console.log(mainVM.map);
-    // });
-
     // GFX code
-    let gfx = new GFX(mainVM);
+    gfx.setLogicEventHandler(mainVM.eventHandler);
 
     // Communication logic
     let rcv = function (msg) {

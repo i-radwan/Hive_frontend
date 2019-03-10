@@ -4,6 +4,10 @@ let $ = require('jquery');
 let ko = require('knockout');
 
 let gfx = function (logicEventHandler) {
+    let self = this;
+
+    self.logicEventHandler = logicEventHandler;
+
     // Canvas & Two & ZUI initialization
     let canvas = $('.map-row');
     let two = new Two({
@@ -39,6 +43,10 @@ let gfx = function (logicEventHandler) {
 
     // SVG Objects
     let robotSVG = 0;
+
+    self.setLogicEventHandler = function (logicEventHandler) {
+        self.logicEventHandler = logicEventHandler;
+    };
 
     // Translate the scene with the given direction (Handles ZUI transformation matrix)
     let translateScene = function (dx, dy) {
@@ -192,9 +200,7 @@ let gfx = function (logicEventHandler) {
         let object = createObject(row, col, type);
         mapObjects[row][col] = object;
         getRendererObject(row, col).add(object.two_object);
-        hoveredObject = {};
-        hovering = false;
-        hoveredObjectIsDrawn = false;
+        removeHoveringObject();
     };
 
     // Updates the dragged object to the mapObject
@@ -219,13 +225,13 @@ let gfx = function (logicEventHandler) {
     };
 
     let handleEscape = function () {
-        hoveredObject = {};
-        hovering = false;
-        hoveredObjectIsDrawn = false;
+        removeHoveringObject();
         selectedObject = -1;
     };
 
     let handleHover = function (type) {
+        removeHoveringObject();
+
         let cell = getMouseCell(mouseX, mouseY);
         hoveredObject = createObject(cell.row, cell.col, type);
         hoveredObject.row = cell.row;
@@ -263,7 +269,7 @@ let gfx = function (logicEventHandler) {
             .bind('click', function (e) {
                 let cell = getMouseCell(e.clientX, e.clientY);
 
-                logicEventHandler({
+                self.logicEventHandler({
                     type: LOGIC_EVENT_TYPE.CELL_CLICK,
                     row: cell.row,
                     col: cell.col
@@ -292,7 +298,7 @@ let gfx = function (logicEventHandler) {
 
     let handleDeleteEvent = function () {
         if (selectedObject != -1) {
-            logicEventHandler({
+            self.logicEventHandler({
                 type: LOGIC_EVENT_TYPE.CELL_DELETE,
                 row: selectedObject.row,
                 col: selectedObject.col
@@ -381,7 +387,7 @@ let gfx = function (logicEventHandler) {
         let currentCell = getMouseCell(e.clientX, e.clientY);
         if (draggingObject) {
             if (draggedObject.row != currentCell.row || draggedObject.col != currentCell.col) {
-                logicEventHandler({
+                self.logicEventHandler({
                     type: LOGIC_EVENT_TYPE.CELL_DRAG,
                     src_row: draggedObject.row,
                     src_col: draggedObject.col,
@@ -435,7 +441,7 @@ let gfx = function (logicEventHandler) {
                 handleDeleteEvent();
                 break;
             case KEY_CODE.ESC:
-                logicEventHandler({
+                self.logicEventHandler({
                     type: LOGIC_EVENT_TYPE.ESC,
                 });
                 break;
@@ -460,7 +466,7 @@ let gfx = function (logicEventHandler) {
         drawGrid();
     };
 
-    this.eventHandler = function (event) {
+    self.eventHandler = function (event) {
         switch (event.type) {
             case GFX_EVENT_TYPE.INIT:
                 init(event.width, event.height);
