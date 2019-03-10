@@ -36,7 +36,7 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
                 quantity: parseInt(self.quantity()),
                 item_weight: parseFloat(self.itemWeight())
             });
-        } else {
+        } else if (map.grid[row][col].type === MAP_CELL.EMPTY) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }
     };
@@ -51,7 +51,7 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
 
     self.dragRack = function (srcRow, srcCol, dstRow, dstCol) {
         if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
-            map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
+            map.grid[dstRow][dstCol] = Object.assign({}, map.grid[srcRow][srcCol]);
             map.grid[srcRow][srcCol] = {
                 type: MAP_CELL.EMPTY
             };
@@ -159,6 +159,11 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         }
 
         return true;
+    };
+
+    self.handleEsc = function () {
+        self.activeRackRow = self.activeRackCol = -1;
+        self.applyVisible(false);
     };
 };
 

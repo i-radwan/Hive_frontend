@@ -67,6 +67,12 @@ let mainViewModel = function (gfxEventHandler) {
     self.handleEsc = function () {
         self.leftMenuVM.handleEsc();
     };
+
+    gfxEventHandler({
+        type: GFX_EVENT_TYPE.INIT,
+        width: self.map.width,
+        height: self.map.height
+    });
 };
 
 module.exports = mainViewModel;

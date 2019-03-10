@@ -28,7 +28,7 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
 
     self.dragEntry = function (srcRow, srcCol, dstRow, dstCol) {
         if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
-            map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
+            map.grid[dstRow][dstCol] = Object.assign({}, map.grid[srcRow][srcCol]);
             map.grid[srcRow][srcCol] = {
                 type: MAP_CELL.EMPTY
             };
