@@ -176,7 +176,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                         object: MAP_CELL.EMPTY,
                         row: row,
                         col: col
-                    }
+                    };
                 case MAP_CELL.ROBOT:
                     self.activeMenu(LEFT_MENU.ROBOT);
                     self.robotVM.fillFields(row, col);
@@ -186,7 +186,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                         object: MAP_CELL.ROBOT,
                         row: row,
                         col: col
-                    }
+                    };
                 case MAP_CELL.RACK:
                     self.activeMenu(LEFT_MENU.RACK);
                     self.rackVM.fillFields(row, col);
@@ -223,13 +223,13 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
         switch (map.grid[row][col].type) {
             case MAP_CELL.ENTRY:
                 return self.entryVM.deleteEntry(row, col);
-            case LEFT_MENU.ROBOT:
+            case MAP_CELL.ROBOT:
                 return self.robotVM.deleteRobot(row, col);
-            case LEFT_MENU.RACK:
+            case MAP_CELL.RACK:
                 return self.rackVM.deleteRack(row, col);
-            case LEFT_MENU.PARK:
+            case MAP_CELL.PARK:
                 return self.parkVM.deletePark(row, col);
-            case LEFT_MENU.OBSTACLE:
+            case MAP_CELL.OBSTACLE:
                 return self.obstacleVM.deleteObstacle(row, col);
         }
     };
@@ -238,13 +238,13 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
         switch (map.grid[srcRow][srcCol].type) {
             case MAP_CELL.ENTRY:
                 return self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
-            case LEFT_MENU.ROBOT:
+            case MAP_CELL.ROBOT:
                 return self.robotVM.moveRobot(srcRow, srcCol, dstRow, dstCol);
-            case LEFT_MENU.RACK:
+            case MAP_CELL.RACK:
                 return self.rackVM.moveRack(srcRow, srcCol, dstRow, dstCol);
-            case LEFT_MENU.PARK:
+            case MAP_CELL.PARK:
                 return self.parkVM.movePark(srcRow, srcCol, dstRow, dstCol);
-            case LEFT_MENU.OBSTACLE:
+            case MAP_CELL.OBSTACLE:
                 return self.obstacleVM.moveObstacle(srcRow, srcCol, dstRow, dstCol);
         }
     };
