@@ -27,7 +27,7 @@ let rackViewModel = function (shouter, map) {
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
             return {
-                type: EVENT_TYPE.ADD_OBJECT,
+                type: GFX_EVENT_TYPE.ADD_OBJECT,
                 object: MAP_CELL.RACK,
                 row: row,
                 col: col,
@@ -47,7 +47,7 @@ let rackViewModel = function (shouter, map) {
             }
 
             return {
-                type: EVENT_TYPE.DELETE_OBJECT,
+                type: GFX_EVENT_TYPE.DELETE_OBJECT,
                 object: MAP_CELL.RACK,
                 row: row,
                 col: col
@@ -63,7 +63,7 @@ let rackViewModel = function (shouter, map) {
             };
 
             return {
-                type: EVENT_TYPE.MOVE_OBJECT,
+                type: GFX_EVENT_TYPE.MOVE_OBJECT,
                 object: MAP_CELL.RACK,
                 src_row: srcRow,
                 src_col: srcCol,
