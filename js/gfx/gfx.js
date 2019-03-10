@@ -32,6 +32,9 @@ let gfx = function (mainVM) {
     let goingUp = false;
     let goingDown = false;
 
+    // SVG Objects
+    let robotSVG = 0;
+
     // Translate the scene with the given direction (Handles ZUI transformation matrix)
     let translateScene = function (dx, dy) {
         zui.translateSurface(dx ,dy);
@@ -93,12 +96,34 @@ let gfx = function (mainVM) {
       return gridMap.children[getRendererObjectIdx(row, col)];
     };
 
-    // Gets the center of the cell in coordinate values (x, y) to draw the objects
-    let getCellCenter = function (row, col) {
-        let cellCenterX = col*GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2;
-        let cellCenterY = row*GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2;
+    // Gets the Top left of the cell in coordinate values (x, y) to draw the objects
+    let getCellTopLeft = function (row, col) {
+        let cellCenterX = col*GRID_CELL_LENGTH;
+        let cellCenterY = row*GRID_CELL_LENGTH;
 
         return {x: cellCenterX, y: cellCenterY};
+    };
+
+    // Gets the center of the cell in coordinate values (x, y) to draw the objects
+    let getCellCenter = function (row, col) {
+        let ret = getCellTopLeft(row, col);
+
+        ret.x += GRID_CELL_LENGTH / 2;
+        ret.y += GRID_CELL_LENGTH / 2;
+
+        return ret;
+    };
+
+
+
+    let loadSvgFile = async function(path) {
+        let promise = new Promise(function (resolve) {
+            two.load(path, function (svg) {
+                resolve(svg);
+            });
+        });
+
+        return await promise;
     };
 
     // Creates the object given its type and position and appends it to the mapObjects array
@@ -111,8 +136,11 @@ let gfx = function (mainVM) {
                 object.fill = "#8b0000";
                 break;
             case MAP_CELL.ROBOT:
-                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
-                object.fill = "#e09500";
+                object = robotSVG.clone();
+                let cellTopLeft = getCellTopLeft(row, col);
+                object.translation.set(cellTopLeft.x, cellTopLeft.y);
+                //object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
+                //object.fill = "#e09500";
                 break;
             case MAP_CELL.RACK:
                 object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
@@ -156,12 +184,11 @@ let gfx = function (mainVM) {
 
         getRendererObject(srcRow, srcCol).remove(object.twoObject);
 
-        let cellCenterX = dstCol*GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2;
-        let cellCenterY = dstRow*GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2;
+        let cellTopLeft = getCellTopLeft(dstRow, dstCol);
 
         getRendererObject(dstRow, dstCol).add(object.twoObject);
         let childIdx = getRendererObject(dstRow, dstCol).children.length - 1;
-        getRendererObject(dstRow, dstCol).children[childIdx].translation.set(cellCenterX, cellCenterY);
+        getRendererObject(dstRow, dstCol).children[childIdx].translation.set(cellTopLeft.x, cellTopLeft.y);
 
         return object;
     };
@@ -354,9 +381,16 @@ let gfx = function (mainVM) {
                 break;
         }
     });
+    
+    let init = async function() {
+        // Load robot svg
+        robotSVG = await loadSvgFile('./svg_models/robot.svg');
+
+        drawGrid(mainVM.map);
+    };
 
     // The only line of code in this file :V
-    drawGrid(mainVM.map);
+    init();
 
     // Redraws the grid in a loop forever (until we find a way to update the map)
     // let updateGrid = function () {
