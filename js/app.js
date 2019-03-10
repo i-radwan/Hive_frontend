@@ -32,9 +32,9 @@ $(document).ready(() => {
     // Communication logic
     let rcv = function (msg) {
         switch (msg.type) {
-            case SERVER_EVENT_TYPE.UPDATE_OBJECT:
+            case SERVER_EVENT_TYPE.OBJECT_UPDATE:
                 gfxEventHandler({
-                    type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                    type: GFX_EVENT_TYPE.OBJECT_MOVE,
                     src_row: msg.src_row,
                     src_col: msg.src_col,
                     dst_row: msg.dst_row,

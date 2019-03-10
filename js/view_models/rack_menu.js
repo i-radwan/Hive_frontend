@@ -27,7 +27,7 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.ADD_OBJECT,
+                type: GFX_EVENT_TYPE.OBJECT_ADD,
                 object: MAP_CELL.RACK,
                 row: row,
                 col: col,
@@ -56,7 +56,7 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
             };
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.DRAG_OBJECT,
+                type: GFX_EVENT_TYPE.OBJECT_DRAG,
                 object: MAP_CELL.RACK,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -70,7 +70,7 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
             }, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.DRAG_OBJECT,
+                type: GFX_EVENT_TYPE.OBJECT_DRAG,
                 object: MAP_CELL.RACK,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -87,7 +87,7 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
             };
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.DELETE_OBJECT,
+                type: GFX_EVENT_TYPE.OBJECT_DELETE,
                 object: MAP_CELL.RACK,
                 row: row,
                 col: col

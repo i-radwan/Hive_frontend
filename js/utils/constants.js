@@ -70,21 +70,21 @@ LOGIC_EVENT_TYPE = {
     ESC: 4
 };
 
-// GFX Events
+// GFX Events TODO: rename, use keyword first: OBJECT_*
 GFX_EVENT_TYPE = {
     INIT: 0,
-    HOVER_OBJECT: 1,
-    ADD_OBJECT: 2,
-    DELETE_OBJECT: 3,
-    DRAG_OBJECT: 4,
-    MOVE_OBJECT: 5,
-    HIGHLIGHT_OBJECT: 6,
+    OBJECT_HOVER: 1,
+    OBJECT_ADD: 2,
+    OBJECT_DELETE: 3,
+    OBJECT_DRAG: 4,
+    OBJECT_MOVE: 5,
+    OBJECT_HIGHLIGHT: 6,
     ESC: 7
 };
 
 // Server Events
 SERVER_EVENT_TYPE = {
-    UPDATE_OBJECT: 0,
+    OBJECT_UPDATE: 0,
     LOG: 1,
     STATS: 2,
     MSG: 3

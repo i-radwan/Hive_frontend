@@ -58,35 +58,35 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
 
     self.entryClicked = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.HOVER_OBJECT,
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.ENTRY
         });
     };
 
     self.robotClicked = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.HOVER_OBJECT,
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.ROBOT
         });
     };
 
     self.rackClicked = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.HOVER_OBJECT,
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.RACK
         });
     };
 
     self.parkClicked = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.HOVER_OBJECT,
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.PARK
         });
     };
 
     self.obstacleClicked = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.HOVER_OBJECT,
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.OBSTACLE
         });
     };
@@ -145,7 +145,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
                         self.robotVM.editRobot(row, col);
 
                         gfxEventHandler({
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                             object: MAP_CELL.ROBOT,
                             row: row,
                             col: col
@@ -156,7 +156,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
                         self.rackVM.editRack(row, col);
 
                         gfxEventHandler({
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                             object: MAP_CELL.RACK,
                             row: row,
                             col: col
@@ -166,7 +166,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
                         self.activeMenu(LEFT_MENU.EMPTY);
 
                         gfxEventHandler({
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                             object: MAP_CELL.PARK,
                             row: row,
                             col: col
@@ -176,7 +176,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
                         self.activeMenu(LEFT_MENU.EMPTY);
 
                         gfxEventHandler({
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                             object: MAP_CELL.OBSTACLE,
                             row: row,
                             col: col
@@ -194,7 +194,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
                     self.robotVM.fillFields(row, col);
 
                     gfxEventHandler({
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                         object: MAP_CELL.ROBOT,
                         row: row,
                         col: col
@@ -205,7 +205,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
                     self.rackVM.fillFields(row, col);
 
                     gfxEventHandler({
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                         object: MAP_CELL.RACK,
                         row: row,
                         col: col
@@ -215,7 +215,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
                     self.activeMenu(LEFT_MENU.EMPTY);
 
                     gfxEventHandler({
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                         object: MAP_CELL.PARK,
                         row: row,
                         col: col
@@ -225,7 +225,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
                     self.activeMenu(LEFT_MENU.EMPTY);
 
                     gfxEventHandler({
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                         object: MAP_CELL.OBSTACLE,
                         row: row,
                         col: col

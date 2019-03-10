@@ -13,7 +13,7 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
             shouter.notifySubscribers({text: "Park placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.ADD_OBJECT,
+                type: GFX_EVENT_TYPE.OBJECT_ADD,
                 object: MAP_CELL.PARK,
                 row: row,
                 col: col
@@ -34,7 +34,7 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
             };
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.DRAG_OBJECT,
+                type: GFX_EVENT_TYPE.OBJECT_DRAG,
                 object: MAP_CELL.PARK,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -45,7 +45,7 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
             shouter.notifySubscribers({text: "(" + dstRow + ", " + dstCol + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.DRAG_OBJECT,
+                type: GFX_EVENT_TYPE.OBJECT_DRAG,
                 object: MAP_CELL.PARK,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -62,7 +62,7 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
             };
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.DELETE_OBJECT,
+                type: GFX_EVENT_TYPE.OBJECT_DELETE,
                 object: MAP_CELL.PARK,
                 row: row,
                 col: col

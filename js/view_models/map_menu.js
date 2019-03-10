@@ -59,7 +59,7 @@ let mapViewModel = function (shouter, map, gfxEventHandler) {
                 switch (el.type) {
                     case MAP_CELL.ENTRY:
                         gfxEventHandler({
-                            type: GFX_EVENT_TYPE.ADD_OBJECT,
+                            type: GFX_EVENT_TYPE.OBJECT_ADD,
                             object: MAP_CELL.ENTRY,
                             row: i,
                             col: j
@@ -67,7 +67,7 @@ let mapViewModel = function (shouter, map, gfxEventHandler) {
                         break;
                     case MAP_CELL.ROBOT:
                         gfxEventHandler({
-                            type: GFX_EVENT_TYPE.ADD_OBJECT,
+                            type: GFX_EVENT_TYPE.OBJECT_ADD,
                             object: MAP_CELL.ROBOT,
                             row: i,
                             col: j,
@@ -80,7 +80,7 @@ let mapViewModel = function (shouter, map, gfxEventHandler) {
                         break;
                     case MAP_CELL.RACK:
                         gfxEventHandler({
-                            type: GFX_EVENT_TYPE.ADD_OBJECT,
+                            type: GFX_EVENT_TYPE.OBJECT_ADD,
                             object: MAP_CELL.RACK,
                             row: i,
                             col: j,
@@ -91,7 +91,7 @@ let mapViewModel = function (shouter, map, gfxEventHandler) {
                         break;
                     case MAP_CELL.PARK:
                         gfxEventHandler({
-                            type: GFX_EVENT_TYPE.ADD_OBJECT,
+                            type: GFX_EVENT_TYPE.OBJECT_ADD,
                             object: MAP_CELL.PARK,
                             row: i,
                             col: j
@@ -99,7 +99,7 @@ let mapViewModel = function (shouter, map, gfxEventHandler) {
                         break;
                     case MAP_CELL.OBSTACLE:
                         gfxEventHandler({
-                            type: GFX_EVENT_TYPE.ADD_OBJECT,
+                            type: GFX_EVENT_TYPE.OBJECT_ADD,
                             object: MAP_CELL.OBSTACLE,
                             row: i,
                             col: j
