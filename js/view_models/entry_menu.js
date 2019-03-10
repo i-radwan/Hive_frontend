@@ -23,22 +23,10 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
         }
     };
 
-    self.deleteEntry = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.ENTRY) {
-            map.grid[row][col] = {
-                type: MAP_CELL.EMPTY
-            };
-
-            gfxEventHandler({
-                type: GFX_EVENT_TYPE.DELETE_OBJECT,
-                object: MAP_CELL.ENTRY,
-                row: row,
-                col: col
-            });
-        }
+    self.moveEntry = function (srcRow, srcCol, dstRow, dstCol) {
     };
 
-    self.moveEntry = function (srcRow, srcCol, dstRow, dstCol) {
+    self.dragEntry = function (srcRow, srcCol, dstRow, dstCol) {
         if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
             map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
             map.grid[srcRow][srcCol] = {
@@ -46,7 +34,7 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
             };
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                type: GFX_EVENT_TYPE.DRAG_OBJECT,
                 object: MAP_CELL.ENTRY,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -60,12 +48,27 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
             }, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                type: GFX_EVENT_TYPE.DRAG_OBJECT,
                 object: MAP_CELL.ENTRY,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: srcRow,
                 dst_col: srcCol
+            });
+        }
+    };
+
+    self.deleteEntry = function (row, col) {
+        if (map.grid[row][col].type === MAP_CELL.ENTRY) {
+            map.grid[row][col] = {
+                type: MAP_CELL.EMPTY
+            };
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.DELETE_OBJECT,
+                object: MAP_CELL.ENTRY,
+                row: row,
+                col: col
             });
         }
     };

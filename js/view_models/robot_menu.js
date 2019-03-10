@@ -48,22 +48,17 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
         }
     };
 
-    self.deleteRobot = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.ROBOT) {
-            map.grid[row][col] = {
-                type: MAP_CELL.EMPTY
-            };
-
-            gfxEventHandler({
-                type: GFX_EVENT_TYPE.DELETE_OBJECT,
-                object: MAP_CELL.ROBOT,
-                row: row,
-                col: col
-            });
-        }
+    self.moveRobot = function (srcRow, srcCol, dstRow, dstCol) {
+        // TODO (ALERT): this would certainly cause an error if robot 2 is moving
+        // to the old cell of robot 1, but the message of robot 2 arrives first from the
+        // gfxEventHandler
+        map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
+        map.grid[srcRow][srcCol] = {
+            type: MAP_CELL.EMPTY
+        };
     };
 
-    self.moveRobot = function (srcRow, srcCol, dstRow, dstCol) {
+    self.dragRobot = function (srcRow, srcCol, dstRow, dstCol) {
         if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
             map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
             map.grid[srcRow][srcCol] = {
@@ -71,7 +66,7 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
             };
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                type: GFX_EVENT_TYPE.DRAG_OBJECT,
                 object: MAP_CELL.ROBOT,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -85,12 +80,27 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
             }, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                type: GFX_EVENT_TYPE.DRAG_OBJECT,
                 object: MAP_CELL.ROBOT,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: srcRow,
                 dst_col: srcCol
+            });
+        }
+    };
+
+    self.deleteRobot = function (row, col) {
+        if (map.grid[row][col].type === MAP_CELL.ROBOT) {
+            map.grid[row][col] = {
+                type: MAP_CELL.EMPTY
+            };
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.DELETE_OBJECT,
+                object: MAP_CELL.ROBOT,
+                row: row,
+                col: col
             });
         }
     };

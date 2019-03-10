@@ -23,22 +23,10 @@ let obstacleViewModel = function (shouter, map, gfxEventHandler) {
         }
     };
 
-    self.deleteObstacle = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.OBSTACLE) {
-            map.grid[row][col] = {
-                type: MAP_CELL.EMPTY
-            };
-
-            gfxEventHandler({
-                type: GFX_EVENT_TYPE.DELETE_OBJECT,
-                object: MAP_CELL.OBSTACLE,
-                row: row,
-                col: col
-            });
-        }
+    self.moveObstacle = function (srcRow, srcCol, dstRow, dstCol) {
     };
 
-    self.moveObstacle = function (srcRow, srcCol, dstRow, dstCol) {
+    self.dragObstacle = function (srcRow, srcCol, dstRow, dstCol) {
         if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
             map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
             map.grid[srcRow][srcCol] = {
@@ -46,7 +34,7 @@ let obstacleViewModel = function (shouter, map, gfxEventHandler) {
             };
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                type: GFX_EVENT_TYPE.DRAG_OBJECT,
                 object: MAP_CELL.OBSTACLE,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -60,12 +48,27 @@ let obstacleViewModel = function (shouter, map, gfxEventHandler) {
             }, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.MOVE_OBJECT,
+                type: GFX_EVENT_TYPE.DRAG_OBJECT,
                 object: MAP_CELL.OBSTACLE,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: srcRow,
                 dst_col: srcCol
+            });
+        }
+    };
+
+    self.deleteObstacle = function (row, col) {
+        if (map.grid[row][col].type === MAP_CELL.OBSTACLE) {
+            map.grid[row][col] = {
+                type: MAP_CELL.EMPTY
+            };
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.DELETE_OBJECT,
+                object: MAP_CELL.OBSTACLE,
+                row: row,
+                col: col
             });
         }
     };

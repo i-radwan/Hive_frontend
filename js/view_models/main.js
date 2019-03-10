@@ -30,6 +30,9 @@ let mainViewModel = function (gfxEventHandler) {
             case LOGIC_EVENT_TYPE.CELL_DRAG:
                 self.leftMenuVM.handleCellDrag(event.src_row, event.src_col, event.dst_row, event.dst_col);
                 break;
+            case LOGIC_EVENT_TYPE.OBJECT_MOVE:
+                self.leftMenuVM.handleObjectMove();
+                break;
             case LOGIC_EVENT_TYPE.CELL_DELETE:
                 self.leftMenuVM.handleCellDeleteClick(event.row, event.col);
                 break;
@@ -45,6 +48,10 @@ let mainViewModel = function (gfxEventHandler) {
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
         self.leftMenuVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
+    };
+
+    self.handleObjectMove = function(srcRow, srcCol, dstRow, dstCol) {
+        self.leftMenuVM.handleObjectMove(srcRow, srcCol, dstRow, dstCol);
     };
 
     self.handleCellDeleteClick = function(row, col) {

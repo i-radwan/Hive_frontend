@@ -66,7 +66,8 @@ LOGIC_EVENT_TYPE = {
     CELL_CLICK: 0,
     CELL_DRAG: 1,
     CELL_DELETE: 2,
-    ESC: 3
+    OBJECT_MOVE: 3,
+    ESC: 4
 };
 
 // GFX Events
@@ -75,9 +76,18 @@ GFX_EVENT_TYPE = {
     HOVER_OBJECT: 1,
     ADD_OBJECT: 2,
     DELETE_OBJECT: 3,
-    MOVE_OBJECT: 4,
-    HIGHLIGHT_OBJECT: 5,
-    ESC: 6
+    DRAG_OBJECT: 4,
+    MOVE_OBJECT: 5,
+    HIGHLIGHT_OBJECT: 6,
+    ESC: 7
+};
+
+// Server Events
+SERVER_EVENT_TYPE = {
+    UPDATE_OBJECT: 0,
+    LOG: 1,
+    STATS: 2,
+    MSG: 3
 };
 
 // GFX

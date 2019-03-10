@@ -258,6 +258,26 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
         switch (map.grid[srcRow][srcCol].type) {
             case MAP_CELL.ENTRY:
+                self.entryVM.dragEntry(srcRow, srcCol, dstRow, dstCol);
+                break;
+            case MAP_CELL.ROBOT:
+                self.robotVM.dragRobot(srcRow, srcCol, dstRow, dstCol);
+                break;
+            case MAP_CELL.RACK:
+                self.rackVM.dragRack(srcRow, srcCol, dstRow, dstCol);
+                break;
+            case MAP_CELL.PARK:
+                self.parkVM.dragPark(srcRow, srcCol, dstRow, dstCol);
+                break;
+            case MAP_CELL.OBSTACLE:
+                self.obstacleVM.dragObstacle(srcRow, srcCol, dstRow, dstCol);
+                break;
+        }
+    };
+
+    self.handleObjectMove = function (srcRow, srcCol, dstRow, dstCol) {
+        switch (map.grid[srcRow][srcCol].type) {
+            case MAP_CELL.ENTRY:
                 self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
                 break;
             case MAP_CELL.ROBOT:
