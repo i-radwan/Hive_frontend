@@ -200,16 +200,20 @@ let gfx = function (logicEventHandler) {
         let object = createObject(row, col, type);
         mapObjects[row][col] = object;
         getRendererObject(row, col).add(object.two_object);
-        removeHoveringObject();
     };
 
     // Updates the dragged object to the mapObject
     let dragObject = function (srcRow, srcCol, dstRow, dstCol) {
         translateObject(draggedObject, draggedObject.draggingRow, draggedObject.draggingCol, dstRow, dstCol);
-        let object = mapObjects[srcRow][srcCol];
+
+        if (dstRow == srcRow && dstCol == srcCol)
+            return;
+
+        mapObjects[dstRow][dstCol].type = mapObjects[srcRow][srcCol].type;
+        mapObjects[dstRow][dstCol].two_object = mapObjects[srcRow][srcCol].two_object;
+
         mapObjects[srcRow][srcCol].type = MAP_CELL.EMPTY;
         mapObjects[srcRow][srcCol].two_object = -1;
-        mapObjects[dstRow][dstCol] = object;
     };
 
     // Deletes an object from the scene and removes it from mabObjects array.
@@ -222,6 +226,7 @@ let gfx = function (logicEventHandler) {
 
     let highlightObject = function (row, col) {
         selectedObject = mapObjects[row][col];
+        removeHoveringObject();
     };
 
     let handleEscape = function () {
@@ -249,8 +254,10 @@ let gfx = function (logicEventHandler) {
         for(let c = 0;c < mapWidth; c++) {
             for(let r = 0; r < mapHeight; r++) {
                 gridMap.add(createCell(r, c));
-                mapObjects[r][c].type = MAP_CELL.EMPTY;
-                mapObjects[r][c].two_object = -1;
+                mapObjects[r][c] = {
+                    type: MAP_CELL.EMPTY,
+                    two_object: -1
+                };
             }
         }
 
@@ -324,14 +331,16 @@ let gfx = function (logicEventHandler) {
         startDragY = e.clientY - canvas.offset().top;
         let cell = getMouseCell(e.clientX, e.clientY);
 
-        if(cell.inBounds) {
+        if(cell.inBounds && !hovering) {
             let cellType = mapObjects[cell.row][cell.col].type;
 
             if (cellType != MAP_CELL.EMPTY) {
                 draggingObject = true;
                 draggedObject = mapObjects[cell.row][cell.col];
-                draggedObject.draggingRow = draggedObject.row;
-                draggedObject.draggingCol = draggedObject.col;
+                draggedObject.draggingRow = cell.row;
+                draggedObject.draggingCol = cell.col;
+                draggedObject.row = cell.row;
+                draggedObject.col = cell.col;
             } else {
                 draggingObject = false;
                 draggedObject = -1;
@@ -491,6 +500,7 @@ let gfx = function (logicEventHandler) {
                 break;
         }
     };
+
 
     // Redraws the grid in a loop forever (until we find a way to update the map)
     // let updateGrid = function () {
