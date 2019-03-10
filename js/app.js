@@ -10,7 +10,7 @@ let mainViewModel = require("./view_models/main");
 $(document).ready(() => {
     // TODO: replace with GFX
     let gfxEventHandler = function(event) {
-
+        console.log(event);
     };
 
     let mainVM = new mainViewModel(gfxEventHandler);

@@ -12,12 +12,12 @@ let obstacleViewModel = function (shouter, map, gfxEventHandler) {
 
             shouter.notifySubscribers({text: "Obstacle placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-            return {
+            gfxEventHandler({
                 type: GFX_EVENT_TYPE.ADD_OBJECT,
                 object: MAP_CELL.OBSTACLE,
                 row: row,
                 col: col
-            };
+            });
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         }

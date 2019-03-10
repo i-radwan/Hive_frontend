@@ -139,13 +139,6 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
                 switch (map.grid[row][col].type) {
                     case MAP_CELL.ENTRY:
                         self.activeMenu(LEFT_MENU.EMPTY);
-
-                        gfxEventHandler({
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
-                            object: MAP_CELL.EMPTY,
-                            row: row,
-                            col: col
-                        });
                         break;
                     case MAP_CELL.ROBOT:
                         self.activeMenu(LEFT_MENU.ROBOT);
@@ -195,13 +188,6 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
             switch (map.grid[row][col].type) {
                 case MAP_CELL.ENTRY:
                     self.activeMenu(LEFT_MENU.EMPTY);
-
-                    gfxEventHandler({
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
-                        object: MAP_CELL.EMPTY,
-                        row: row,
-                        col: col
-                    });
                     break;
                 case MAP_CELL.ROBOT:
                     self.activeMenu(LEFT_MENU.ROBOT);
