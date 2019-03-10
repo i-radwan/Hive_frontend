@@ -23,15 +23,33 @@ let mainViewModel = function () {
     self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.map);
 
     self.handleCellClick = function (row, col) {
-        self.leftMenuVM.handleCellClick(row, col);
+        let events = [];
+
+        let e = self.leftMenuVM.handleCellClick(row, col);
+
+        events.push(e);
+
+        return events;
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
-        self.leftMenuVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
+        let events = [];
+
+        let e = self.leftMenuVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
+
+        events.push(e);
+
+        return events;
     };
 
     self.handleCellDeleteClick = function(row, col) {
-        self.leftMenuVM.handleCellDeleteClick(row, col);
+        let events = [];
+
+        let e = self.leftMenuVM.handleCellDeleteClick(row, col);
+
+        events.push(e);
+
+        return events;
     };
 
     self.handleEsc = function () {
