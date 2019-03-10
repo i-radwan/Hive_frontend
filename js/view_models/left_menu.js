@@ -302,6 +302,8 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
     };
 
     self.handleEsc = function () {
+        self.robotVM.handleEsc();
+        self.rackVM.handleEsc();
         self.activeMenu(LEFT_MENU.EMPTY);
 
         gfxEventHandler({

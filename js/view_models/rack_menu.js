@@ -160,6 +160,11 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
 
         return true;
     };
+
+    self.handleEsc = function () {
+        self.activeRackRow = self.activeRackCol = -1;
+        self.applyVisible(false);
+    };
 };
 
 module.exports = rackViewModel;

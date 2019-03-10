@@ -211,6 +211,11 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
 
         return true;
     };
+
+    self.handleEsc = function () {
+        self.activeRobotRow = self.activeRobotCol = -1;
+        self.applyVisible(false);
+    };
 };
 
 module.exports = robotViewModel;
