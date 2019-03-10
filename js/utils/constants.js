@@ -66,18 +66,28 @@ LOGIC_EVENT_TYPE = {
     CELL_CLICK: 0,
     CELL_DRAG: 1,
     CELL_DELETE: 2,
-    ESC: 3
+    OBJECT_MOVE: 3,
+    ESC: 4
 };
 
-// GFX Events
+// GFX Events TODO: rename, use keyword first: OBJECT_*
 GFX_EVENT_TYPE = {
     INIT: 0,
-    HOVER_OBJECT: 1,
-    ADD_OBJECT: 2,
-    DELETE_OBJECT: 3,
-    MOVE_OBJECT: 4,
-    HIGHLIGHT_OBJECT: 5,
-    ESC: 6
+    OBJECT_HOVER: 1,
+    OBJECT_ADD: 2,
+    OBJECT_DELETE: 3,
+    OBJECT_DRAG: 4,
+    OBJECT_MOVE: 5,
+    OBJECT_HIGHLIGHT: 6,
+    ESC: 7
+};
+
+// Server Events
+SERVER_EVENT_TYPE = {
+    OBJECT_UPDATE: 0,
+    LOG: 1,
+    STATS: 2,
+    MSG: 3
 };
 
 // GFX

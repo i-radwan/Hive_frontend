@@ -460,7 +460,7 @@ let gfx = function (logicEventHandler) {
         drawGrid();
     };
 
-    let eventHander = function (event) {
+    this.eventHandler = function (event) {
         switch (event.type) {
             case GFX_EVENT_TYPE.INIT:
                 init(event.width, event.height);

@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let robotViewModel = function (shouter, map) {
+let robotViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
     self.id = ko.observable(1);
@@ -32,8 +32,8 @@ let robotViewModel = function (shouter, map) {
 
             shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-            return {
-                type: GFX_EVENT_TYPE.ADD_OBJECT,
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.OBJECT_ADD,
                 object: MAP_CELL.ROBOT,
                 row: row,
                 col: col,
@@ -42,9 +42,51 @@ let robotViewModel = function (shouter, map) {
                 battery_cap: parseInt(self.batteryCap()),
                 color: self.color(),
                 ip: self.ip()
-            };
+            });
         } else {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+        }
+    };
+
+    self.moveRobot = function (srcRow, srcCol, dstRow, dstCol) {
+        // TODO (ALERT): this would certainly cause an error if robot 2 is moving
+        // to the old cell of robot 1, but the message of robot 2 arrives first from the
+        // gfxEventHandler
+        map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
+        map.grid[srcRow][srcCol] = {
+            type: MAP_CELL.EMPTY
+        };
+    };
+
+    self.dragRobot = function (srcRow, srcCol, dstRow, dstCol) {
+        if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
+            map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
+            map.grid[srcRow][srcCol] = {
+                type: MAP_CELL.EMPTY
+            };
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.OBJECT_DRAG,
+                object: MAP_CELL.ROBOT,
+                src_row: srcRow,
+                src_col: srcCol,
+                dst_row: dstRow,
+                dst_col: dstCol
+            });
+        } else {
+            shouter.notifySubscribers({
+                text: "(" + dstRow + ", " + dstCol + ") is occupied!",
+                type: MSG_ERROR
+            }, SHOUT_MSG);
+
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.OBJECT_DRAG,
+                object: MAP_CELL.ROBOT,
+                src_row: srcRow,
+                src_col: srcCol,
+                dst_row: srcRow,
+                dst_col: srcCol
+            });
         }
     };
 
@@ -54,35 +96,12 @@ let robotViewModel = function (shouter, map) {
                 type: MAP_CELL.EMPTY
             };
 
-            return {
-                type: GFX_EVENT_TYPE.DELETE_OBJECT,
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.OBJECT_DELETE,
                 object: MAP_CELL.ROBOT,
                 row: row,
                 col: col
-            };
-        }
-    };
-
-    self.moveRobot = function (srcRow, srcCol, dstRow, dstCol) {
-        if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
-            map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
-            map.grid[srcRow][srcCol] = {
-                type: MAP_CELL.EMPTY
-            };
-
-            return {
-                type: GFX_EVENT_TYPE.MOVE_OBJECT,
-                object: MAP_CELL.ROBOT,
-                src_row: srcRow,
-                src_col: srcCol,
-                dst_row: dstRow,
-                dst_col: dstCol
-            };
-        } else {
-            shouter.notifySubscribers({
-                text: "(" + dstRow + ", " + dstCol + ") is occupied!",
-                type: MSG_ERROR
-            }, SHOUT_MSG);
+            });
         }
     };
 

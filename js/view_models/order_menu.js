@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let orderViewModel = function (shouter, map) {
+let orderViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
     self.name = ko.observable("");

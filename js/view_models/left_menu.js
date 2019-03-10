@@ -9,7 +9,7 @@ let parkViewModel = require('./park_menu');
 let obstacleViewModel = require('./obstacle_menu');
 let orderViewModel = require('./order_menu');
 
-let leftMenuViewModel = function (runningMode, shouter, map) {
+let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
@@ -57,23 +57,38 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
     };
 
     self.entryClicked = function () {
-
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            object: MAP_CELL.ENTRY
+        });
     };
 
     self.robotClicked = function () {
-
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            object: MAP_CELL.ROBOT
+        });
     };
 
     self.rackClicked = function () {
-
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            object: MAP_CELL.RACK
+        });
     };
 
     self.parkClicked = function () {
-
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            object: MAP_CELL.PARK
+        });
     };
 
     self.obstacleClicked = function () {
-
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            object: MAP_CELL.OBSTACLE
+        });
     };
 
     self.orderClicked = function () {
@@ -81,14 +96,14 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
     };
 
     // Sub view models
-    self.tempVM = new tempViewModel(shouter, map);
-    self.mapVM = new mapViewModel(shouter, map);
-    self.entryVM = new entryViewModel(shouter, map);
-    self.robotVM = new robotViewModel(shouter, map);
-    self.rackVM = new rackViewModel(shouter, map);
-    self.parkVM = new parkViewModel(shouter, map);
-    self.obstacleVM = new obstacleViewModel(shouter, map);
-    self.orderVM = new orderViewModel(shouter, map);
+    self.tempVM = new tempViewModel(shouter, map, gfxEventHandler);
+    self.mapVM = new mapViewModel(shouter, map, gfxEventHandler);
+    self.entryVM = new entryViewModel(shouter, map, gfxEventHandler);
+    self.robotVM = new robotViewModel(shouter, map, gfxEventHandler);
+    self.rackVM = new rackViewModel(shouter, map, gfxEventHandler);
+    self.parkVM = new parkViewModel(shouter, map, gfxEventHandler);
+    self.obstacleVM = new obstacleViewModel(shouter, map, gfxEventHandler);
+    self.orderVM = new orderViewModel(shouter, map, gfxEventHandler);
 
     // Listen for mode change
     runningMode.subscribe(function (newRunningMode) {
@@ -105,116 +120,117 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
             if (map.grid[row][col].type === MAP_CELL.EMPTY) {
                 switch (self.activeMenu()) {
                     case LEFT_MENU.ENTRY:
-                        return self.entryVM.addEntry(row, col);
+                        self.entryVM.addEntry(row, col);
+                        break;
                     case LEFT_MENU.ROBOT:
-                        return self.robotVM.addRobot(row, col);
+                        self.robotVM.addRobot(row, col);
+                        break;
                     case LEFT_MENU.RACK:
-                        return self.rackVM.addRack(row, col);
+                        self.rackVM.addRack(row, col);
+                        break;
                     case LEFT_MENU.PARK:
-                        return self.parkVM.addPark(row, col);
+                        self.parkVM.addPark(row, col);
+                        break;
                     case LEFT_MENU.OBSTACLE:
-                        return self.obstacleVM.addObstacle(row, col);
+                        self.obstacleVM.addObstacle(row, col);
+                        break;
                 }
             } else {
                 switch (map.grid[row][col].type) {
                     case MAP_CELL.ENTRY:
                         self.activeMenu(LEFT_MENU.EMPTY);
-
-                        return {
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
-                            object: MAP_CELL.EMPTY,
-                            row: row,
-                            col: col
-                        }
+                        break;
                     case MAP_CELL.ROBOT:
                         self.activeMenu(LEFT_MENU.ROBOT);
                         self.robotVM.editRobot(row, col);
 
-                        return {
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        gfxEventHandler({
+                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                             object: MAP_CELL.ROBOT,
                             row: row,
                             col: col
-                        }
+                        });
+                        break;
                     case MAP_CELL.RACK:
                         self.activeMenu(LEFT_MENU.RACK);
                         self.rackVM.editRack(row, col);
 
-                        return {
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        gfxEventHandler({
+                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                             object: MAP_CELL.RACK,
                             row: row,
                             col: col
-                        }
+                        });
+                        break;
                     case MAP_CELL.PARK:
                         self.activeMenu(LEFT_MENU.EMPTY);
 
-                        return {
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        gfxEventHandler({
+                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                             object: MAP_CELL.PARK,
                             row: row,
                             col: col
-                        }
+                        });
+                        break;
                     case MAP_CELL.OBSTACLE:
                         self.activeMenu(LEFT_MENU.EMPTY);
 
-                        return {
-                            type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                        gfxEventHandler({
+                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                             object: MAP_CELL.OBSTACLE,
                             row: row,
                             col: col
-                        }
+                        });
+                        break;
                 }
             }
         } else {
             switch (map.grid[row][col].type) {
                 case MAP_CELL.ENTRY:
                     self.activeMenu(LEFT_MENU.EMPTY);
-
-                    return {
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
-                        object: MAP_CELL.EMPTY,
-                        row: row,
-                        col: col
-                    };
+                    break;
                 case MAP_CELL.ROBOT:
                     self.activeMenu(LEFT_MENU.ROBOT);
                     self.robotVM.fillFields(row, col);
 
-                    return {
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                    gfxEventHandler({
+                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                         object: MAP_CELL.ROBOT,
                         row: row,
                         col: col
-                    };
+                    });
+                    break;
                 case MAP_CELL.RACK:
                     self.activeMenu(LEFT_MENU.RACK);
                     self.rackVM.fillFields(row, col);
 
-                    return {
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                    gfxEventHandler({
+                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                         object: MAP_CELL.RACK,
                         row: row,
                         col: col
-                    };
+                    });
+                    break;
                 case MAP_CELL.PARK:
                     self.activeMenu(LEFT_MENU.EMPTY);
 
-                    return {
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                    gfxEventHandler({
+                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                         object: MAP_CELL.PARK,
                         row: row,
                         col: col
-                    };
+                    });
+                    break;
                 case MAP_CELL.OBSTACLE:
                     self.activeMenu(LEFT_MENU.EMPTY);
 
-                    return {
-                        type: GFX_EVENT_TYPE.HIGHLIGHT_OBJECT,
+                    gfxEventHandler({
+                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
                         object: MAP_CELL.OBSTACLE,
                         row: row,
                         col: col
-                    };
+                    });
+                    break;
             }
         }
     };
@@ -222,15 +238,20 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
     self.handleCellDeleteClick = function (row, col) {
         switch (map.grid[row][col].type) {
             case MAP_CELL.ENTRY:
-                return self.entryVM.deleteEntry(row, col);
+                self.entryVM.deleteEntry(row, col);
+                break;
             case MAP_CELL.ROBOT:
-                return self.robotVM.deleteRobot(row, col);
+                self.robotVM.deleteRobot(row, col);
+                break;
             case MAP_CELL.RACK:
-                return self.rackVM.deleteRack(row, col);
+                self.rackVM.deleteRack(row, col);
+                break;
             case MAP_CELL.PARK:
-                return self.parkVM.deletePark(row, col);
+                self.parkVM.deletePark(row, col);
+                break;
             case MAP_CELL.OBSTACLE:
-                return self.obstacleVM.deleteObstacle(row, col);
+                self.obstacleVM.deleteObstacle(row, col);
+                break;
         }
         self.activeMenu(LEFT_MENU.EMPTY);
     };
@@ -238,20 +259,49 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
         switch (map.grid[srcRow][srcCol].type) {
             case MAP_CELL.ENTRY:
-                return self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
+                self.entryVM.dragEntry(srcRow, srcCol, dstRow, dstCol);
+                break;
             case MAP_CELL.ROBOT:
-                return self.robotVM.moveRobot(srcRow, srcCol, dstRow, dstCol);
+                self.robotVM.dragRobot(srcRow, srcCol, dstRow, dstCol);
+                break;
             case MAP_CELL.RACK:
-                return self.rackVM.moveRack(srcRow, srcCol, dstRow, dstCol);
+                self.rackVM.dragRack(srcRow, srcCol, dstRow, dstCol);
+                break;
             case MAP_CELL.PARK:
-                return self.parkVM.movePark(srcRow, srcCol, dstRow, dstCol);
+                self.parkVM.dragPark(srcRow, srcCol, dstRow, dstCol);
+                break;
             case MAP_CELL.OBSTACLE:
-                return self.obstacleVM.moveObstacle(srcRow, srcCol, dstRow, dstCol);
+                self.obstacleVM.dragObstacle(srcRow, srcCol, dstRow, dstCol);
+                break;
+        }
+    };
+
+    self.handleObjectMove = function (srcRow, srcCol, dstRow, dstCol) {
+        switch (map.grid[srcRow][srcCol].type) {
+            case MAP_CELL.ENTRY:
+                self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
+                break;
+            case MAP_CELL.ROBOT:
+                self.robotVM.moveRobot(srcRow, srcCol, dstRow, dstCol);
+                break;
+            case MAP_CELL.RACK:
+                self.rackVM.moveRack(srcRow, srcCol, dstRow, dstCol);
+                break;
+            case MAP_CELL.PARK:
+                self.parkVM.movePark(srcRow, srcCol, dstRow, dstCol);
+                break;
+            case MAP_CELL.OBSTACLE:
+                self.obstacleVM.moveObstacle(srcRow, srcCol, dstRow, dstCol);
+                break;
         }
     };
 
     self.handleEsc = function () {
         self.activeMenu(LEFT_MENU.EMPTY);
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.ESC
+        });
     };
 };
 
