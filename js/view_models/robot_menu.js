@@ -52,7 +52,7 @@ let robotViewModel = function (shouter, map) {
         if (map.grid[row][col].type === MAP_CELL.ROBOT) {
             map.grid[row][col] = {
                 type: MAP_CELL.EMPTY
-            }
+            };
 
             return {
                 type: EVENT_TYPE.DELETE_OBJECT,
@@ -68,13 +68,15 @@ let robotViewModel = function (shouter, map) {
             map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
             map.grid[srcRow][srcCol] = {
                 type: MAP_CELL.EMPTY
-            }
+            };
 
             return {
                 type: EVENT_TYPE.MOVE_OBJECT,
                 object: MAP_CELL.ROBOT,
-                row: row,
-                col: col
+                src_row: srcRow,
+                src_col: srcCol,
+                dst_row: dstRow,
+                dst_col: dstCol
             };
         } else {
             shouter.notifySubscribers({

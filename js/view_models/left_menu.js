@@ -176,7 +176,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                         object: MAP_CELL.EMPTY,
                         row: row,
                         col: col
-                    }
+                    };
                 case MAP_CELL.ROBOT:
                     self.activeMenu(LEFT_MENU.ROBOT);
                     self.robotVM.fillFields(row, col);
@@ -186,7 +186,7 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
                         object: MAP_CELL.ROBOT,
                         row: row,
                         col: col
-                    }
+                    };
                 case MAP_CELL.RACK:
                     self.activeMenu(LEFT_MENU.RACK);
                     self.rackVM.fillFields(row, col);
@@ -222,20 +222,15 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
     self.handleCellDeleteClick = function (row, col) {
         switch (map.grid[row][col].type) {
             case MAP_CELL.ENTRY:
-                self.entryVM.deleteEntry(row, col);
-                break;
+                return self.entryVM.deleteEntry(row, col);
             case MAP_CELL.ROBOT:
-                self.robotVM.deleteRobot(row, col);
-                break;
+                return self.robotVM.deleteRobot(row, col);
             case MAP_CELL.RACK:
-                self.rackVM.deleteRack(row, col);
-                break;
+                return self.rackVM.deleteRack(row, col);
             case MAP_CELL.PARK:
-                self.parkVM.deletePark(row, col);
-                break;
+                return self.parkVM.deletePark(row, col);
             case MAP_CELL.OBSTACLE:
-                self.obstacleVM.deleteObstacle(row, col);
-                break;
+                return self.obstacleVM.deleteObstacle(row, col);
         }
         self.activeMenu(LEFT_MENU.EMPTY);
     };
@@ -243,20 +238,15 @@ let leftMenuViewModel = function (runningMode, shouter, map) {
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
         switch (map.grid[srcRow][srcCol].type) {
             case MAP_CELL.ENTRY:
-                self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
             case MAP_CELL.ROBOT:
-                self.robotVM.moveRobot(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.robotVM.moveRobot(srcRow, srcCol, dstRow, dstCol);
             case MAP_CELL.RACK:
-                self.rackVM.moveRack(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.rackVM.moveRack(srcRow, srcCol, dstRow, dstCol);
             case MAP_CELL.PARK:
-                self.parkVM.movePark(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.parkVM.movePark(srcRow, srcCol, dstRow, dstCol);
             case MAP_CELL.OBSTACLE:
-                self.obstacleVM.moveObstacle(srcRow, srcCol, dstRow, dstCol);
-                break;
+                return self.obstacleVM.moveObstacle(srcRow, srcCol, dstRow, dstCol);
         }
     };
 
