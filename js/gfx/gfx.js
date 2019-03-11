@@ -16,13 +16,16 @@ let gfx = function (logicEventHandler) {
         autostart: true
     }).appendTo(canvas[0]);
     let zui = new ZUI(two);
-    let gridMap;
-    let mouseX, mouseY;
     zui.addLimits(MIN_ZOOM_VAL, MAX_ZOOM_VAL);
 
+    // Map Scene
+    let gridMap;
+    // Mouse positions
+    let mouseX = 0, mouseY = 0;
+
     // all of the scene objects (Racks, Robots...)
-    let mapWidth, mapHeight;
     let mapObjects;
+    let mapWidth, mapHeight;
 
     // Dragging & Selecting Variables
     let startDragX = 0;
@@ -44,6 +47,7 @@ let gfx = function (logicEventHandler) {
     // SVG Objects
     let robotSVG = 0;
 
+    // Set the event handler that communicates with the mainVM
     self.setLogicEventHandler = function (logicEventHandler) {
         self.logicEventHandler = logicEventHandler;
     };
@@ -63,16 +67,16 @@ let gfx = function (logicEventHandler) {
     };
 
     // Gets from the mouse raw position the row and column of the cell that is being clicked (if out of bounds it returns the nearest cell)
-    let getMouseCell = function (mouseX, mouseY) {
-        mouseX = mouseX - canvas.offset().left - gridMap.getBoundingClientRect().left;
-        mouseY = mouseY - canvas.offset().top - gridMap.getBoundingClientRect().top;
-        let cellWidth = (gridMap.getBoundingClientRect().right - gridMap.getBoundingClientRect().left) / mapWidth;
+    let getMouseCell = function (mousePosX, mousePosY) {
+        mousePosX = mousePosX - canvas.offset().left - gridMap.getBoundingClientRect().left;
+        mousePosY = mousePosY - canvas.offset().top - gridMap.getBoundingClientRect().top;
+        let cellWidth = (gridMap.getBoundingClientRect().width) / mapWidth;
 
-        let cellRow = parseInt(mouseY / cellWidth);
-        let cellCol = parseInt(mouseX / cellWidth);
+        let cellRow = Math.floor(mousePosY / cellWidth);
+        let cellCol = Math.floor(mousePosX / cellWidth);
         let ret = {row: cellRow, col: cellCol, inBounds: true};
 
-        if (cellCol < 0 || cellCol >= mapWidth || cellRow < 0 || cellRow >= mapWidth)
+        if (cellCol < 0 || cellCol >= mapWidth || cellRow < 0 || cellRow >= mapHeight)
             ret.inBounds = false;
 
         ret.row = Math.min(ret.row, mapHeight - 1);
@@ -141,9 +145,8 @@ let gfx = function (logicEventHandler) {
                 object.fill = "#1d1d1e";
                 break;
         }
-        let ret = {two_object: object, type: type};
 
-        return ret;
+        return {two_object: object, type: type, row: row, col: col};
     };
 
     // Creates a cell at the given position and creates the objects that this cell contains
@@ -158,6 +161,7 @@ let gfx = function (logicEventHandler) {
         return cellGroup;
     };
 
+    // Remove the dummy hovering object from being drawn
     let removeHoveringObject = function () {
         if (hoveredObjectIsDrawn) {
             getRendererObject(hoveredObject.row, hoveredObject.col).remove(hoveredObject.two_object);
@@ -167,6 +171,7 @@ let gfx = function (logicEventHandler) {
         hoveredObjectIsDrawn = false;
     };
 
+    // Remove the dummy hovering object that represents hovering
     let showHoveringObject = function () {
         hoveredObjectIsDrawn = true;
         let cellTopLeft = getCellTopLeft(hoveredObject.row, hoveredObject.col);
@@ -174,6 +179,7 @@ let gfx = function (logicEventHandler) {
         hoveredObject.two_object.translation.set(cellTopLeft.x, cellTopLeft.y);
     };
 
+    // Hide hovering object from the drawing area
     let hideHoveringObject = function () {
         hoveredObjectIsDrawn = false;
         getRendererObject(hoveredObject.row, hoveredObject.col).remove(hoveredObject.two_object);
@@ -190,12 +196,11 @@ let gfx = function (logicEventHandler) {
 
         getRendererObject(dstRow, dstCol).add(object.two_object);
         object.two_object.translation.set(cellTopLeft.x, cellTopLeft.y);
-        // let childIdx = getRendererObject(dstRow, dstCol).children.length - 1;
-        // getRendererObject(dstRow, dstCol).children[childIdx].translation.set(cellTopLeft.x, cellTopLeft.y);
 
         return object;
     };
 
+    // Adds object to the scene and put it in the mapObjects array
     let addObject = function (row, col, type) {
         let object = createObject(row, col, type);
         mapObjects[row][col] = object;
@@ -211,6 +216,8 @@ let gfx = function (logicEventHandler) {
 
         mapObjects[dstRow][dstCol].type = mapObjects[srcRow][srcCol].type;
         mapObjects[dstRow][dstCol].two_object = mapObjects[srcRow][srcCol].two_object;
+        mapObjects[dstRow][dstCol].row = dstRow;
+        mapObjects[dstRow][dstCol].col = dstCol;
 
         mapObjects[srcRow][srcCol].type = MAP_CELL.EMPTY;
         mapObjects[srcRow][srcCol].two_object = -1;
@@ -222,18 +229,23 @@ let gfx = function (logicEventHandler) {
 
         mapObjects[row][col].type = MAP_CELL.EMPTY;
         mapObjects[row][col].two_object = -1;
+        selectedObject = -1;
     };
 
+    // Highlights a certain object to be drawn differently and make it selected
     let highlightObject = function (row, col) {
+        console.log('highlighting Object at  {', row, ', ', col, '}');
         selectedObject = mapObjects[row][col];
         removeHoveringObject();
     };
 
+    // Remove hovering object or deselect the selected object
     let handleEscape = function () {
         removeHoveringObject();
         selectedObject = -1;
     };
 
+    // Start the hovering action
     let handleHover = function (type) {
         removeHoveringObject();
 
@@ -266,7 +278,6 @@ let gfx = function (logicEventHandler) {
 
         // What a magical equation !
         zui.zoomBy(-Math.pow(mapWidth * mapHeight, 0.5) / 30, two.width / 2 + canvas.offset().left,  two.height / 2 + canvas.offset().top);
-
 
         two.update();
         $(gridMap._renderer.elem)
@@ -303,6 +314,7 @@ let gfx = function (logicEventHandler) {
         translateScene(KEYBOARD_DRAG_SPEED * horizontalDir, KEYBOARD_DRAG_SPEED * verticalDir);
     };
 
+    // Sends to the mainVM event to delete the selected object
     let handleDeleteEvent = function () {
         if (selectedObject != -1) {
             self.logicEventHandler({
@@ -456,7 +468,8 @@ let gfx = function (logicEventHandler) {
                 break;
         }
     });
-    
+
+    // Initializes the canvas with a certain width and height
     let init = function(width, height) {
         // Set width and height
         mapWidth = width;
@@ -475,6 +488,7 @@ let gfx = function (logicEventHandler) {
         drawGrid();
     };
 
+    // The handler that handles all the events coming from the mainVM
     self.eventHandler = function (event) {
         switch (event.type) {
             case GFX_EVENT_TYPE.INIT:
