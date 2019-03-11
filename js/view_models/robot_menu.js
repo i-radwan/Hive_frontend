@@ -44,8 +44,12 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
                 color: self.color(),
                 ip: self.ip()
             });
-        } else if (map.grid[row][col].type === MAP_CELL.EMPTY) {
+        } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+        } else if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRobotRow !== -1 && self.activeRobotCol !== -1) {
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.ESC
+            });
         }
     };
 
@@ -142,11 +146,10 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
 
         shouter.notifySubscribers({text: "Robot updated successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-        self.activeRobotRow = self.activeRobotCol = -1;
-        self.applyVisible(false);
+        self.clearSelection();
 
         gfxEventHandler({
-           type: GFX_EVENT_TYPE.ESC
+            type: GFX_EVENT_TYPE.ESC
         });
     };
 
@@ -212,9 +215,13 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
         return true;
     };
 
-    self.handleEsc = function () {
+    self.clearSelection = function () {
         self.activeRobotRow = self.activeRobotCol = -1;
         self.applyVisible(false);
+    };
+
+    self.handleEsc = function () {
+        self.clearSelection();
     };
 };
 

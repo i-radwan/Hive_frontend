@@ -36,8 +36,12 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
                 quantity: parseInt(self.quantity()),
                 item_weight: parseFloat(self.itemWeight())
             });
-        } else if (map.grid[row][col].type === MAP_CELL.EMPTY) {
+        } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeRackRow === -1 && self.activeRackCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+        } else if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRackRow !== -1 && self.activeRackCol !== -1) {
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.ESC
+            });
         }
     };
 
@@ -128,8 +132,11 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
 
         shouter.notifySubscribers({text: "Rack updated successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-        self.activeRackRow = self.activeRackCol = -1;
-        self.applyVisible(false);
+        self.clearSelection();
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.ESC
+        });
     };
 
     self.checkValid = function () {
@@ -161,9 +168,13 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         return true;
     };
 
-    self.handleEsc = function () {
+    self.clearSelection = function() {
         self.activeRackRow = self.activeRackCol = -1;
         self.applyVisible(false);
+    };
+
+    self.handleEsc = function () {
+        self.clearSelection();
     };
 };
 
