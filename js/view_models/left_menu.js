@@ -157,11 +157,11 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
                         self.rackVM.editRack(row, col);
                         break;
                     case MAP_CELL.PARK:
-                        self.activeMenu(LEFT_MENU.EMPTY);
+                        self.activeMenu(LEFT_MENU.PARK);
                         self.parkVM.editPark(row, col);
                         break;
                     case MAP_CELL.OBSTACLE:
-                        self.activeMenu(LEFT_MENU.EMPTY);
+                        self.activeMenu(LEFT_MENU.OBSTACLE);
                         self.obstacleVM.editObstacle(row, col);
                         break;
                 }
@@ -181,11 +181,11 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
                     self.rackVM.fillFields(row, col);
                     break;
                 case MAP_CELL.PARK:
-                    self.activeMenu(LEFT_MENU.EMPTY);
+                    self.activeMenu(LEFT_MENU.PARK);
                     self.parkVM.fillFields(row, col);
                     break;
                 case MAP_CELL.OBSTACLE:
-                    self.activeMenu(LEFT_MENU.EMPTY);
+                    self.activeMenu(LEFT_MENU.OBSTACLE);
                     self.obstacleVM.fillFields(row, col);
                     break;
             }
