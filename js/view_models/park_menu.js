@@ -4,8 +4,11 @@ let ko = require('knockout');
 let parkViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
+    self.activeParkCol = -1;
+    self.activeParkCol = -1;
+    
     self.addPark = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY || map.grid[row][col].type === MAP_CELL.PARK) {
+        if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeParkRow === -1 && self.activeParkCol === -1) {
             map.grid[row][col] = {
                 type: MAP_CELL.PARK
             };
@@ -18,8 +21,12 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
-        } else {
+        } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeParkRow === -1 && self.activeParkCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+        } else if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeParkRow !== -1 && self.activeParkCol !== -1) {
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.ESC
+            });
         }
     };
 
@@ -67,7 +74,46 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
+
+            self.clearSelection();
+
+            return true;
         }
+
+        return false;
+    };
+
+    self.fillFields = function (row, col) {
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.PARK,
+            row: row,
+            col: col
+        });
+    };
+
+    self.editPark = function (row, col) {
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.PARK,
+            row: row,
+            col: col
+        });
+    };
+
+    self.updatePark = function () {
+    };
+
+    self.checkValid = function () {
+    };
+
+    self.clearSelection = function () {
+        self.activeParkRow = self.activeParkCol = -1;
+        self.applyVisible(false);
+    };
+
+    self.handleEsc = function () {
+        self.clearSelection();
     };
 };
 

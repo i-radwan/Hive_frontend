@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let controlConsoleViewModel = function (runningMode, shouter, map, gfxEventHandler) {
+let controlConsoleViewModel = function (runningMode, shouter, map, gfxEventHandler, commSender) {
     let self = this;
 
     self.playing = ko.observable(false);
@@ -16,6 +16,11 @@ let controlConsoleViewModel = function (runningMode, shouter, map, gfxEventHandl
         } else {
             runningMode(RUNNING_MODE.SIMULATE);
             self.playing(true);
+
+            commSender({
+                type: SERVER_EVENT_TYPE.MAP,
+                map: JSON.stringify(map, null, 2)
+            });
         }
     };
 
@@ -53,6 +58,10 @@ let controlConsoleViewModel = function (runningMode, shouter, map, gfxEventHandl
     runningMode.subscribe(function (newRunningMode) {
 
     });
+
+    self.handleEsc = function() {
+
+    };
 };
 
 module.exports = controlConsoleViewModel;

@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let orderViewModel = function (shouter, map, gfxEventHandler) {
+let orderViewModel = function (shouter, map, gfxEventHandler, commSender) {
     let self = this;
 
     self.name = ko.observable("");
@@ -31,6 +31,12 @@ let orderViewModel = function (shouter, map, gfxEventHandler) {
 
     self.addOrder = function () {
         console.log("Add order");
+
+        commSender({
+            type: SERVER_EVENT_TYPE.ORDER_NEW,
+            name: self.name(),
+            items: self.items()
+        });
     };
 };
 
