@@ -70,24 +70,18 @@ LOGIC_EVENT_TYPE = {
     ESC: 4
 };
 
-// GFX Events TODO: rename, use keyword first: OBJECT_*
-GFX_EVENT_TYPE = {
-    INIT: 0,
-    OBJECT_HOVER: 1,
-    OBJECT_ADD: 2,
-    OBJECT_DELETE: 3,
-    OBJECT_DRAG: 4,
-    OBJECT_MOVE: 5,
-    OBJECT_HIGHLIGHT: 6,
-    ESC: 7
-};
+// Server
+SERVER_IP = 0;
+SERVER_PORT = 12346;
 
 // Server Events
 SERVER_EVENT_TYPE = {
     OBJECT_UPDATE: 0,
     LOG: 1,
     STATS: 2,
-    MSG: 3
+    MSG: 3,
+    MAP: 4,
+    ORDER_NEW: 5
 };
 
 // GFX
@@ -107,4 +101,16 @@ KEY_CODE = {
     F5: 116,
     DELETE: 46,
     ESC: 27
+};
+
+// GFX Events TODO: rename, use keyword first: OBJECT_*
+GFX_EVENT_TYPE = {
+    INIT: 0,
+    OBJECT_HOVER: 1,
+    OBJECT_ADD: 2,
+    OBJECT_DELETE: 3,
+    OBJECT_DRAG: 4,
+    OBJECT_MOVE: 5,
+    OBJECT_HIGHLIGHT: 6,
+    ESC: 7
 };

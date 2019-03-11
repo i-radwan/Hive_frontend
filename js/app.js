@@ -2,6 +2,7 @@
 require("./utils/constants");
 let $ = require('jquery');
 let ko = require('knockout');
+let communicator = require('comm/comm');
 
 // ViewModels
 let mainViewModel = require("./view_models/main");
@@ -13,7 +14,9 @@ $(document).ready(() => {
         console.log(event);
     };
 
-    let mainVM = new mainViewModel(gfxEventHandler);
+    let comm = new communicator();
+
+    let mainVM = new mainViewModel(gfxEventHandler, comm.send);
 
     ko.applyBindings(mainVM, $("#main")[0]);
 
@@ -52,6 +55,8 @@ $(document).ready(() => {
                 break;
         }
     };
+
+    comm.connect(SERVER_IP, SERVER_PORT, rcv);
 
     // Simulation logic
 

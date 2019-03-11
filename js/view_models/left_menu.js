@@ -9,7 +9,7 @@ let parkViewModel = require('./park_menu');
 let obstacleViewModel = require('./obstacle_menu');
 let orderViewModel = require('./order_menu');
 
-let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
+let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, commSender) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
@@ -102,14 +102,14 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler) {
     };
 
     // Sub view models
-    self.tempVM = new tempViewModel(shouter, map, gfxEventHandler);
-    self.mapVM = new mapViewModel(shouter, map, gfxEventHandler);
-    self.entryVM = new entryViewModel(shouter, map, gfxEventHandler);
-    self.robotVM = new robotViewModel(shouter, map, gfxEventHandler);
-    self.rackVM = new rackViewModel(shouter, map, gfxEventHandler);
-    self.parkVM = new parkViewModel(shouter, map, gfxEventHandler);
-    self.obstacleVM = new obstacleViewModel(shouter, map, gfxEventHandler);
-    self.orderVM = new orderViewModel(shouter, map, gfxEventHandler);
+    self.tempVM = new tempViewModel(shouter, map, gfxEventHandler, commSender);
+    self.mapVM = new mapViewModel(shouter, map, gfxEventHandler, commSender);
+    self.entryVM = new entryViewModel(shouter, map, gfxEventHandler, commSender);
+    self.robotVM = new robotViewModel(shouter, map, gfxEventHandler, commSender);
+    self.rackVM = new rackViewModel(shouter, map, gfxEventHandler, commSender);
+    self.parkVM = new parkViewModel(shouter, map, gfxEventHandler, commSender);
+    self.obstacleVM = new obstacleViewModel(shouter, map, gfxEventHandler, commSender);
+    self.orderVM = new orderViewModel(shouter, map, gfxEventHandler, commSender);
 
     // Listen for mode change
     runningMode.subscribe(function (newRunningMode) {
