@@ -107,7 +107,13 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
+
+            self.clearSelection();
+
+            return true;
         }
+
+        return false;
     };
 
     self.fillFields = function (row, col) {
@@ -121,6 +127,13 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
         self.loadCap(robot.load_cap);
         self.batteryCap(robot.battery_cap);
         self.ip(robot.ip);
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.ROBOT,
+            row: row,
+            col: col
+        });
     };
 
     self.editRobot = function (row, col) {
@@ -128,6 +141,13 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
         self.applyVisible(true);
         self.activeRobotRow = row;
         self.activeRobotCol = col;
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.ROBOT,
+            row: row,
+            col: col
+        });
     };
 
     self.updateRobot = function () {

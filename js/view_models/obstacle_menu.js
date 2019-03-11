@@ -4,8 +4,11 @@ let ko = require('knockout');
 let obstacleViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
+    self.activeObstacleCol = -1;
+    self.activeObstacleCol = -1;
+
     self.addObstacle = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY || map.grid[row][col].type === MAP_CELL.OBSTACLE) {
+        if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeObstacleRow === -1 && self.activeObstacleCol === -1) {
             map.grid[row][col] = {
                 type: MAP_CELL.OBSTACLE
             };
@@ -18,8 +21,12 @@ let obstacleViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
-        } else {
+        } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeObstacleRow === -1 && self.activeObstacleCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+        } else if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeObstacleRow !== -1 && self.activeObstacleCol !== -1) {
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.ESC
+            });
         }
     };
 
@@ -70,7 +77,46 @@ let obstacleViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
+
+            self.clearSelection();
+
+            return true;
         }
+
+        return false;
+    };
+
+    self.fillFields = function (row, col) {
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.OBSTACLE,
+            row: row,
+            col: col
+        });
+    };
+
+    self.editObstacle = function (row, col) {
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.OBSTACLE,
+            row: row,
+            col: col
+        });
+    };
+
+    self.updateObstacle = function () {
+    };
+
+    self.checkValid = function () {
+    };
+
+    self.clearSelection = function () {
+        self.activeObstacleRow = self.activeObstacleCol = -1;
+        self.applyVisible(false);
+    };
+
+    self.handleEsc = function () {
+        self.clearSelection();
     };
 };
 

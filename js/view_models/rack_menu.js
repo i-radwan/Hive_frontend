@@ -97,7 +97,13 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
+
+            self.clearSelection();
+
+            return true;
         }
+
+        return false;
     };
 
     self.fillFields = function (row, col) {
@@ -109,6 +115,13 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         self.itemNumber(rack.item_number);
         self.quantity(rack.quantity);
         self.itemWeight(rack.item_weight);
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.RACK,
+            row: row,
+            col: col
+        });
     };
 
     self.editRack = function (row, col) {
@@ -116,6 +129,13 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         self.applyVisible(true);
         self.activeRackRow = row;
         self.activeRackCol = col;
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.RACK,
+            row: row,
+            col: col
+        });
     };
 
     self.updateRack = function () {

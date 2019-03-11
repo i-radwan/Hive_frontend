@@ -1,5 +1,6 @@
 require("../utils/constants");
 let ko = require('knockout');
+
 let tempViewModel = require('./temps_menu');
 let mapViewModel = require('./map_menu');
 let entryViewModel = require('./entry_menu');
@@ -145,48 +146,23 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
                 switch (map.grid[row][col].type) {
                     case MAP_CELL.ENTRY:
                         self.activeMenu(LEFT_MENU.EMPTY);
+                        self.entryVM.editEntry(row, col);
                         break;
                     case MAP_CELL.ROBOT:
                         self.activeMenu(LEFT_MENU.ROBOT);
                         self.robotVM.editRobot(row, col);
-
-                        gfxEventHandler({
-                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-                            object: MAP_CELL.ROBOT,
-                            row: row,
-                            col: col
-                        });
                         break;
                     case MAP_CELL.RACK:
                         self.activeMenu(LEFT_MENU.RACK);
                         self.rackVM.editRack(row, col);
-
-                        gfxEventHandler({
-                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-                            object: MAP_CELL.RACK,
-                            row: row,
-                            col: col
-                        });
                         break;
                     case MAP_CELL.PARK:
                         self.activeMenu(LEFT_MENU.EMPTY);
-
-                        gfxEventHandler({
-                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-                            object: MAP_CELL.PARK,
-                            row: row,
-                            col: col
-                        });
+                        self.parkVM.editPark(row, col);
                         break;
                     case MAP_CELL.OBSTACLE:
                         self.activeMenu(LEFT_MENU.EMPTY);
-
-                        gfxEventHandler({
-                            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-                            object: MAP_CELL.OBSTACLE,
-                            row: row,
-                            col: col
-                        });
+                        self.obstacleVM.editObstacle(row, col);
                         break;
                 }
             }
@@ -194,71 +170,52 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
             switch (map.grid[row][col].type) {
                 case MAP_CELL.ENTRY:
                     self.activeMenu(LEFT_MENU.EMPTY);
+                    self.entryVM.fillFields(row, col);
                     break;
                 case MAP_CELL.ROBOT:
                     self.activeMenu(LEFT_MENU.ROBOT);
                     self.robotVM.fillFields(row, col);
-
-                    gfxEventHandler({
-                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-                        object: MAP_CELL.ROBOT,
-                        row: row,
-                        col: col
-                    });
                     break;
                 case MAP_CELL.RACK:
                     self.activeMenu(LEFT_MENU.RACK);
                     self.rackVM.fillFields(row, col);
-
-                    gfxEventHandler({
-                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-                        object: MAP_CELL.RACK,
-                        row: row,
-                        col: col
-                    });
                     break;
                 case MAP_CELL.PARK:
                     self.activeMenu(LEFT_MENU.EMPTY);
-
-                    gfxEventHandler({
-                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-                        object: MAP_CELL.PARK,
-                        row: row,
-                        col: col
-                    });
+                    self.parkVM.fillFields(row, col);
                     break;
                 case MAP_CELL.OBSTACLE:
                     self.activeMenu(LEFT_MENU.EMPTY);
-
-                    gfxEventHandler({
-                        type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-                        object: MAP_CELL.OBSTACLE,
-                        row: row,
-                        col: col
-                    });
+                    self.obstacleVM.fillFields(row, col);
                     break;
             }
         }
     };
 
     self.handleCellDeleteClick = function (row, col) {
+        let status = false;
+
         switch (map.grid[row][col].type) {
             case MAP_CELL.ENTRY:
-                self.entryVM.deleteEntry(row, col);
+                status = self.entryVM.deleteEntry(row, col);
                 break;
             case MAP_CELL.ROBOT:
-                self.robotVM.deleteRobot(row, col);
+                status = self.robotVM.deleteRobot(row, col);
                 break;
             case MAP_CELL.RACK:
-                self.rackVM.deleteRack(row, col);
+                status = self.rackVM.deleteRack(row, col);
                 break;
             case MAP_CELL.PARK:
-                self.parkVM.deletePark(row, col);
+                status = self.parkVM.deletePark(row, col);
                 break;
             case MAP_CELL.OBSTACLE:
-                self.obstacleVM.deleteObstacle(row, col);
+                status = self.obstacleVM.deleteObstacle(row, col);
                 break;
         }
+
+        // Hide details panel after delete is done
+        if (status)
+            self.activeMenu(LEFT_MENU.EMPTY);
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
@@ -302,13 +259,13 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
     };
 
     self.handleEsc = function () {
+        self.entryVM.handleEsc();
         self.robotVM.handleEsc();
         self.rackVM.handleEsc();
-        self.activeMenu(LEFT_MENU.EMPTY);
+        self.parkVM.handleEsc();
+        self.obstacleVM.handleEsc();
 
-        gfxEventHandler({
-            type: GFX_EVENT_TYPE.ESC
-        });
+        self.activeMenu(LEFT_MENU.EMPTY);
     };
 };
 

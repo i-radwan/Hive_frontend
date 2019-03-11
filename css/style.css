@@ -160,22 +160,18 @@ body {
     margin-left: 82px;
 }
 
-.left-menu-details-rack {
-    padding: 0;
+.left-menu-details-entry {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
 }
 
-.left-menu-details-rack .form-group {
-    margin-top: 20px;
-}
-
-.left-menu-details-rack label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.left-menu-details-rack input {
-    border-color: transparent;
-    color: #bababa !important;
+.left-menu-details-entry p {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .left-menu-details-robot {
@@ -192,6 +188,24 @@ body {
 }
 
 .left-menu-details-robot input {
+    border-color: transparent;
+    color: #bababa !important;
+}
+
+.left-menu-details-rack {
+    padding: 0;
+}
+
+.left-menu-details-rack .form-group {
+    margin-top: 20px;
+}
+
+.left-menu-details-rack label {
+    font-size: 17px;
+    color: #bababa;
+}
+
+.left-menu-details-rack input {
     border-color: transparent;
     color: #bababa !important;
 }
@@ -255,6 +269,34 @@ body {
 
 .order-items-container i:hover {
     color: red;
+}
+
+.left-menu-details-park {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.left-menu-details-park p {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.left-menu-details-obstacle {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.left-menu-details-obstacle p {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .left-menu-details-bottom-actions {

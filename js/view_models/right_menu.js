@@ -180,6 +180,10 @@ let rightMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, c
             self.activeMenu(RIGHT_MENU.LOGS);
         }
     });
+
+    self.handleEsc = function() {
+
+    };
 };
 
 module.exports = rightMenuViewModel;

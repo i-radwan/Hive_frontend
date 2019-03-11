@@ -20,7 +20,7 @@ let mainViewModel = function (gfxEventHandler, commSender) {
 
     self.gfxEventHandler = gfxEventHandler;
 
-    self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.map, gfxEventHandle, commSender);
+    self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler, commSender);
     self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler, commSender);
     self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler, commSender);
 
@@ -28,7 +28,7 @@ let mainViewModel = function (gfxEventHandler, commSender) {
         self.gfxEventHandler = gfxEventHandler;
     };
 
-    self.eventHandler = function(event) {
+    self.eventHandler = function (event) {
         switch (event.type) {
             case LOGIC_EVENT_TYPE.CELL_CLICK:
                 self.leftMenuVM.handleCellClick(event.row, event.col);
@@ -43,7 +43,7 @@ let mainViewModel = function (gfxEventHandler, commSender) {
                 self.leftMenuVM.handleCellDeleteClick(event.row, event.col);
                 break;
             case LOGIC_EVENT_TYPE.ESC:
-                self.leftMenuVM.handleEsc();
+                self.handleEsc();
                 break;
         }
     };
@@ -56,16 +56,22 @@ let mainViewModel = function (gfxEventHandler, commSender) {
         self.leftMenuVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
     };
 
-    self.handleObjectMove = function(srcRow, srcCol, dstRow, dstCol) {
+    self.handleObjectMove = function (srcRow, srcCol, dstRow, dstCol) {
         self.leftMenuVM.handleObjectMove(srcRow, srcCol, dstRow, dstCol);
     };
 
-    self.handleCellDeleteClick = function(row, col) {
+    self.handleCellDeleteClick = function (row, col) {
         self.leftMenuVM.handleCellDeleteClick(row, col);
     };
 
     self.handleEsc = function () {
         self.leftMenuVM.handleEsc();
+        self.controlConsoleVM.handleEsc();
+        self.rightMenuVM.handleEsc();
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.ESC
+        });
     };
 
     gfxEventHandler({

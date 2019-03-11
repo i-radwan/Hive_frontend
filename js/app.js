@@ -2,7 +2,7 @@
 require("./utils/constants");
 let $ = require('jquery');
 let ko = require('knockout');
-let communicator = require('comm/comm');
+let communicator = require('./comm/comm');
 
 // ViewModels
 let mainViewModel = require("./view_models/main");

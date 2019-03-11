@@ -4,8 +4,11 @@ let ko = require('knockout');
 let entryViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
+    self.activeEntryRow = -1;
+    self.activeEntryCol = -1;
+
     self.addEntry = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY) {
+        if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeEntryRow === -1 && self.activeEntryCol === -1) {
             map.grid[row][col] = {
                 type: MAP_CELL.ENTRY
             };
@@ -18,8 +21,12 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
-        } else {
+        } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeEntryRow === -1 && self.activeEntryCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+        } else if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeEntryRow !== -1 && self.activeEntryCol !== -1) {
+            gfxEventHandler({
+                type: GFX_EVENT_TYPE.ESC
+            });
         }
     };
 
@@ -70,7 +77,54 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
+
+            self.clearSelection();
+
+            return true;
         }
+
+        return false;
+    };
+
+    self.fillFields = function (row, col) {
+        let entry = map.grid[row][col];
+
+        if (entry.type !== MAP_CELL.ENTRY)
+            return;
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.ENTRY,
+            row: row,
+            col: col
+        });
+    };
+
+    self.editEntry = function (row, col) {
+        self.fillFields(row, col);
+        self.activeEntryRow = row;
+        self.activeEntryCol = col;
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            object: MAP_CELL.ENTRY,
+            row: row,
+            col: col
+        });
+    };
+
+    self.updateEntry = function () {
+    };
+
+    self.checkValid = function () {
+    };
+
+    self.clearSelection = function () {
+        self.activeEntryRow = self.activeEntryCol = -1;
+    };
+
+    self.handleEsc = function () {
+        self.clearSelection();
     };
 };
 

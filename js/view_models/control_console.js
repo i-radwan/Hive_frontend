@@ -58,6 +58,10 @@ let controlConsoleViewModel = function (runningMode, shouter, map, gfxEventHandl
     runningMode.subscribe(function (newRunningMode) {
 
     });
+
+    self.handleEsc = function() {
+
+    };
 };
 
 module.exports = controlConsoleViewModel;
