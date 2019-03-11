@@ -112,7 +112,6 @@ let obstacleViewModel = function (shouter, map, gfxEventHandler) {
 
     self.clearSelection = function () {
         self.activeObstacleRow = self.activeObstacleCol = -1;
-        self.applyVisible(false);
     };
 
     self.handleEsc = function () {

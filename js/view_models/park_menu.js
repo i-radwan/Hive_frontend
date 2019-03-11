@@ -109,7 +109,6 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
 
     self.clearSelection = function () {
         self.activeParkRow = self.activeParkCol = -1;
-        self.applyVisible(false);
     };
 
     self.handleEsc = function () {
