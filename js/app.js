@@ -3,6 +3,7 @@ require("./utils/constants");
 let $ = require('jquery');
 let ko = require('knockout');
 let GFX = require('./gfx/gfx');
+let communicator = require('./comm/comm');
 
 // ViewModels
 let mainViewModel = require("./view_models/main");
@@ -11,7 +12,9 @@ let mainViewModel = require("./view_models/main");
 $(document).ready(() => {
     let gfx = new GFX();
 
-    let mainVM = new mainViewModel(gfx.eventHandler);
+    let comm = new communicator();
+
+    let mainVM = new mainViewModel(gfx.eventHandler, comm.send);
 
     ko.applyBindings(mainVM, $("#main")[0]);
 
@@ -22,7 +25,7 @@ $(document).ready(() => {
     let rcv = function (msg) {
         switch (msg.type) {
             case SERVER_EVENT_TYPE.OBJECT_UPDATE:
-                gfxEventHandler({
+                gfx.eventHandler({
                     type: GFX_EVENT_TYPE.OBJECT_MOVE,
                     src_row: msg.src_row,
                     src_col: msg.src_col,
@@ -41,6 +44,8 @@ $(document).ready(() => {
                 break;
         }
     };
+
+    comm.connect(SERVER_IP, SERVER_PORT, rcv);
 
     // Simulation logic
 });
