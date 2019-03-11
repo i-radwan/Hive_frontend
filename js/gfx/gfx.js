@@ -173,6 +173,7 @@ let gfx = function (logicEventHandler) {
 
     // Remove the dummy hovering object that represents hovering
     let showHoveringObject = function () {
+        console.log('Showing the hovering object');
         hoveredObjectIsDrawn = true;
         let cellTopLeft = getCellTopLeft(hoveredObject.row, hoveredObject.col);
         getRendererObject(hoveredObject.row, hoveredObject.col).add(hoveredObject.two_object);
@@ -253,9 +254,8 @@ let gfx = function (logicEventHandler) {
         hoveredObject = createObject(cell.row, cell.col, type);
         hoveredObject.row = cell.row;
         hoveredObject.col = cell.col;
-        getRendererObject(cell.row, cell.col).remove(hoveredObject.two_object);
         hovering = true;
-        hoveredObjectIsDrawn = false;
+        hideHoveringObject();
     };
 
     // Draws the grid
