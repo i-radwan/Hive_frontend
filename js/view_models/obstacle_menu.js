@@ -4,7 +4,7 @@ let ko = require('knockout');
 let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
-    self.activeObstacleCol = -1;
+    self.activeObstacleRow = -1;
     self.activeObstacleCol = -1;
 
     self.add = function (row, col) {

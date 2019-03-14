@@ -4,9 +4,9 @@ let ko = require('knockout');
 let stationViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
+    self.activeStationRow = -1;
     self.activeStationCol = -1;
-    self.activeStationCol = -1;
-    
+
     self.add = function (row, col) {
         if (state.map.grid[row][col].facility === undefined && self.activeStationRow === -1 && self.activeStationCol === -1) {
             state.map.grid[row][col].facility = {
