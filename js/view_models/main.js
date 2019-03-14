@@ -1,4 +1,4 @@
-require("../utils/constants");
+require('../utils/constants');
 let ko = require('knockout');
 
 // Models

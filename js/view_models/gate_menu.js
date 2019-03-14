@@ -1,29 +1,29 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let obstacleViewModel = function (shouter, state, gfxEventHandler) {
+let gateViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
-    self.activeObstacleCol = -1;
-    self.activeObstacleCol = -1;
+    self.activeGateRow = -1;
+    self.activeGateCol = -1;
 
     self.add = function (row, col) {
-        if (state.map.grid[row][col].facility === undefined && self.activeObstacleRow === -1 && self.activeObstacleCol === -1) {
+        if (state.map.grid[row][col].facility === undefined && self.activeGateRow === -1 && self.activeGateCol === -1) {
             state.map.grid[row][col].facility = {
-                type: MAP_CELL.OBSTACLE
+                type: MAP_CELL.GATE
             };
 
-            shouter.notifySubscribers({text: "Obstacle placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Gate placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.OBJECT_ADD,
-                object: MAP_CELL.OBSTACLE,
+                object: MAP_CELL.GATE,
                 row: row,
                 col: col
             });
-        } else if (state.map.grid[row][col].facility !== undefined && self.activeObstacleRow === -1 && self.activeObstacleCol === -1) {
+        } else if (state.map.grid[row][col].facility !== undefined && self.activeGateRow === -1 && self.activeGateCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
-        } else if (state.map.grid[row][col].facility === undefined && self.activeObstacleRow !== -1 && self.activeObstacleCol !== -1) {
+        } else if (state.map.grid[row][col].facility === undefined && self.activeGateRow !== -1 && self.activeGateCol !== -1) {
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.ESC
             });
@@ -35,12 +35,12 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
         if (state.map.grid[dstRow][dstCol].facility === undefined) {
-            state.map.grid[dstRow][dstCol] = Object.assign({}, state.map.grid[srcRow][srcCol]);
-            state.map.grid[srcRow][srcCol] = undefined;
+            state.map.grid[dstRow][dstCol].facility = Object.assign({}, state.map.grid[srcRow][srcCol].facility);
+            state.map.grid[srcRow][srcCol].facility = undefined;
 
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.OBJECT_DRAG,
-                object: MAP_CELL.OBSTACLE,
+                object: MAP_CELL.GATE,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: dstRow,
@@ -54,7 +54,7 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
 
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.OBJECT_DRAG,
-                object: MAP_CELL.OBSTACLE,
+                object: MAP_CELL.GATE,
                 src_row: srcRow,
                 src_col: srcCol,
                 dst_row: srcRow,
@@ -64,12 +64,12 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.delete = function (row, col) {
-        if (state.map.grid[row][col].facility.type === MAP_CELL.OBSTACLE) {
+        if (state.map.grid[row][col].facility.type === MAP_CELL.GATE) {
             state.map.grid[row][col].facility = undefined;
 
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.OBJECT_DELETE,
-                object: MAP_CELL.OBSTACLE,
+                object: MAP_CELL.GATE,
                 row: row,
                 col: col
             });
@@ -83,32 +83,45 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.fill = function (row, col) {
+        let gate = state.map.grid[row][col].facility;
+
+        if (gate.type !== MAP_CELL.GATE)
+            return;
+
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.OBSTACLE,
+            object: MAP_CELL.GATE,
             row: row,
             col: col
         });
     };
 
     self.edit = function (row, col) {
+        self.fill(row, col);
+        self.activeGateRow = row;
+        self.activeGateCol = col;
+
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.OBSTACLE,
+            object: MAP_CELL.GATE,
             row: row,
             col: col
         });
     };
 
     self.update = function () {
+        if (!check())
+            return false;
+
         return true;
     };
 
     self.check = function () {
+        return true;
     };
 
     self.unselect = function () {
-        self.activeObstacleRow = self.activeObstacleCol = -1;
+        self.activeGateRow = self.activeGateCol = -1;
     };
 
     self.handleEsc = function () {
@@ -116,4 +129,4 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     };
 };
 
-module.exports = obstacleViewModel;
+module.exports = gateViewModel;

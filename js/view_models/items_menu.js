@@ -1,6 +1,5 @@
-require("../utils/constants"); // TODO use single quotes
+require('../utils/constants');
 require('knockout-mapping');
-
 let ko = require('knockout');
 
 let itemsViewModel = function (shouter, state, gfxEventHandler) {
@@ -13,18 +12,18 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
 
     self.filteredItems = ko.computed(function () {
         return self.items().filter(function (item) {
-            return self.searchValue().length === 0 || item.id() === parseInt(self.searchValue());
+            return self.searchValue().length === 0 || parseInt(item.id()) === parseInt(self.searchValue());
         });
     });
 
-    self.removeItem = function () {
+    self.remove = function () {
         self.items.remove(this);
 
         state.items = ko.mapping.toJS(self.items()); // TODO try w/o brackets
     };
 
-    self.addItem = function () {
-        if (!self.checkValid())
+    self.add = function () {
+        if (!self.check())
             return;
 
         let id = ko.observable(parseInt(self.newItemID()));
@@ -50,7 +49,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
         state.items = ko.mapping.toJS(self.items()); // TODO try w/o brackets
     };
 
-    self.checkValid = function () {
+    self.check = function () {
         if (self.newItemID().length === 0) {
             shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -65,7 +64,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
 
         // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
-            if (self.items()[i].id() === parseInt(self.newItemID())) {
+            if (parseInt(self.items()[i].id()) === parseInt(self.newItemID())) {
                 shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
 
                 return false;

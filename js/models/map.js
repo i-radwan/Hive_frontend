@@ -1,4 +1,4 @@
-require("../utils/constants");
+require('../utils/constants');
 
 let Map = function () {
     let self = this;
@@ -21,9 +21,11 @@ let Map = function () {
 
         for (let i = 0; i < height; i++) {
             newGrid[i] = new Array(width);
+
             for (let j = 0; j < width; j++) {
                 newGrid[i][j] = {
-                    type: MAP_CELL.EMPTY
+                    robot: undefined,
+                    facility: undefined
                 };
             }
         }
@@ -31,7 +33,7 @@ let Map = function () {
         if (copyOld === true) {
             for (let i = 0; i < Math.min(height, self.grid.length); i++) {
                 for (let j = 0; j < Math.min(width, self.grid[i].length); j++) {
-                    newGrid[i][j] = self.grid[i][j];
+                    newGrid[i][j] = Object.assign({}, self.grid[i][j]);
                 }
             }
         }
@@ -58,19 +60,9 @@ let Map = function () {
             self.grid[i] = new Array(self.width);
 
             for (let j = 0; j < self.width; j++) {
-                self.grid[i][j] = newMap[i][j];
+                self.grid[i][j] = Object.assign({}, newMap[i][j]);
             }
         }
-    };
-
-    /**
-     * Saves the map to the given file.
-     *
-     * @param path  The path to the file.
-     */
-    self.saveMap = function (path = "map.hive") {
-        console.log(JSON.stringify(self, null, 2));
-        fs.writeFile('./data.json', JSON.stringify(self, null, 2) , 'utf-8');
     };
 
     self.changeMapSize(self.height, self.width, false);

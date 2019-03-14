@@ -3,10 +3,10 @@ LEFT_MENU = {
     EMPTY: 0,
     TEMPS: 1,
     MAP: 2,
-    ENTRY: 3,
+    GATE: 3,
     ROBOT: 4,
     RACK: 5,
-    PARK: 6,
+    STATION: 6,
     OBSTACLE: 7,
     ORDER: 8
 };
@@ -29,12 +29,11 @@ RUNNING_MODE = {
 MAP_INIT_WIDTH = 17;
 MAP_INIT_HEIGHT = 10;
 MAP_CELL = {
-    EMPTY: 0,
-    ENTRY: 1,
-    ROBOT: 2,
-    RACK: 3,
-    PARK: 4,
-    OBSTACLE: 5
+    GATE: 0,
+    ROBOT: 1,
+    RACK: 2,
+    STATION: 3,
+    OBSTACLE: 4
 };
 
 // Shouting codes
@@ -81,7 +80,7 @@ SERVER_EVENT_TYPE = {
     LOG: 1,
     STATS: 2,
     MSG: 3,
-    MAP: 4,
+    INIT: 4,
     ORDER_NEW: 5
 };
 

@@ -1,4 +1,4 @@
-require("../utils/constants");
+require('../utils/constants');
 require('knockout-mapping');
 let ko = require('knockout');
 
@@ -15,29 +15,13 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
     self.activeRackRow = -1;
     self.activeRackCol = -1;
 
-    self.addItem = function () {
-        if (!self.checkValidItem(self.itemID(), self.itemQuantity(), 0))
-            return;
-
-        self.items.push({
-            id: ko.observable(parseInt(self.itemID())),
-            quantity: ko.observable(parseInt(self.itemQuantity()))
-        });
-
-        console.log(state.map);
-    };
-
-    self.removeItem = function () {
-        self.items.remove(this);
-    };
-
-    self.addRack = function (row, col) {
-        if (state.map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRackRow === -1 && self.activeRackCol === -1) {
-            if (!self.checkValidRack()) {
+    self.add = function (row, col) {
+        if (state.map.grid[row][col].facility === undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
+            if (!self.check()) {
                 return;
             }
 
-            state.map.grid[row][col] = {
+            state.map.grid[row][col].facility = {
                 type: MAP_CELL.RACK,
                 capacity: parseInt(self.capacity()),
                 items: ko.mapping.toJS(self.items())
@@ -53,29 +37,25 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
                 capacity: parseInt(self.capacity()),
                 items: ko.mapping.toJS(self.items())
             });
-        } else if (state.map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeRackRow === -1 && self.activeRackCol === -1) {
+        } else if (state.map.grid[row][col].facility !== undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
-        } else if (state.map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRackRow !== -1 && self.activeRackCol !== -1) {
+        } else if (state.map.grid[row][col].facility === undefined && self.activeRackRow !== -1 && self.activeRackCol !== -1) {
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.ESC
             });
         }
     };
 
-    self.moveRack = function (srcRow, srcCol, dstRow, dstCol) {
+    self.move = function (srcRow, srcCol, dstRow, dstCol) {
         // TODO: rack to be moved with the robot carrying it :'D
-        // state.map.grid[dstRow][dstCol] = state.map.grid[srcRow][srcCol];
-        // state.map.grid[srcRow][srcCol] = {
-        //     type: MAP_CELL.EMPTY
-        // };
+        // state.map.grid[dstRow][dstCol].facility = state.map.grid[srcRow][srcCol].facility;
+        // state.map.grid[srcRow][srcCol].facility = undefined;
     };
 
     self.dragRack = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
-            state.map.grid[dstRow][dstCol] = Object.assign({}, state.map.grid[srcRow][srcCol]);
-            state.map.grid[srcRow][srcCol] = {
-                type: MAP_CELL.EMPTY
-            };
+        if (state.map.grid[dstRow][dstCol].facility === undefined) {
+            state.map.grid[dstRow][dstCol].facility = Object.assign({}, state.map.grid[srcRow][srcCol].facility);
+            state.map.grid[srcRow][srcCol] = undefined;
 
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.OBJECT_DRAG,
@@ -102,11 +82,9 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         }
     };
 
-    self.deleteRack = function (row, col) {
-        if (state.map.grid[row][col].type === MAP_CELL.RACK) {
-            state.map.grid[row][col] = {
-                type: MAP_CELL.EMPTY
-            };
+    self.delete = function (row, col) {
+        if (state.map.grid[row][col].facility.type === MAP_CELL.RACK) {
+            state.map.grid[row][col].facility = undefined;
 
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.OBJECT_DELETE,
@@ -115,7 +93,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
                 col: col
             });
 
-            self.clearSelection();
+            self.unselect();
 
             return true;
         }
@@ -123,8 +101,8 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         return false;
     };
 
-    self.fillFields = function (row, col) {
-        let rack = state.map.grid[row][col];
+    self.fill = function (row, col) {
+        let rack = state.map.grid[row][col].facility;
 
         if (rack.type !== MAP_CELL.RACK)
             return;
@@ -140,8 +118,8 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         });
     };
 
-    self.editRack = function (row, col) {
-        self.fillFields(row, col);
+    self.edit = function (row, col) {
+        self.fill(row, col);
         self.applyVisible(true);
         self.activeRackRow = row;
         self.activeRackCol = col;
@@ -154,12 +132,12 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         });
     };
 
-    self.updateRack = function () {
-        if (!self.checkValidRack()) {
+    self.update = function () {
+        if (!self.check()) {
             return false;
         }
 
-        state.map.grid[self.activeRackRow][self.activeRackCol] = {
+        state.map.grid[self.activeRackRow][self.activeRackCol].facility = {
             type: MAP_CELL.RACK,
             capacity: parseInt(self.capacity()),
             items: ko.mapping.toJS(self.items())
@@ -167,7 +145,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
         shouter.notifySubscribers({text: "Rack updated successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-        self.clearSelection();
+        self.unselect();
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC
@@ -176,7 +154,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.checkValidRack = function () {
+    self.check = function () {
         if (self.items().length === 0) {
             shouter.notifySubscribers({text: "Rack must contain items!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -188,13 +166,13 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         for (let i = 0; i < self.items().length; ++i) {
             let item = self.items()[i];
 
-            if (!self.checkValidItem(item.id(), item.quantity(), 1))
+            if (!self.checkItem(parseInt(item.id()), parseInt(item.quantity()), 1))
                 return false;
 
-            load += item.quantity() * state.getItemWeight(item.id());
+            load += parseInt(item.quantity()) * state.getItemWeight(parseInt(item.id()));
         }
 
-        if (load > self.capacity()) {
+        if (load > parseInt(self.capacity())) {
             shouter.notifySubscribers({text: "Rack load is " + load + " which exceeds the capacity!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
@@ -203,7 +181,23 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.checkValidItem = function (id, quantity, count) {
+    self.addItem = function () {
+        if (!self.checkItem(parseInt(self.itemID()), parseInt(self.itemQuantity()), 0))
+            return;
+
+        self.items.push({
+            id: ko.observable(parseInt(self.itemID())),
+            quantity: ko.observable(parseInt(self.itemQuantity()))
+        });
+
+        console.log(state.map);
+    };
+
+    self.removeItem = function () {
+        self.items.remove(this);
+    };
+
+    self.checkItem = function (id, quantity, count) {
         if (id.length === 0) {
             shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -217,7 +211,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         // -ve values
-        if (parseInt(id) < 0 || parseInt(quantity) < 0) {
+        if (id < 0 || quantity < 0) {
             shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
@@ -225,7 +219,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
         let cnt = 0;
         for (let i = 0; i < self.items().length; ++i) {
-            if (parseInt(self.items()[i].id()) === parseInt(id)) {
+            if (parseInt(self.items()[i].id()) === id) {
                 cnt++;
             }
         }
@@ -246,13 +240,13 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.clearSelection = function() {
+    self.unselect = function() {
         self.activeRackRow = self.activeRackCol = -1;
         self.applyVisible(false);
     };
 
     self.handleEsc = function () {
-        self.clearSelection();
+        self.unselect();
     };
 };
 

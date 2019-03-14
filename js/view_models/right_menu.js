@@ -1,4 +1,4 @@
-require("../utils/constants");
+require('../utils/constants');
 let ko = require('knockout');
 
 let itemsViewModel = require('./items_menu');
@@ -9,6 +9,9 @@ let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
     self.logs = ko.observableArray();
     self.stats = ko.observableArray();
+
+    // Sub view models
+    self.itemsVM = new itemsViewModel(shouter, state, gfxEventHandler);
 
     // TODO: listen to events
     self.logs.push({
@@ -182,9 +185,6 @@ let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler,
             self.activeMenu(RIGHT_MENU.LOGS);
         }
     });
-
-    // Sub view models
-    self.itemsVM = new itemsViewModel(shouter, state, gfxEventHandler);
 
     self.handleEsc = function() {
 

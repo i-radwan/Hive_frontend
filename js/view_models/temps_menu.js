@@ -1,4 +1,4 @@
-require("../utils/constants");
+require('../utils/constants');
 let ko = require('knockout');
 
 let tempsViewModel = function (shouter, state) {
@@ -27,41 +27,57 @@ let tempsViewModel = function (shouter, state) {
                     switch (rand) {
                         case 0:
                             temp[j][k] = {
-                                type: MAP_CELL.EMPTY
+                                robot: undefined,
+                                facility: undefined
                             };
                             break;
                         case 1:
                             temp[j][k] = {
-                                type: MAP_CELL.ENTRY
+                                robot: undefined,
+                                facility: {
+                                    type: MAP_CELL.GATE
+                                }
                             };
                             break;
                         case 2:
                             temp[j][k] = {
-                                type: MAP_CELL.ROBOT,
-                                color: "#FF0000",
-                                load_cap: 10,
-                                battery_cap: 1000,
-                                ip: ""
+                                robot: {
+                                    type: MAP_CELL.ROBOT,
+                                    color: "#FF0000",
+                                    load_cap: 10,
+                                    battery_cap: 1000,
+                                    ip: ""
+                                },
+                                facility: undefined
                             };
                             break;
                         case 3:
                             temp[j][k] = {
-                                type: MAP_CELL.RACK,
-                                items: [{
-                                    id: 1,
-                                    quantity: 10
-                                }],
-                                capacity: RACK_CAP
+                                robot: undefined,
+                                facility: {
+                                    type: MAP_CELL.RACK,
+                                    items: [{
+                                        id: 1,
+                                        quantity: 10
+                                    }],
+                                    capacity: RACK_CAP
+                                }
                             };
                             break;
                         case 4:
                             temp[j][k] = {
-                                type: MAP_CELL.PARK
+                                robot: undefined,
+                                facility: {
+                                    type: MAP_CELL.STATION
+                                }
                             };
                             break;
                         case 5:
                             temp[j][k] = {
-                                type: MAP_CELL.OBSTACLE
+                                robot: undefined,
+                                facility: {
+                                    type: MAP_CELL.OBSTACLE
+                                }
                             };
                     }
                 }
