@@ -1,6 +1,8 @@
 require("../utils/constants");
 let ko = require('knockout');
 
+let itemsViewModel = require('./items_menu');
+
 let rightMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, commSender) {
     let self = this;
 
@@ -174,12 +176,15 @@ let rightMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, c
     // Listen for mode change
     runningMode.subscribe(function (newRunningMode) {
         if (newRunningMode === RUNNING_MODE.DESIGN) {
-            self.activeMenu(RIGHT_MENU.EMPTY);
+            self.activeMenu(RIGHT_MENU.ITEMS);
         }
         else {
             self.activeMenu(RIGHT_MENU.LOGS);
         }
     });
+
+    // Sub view models
+    self.itemsVM = new itemsViewModel(shouter, map, gfxEventHandler);
 
     self.handleEsc = function() {
 

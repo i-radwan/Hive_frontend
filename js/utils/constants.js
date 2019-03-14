@@ -14,7 +14,8 @@ LEFT_MENU = {
 RIGHT_MENU = {
     EMPTY: 0,
     LOGS: 1,
-    STATS: 2
+    STATS: 2,
+    ITEMS: 3
 };
 
 // Running modes

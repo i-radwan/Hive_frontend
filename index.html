@@ -181,9 +181,9 @@
                                name="order_name" placeholder="Order Name"
                                data-bind="textInput: leftMenuVM.orderVM.name">
                     </div>
-                    <hr class="orders-separator" data-bind="css: {hidden: leftMenuVM.orderVM.items().length == 0}">
+                    <hr class="orders-separator" data-bind="css: {hidden: leftMenuVM.orderVM.items().length === 0}">
                     <div class="order-items-container"
-                         data-bind="css: {hidden: leftMenuVM.orderVM.items().length == 0}">
+                         data-bind="css: {hidden: leftMenuVM.orderVM.items().length === 0}">
                         <div class="form-group">
                             <label>Items</label>
                             <span data-bind="foreach: leftMenuVM.orderVM.items">
@@ -247,8 +247,59 @@
         </div>
     </div>
     <div class="col-md-2 right-menu" id="right-menu">
-        <div class="right-menu-empty" data-bind="css: {hidden: runningMode() !== RUNNING_MODE.DESIGN}">
-            <p class="text-light text-muted text-center">No info!</p>
+        <div class="right-menu-items-menu" data-bind="css: {hidden: runningMode() !== RUNNING_MODE.DESIGN}">
+            <div class="right-menu-items-title">
+                <div id="right-menu-items-title-container">
+                    <div class="inner-container">
+                        <div class="toggle">
+                            <p>ITEMS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group items-search-container">
+                <input type="text" class="form-control bg-dark text-light" id="search_value"
+                       name="search_value" placeholder="Search (ID) ..."
+                       data-bind="textInput: rightMenuVM.itemsVM.searchValue">
+            </div>
+
+            <hr class="items-separator" data-bind="css: {hidden: rightMenuVM.itemsVM.items().length === 0}">
+
+            <div class="items-container" data-bind="css: {hidden: rightMenuVM.itemsVM.items().length === 0}">
+                <div class="form-group">
+                    <span data-bind="foreach: rightMenuVM.itemsVM.filteredItems">
+                    <div class="row item-container"><div class="col-md-10 item-container-fields">
+                        <input type="number" class="form-control bg-dark text-light" placeholder="ID"
+                               data-bind="textInput: id">
+                          <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
+                                 data-bind="textInput: weight">
+                       </div>
+                       <div class="col-md-2 item-container-icon">
+                          <i class="fas fa-minus"
+                             data-bind="click: $parent.rightMenuVM.itemsVM.removeItem"></i>
+                       </div>
+                    </div>
+                    </span>
+                </div>
+            </div>
+
+            <hr class="items-separator">
+
+            <div class="form-group">
+                <label>Add Item</label>
+                <div class="row item-container">
+                    <div class="col-md-10 item-container-fields">
+                        <input type="number" class="form-control bg-dark text-light" placeholder="ID"
+                               data-bind="textInput: rightMenuVM.itemsVM.newItemID">
+                        <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
+                               data-bind="textInput: rightMenuVM.itemsVM.newItemWeight">
+                    </div>
+                    <div class="col-md-2 item-container-icon">
+                        <i class="fas fa-plus" data-bind="click: rightMenuVM.itemsVM.addItem"></i>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="right-menu-stats" data-bind="css: {hidden: runningMode() === RUNNING_MODE.DESIGN}">
             <div class="right-menu-stats-toggle" data-bind="click: rightMenuVM.toggleActiveList">
@@ -276,26 +327,26 @@
                 <div class="right-menu-logs" id="right-menu-logs"
                      data-bind="css: {hidden: rightMenuVM.activeMenu() !== RIGHT_MENU.LOGS}">
                      <span data-bind="foreach: rightMenuVM.logs">
-                        <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
-                           <div class="row right-menu-log-item">
-                              <div class="col-md-3 right-menu-log-item-icon">
-                                 <i class="fas large"
-                                    data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
-                                 <i class="fas small"
-                                    data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style {color: color}"></i>
-                              </div>
-                              <div class="col-md-9 right-menu-log-item-text">
-                                 <span data-bind="html: msg"></span>
-                              </div>
-                           </div>
-                        </span>
-                        <span data-bind="if: object === LOG_OBJECT_SIMULATION">
-                           <div class="row right-menu-log-sep">
-                              <hr>
-                              <span data-bind="text: msg"></span>
-                              <hr>
-                           </div>
-                        </span>
+                         <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
+                             <div class="row right-menu-log-item">
+                                 <div class="col-md-3 right-menu-log-item-icon">
+                                     <i class="fas large"
+                                        data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
+                                     <i class="fas small"
+                                        data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style {color: color}"></i>
+                                 </div>
+                                 <div class="col-md-9 right-menu-log-item-text">
+                                     <span data-bind="html: msg"></span>
+                                 </div>
+                             </div>
+                         </span>
+                         <span data-bind="if: object === LOG_OBJECT_SIMULATION">
+                            <div class="row right-menu-log-sep">
+                               <hr>
+                               <span data-bind="text: msg"></span>
+                               <hr>
+                            </div>
+                         </span>
                      </span>
                 </div>
                 <div class="right-menu-stats" id="right-menu-stats"
