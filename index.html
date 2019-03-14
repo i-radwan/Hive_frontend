@@ -142,23 +142,52 @@
                 <div class="left-menu-details-rack"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.RACK}">
                     <div class="form-group">
-                        <label for="rack_item_number">Item Number</label>
-                        <input type="number" class="form-control bg-dark text-light" id="rack_item_number"
-                               name="rack_item_number" placeholder="Item number"
-                               data-bind="textInput: leftMenuVM.rackVM.itemNumber, enable: runningMode() === RUNNING_MODE.DESIGN">
+                        <label>Capacity</label>
+                        <input type="number" class="form-control bg-dark text-light" placeholder="Capacity (Kg)"
+                               data-bind="textInput: leftMenuVM.rackVM.capacity, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
-                    <div class="form-group">
-                        <label for="rack_quantity">Quantity</label>
-                        <input type="number" class="form-control bg-dark text-light" id="rack_quantity"
-                               name="rack_quantity" placeholder="Quantity"
-                               data-bind="textInput: leftMenuVM.rackVM.quantity, enable: runningMode() === RUNNING_MODE.DESIGN">
+
+                    <!--<label data-bind="css: {hidden: leftMenuVM.rackVM.items().length === 0}">Items</label>-->
+                    <hr class="items-separator" data-bind="css: {hidden: leftMenuVM.rackVM.items().length === 0}">
+
+                    <div class="left-menu-items-menu">
+                        <div class="items-container" data-bind="css: {hidden: leftMenuVM.rackVM.items().length === 0}">
+                            <div class="form-group">
+                                <span data-bind="foreach: leftMenuVM.rackVM.items">
+                                    <div class="row item-container">
+                                        <div class="col-md-10 item-container-fields">
+                                            <input type="number" class="form-control bg-dark text-light" placeholder="ID"
+                                                   data-bind="textInput: id, enable: $parent.runningMode() === RUNNING_MODE.DESIGN">
+                                            <input type="number" class="form-control bg-dark text-light" placeholder="Quantity"
+                                                   data-bind="textInput: quantity, enable: $parent.runningMode() === RUNNING_MODE.DESIGN">
+                                       </div>
+                                       <div class="col-md-2 item-container-icon">
+                                          <i class="fas fa-minus"
+                                             data-bind="click: $parent.leftMenuVM.rackVM.removeItem, enable: $parent.runningMode() === RUNNING_MODE.DESIGN"></i>
+                                       </div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+
+                        <hr class="items-separator">
+
+                        <div class="form-group">
+                            <label>Add Item</label>
+                            <div class="row item-container">
+                                <div class="col-md-10 item-container-fields">
+                                    <input type="number" class="form-control bg-dark text-light" placeholder="ID"
+                                           data-bind="textInput: leftMenuVM.rackVM.itemID, enable: runningMode() === RUNNING_MODE.DESIGN">
+                                    <input type="number" class="form-control bg-dark text-light" placeholder="Quantity"
+                                           data-bind="textInput: leftMenuVM.rackVM.itemQuantity, enable: runningMode() === RUNNING_MODE.DESIGN">
+                                </div>
+                                <div class="col-md-2 item-container-icon">
+                                    <i class="fas fa-plus" data-bind="click: leftMenuVM.rackVM.addItem, enable: runningMode() === RUNNING_MODE.DESIGN"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="rack_item_weight">Item Weight</label>
-                        <input type="number" class="form-control bg-dark text-light" id="rack_item_weight"
-                               name="rack_item_weight" placeholder="Item Weight (kg)"
-                               data-bind="textInput: leftMenuVM.rackVM.itemWeight, enable: runningMode() === RUNNING_MODE.DESIGN">
-                    </div>
+
                     <div class="left-menu-details-bottom-actions"
                          data-bind="css: {hidden: !leftMenuVM.rackVM.applyVisible()}">
                         <i class="fas fa-check"

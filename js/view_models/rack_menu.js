@@ -1,28 +1,46 @@
 require("../utils/constants");
+require('knockout-mapping');
 let ko = require('knockout');
 
 let rackViewModel = function (shouter, map, gfxEventHandler) {
     let self = this;
 
-    self.itemNumber = ko.observable(1);
-    self.quantity = ko.observable(10);
-    self.itemWeight = ko.observable(1);
+    self.capacity = ko.observable(RACK_CAP);
+
+    self.items = ko.observableArray();
+    self.itemID = ko.observable();
+    self.itemQuantity = ko.observable();
 
     self.applyVisible = ko.observable(false);
     self.activeRackRow = -1;
     self.activeRackCol = -1;
 
+    self.addItem = function () {
+        if (!self.checkValidItem(self.itemID(), self.itemQuantity(), 0))
+            return;
+
+        self.items.push({
+            id: ko.observable(parseInt(self.itemID())),
+            quantity: ko.observable(parseInt(self.itemQuantity()))
+        });
+
+        console.log(map);
+    };
+
+    self.removeItem = function () {
+        self.items.remove(this);
+    };
+
     self.addRack = function (row, col) {
         if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRackRow === -1 && self.activeRackCol === -1) {
-            if (!self.checkValid()) {
+            if (!self.checkValidRack()) {
                 return;
             }
 
             map.grid[row][col] = {
                 type: MAP_CELL.RACK,
-                item_number: parseInt(self.itemNumber()),
-                quantity: parseInt(self.quantity()),
-                item_weight: parseFloat(self.itemWeight())
+                capacity: parseInt(self.capacity()),
+                items: ko.mapping.toJS(self.items())
             };
 
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
@@ -32,9 +50,8 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
                 object: MAP_CELL.RACK,
                 row: row,
                 col: col,
-                item_number: parseInt(self.itemNumber()),
-                quantity: parseInt(self.quantity()),
-                item_weight: parseFloat(self.itemWeight())
+                capacity: parseInt(self.capacity()),
+                items: ko.mapping.toJS(self.items())
             });
         } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeRackRow === -1 && self.activeRackCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
@@ -112,9 +129,8 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         if (rack.type !== MAP_CELL.RACK)
             return;
 
-        self.itemNumber(rack.item_number);
-        self.quantity(rack.quantity);
-        self.itemWeight(rack.item_weight);
+        self.capacity(rack.capacity);
+        self.items(ko.mapping.fromJS(rack.items)());
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
@@ -139,15 +155,14 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
     };
 
     self.updateRack = function () {
-        if (!self.checkValid()) {
+        if (!self.checkValidRack()) {
             return;
         }
 
         map.grid[self.activeRackRow][self.activeRackCol] = {
             type: MAP_CELL.RACK,
-            item_number: parseInt(self.itemNumber()),
-            quantity: parseInt(self.quantity()),
-            item_weight: parseFloat(self.itemWeight())
+            capacity: parseInt(self.capacity()),
+            items: ko.mapping.toJS(self.items())
         };
 
         shouter.notifySubscribers({text: "Rack updated successfully!", type: MSG_INFO}, SHOUT_MSG);
@@ -159,28 +174,54 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         });
     };
 
-    self.checkValid = function () {
-        if (self.itemNumber().length === 0) {
-            shouter.notifySubscribers({text: "Item number is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+    self.checkValidRack = function () {
+        if (self.items().length === 0) {
+            shouter.notifySubscribers({text: "Rack must contain items!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
-        if (self.quantity().length === 0) {
+        for (let i = 0; i < self.items().length; ++i) {
+            let item = self.items()[i];
+
+            if (!self.checkValidItem(item.id(), item.quantity(), 1))
+                return false;
+
+            // TODO: check for capacity and items existence
+        }
+
+        return true;
+    };
+
+    self.checkValidItem = function (id, quantity, count) {
+        if (id.length === 0) {
+            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (quantity.length === 0) {
             shouter.notifySubscribers({text: "Quantity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
-        if (self.itemWeight().length === 0) {
-            shouter.notifySubscribers({text: "Item weight is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+        // -ve values
+        if (parseInt(id) < 0 || parseInt(quantity) < 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
-        // -ve values
-        if (parseInt(self.itemNumber()) < 0 || parseInt(self.quantity()) < 0 || parseInt(self.itemWeight()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+        let cnt = 0;
+        for (let i = 0; i < self.items().length; ++i) {
+            if (parseInt(self.items()[i].id()) === parseInt(id)) {
+                cnt++;
+            }
+        }
+
+        if (cnt > count) {
+            shouter.notifySubscribers({text: "Items IDs should be unique!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }

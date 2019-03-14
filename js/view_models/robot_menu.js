@@ -151,7 +151,7 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
     };
 
     self.updateRobot = function () {
-        if (!self.checkValid()) {
+        if (!self.checkValid()) { // ToDo: this will cause an issue if the ID didn't change
             return;
         }
 

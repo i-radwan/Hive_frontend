@@ -115,3 +115,7 @@ GFX_EVENT_TYPE = {
     OBJECT_HIGHLIGHT: 6,
     ESC: 7
 };
+
+// Logic
+RACK_CAP = 250;
+

@@ -196,6 +196,19 @@ body {
     padding: 0;
 }
 
+.left-menu-items-menu {
+}
+
+.left-menu-items-menu input {
+    border-color: transparent;
+    color: #bababa !important;
+}
+
+.left-menu-items-menu label {
+    font-size: 17px;
+    color: #bababa;
+}
+
 .left-menu-details-rack .form-group {
     margin-top: 20px;
 }
