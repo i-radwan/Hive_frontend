@@ -103,7 +103,8 @@ body {
 }
 
 .left-menu-details-temps img:hover {
-    animation: fade-in 1s ease;
+    animation: fade-in 0.4s ease;
+    animation-fill-mode: forwards;
 }
 
 .left-menu-details-map {

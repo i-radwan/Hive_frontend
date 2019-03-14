@@ -67,50 +67,9 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     });
 
     let sendState = function () {
-        let stateCopy = Object.assign({}, state);
-
-        let racks = [];
-        let robots = [];
-        let gates = [];
-        let stations = [];
-        let obstacles = [];
-
-        for (let i = 0; i < state.map.height; ++i) {
-            for (let j = 0; j < state.map.width; ++j) {
-                let c = state.map.grid[i][j];
-
-                if (c.robot !== undefined) {
-                    robots.push(c.robot);
-                } else if (c.facility !== undefined) {
-                    switch (c.facility.type) {
-                        case MAP_CELL.GATE:
-                            gates.push(c.facility);
-                            break;
-                        case MAP_CELL.RACK:
-                            racks.push(c.facility);
-                            break;
-                        case MAP_CELL.STATION:
-                            stations.push(c.facility);
-                            break;
-                        case MAP_CELL.OBSTACLE:
-                            obstacles.push(c.facility);
-                            break;
-                    }
-                }
-            }
-        }
-
-        stateCopy.robots = robots;
-        stateCopy.gates = gates;
-        stateCopy.racks = racks;
-        stateCopy.stations = stations;
-        stateCopy.obstacles = obstacles;
-
-        console.log(JSON.stringify(stateCopy, null, 2));
-
         commSender({
             type: SERVER_EVENT_TYPE.INIT,
-            data: JSON.stringify(stateCopy, null, 2)
+            data: JSON.stringify(state, null, 2)
         });
     };
 };
