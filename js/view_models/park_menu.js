@@ -102,6 +102,7 @@ let parkViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.updatePark = function () {
+        return true;
     };
 
     self.checkValid = function () {

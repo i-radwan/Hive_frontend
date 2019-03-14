@@ -152,7 +152,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
 
     self.updateRobot = function () {
         if (!self.checkValid()) { // ToDo: this will cause an issue if the ID didn't change
-            return;
+            return false;
         }
 
         state.map.grid[self.activeRobotRow][self.activeRobotCol] = {
@@ -171,6 +171,8 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC
         });
+
+        return true;
     };
 
     self.checkValid = function () {

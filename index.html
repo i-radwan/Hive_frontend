@@ -136,7 +136,7 @@
                     <div class="left-menu-details-bottom-actions"
                          data-bind="css: {hidden: !leftMenuVM.robotVM.applyVisible()}">
                         <i class="fas fa-check"
-                           data-bind="click: function(){leftMenuVM.robotVM.updateRobot(); leftMenuVM.activeMenu(LEFT_MENU.EMPTY)}"></i>
+                           data-bind="click: function(){if(leftMenuVM.robotVM.updateRobot()) leftMenuVM.activeMenu(LEFT_MENU.EMPTY)}"></i>
                     </div>
                 </div>
                 <div class="left-menu-details-rack"
@@ -147,7 +147,6 @@
                                data-bind="textInput: leftMenuVM.rackVM.capacity, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
 
-                    <!--<label data-bind="css: {hidden: leftMenuVM.rackVM.items().length === 0}">Items</label>-->
                     <hr class="items-separator" data-bind="css: {hidden: leftMenuVM.rackVM.items().length === 0}">
 
                     <div class="left-menu-items-menu">
@@ -191,7 +190,7 @@
                     <div class="left-menu-details-bottom-actions"
                          data-bind="css: {hidden: !leftMenuVM.rackVM.applyVisible()}">
                         <i class="fas fa-check"
-                           data-bind="click: function(){leftMenuVM.rackVM.updateRack(); leftMenuVM.activeMenu(LEFT_MENU.EMPTY)}"></i>
+                           data-bind="click: function(){if(leftMenuVM.rackVM.updateRack()) leftMenuVM.activeMenu(LEFT_MENU.EMPTY)}"></i>
                     </div>
                 </div>
                 <div class="left-menu-details-park"

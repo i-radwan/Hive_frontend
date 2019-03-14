@@ -105,6 +105,7 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.updateObstacle = function () {
+        return true;
     };
 
     self.checkValid = function () {

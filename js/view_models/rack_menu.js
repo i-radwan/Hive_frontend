@@ -156,7 +156,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
     self.updateRack = function () {
         if (!self.checkValidRack()) {
-            return;
+            return false;
         }
 
         state.map.grid[self.activeRackRow][self.activeRackCol] = {
@@ -172,6 +172,8 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC
         });
+
+        return true;
     };
 
     self.checkValidRack = function () {

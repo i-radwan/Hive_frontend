@@ -114,6 +114,7 @@ let entryViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.updateEntry = function () {
+        return true;
     };
 
     self.checkValid = function () {
