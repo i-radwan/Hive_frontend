@@ -1,15 +1,15 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let parkViewModel = function (shouter, map, gfxEventHandler) {
+let parkViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
     self.activeParkCol = -1;
     self.activeParkCol = -1;
     
     self.addPark = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeParkRow === -1 && self.activeParkCol === -1) {
-            map.grid[row][col] = {
+        if (state.map.grid[row][col].type === MAP_CELL.EMPTY && self.activeParkRow === -1 && self.activeParkCol === -1) {
+            state.map.grid[row][col] = {
                 type: MAP_CELL.PARK
             };
 
@@ -21,9 +21,9 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
-        } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeParkRow === -1 && self.activeParkCol === -1) {
+        } else if (state.map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeParkRow === -1 && self.activeParkCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
-        } else if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeParkRow !== -1 && self.activeParkCol !== -1) {
+        } else if (state.map.grid[row][col].type === MAP_CELL.EMPTY && self.activeParkRow !== -1 && self.activeParkCol !== -1) {
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.ESC
             });
@@ -34,9 +34,9 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
     };
 
     self.dragPark = function (srcRow, srcCol, dstRow, dstCol) {
-        if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
-            map.grid[dstRow][dstCol] = Object.assign({}, map.grid[srcRow][srcCol]);
-            map.grid[srcRow][srcCol] = {
+        if (state.map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
+            state.map.grid[dstRow][dstCol] = Object.assign({}, state.map.grid[srcRow][srcCol]);
+            state.map.grid[srcRow][srcCol] = {
                 type: MAP_CELL.EMPTY
             };
 
@@ -63,8 +63,8 @@ let parkViewModel = function (shouter, map, gfxEventHandler) {
     };
 
     self.deletePark = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.PARK) {
-            map.grid[row][col] = {
+        if (state.map.grid[row][col].type === MAP_CELL.PARK) {
+            state.map.grid[row][col] = {
                 type: MAP_CELL.EMPTY
             };
 

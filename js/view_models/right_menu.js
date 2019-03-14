@@ -3,7 +3,7 @@ let ko = require('knockout');
 
 let itemsViewModel = require('./items_menu');
 
-let rightMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, commSender) {
+let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, commSender) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
@@ -184,7 +184,7 @@ let rightMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, c
     });
 
     // Sub view models
-    self.itemsVM = new itemsViewModel(shouter, map, gfxEventHandler);
+    self.itemsVM = new itemsViewModel(shouter, state, gfxEventHandler);
 
     self.handleEsc = function() {
 

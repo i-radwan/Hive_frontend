@@ -1,7 +1,9 @@
-require("../utils/constants");
+require("../utils/constants"); // TODO use single quotes
+require('knockout-mapping');
+
 let ko = require('knockout');
 
-let itemsViewModel = function (shouter, map, gfxEventHandler) {
+let itemsViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
     self.searchValue = ko.observable("");
@@ -17,19 +19,35 @@ let itemsViewModel = function (shouter, map, gfxEventHandler) {
 
     self.removeItem = function () {
         self.items.remove(this);
+
+        state.items = ko.mapping.toJS(self.items()); // TODO try w/o brackets
     };
 
     self.addItem = function () {
         if (!self.checkValid())
             return;
 
+        let id = ko.observable(parseInt(self.newItemID()));
+        let weight = ko.observable(parseFloat(self.newItemWeight()));
+
         self.items.push({
-            id: ko.observable(parseInt(self.newItemID())),
-            weight: ko.observable(parseFloat(self.newItemWeight()))
+            id: id,
+            weight: weight
         });
 
         // Auto increment
         self.newItemID(parseInt(self.newItemID()) + 1);
+
+        // Subscribe to any changes
+        id.subscribe(function (newID) {
+            state.items = ko.mapping.toJS(self.items());
+        });
+
+        weight.subscribe(function (newID) {
+            state.items = ko.mapping.toJS(self.items());
+        });
+
+        state.items = ko.mapping.toJS(self.items()); // TODO try w/o brackets
     };
 
     self.checkValid = function () {

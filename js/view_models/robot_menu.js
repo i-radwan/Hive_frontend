@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let robotViewModel = function (shouter, map, gfxEventHandler) {
+let robotViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
     self.id = ko.observable(1);
@@ -15,12 +15,12 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
     self.activeRobotCol = -1;
 
     self.addRobot = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
+        if (state.map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
             if (!self.checkValid()) {
                 return;
             }
 
-            map.grid[row][col] = {
+            state.map.grid[row][col] = {
                 type: MAP_CELL.ROBOT,
                 id: parseInt(self.id()),
                 color: self.color(),
@@ -44,9 +44,9 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
                 color: self.color(),
                 ip: self.ip()
             });
-        } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
+        } else if (state.map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
-        } else if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRobotRow !== -1 && self.activeRobotCol !== -1) {
+        } else if (state.map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRobotRow !== -1 && self.activeRobotCol !== -1) {
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.ESC
             });
@@ -57,16 +57,16 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
         // TODO (ALERT): this would certainly cause an error if robot 2 is moving
         // to the old cell of robot 1, but the message of robot 2 arrives first from the
         // gfxEventHandler
-        map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
-        map.grid[srcRow][srcCol] = {
+        state.map.grid[dstRow][dstCol] = state.map.grid[srcRow][srcCol];
+        state.map.grid[srcRow][srcCol] = {
             type: MAP_CELL.EMPTY
         };
     };
 
     self.dragRobot = function (srcRow, srcCol, dstRow, dstCol) {
-        if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
-            map.grid[dstRow][dstCol] = Object.assign({}, map.grid[srcRow][srcCol]);
-            map.grid[srcRow][srcCol] = {
+        if (state.map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
+            state.map.grid[dstRow][dstCol] = Object.assign({}, state.map.grid[srcRow][srcCol]);
+            state.map.grid[srcRow][srcCol] = {
                 type: MAP_CELL.EMPTY
             };
 
@@ -96,8 +96,8 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
     };
 
     self.deleteRobot = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.ROBOT) {
-            map.grid[row][col] = {
+        if (state.map.grid[row][col].type === MAP_CELL.ROBOT) {
+            state.map.grid[row][col] = {
                 type: MAP_CELL.EMPTY
             };
 
@@ -117,7 +117,7 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
     };
 
     self.fillFields = function (row, col) {
-        let robot = map.grid[row][col];
+        let robot = state.map.grid[row][col];
 
         if (robot.type !== MAP_CELL.ROBOT)
             return;
@@ -155,7 +155,7 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
             return;
         }
 
-        map.grid[self.activeRobotRow][self.activeRobotCol] = {
+        state.map.grid[self.activeRobotRow][self.activeRobotCol] = {
             type: MAP_CELL.ROBOT,
             id: parseInt(self.id()),
             color: self.color(),
@@ -199,9 +199,9 @@ let robotViewModel = function (shouter, map, gfxEventHandler) {
         }
 
         // Duplicate ID check
-        for (let i = 0; i < map.height; ++i) {
-            for (let j = 0; j < map.width; ++j) {
-                let c = map.grid[i][j];
+        for (let i = 0; i < state.map.height; ++i) {
+            for (let j = 0; j < state.map.width; ++j) {
+                let c = state.map.grid[i][j];
 
                 if (c.type === MAP_CELL.ROBOT && c.id === parseInt(self.id())) {
                     shouter.notifySubscribers({text: "Robot ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);

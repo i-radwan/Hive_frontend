@@ -26,8 +26,8 @@ $(document).ready(() => {
     let w = map.width();
 
     map.click(function(e) {
-        let events = mainVM.handleCellClick(Math.floor(e.offsetY / h * mainVM.map.height), Math.floor(e.offsetX / w * mainVM.map.width));
-        console.log(events, mainVM.map);
+        mainVM.handleCellClick(Math.floor(e.offsetY / h * mainVM.state.map.height), Math.floor(e.offsetX / w * mainVM.state.map.width));
+        console.log(mainVM.state.map);
     });
 
     // GFX code

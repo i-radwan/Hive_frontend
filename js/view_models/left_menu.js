@@ -10,7 +10,7 @@ let parkViewModel = require('./park_menu');
 let obstacleViewModel = require('./obstacle_menu');
 let orderViewModel = require('./order_menu');
 
-let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, commSender) {
+let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, commSender) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
@@ -103,14 +103,14 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
     };
 
     // Sub view models
-    self.tempVM = new tempViewModel(shouter, map, gfxEventHandler, commSender);
-    self.mapVM = new mapViewModel(shouter, map, gfxEventHandler, commSender);
-    self.entryVM = new entryViewModel(shouter, map, gfxEventHandler, commSender);
-    self.robotVM = new robotViewModel(shouter, map, gfxEventHandler, commSender);
-    self.rackVM = new rackViewModel(shouter, map, gfxEventHandler, commSender);
-    self.parkVM = new parkViewModel(shouter, map, gfxEventHandler, commSender);
-    self.obstacleVM = new obstacleViewModel(shouter, map, gfxEventHandler, commSender);
-    self.orderVM = new orderViewModel(shouter, map, gfxEventHandler, commSender);
+    self.tempVM = new tempViewModel(shouter, state, gfxEventHandler, commSender);
+    self.mapVM = new mapViewModel(shouter, state, gfxEventHandler, commSender);
+    self.entryVM = new entryViewModel(shouter, state, gfxEventHandler, commSender);
+    self.robotVM = new robotViewModel(shouter, state, gfxEventHandler, commSender);
+    self.rackVM = new rackViewModel(shouter, state, gfxEventHandler, commSender);
+    self.parkVM = new parkViewModel(shouter, state, gfxEventHandler, commSender);
+    self.obstacleVM = new obstacleViewModel(shouter, state, gfxEventHandler, commSender);
+    self.orderVM = new orderViewModel(shouter, state, gfxEventHandler, commSender);
 
     // Listen for mode change
     runningMode.subscribe(function (newRunningMode) {
@@ -124,7 +124,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
     // Outside events
     self.handleCellClick = function (row, col) {
         if (runningMode() === RUNNING_MODE.DESIGN) {
-            if (map.grid[row][col].type === MAP_CELL.EMPTY) {
+            if (state.map.grid[row][col].type === MAP_CELL.EMPTY) {
                 switch (self.activeMenu()) {
                     case LEFT_MENU.ENTRY:
                         self.entryVM.addEntry(row, col);
@@ -143,7 +143,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
                         break;
                 }
             } else {
-                switch (map.grid[row][col].type) {
+                switch (state.map.grid[row][col].type) {
                     case MAP_CELL.ENTRY:
                         self.activeMenu(LEFT_MENU.EMPTY);
                         self.entryVM.editEntry(row, col);
@@ -167,7 +167,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
                 }
             }
         } else {
-            switch (map.grid[row][col].type) {
+            switch (state.map.grid[row][col].type) {
                 case MAP_CELL.ENTRY:
                     self.activeMenu(LEFT_MENU.EMPTY);
                     self.entryVM.fillFields(row, col);
@@ -195,7 +195,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
     self.handleCellDeleteClick = function (row, col) {
         let status = false;
 
-        switch (map.grid[row][col].type) {
+        switch (state.map.grid[row][col].type) {
             case MAP_CELL.ENTRY:
                 status = self.entryVM.deleteEntry(row, col);
                 break;
@@ -219,7 +219,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
-        switch (map.grid[srcRow][srcCol].type) {
+        switch (state.map.grid[srcRow][srcCol].type) {
             case MAP_CELL.ENTRY:
                 self.entryVM.dragEntry(srcRow, srcCol, dstRow, dstCol);
                 break;
@@ -239,7 +239,7 @@ let leftMenuViewModel = function (runningMode, shouter, map, gfxEventHandler, co
     };
 
     self.handleObjectMove = function (srcRow, srcCol, dstRow, dstCol) {
-        switch (map.grid[srcRow][srcCol].type) {
+        switch (state.map.grid[srcRow][srcCol].type) {
             case MAP_CELL.ENTRY:
                 self.entryVM.moveEntry(srcRow, srcCol, dstRow, dstCol);
                 break;

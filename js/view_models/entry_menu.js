@@ -1,15 +1,15 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let entryViewModel = function (shouter, map, gfxEventHandler) {
+let entryViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
     self.activeEntryRow = -1;
     self.activeEntryCol = -1;
 
     self.addEntry = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeEntryRow === -1 && self.activeEntryCol === -1) {
-            map.grid[row][col] = {
+        if (state.map.grid[row][col].type === MAP_CELL.EMPTY && self.activeEntryRow === -1 && self.activeEntryCol === -1) {
+            state.map.grid[row][col] = {
                 type: MAP_CELL.ENTRY
             };
 
@@ -21,9 +21,9 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
                 row: row,
                 col: col
             });
-        } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeEntryRow === -1 && self.activeEntryCol === -1) {
+        } else if (state.map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeEntryRow === -1 && self.activeEntryCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
-        } else if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeEntryRow !== -1 && self.activeEntryCol !== -1) {
+        } else if (state.map.grid[row][col].type === MAP_CELL.EMPTY && self.activeEntryRow !== -1 && self.activeEntryCol !== -1) {
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.ESC
             });
@@ -34,9 +34,9 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
     };
 
     self.dragEntry = function (srcRow, srcCol, dstRow, dstCol) {
-        if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
-            map.grid[dstRow][dstCol] = Object.assign({}, map.grid[srcRow][srcCol]);
-            map.grid[srcRow][srcCol] = {
+        if (state.map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
+            state.map.grid[dstRow][dstCol] = Object.assign({}, state.map.grid[srcRow][srcCol]);
+            state.map.grid[srcRow][srcCol] = {
                 type: MAP_CELL.EMPTY
             };
 
@@ -66,8 +66,8 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
     };
 
     self.deleteEntry = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.ENTRY) {
-            map.grid[row][col] = {
+        if (state.map.grid[row][col].type === MAP_CELL.ENTRY) {
+            state.map.grid[row][col] = {
                 type: MAP_CELL.EMPTY
             };
 
@@ -87,7 +87,7 @@ let entryViewModel = function (shouter, map, gfxEventHandler) {
     };
 
     self.fillFields = function (row, col) {
-        let entry = map.grid[row][col];
+        let entry = state.map.grid[row][col];
 
         if (entry.type !== MAP_CELL.ENTRY)
             return;

@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let controlConsoleViewModel = function (runningMode, shouter, map, gfxEventHandler, commSender) {
+let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHandler, commSender) {
     let self = this;
 
     self.playing = ko.observable(false);
@@ -19,7 +19,7 @@ let controlConsoleViewModel = function (runningMode, shouter, map, gfxEventHandl
 
             commSender({
                 type: SERVER_EVENT_TYPE.MAP,
-                map: JSON.stringify(map, null, 2)
+                state: JSON.stringify(state, null, 2)
             });
         }
     };
@@ -30,9 +30,9 @@ let controlConsoleViewModel = function (runningMode, shouter, map, gfxEventHandl
     };
 
     self.deployClicked = function () {
-        for (let i = 0; i < map.height; ++i) {
-            for (let j = 0; j < map.width; ++j) {
-                let c = map.grid[i][j];
+        for (let i = 0; i < state.map.height; ++i) {
+            for (let j = 0; j < state.map.width; ++j) {
+                let c = state.map.grid[i][j];
 
                 if (c.type === MAP_CELL.ROBOT && !c.ip.match(REG_IP)) {
                     shouter.notifySubscribers({text: "Robot IP is mandatory!", type: MSG_ERROR}, SHOUT_MSG);

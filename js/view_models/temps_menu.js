@@ -1,7 +1,7 @@
 require("../utils/constants");
 let ko = require('knockout');
 
-let tempsViewModel = function (shouter, map) {
+let tempsViewModel = function (shouter, state) {
     let self = this;
 
     /**
@@ -12,6 +12,11 @@ let tempsViewModel = function (shouter, map) {
         let temps = [];
         for (let i = 0; i < 10; i++) {
             let temp = new Array(20);
+
+            let items = [{
+                id: 1,
+                weight: 10
+            }];
 
             for (let j = 0; j < 20; j++) {
                 temp[j] = new Array(30);
@@ -42,9 +47,11 @@ let tempsViewModel = function (shouter, map) {
                         case 3:
                             temp[j][k] = {
                                 type: MAP_CELL.RACK,
-                                item_number: 1,
-                                quantity: 10,
-                                weight: 1
+                                items: [{
+                                    id: 1,
+                                    quantity: 10
+                                }],
+                                capacity: RACK_CAP
                             };
                             break;
                         case 4:
@@ -61,7 +68,10 @@ let tempsViewModel = function (shouter, map) {
             }
 
             temps.push({
-                temp: temp,
+                temp: {
+                    map: temp,
+                    items: items
+                },
                 img: "images/temps/hold.png"
             });
         }
@@ -74,9 +84,10 @@ let tempsViewModel = function (shouter, map) {
     self.tempClicked = function (idx) {
         console.log("Template " + idx() + " applied!");
 
-        map.setMap(self.temps[idx()].temp);
+        state.items = self.temps[idx()].temp.items;
+        state.map.setMap(self.temps[idx()].temp.map);
 
-        shouter.notifySubscribers(self.temps[idx()].temp, SHOUT_MAP_TEMP_APPLIED);
+        shouter.notifySubscribers(self.temps[idx()].temp.map, SHOUT_MAP_TEMP_APPLIED);
     };
 };
 

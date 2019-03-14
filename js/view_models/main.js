@@ -2,7 +2,7 @@ require("../utils/constants");
 let ko = require('knockout');
 
 // Models
-let Map = require('../models/map');
+let State = require('../models/state');
 
 // ViewModels
 let leftMenuViewModel = require("./left_menu");
@@ -12,7 +12,7 @@ let rightMenuViewModel = require("./right_menu");
 let mainViewModel = function (gfxEventHandler, commSender) {
     let self = this;
 
-    self.map = new Map();
+    self.state = new State();
 
     self.shouter = new ko.subscribable();
 
@@ -20,9 +20,9 @@ let mainViewModel = function (gfxEventHandler, commSender) {
 
     self.gfxEventHandler = gfxEventHandler;
 
-    self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler, commSender);
-    self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler, commSender);
-    self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.map, gfxEventHandler, commSender);
+    self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, commSender);
+    self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, commSender);
+    self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, commSender);
 
     self.setGFXEventHandler = function (gfxEventHandler) {
         self.gfxEventHandler = gfxEventHandler;
@@ -76,8 +76,8 @@ let mainViewModel = function (gfxEventHandler, commSender) {
 
     gfxEventHandler({
         type: GFX_EVENT_TYPE.INIT,
-        width: self.map.width,
-        height: self.map.height
+        width: self.state.map.width,
+        height: self.state.map.height
     });
 };
 
