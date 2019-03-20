@@ -1,26 +1,27 @@
-require("../utils/constants");
+require('../utils/constants');
+require('knockout-mapping');
 let ko = require('knockout');
 
-let orderViewModel = function (shouter, map, gfxEventHandler, commSender) {
+let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
     let self = this;
 
     self.name = ko.observable("");
     self.items = ko.observableArray();
-    self.itemNumber = ko.observable();
-    self.quantity = ko.observable();
+    self.itemID = ko.observable();
+    self.itemQuantity = ko.observable();
 
     self.addItem = function () {
-        if (!self.itemNumber() || !self.quantity()) return;
+        if (!self.itemID() || !self.itemQuantity()) return;
 
         console.log("Add item");
 
         self.items.push({
-            item_number: ko.observable(self.itemNumber()),
-            quantity: ko.observable(self.quantity())
+            id: ko.observable(parseInt(self.itemID())),
+            quantity: ko.observable(parseInt(self.itemQuantity()))
         });
 
-        self.itemNumber("");
-        self.quantity("");
+        self.itemID("");
+        self.itemQuantity("");
     };
 
     self.removeItem = function () {
@@ -34,8 +35,10 @@ let orderViewModel = function (shouter, map, gfxEventHandler, commSender) {
 
         commSender({
             type: SERVER_EVENT_TYPE.ORDER_NEW,
-            name: self.name(),
-            items: self.items()
+            data: {
+                name: self.name(),
+                items: ko.mapping.toJS(self.items())
+            }
         });
     };
 };

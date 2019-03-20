@@ -1,28 +1,30 @@
-require("../utils/constants");
+require('../utils/constants');
+require('knockout-mapping');
 let ko = require('knockout');
 
-let rackViewModel = function (shouter, map, gfxEventHandler) {
+let rackViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
-    self.itemNumber = ko.observable(1);
-    self.quantity = ko.observable(10);
-    self.itemWeight = ko.observable(1);
+    self.capacity = ko.observable(RACK_CAP);
+
+    self.items = ko.observableArray();
+    self.itemID = ko.observable();
+    self.itemQuantity = ko.observable();
 
     self.applyVisible = ko.observable(false);
     self.activeRackRow = -1;
     self.activeRackCol = -1;
 
-    self.addRack = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRackRow === -1 && self.activeRackCol === -1) {
-            if (!self.checkValid()) {
+    self.add = function (row, col) {
+        if (state.map.grid[row][col].facility === undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
+            if (!self.check()) {
                 return;
             }
 
-            map.grid[row][col] = {
+            state.map.grid[row][col].facility = {
                 type: MAP_CELL.RACK,
-                item_number: parseInt(self.itemNumber()),
-                quantity: parseInt(self.quantity()),
-                item_weight: parseFloat(self.itemWeight())
+                capacity: parseInt(self.capacity()),
+                items: ko.mapping.toJS(self.items())
             };
 
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
@@ -32,33 +34,28 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
                 object: MAP_CELL.RACK,
                 row: row,
                 col: col,
-                item_number: parseInt(self.itemNumber()),
-                quantity: parseInt(self.quantity()),
-                item_weight: parseFloat(self.itemWeight())
+                capacity: parseInt(self.capacity()),
+                items: ko.mapping.toJS(self.items())
             });
-        } else if (map.grid[row][col].type !== MAP_CELL.EMPTY && self.activeRackRow === -1 && self.activeRackCol === -1) {
+        } else if (state.map.grid[row][col].facility !== undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
-        } else if (map.grid[row][col].type === MAP_CELL.EMPTY && self.activeRackRow !== -1 && self.activeRackCol !== -1) {
+        } else if (state.map.grid[row][col].facility === undefined && self.activeRackRow !== -1 && self.activeRackCol !== -1) {
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.ESC
             });
         }
     };
 
-    self.moveRack = function (srcRow, srcCol, dstRow, dstCol) {
+    self.move = function (srcRow, srcCol, dstRow, dstCol) {
         // TODO: rack to be moved with the robot carrying it :'D
-        // map.grid[dstRow][dstCol] = map.grid[srcRow][srcCol];
-        // map.grid[srcRow][srcCol] = {
-        //     type: MAP_CELL.EMPTY
-        // };
+        // state.map.grid[dstRow][dstCol].facility = state.map.grid[srcRow][srcCol].facility;
+        // state.map.grid[srcRow][srcCol].facility = undefined;
     };
 
     self.dragRack = function (srcRow, srcCol, dstRow, dstCol) {
-        if (map.grid[dstRow][dstCol].type === MAP_CELL.EMPTY) {
-            map.grid[dstRow][dstCol] = Object.assign({}, map.grid[srcRow][srcCol]);
-            map.grid[srcRow][srcCol] = {
-                type: MAP_CELL.EMPTY
-            };
+        if (state.map.grid[dstRow][dstCol].facility === undefined) {
+            state.map.grid[dstRow][dstCol].facility = Object.assign({}, state.map.grid[srcRow][srcCol].facility);
+            state.map.grid[srcRow][srcCol] = undefined;
 
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.OBJECT_DRAG,
@@ -85,11 +82,9 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         }
     };
 
-    self.deleteRack = function (row, col) {
-        if (map.grid[row][col].type === MAP_CELL.RACK) {
-            map.grid[row][col] = {
-                type: MAP_CELL.EMPTY
-            };
+    self.delete = function (row, col) {
+        if (state.map.grid[row][col].facility.type === MAP_CELL.RACK) {
+            state.map.grid[row][col].facility = undefined;
 
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.OBJECT_DELETE,
@@ -98,7 +93,7 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
                 col: col
             });
 
-            self.clearSelection();
+            self.unselect();
 
             return true;
         }
@@ -106,15 +101,14 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         return false;
     };
 
-    self.fillFields = function (row, col) {
-        let rack = map.grid[row][col];
+    self.fill = function (row, col) {
+        let rack = state.map.grid[row][col].facility;
 
         if (rack.type !== MAP_CELL.RACK)
             return;
 
-        self.itemNumber(rack.item_number);
-        self.quantity(rack.quantity);
-        self.itemWeight(rack.item_weight);
+        self.capacity(rack.capacity);
+        self.items(ko.mapping.fromJS(rack.items)());
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
@@ -124,8 +118,8 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         });
     };
 
-    self.editRack = function (row, col) {
-        self.fillFields(row, col);
+    self.edit = function (row, col) {
+        self.fill(row, col);
         self.applyVisible(true);
         self.activeRackRow = row;
         self.activeRackCol = col;
@@ -138,49 +132,48 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         });
     };
 
-    self.updateRack = function () {
-        if (!self.checkValid()) {
-            return;
+    self.update = function () {
+        if (!self.check()) {
+            return false;
         }
 
-        map.grid[self.activeRackRow][self.activeRackCol] = {
+        state.map.grid[self.activeRackRow][self.activeRackCol].facility = {
             type: MAP_CELL.RACK,
-            item_number: parseInt(self.itemNumber()),
-            quantity: parseInt(self.quantity()),
-            item_weight: parseFloat(self.itemWeight())
+            capacity: parseInt(self.capacity()),
+            items: ko.mapping.toJS(self.items())
         };
 
         shouter.notifySubscribers({text: "Rack updated successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-        self.clearSelection();
+        self.unselect();
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC
         });
+
+        return true;
     };
 
-    self.checkValid = function () {
-        if (self.itemNumber().length === 0) {
-            shouter.notifySubscribers({text: "Item number is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+    self.check = function () {
+        if (self.items().length === 0) {
+            shouter.notifySubscribers({text: "Rack must contain items!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
-        if (self.quantity().length === 0) {
-            shouter.notifySubscribers({text: "Quantity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+        let load = 0;
 
-            return false;
+        for (let i = 0; i < self.items().length; ++i) {
+            let item = self.items()[i];
+
+            if (!self.checkItem(parseInt(item.id()), parseInt(item.quantity()), 1))
+                return false;
+
+            load += parseInt(item.quantity()) * state.getItemWeight(parseInt(item.id()));
         }
 
-        if (self.itemWeight().length === 0) {
-            shouter.notifySubscribers({text: "Item weight is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
-
-            return false;
-        }
-
-        // -ve values
-        if (parseInt(self.itemNumber()) < 0 || parseInt(self.quantity()) < 0 || parseInt(self.itemWeight()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+        if (load > parseInt(self.capacity())) {
+            shouter.notifySubscribers({text: "Rack load is " + load + " which exceeds the capacity!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
@@ -188,13 +181,72 @@ let rackViewModel = function (shouter, map, gfxEventHandler) {
         return true;
     };
 
-    self.clearSelection = function() {
+    self.addItem = function () {
+        if (!self.checkItem(parseInt(self.itemID()), parseInt(self.itemQuantity()), 0))
+            return;
+
+        self.items.push({
+            id: ko.observable(parseInt(self.itemID())),
+            quantity: ko.observable(parseInt(self.itemQuantity()))
+        });
+
+        console.log(state.map);
+    };
+
+    self.removeItem = function () {
+        self.items.remove(this);
+    };
+
+    self.checkItem = function (id, quantity, count) {
+        if (id.length === 0) {
+            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (quantity.length === 0) {
+            shouter.notifySubscribers({text: "Quantity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // -ve values
+        if (id < 0 || quantity < 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        let cnt = 0;
+        for (let i = 0; i < self.items().length; ++i) {
+            if (parseInt(self.items()[i].id()) === id) {
+                cnt++;
+            }
+        }
+
+        if (cnt > count) {
+            shouter.notifySubscribers({text: "Items IDs should be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // Check if item exists
+        if (state.getItemWeight(id) === -1) {
+            shouter.notifySubscribers({text: "Items IDs doesn't exist!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        return true;
+    };
+
+    self.unselect = function() {
         self.activeRackRow = self.activeRackCol = -1;
         self.applyVisible(false);
     };
 
     self.handleEsc = function () {
-        self.clearSelection();
+        self.unselect();
     };
 };
 

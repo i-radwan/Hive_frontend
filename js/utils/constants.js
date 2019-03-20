@@ -3,10 +3,10 @@ LEFT_MENU = {
     EMPTY: 0,
     TEMPS: 1,
     MAP: 2,
-    ENTRY: 3,
+    GATE: 3,
     ROBOT: 4,
     RACK: 5,
-    PARK: 6,
+    STATION: 6,
     OBSTACLE: 7,
     ORDER: 8
 };
@@ -14,7 +14,8 @@ LEFT_MENU = {
 RIGHT_MENU = {
     EMPTY: 0,
     LOGS: 1,
-    STATS: 2
+    STATS: 2,
+    ITEMS: 3
 };
 
 // Running modes
@@ -28,12 +29,11 @@ RUNNING_MODE = {
 MAP_INIT_WIDTH = 17;
 MAP_INIT_HEIGHT = 10;
 MAP_CELL = {
-    EMPTY: 0,
-    ENTRY: 1,
-    ROBOT: 2,
-    RACK: 3,
-    PARK: 4,
-    OBSTACLE: 5
+    GATE: 0,
+    ROBOT: 1,
+    RACK: 2,
+    STATION: 3,
+    OBSTACLE: 4
 };
 
 // Shouting codes
@@ -80,7 +80,7 @@ SERVER_EVENT_TYPE = {
     LOG: 1,
     STATS: 2,
     MSG: 3,
-    MAP: 4,
+    INIT: 4,
     ORDER_NEW: 5
 };
 
@@ -123,3 +123,6 @@ GFX_SVG_MODEL = {
     OBSTACLE: '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><title>Obstacle 4</title><path d="M0,0H23a0,0,0,0,1,0,0V9.5a1,1,0,0,1-1,1H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" fill="#bababa"/><path d="M25,0H48a0,0,0,0,1,0,0V9.5a1,1,0,0,1-1,1H26a1,1,0,0,1-1-1V0A0,0,0,0,1,25,0Z" fill="#bababa"/><path d="M0,25H22a1,1,0,0,1,1,1v8.5a1,1,0,0,1-1,1H0a0,0,0,0,1,0,0V25A0,0,0,0,1,0,25Z" fill="#bababa"/><rect x="25" y="25" width="23" height="10.5" rx="1" ry="1" fill="#bababa"/><rect x="13.5" y="12.5" width="23" height="10.5" rx="1" ry="1" fill="#bababa"/><path d="M0,12.5H10.5a1,1,0,0,1,1,1V22a1,1,0,0,1-1,1H0a0,0,0,0,1,0,0V12.5A0,0,0,0,1,0,12.5Z" fill="#bababa"/><path d="M39.5,12.5H50a0,0,0,0,1,0,0V23a0,0,0,0,1,0,0H39.5a1,1,0,0,1-1-1V13.5A1,1,0,0,1,39.5,12.5Z" fill="#bababa"/><rect x="13.5" y="37.5" width="23" height="10.5" rx="1" ry="1" fill="#bababa"/><path d="M0,37.5H10.5a1,1,0,0,1,1,1V47a1,1,0,0,1-1,1H0a0,0,0,0,1,0,0V37.5A0,0,0,0,1,0,37.5Z" fill="#bababa"/><path d="M39.5,37.5H50a0,0,0,0,1,0,0V48a0,0,0,0,1,0,0H39.5a1,1,0,0,1-1-1V38.5A1,1,0,0,1,39.5,37.5Z" fill="#bababa"/></svg>',
     RACK: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><title>Rack</title><line x1="25" y1="34.84" x2="40" y2="26.18" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="34.84" x2="10" y2="26.18" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="32.59" x2="40" y2="23.93" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="32.59" x2="10" y2="23.93" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="37.09" x2="40" y2="28.43" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="37.09" x2="10" y2="28.43" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><polygon points="40 21.57 40 21.68 25 30.34 10 21.68 10 21.57 25 12.91 40 21.57" fill="#bababa"/><line x1="25" y1="30.34" x2="40" y2="21.68" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="30.34" x2="10" y2="21.68" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="12.91" x2="40" y2="21.57" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="12.91" x2="10" y2="21.57" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/></svg>'
 };
+
+// Logic
+RACK_CAP = 250;
