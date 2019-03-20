@@ -45,7 +45,7 @@ let gfx = function (logicEventHandler) {
     let goingDown = false;
 
     // SVG Objects
-    let robotSVG = 0, entrySVG = 0, parkSVG = 0, obstacleSVG = 0, rackSVG = 0;
+    let robotSVG = 0, gateSVG = 0, stationSVG = 0, obstacleSVG = 0, rackSVG = 0;
 
     // Set the event handler that communicates with the mainVM
     self.setLogicEventHandler = function (logicEventHandler) {
@@ -118,13 +118,12 @@ let gfx = function (logicEventHandler) {
 
     // Creates the object given its type and position
     let createObject = function (row, col, type) {
-        let cellCenter = getCellCenter(row, col);
         let cellTopLeft = getCellTopLeft(row, col);
 
         let object;
         switch (type) {
-            case MAP_CELL.ENTRY:
-                object = entrySVG.clone();
+            case MAP_CELL.GATE:
+                object = gateSVG.clone();
                 object.translation.set(cellTopLeft.x, cellTopLeft.y);
                 break;
             case MAP_CELL.ROBOT:
@@ -135,8 +134,8 @@ let gfx = function (logicEventHandler) {
                 object = rackSVG.clone();
                 object.translation.set(cellTopLeft.x, cellTopLeft.y);
                 break;
-            case MAP_CELL.PARK:
-                object = parkSVG.clone();
+            case MAP_CELL.STATION:
+                object = stationSVG.clone();
                 object.translation.set(cellTopLeft.x, cellTopLeft.y);
                 break;
             case MAP_CELL.OBSTACLE:
@@ -483,8 +482,8 @@ let gfx = function (logicEventHandler) {
 
         // Load robot svg
         robotSVG = two.load(GFX_SVG_MODEL.ROBOT);
-        entrySVG = two.load(GFX_SVG_MODEL.ENTRY);
-        parkSVG = two.load(GFX_SVG_MODEL.PARK);
+        gateSVG = two.load(GFX_SVG_MODEL.GATE);
+        stationSVG = two.load(GFX_SVG_MODEL.STATION);
         obstacleSVG = two.load(GFX_SVG_MODEL.OBSTACLE);
         rackSVG = two.load(GFX_SVG_MODEL.RACK);
 
