@@ -473,7 +473,7 @@ Center
 Map
  */
 .map-row {
-    background: #bababa;
+    background: #1d1d1e;
     height: 80%;
 }
 
@@ -674,6 +674,7 @@ General
 ::-webkit-scrollbar:not(.right-menu-logs) {
     width: 0;
     background: transparent;
+    display: none;
 }
 
 input[type=number]::-webkit-inner-spin-button,

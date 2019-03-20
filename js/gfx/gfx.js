@@ -45,7 +45,7 @@ let gfx = function (logicEventHandler) {
     let goingDown = false;
 
     // SVG Objects
-    let robotSVG = 0;
+    let robotSVG = 0, entrySVG = 0, parkSVG = 0, obstacleSVG = 0, rackSVG = 0;
 
     // Set the event handler that communicates with the mainVM
     self.setLogicEventHandler = function (logicEventHandler) {
@@ -119,30 +119,29 @@ let gfx = function (logicEventHandler) {
     // Creates the object given its type and position
     let createObject = function (row, col, type) {
         let cellCenter = getCellCenter(row, col);
+        let cellTopLeft = getCellTopLeft(row, col);
+
         let object;
         switch (type) {
             case MAP_CELL.ENTRY:
-                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
-                object.fill = "#8b0000";
+                object = entrySVG.clone();
+                object.translation.set(cellTopLeft.x, cellTopLeft.y);
                 break;
             case MAP_CELL.ROBOT:
                 object = robotSVG.clone();
-                let cellTopLeft = getCellTopLeft(row, col);
                 object.translation.set(cellTopLeft.x, cellTopLeft.y);
-                //object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
-                //object.fill = "#e09500";
                 break;
             case MAP_CELL.RACK:
-                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
-                object.fill = "#3972bf";
+                object = rackSVG.clone();
+                object.translation.set(cellTopLeft.x, cellTopLeft.y);
                 break;
             case MAP_CELL.PARK:
-                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
-                object.fill = "#78c631";
+                object = parkSVG.clone();
+                object.translation.set(cellTopLeft.x, cellTopLeft.y);
                 break;
             case MAP_CELL.OBSTACLE:
-                object = two.makeCircle(cellCenter.x, cellCenter.y, 10);
-                object.fill = "#1d1d1e";
+                object = obstacleSVG.clone();
+                object.translation.set(cellTopLeft.x, cellTopLeft.y);
                 break;
         }
 
@@ -155,7 +154,8 @@ let gfx = function (logicEventHandler) {
         let cellGroup = two.makeGroup();
 
         let square = two.makeRectangle(cellCenter.x, cellCenter.y, GRID_CELL_LENGTH, GRID_CELL_LENGTH);
-        square.fill = '#bababa';
+        square.fill = '#1d1d1e';
+        square.stroke = '#bababa';
         cellGroup.add(square);
 
         return cellGroup;
@@ -482,8 +482,11 @@ let gfx = function (logicEventHandler) {
         }
 
         // Load robot svg
-        robotSVG = two.load('<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50.5 50.5"><title>robot2</title><circle cx="25.25" cy="25.25" r="25" fill="#df9626" stroke="#231f20" stroke-linecap="round" stroke-miterlimit="10" stroke-width="0.5"/><circle cx="17.25" cy="15.19" r="5" fill="#bbbabb" stroke="#231f20" stroke-linecap="round" stroke-miterlimit="10" stroke-width="0.5"/><circle cx="33.25" cy="14.75" r="5" fill="#bbbabb" stroke="#231f20" stroke-linecap="round" stroke-miterlimit="10" stroke-width="0.5"/></svg>');
-
+        robotSVG = two.load(GFX_SVG_MODEL.ROBOT);
+        entrySVG = two.load(GFX_SVG_MODEL.ENTRY);
+        parkSVG = two.load(GFX_SVG_MODEL.PARK);
+        obstacleSVG = two.load(GFX_SVG_MODEL.OBSTACLE);
+        rackSVG = two.load(GFX_SVG_MODEL.RACK);
 
         drawGrid();
     };
