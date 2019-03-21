@@ -20,6 +20,10 @@ let gfx = function (logicEventHandler) {
 
     // Map Scene
     let gridMap;
+    // Running mode
+    let runningMode = RUNNING_MODE.DESIGN;
+    let simulationPaused = false;
+
     // Mouse positions
     let mouseX = 0, mouseY = 0;
 
@@ -74,6 +78,24 @@ let gfx = function (logicEventHandler) {
 
         let cellRow = Math.floor(mousePosY / cellWidth);
         let cellCol = Math.floor(mousePosX / cellWidth);
+        let ret = {row: cellRow, col: cellCol, inBounds: true};
+
+        if (cellCol < 0 || cellCol >= mapWidth || cellRow < 0 || cellRow >= mapHeight)
+            ret.inBounds = false;
+
+        ret.row = Math.min(ret.row, mapHeight - 1);
+        ret.row = Math.max(ret.row, 0);
+
+        ret.col = Math.min(ret.col, mapWidth - 1);
+        ret.col = Math.max(ret.col, 0);
+
+        return ret;
+    };
+
+    // Gets the row and col of the cell based on the local x &y values
+    let getCell = function (x, y) {
+        let cellRow = Math.floor(y / GRID_CELL_LENGTH);
+        let cellCol = Math.floor(x / GRID_CELL_LENGTH);
         let ret = {row: cellRow, col: cellCol, inBounds: true};
 
         if (cellCol < 0 || cellCol >= mapWidth || cellRow < 0 || cellRow >= mapHeight)
@@ -144,7 +166,7 @@ let gfx = function (logicEventHandler) {
                 break;
         }
 
-        return {two_object: object, type: type, row: row, col: col};
+        return {two_object: object, type: type, row: row, col: col, rotation_vector: new Two.Vector(-GRID_CELL_LENGTH/2, -GRID_CELL_LENGTH/2)};
     };
 
     // Creates a cell at the given position and creates the objects that this cell contains
@@ -200,51 +222,6 @@ let gfx = function (logicEventHandler) {
         return object;
     };
 
-    // Adds object to the scene and put it in the mapObjects array
-    let addObject = function (row, col, type) {
-        let object = createObject(row, col, type);
-        mapObjects[row][col] = object;
-        getRendererObject(row, col).add(object.two_object);
-    };
-
-    // Updates the dragged object to the mapObject
-    let dragObject = function (srcRow, srcCol, dstRow, dstCol) {
-        translateObject(draggedObject, draggedObject.draggingRow, draggedObject.draggingCol, dstRow, dstCol);
-
-        if (dstRow == srcRow && dstCol == srcCol)
-            return;
-
-        mapObjects[dstRow][dstCol].type = mapObjects[srcRow][srcCol].type;
-        mapObjects[dstRow][dstCol].two_object = mapObjects[srcRow][srcCol].two_object;
-        mapObjects[dstRow][dstCol].row = dstRow;
-        mapObjects[dstRow][dstCol].col = dstCol;
-
-        mapObjects[srcRow][srcCol].type = MAP_CELL.EMPTY;
-        mapObjects[srcRow][srcCol].two_object = -1;
-    };
-
-    // Deletes an object from the scene and removes it from mabObjects array.
-    let deleteObject = function (row, col) {
-        getRendererObject(row, col).remove(mapObjects[row][col].two_object);
-
-        mapObjects[row][col].type = MAP_CELL.EMPTY;
-        mapObjects[row][col].two_object = -1;
-        selectedObject = -1;
-    };
-
-    // Highlights a certain object to be drawn differently and make it selected
-    let highlightObject = function (row, col) {
-        console.log('highlighting Object at  {', row, ', ', col, '}');
-        selectedObject = mapObjects[row][col];
-        removeHoveringObject();
-    };
-
-    // Remove hovering object or deselect the selected object
-    let handleEscape = function () {
-        removeHoveringObject();
-        selectedObject = -1;
-    };
-
     // Start the hovering action
     let handleHover = function (type) {
         removeHoveringObject();
@@ -257,6 +234,260 @@ let gfx = function (logicEventHandler) {
         hideHoveringObject();
     };
 
+    // Adds object to the scene and put it in the mapObjects array
+    let addObject = function (row, col, type) {
+        let object = createObject(row, col, type);
+
+        if (type == MAP_CELL.ROBOT)
+            mapObjects[row][col].robot = object;
+        else
+            mapObjects[row][col].facility = object;
+        getRendererObject(row, col).add(object.two_object);
+    };
+
+    // Updates the dragged object to the mapObject
+    let dragObject = function (srcRow, srcCol, dstRow, dstCol) {
+        translateObject(draggedObject, draggedObject.draggingRow, draggedObject.draggingCol, dstRow, dstCol);
+
+        if (dstRow == srcRow && dstCol == srcCol)
+            return;
+
+        mapObjects[dstRow][dstCol] = {
+            facility: {
+                type: mapObjects[srcRow][srcCol].facility.type,
+                two_object: mapObjects[srcRow][srcCol].facility.two_object,
+                row: dstRow,
+                col: dstCol,
+                rotation_vector: mapObjects[srcRow][srcCol].facility.rotation_vector
+            },
+            robot: {
+                type: mapObjects[srcRow][srcCol].robot.type,
+                two_object: mapObjects[srcRow][srcCol].robot.two_object,
+                row: dstRow,
+                col: dstCol,
+                rotation_vector: mapObjects[srcRow][srcCol].robot.rotation_vector
+            }
+        };
+        mapObjects[srcRow][srcCol] = {
+            facility: {
+                type: MAP_CELL.EMPTY,
+                two_object: -1,
+                row: dstRow,
+                col: dstCol
+            },
+            robot: {
+                type: MAP_CELL.EMPTY,
+                two_object: -1,
+                row: dstRow,
+                col: dstCol
+            }
+        };
+    };
+
+    // Deletes an object from the scene and removes it from mapObjects array.
+    let deleteObject = function (row, col) {
+        if (mapObjects[row][col].robot !== MAP_CELL.EMPTY)
+            getRendererObject(row, col).remove(mapObjects[row][col].robot.two_object);
+
+        if (mapObjects[row][col].facility !== MAP_CELL.EMPTY)
+            getRendererObject(row, col).remove(mapObjects[row][col].facility.two_object);
+
+        mapObjects[row][col] = {
+            facility: {
+                type: MAP_CELL.EMPTY,
+                two_object: -1
+            },
+            robot: {
+                type: MAP_CELL.EMPTY,
+                two_object: -1
+            }
+        };
+        selectedObject = -1;
+    };
+
+    // Highlights a certain object to be drawn differently and make it selected
+    let highlightObject = function (row, col) {
+        console.log('highlighting Object at  {', row, ', ', col, '}');
+
+        // Can't select multiple would default to the facility
+        if (mapObjects[row][col].facility.type !== MAP_CELL.EMPTY)
+            selectedObject = mapObjects[row][col].facility;
+        else
+            selectedObject = mapObjects[row][col].robot;
+        removeHoveringObject();
+    };
+
+    let animateObject = function (srcRow, srcCol, dstRow, dstCol, angle, translate_speed, rotate_speed) {
+        let animatedObject;
+
+        // Can't animate multiple would default to the robot
+        if (mapObjects[srcRow][srcCol].robot.type !== MAP_CELL.EMPTY)
+            animatedObject = mapObjects[srcRow][srcCol].robot;
+        else
+            animatedObject = mapObjects[srcRow][srcCol].facility;
+
+        getRendererObject(srcRow, srcCol).remove(animatedObject.two_object);
+        gridMap.add(animatedObject.two_object);
+        animatedObject.animating = true;
+
+            let dstTopLeft = getCellTopLeft(dstRow, dstCol);
+            let srcTopLeft = getCellTopLeft(srcRow, srcCol);
+
+        animatedObject.cur_x = srcTopLeft.x;
+        animatedObject.cur_y = srcTopLeft.y;
+        animatedObject.nxt_x = dstTopLeft.x;
+        animatedObject.nxt_y = dstTopLeft.y;
+        animatedObject.translate_speed = translate_speed;
+        animatedObject.translating = true;
+        animatedObject.cur_angle = 0;
+        animatedObject.nxt_angle = angle;
+        animatedObject.rotate_speed = rotate_speed;
+        animatedObject.rotating = true;
+    };
+
+    let handleObjectsAnimation = function (timeDelta) {
+        if (runningMode != RUNNING_MODE.SIMULATE)
+            return;
+
+        for (let r = 0; r < mapObjects.length; r++) {
+            for (let c = 0; c < mapObjects[r].length; c++) {
+                if (mapObjects[r][c].facility.type == MAP_CELL.EMPTY && mapObjects[r][c].robot.type == MAP_CELL.EMPTY)
+                    continue;
+                if(!mapObjects[r][c].facility.animating && !mapObjects[r][c].robot.animating)
+                    continue;
+
+                // Can't animate multiple would default to the robot
+                let animatedObject;
+
+                if (mapObjects[r][c].robot.animating && mapObjects[r][c].robot !== MAP_CELL.EMPTY)
+                    animatedObject = mapObjects[r][c].robot;
+                else
+                    animatedObject = mapObjects[r][c].facility;
+
+                if (animatedObject.nxt_angle == animatedObject.cur_angle)
+                    animatedObject.rotating = false;
+
+                if (animatedObject.translating) {
+                    let dir = new Two.Vector(animatedObject.nxt_x - animatedObject.cur_x, animatedObject.nxt_y - animatedObject.cur_y);
+                    dir.normalize();
+                    dir.multiplyScalar(animatedObject.translate_speed * timeDelta);
+
+                    animatedObject.cur_x += dir.x;
+                    animatedObject.cur_y += dir.y;
+
+                    let dir2 = new Two.Vector(animatedObject.nxt_x - animatedObject.cur_x, animatedObject.nxt_y - animatedObject.cur_y);
+                    dir2.normalize();
+                    dir2.multiplyScalar(animatedObject.translate_speed * timeDelta);
+
+                    // End of animation
+                    if(!dir.equals(dir2) || (animatedObject.cur_x == animatedObject.nxt_x && animatedObject.cur_y == animatedObject.nxt_y)) {
+                        let v = new Two.Vector(animatedObject.cur_x - dir.x, animatedObject.cur_y - dir.y);
+                        let v2 = new Two.Vector(animatedObject.nxt_x, animatedObject.nxt_y);
+                        dir.setLength(v.distanceTo(v2));
+                        animatedObject.cur_x = animatedObject.nxt_x;
+                        animatedObject.cur_y = animatedObject.nxt_y;
+                        animatedObject.translating = false;
+                    }
+                    animatedObject.two_object.translation.addSelf(dir);
+                }
+                if (animatedObject.rotating) {
+                    let dir = (animatedObject.nxt_angle - animatedObject.cur_angle) / Math.abs(animatedObject.nxt_angle - animatedObject.cur_angle);
+                    dir *= animatedObject.rotate_speed * timeDelta;
+                    animatedObject.cur_angle += dir;
+
+                    let dir2 = (animatedObject.nxt_angle - animatedObject.cur_angle) / Math.abs(animatedObject.nxt_angle - animatedObject.cur_angle);
+                    dir2 *= animatedObject.rotate_speed * timeDelta;
+
+                    // End of animation
+                    if (dir !== dir2 || animatedObject.cur_angle == animatedObject.nxt_angle) {
+                        dir = animatedObject.nxt_angle - animatedObject.cur_angle + dir;
+                        animatedObject.cur_angle = animatedObject.nxt_angle;
+                        animatedObject.rotating = false;
+                    }
+
+                    // I hate Two.js
+                    let theta = dir * Math.PI / 180;
+                    let v2 = animatedObject.rotation_vector;
+                    let v1 = v2.clone();
+
+                    v2.x = v1.x * Math.cos(theta) - v1.y * Math.sin(theta);
+                    v2.y = v1.x * Math.sin(theta) + v1.y * Math.cos(theta);
+
+                    v1.multiplyScalar(-1);
+                    v1.addSelf(v2);
+
+                    animatedObject.two_object.rotation -= dir * Math.PI / 180;
+                    animatedObject.two_object.translation.addSelf(v1.y, v1.x);
+                }
+
+                if (!animatedObject.translating && !animatedObject.rotating) {
+                    animatedObject.animating = false;
+                    let dst = getCell(animatedObject.nxt_x, animatedObject.nxt_y);
+
+                    if (dst.row !== r || dst.col !== c) {
+                        if (animatedObject.type == MAP_CELL.ROBOT) {
+                            mapObjects[dst.row][dst.col].robot = {
+                                type: animatedObject.type,
+                                two_object: animatedObject.two_object,
+                                row: dst.row,
+                                col: dst.col,
+                                rotation_vector: animatedObject.rotation_vector
+                            };
+
+                            mapObjects[r][c].robot = {
+                                type: MAP_CELL.EMPTY,
+                                two_object: -1
+                            };
+                        }
+
+                        else {
+                            mapObjects[dst.row][dst.col].facility = {
+                                type: animatedObject.type,
+                                two_object: animatedObject.two_object,
+                                row: dst.row,
+                                col: dst.col,
+                                rotation_vector: animatedObject.rotation_vector
+                            };
+
+                            mapObjects[r][c].facility = {
+                                type: MAP_CELL.EMPTY,
+                                two_object: -1
+                            };
+                        }
+                    }
+
+                    gridMap.remove(animatedObject.two_object);
+                    getRendererObject(dst.row, dst.col).add(animatedObject.two_object);
+
+                    // TODO inform the event handler that the animation is done
+                }
+            }
+        }
+    };
+
+    // Remove hovering object or deselect the selected object
+    let handleEscape = function () {
+        removeHoveringObject();
+        selectedObject = -1;
+    };
+
+    let handleSimulationStart = function () {
+        runningMode = RUNNING_MODE.SIMULATE;
+        simulationPaused = false;
+    };
+
+    let handleSimulationPause = function () {
+        simulationPaused = true;
+    };
+
+    let handleSimulationResume = function () {
+        simulationPaused = false;
+    };
+
+    let handleSimulationEnd = function () {
+        runningMode = RUNNING_MODE.DESIGN;
+    };
+
     // Draws the grid
     let drawGrid = function () {
         resetScene();
@@ -266,8 +497,14 @@ let gfx = function (logicEventHandler) {
             for(let r = 0; r < mapHeight; r++) {
                 gridMap.add(createCell(r, c));
                 mapObjects[r][c] = {
-                    type: MAP_CELL.EMPTY,
-                    two_object: -1
+                    facility: {
+                        type: MAP_CELL.EMPTY,
+                        two_object: -1
+                    },
+                    robot: {
+                        type: MAP_CELL.EMPTY,
+                        two_object: -1
+                    }
                 };
             }
         }
@@ -291,13 +528,11 @@ let gfx = function (logicEventHandler) {
                     row: cell.row,
                     col: cell.col
                 });
-
-                console.log('Clicking on Cell = {', cell.row, ', ',cell.col,'}');
             });
     };
 
     // Translates the scene a tiny amount according to the pressed keys (should only be called in update function)
-    let handleKeyboardDragEvent = function () {
+    let handleKeyboardDragEvent = function (timeDelta) {
         let verticalDir = 0;
         let horizontalDir = 0;
         if(goingLeft)
@@ -310,7 +545,7 @@ let gfx = function (logicEventHandler) {
         else if(goingDown)
             verticalDir = -1;
 
-        translateScene(KEYBOARD_DRAG_SPEED * horizontalDir, KEYBOARD_DRAG_SPEED * verticalDir);
+        translateScene(timeDelta * KEYBOARD_DRAG_SPEED * horizontalDir, timeDelta * KEYBOARD_DRAG_SPEED * verticalDir);
     };
 
     // Sends to the mainVM event to delete the selected object
@@ -324,9 +559,50 @@ let gfx = function (logicEventHandler) {
         }
     };
 
+    let handleDesignModeMouseDownEvent = function (e) {
+        dragging = true;
+        startDragX = e.clientX - canvas.offset().left;
+        startDragY = e.clientY - canvas.offset().top;
+        let cell = getMouseCell(e.clientX, e.clientY);
+
+        if(cell.inBounds && !hovering) {
+            let obj, cellType;
+            if (mapObjects[cell.row][cell.col].facility.type !== MAP_CELL.EMPTY) {
+                obj = mapObjects[cell.row][cell.col].facility;
+                cellType = mapObjects[cell.row][cell.col].facility.type;
+            }
+
+            else if (mapObjects[cell.row][cell.col].robot.type !== MAP_CELL.EMPTY) {
+                obj = mapObjects[cell.row][cell.col].robot;
+                cellType = mapObjects[cell.row][cell.col].robot.type;
+            }
+
+            if (cellType != MAP_CELL.EMPTY) {
+                draggingObject = true;
+                draggedObject = obj;
+                draggedObject.draggingRow = cell.row;
+                draggedObject.draggingCol = cell.col;
+                draggedObject.row = cell.row;
+                draggedObject.col = cell.col;
+            } else {
+                draggingObject = false;
+                draggedObject = -1;
+            }
+        }
+    };
+
+    let handleSimulationModeMouseDownEvent = function (e) {
+        dragging = true;
+        draggingObject = false;
+        draggedObject = -1;
+        startDragX = e.clientX - canvas.offset().left;
+        startDragY = e.clientY - canvas.offset().top;
+    };
+
     // Does the updates required at every time step
     two.bind('update', function () {
-        handleKeyboardDragEvent();
+        handleKeyboardDragEvent(two.timeDelta);
+        handleObjectsAnimation(two.timeDelta);
     });
 
     // Handles zooming
@@ -337,26 +613,10 @@ let gfx = function (logicEventHandler) {
 
     // Handles initial Dragging click
     canvas.bind('mousedown', function (e) {
-        dragging = true;
-        startDragX = e.clientX - canvas.offset().left;
-        startDragY = e.clientY - canvas.offset().top;
-        let cell = getMouseCell(e.clientX, e.clientY);
-
-        if(cell.inBounds && !hovering) {
-            let cellType = mapObjects[cell.row][cell.col].type;
-
-            if (cellType != MAP_CELL.EMPTY) {
-                draggingObject = true;
-                draggedObject = mapObjects[cell.row][cell.col];
-                draggedObject.draggingRow = cell.row;
-                draggedObject.draggingCol = cell.col;
-                draggedObject.row = cell.row;
-                draggedObject.col = cell.col;
-            } else {
-                draggingObject = false;
-                draggedObject = -1;
-            }
-        }
+        if (runningMode == RUNNING_MODE.DESIGN)
+            handleDesignModeMouseDownEvent(e);
+        else
+            handleSimulationModeMouseDownEvent(e);
     });
 
     // Handles intermediate Dragging move
@@ -400,6 +660,32 @@ let gfx = function (logicEventHandler) {
 
         startDragX = mouseX - canvas.offset().left;
         startDragY = mouseY - canvas.offset().top;
+    });
+
+    let x = 0;
+
+    canvas.bind('contextmenu', function () {
+        if (x%9 == 0) {
+            handleSimulationStart();
+            animateObject(0, 0, 0, 0, 90, 0.1, 0.5);
+        } else if (x%9 == 1) {
+            animateObject(0, 0, 0, 5, 0, 0.1, 0.1);
+        } else if (x%9 == 2) {
+            animateObject(0, 5, 0, 5, -90, 0.1, 0.5);
+        } else if (x%9 == 3) {
+            animateObject(0, 5, 5, 5, 0, 0.1, 0.1);
+        } else if (x%9 == 4) {
+            animateObject(5, 5, 5, 5, -90, 0.1, 0.5);
+        } else if (x%9 == 5) {
+            animateObject(5, 5, 5, 0, 0, 0.1, 0.1);
+        } else if (x%9 == 6) {
+            animateObject(5, 0, 5, 0, -90, 0.1, 0.5);
+        } else if (x%9 == 7) {
+            animateObject(5, 0, 0, 0, 0, 0.1, 0.1);
+        } else if (x%9 == 8) {
+            animateObject(0, 0, 0, 0, -180, 0.1, 0.5);
+        }
+       x++;
     });
 
     // Handles final dragging move and mouse clicks
@@ -513,6 +799,21 @@ let gfx = function (logicEventHandler) {
                 break;
             case GFX_EVENT_TYPE.ESC:
                 handleEscape();
+                break;
+            case GFX_EVENT_TYPE.SIMULATION_START:
+                handleSimulationStart();
+                break;
+            case GFX_EVENT_TYPE.SIMULATION_PAUSE:
+                handleSimulationPause();
+                break;
+            case GFX_EVENT_TYPE.SIMULATION_RESUME:
+                handleSimulationResume();
+                break;
+            case GFX_EVENT_TYPE.SIMULATION_END:
+                handleSimulationEnd();
+                break;
+            case GFX_EVENT_TYPE.ANIMATE_OBJECT:
+                animateObject(event.src_row, event.src_col, event.dst_row, event.dst_col, event.animation_speed);
                 break;
         }
     };
