@@ -7,6 +7,8 @@ let State = function () {
 
     self.map = new Map();
     self.items = [];
+    self.orders = [];
+    self.stock = {};
 
     self.getItem = function (id) {
         for (let i = 0; i < self.items.length; ++i) {
@@ -30,6 +32,13 @@ let State = function () {
         }
 
         return false;
+    };
+
+    self.load = function (newState) {
+        self.items = Object.assign({}, newState.items);
+        self.orders = Object.assign({}, newState.orders);
+        self.stock = Object.assign({}, newState.stock);
+        self.map.setMap(newState.map.grid);
     };
 };
 

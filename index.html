@@ -230,10 +230,14 @@
                 <div class="left-menu-details-order"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.ORDER}">
                     <div class="form-group">
-                        <label for="order_name">Order Name</label>
-                        <input type="text" class="form-control bg-dark text-light" id="order_name"
-                               name="order_name" placeholder="Order Name"
-                               data-bind="textInput: leftMenuVM.orderVM.name">
+                        <label>Order ID</label>
+                        <input type="text" class="form-control bg-dark text-light"
+                               placeholder="Order ID" data-bind="textInput: leftMenuVM.orderVM.id">
+                    </div>
+                    <div class="form-group">
+                        <label>Gate ID</label>
+                        <input type="number" class="form-control bg-dark text-light"
+                               placeholder="Gate ID (Blank for automatic)" data-bind="textInput: leftMenuVM.orderVM.gateID">
                     </div>
                     <hr class="orders-separator" data-bind="css: {hidden: leftMenuVM.orderVM.items().length === 0}">
                     <div class="order-items-container"

@@ -3,13 +3,13 @@ let fs = require('fs');
 let ko = require('knockout');
 const {dialog} = require('electron').remote;
 
-let mapViewModc = function (shouter, state, gfxEventHandler) {
-    let scf = this;
+let mapViewModel = function (shouter, state, gfxEventHandler) {
+    let self = this;
 
-    scf.mapWidth = ko.observable(MAP_INIT_WIDTH);
-    scf.mapHeight = ko.observable(MAP_INIT_HEIGHT);
+    self.mapWidth = ko.observable(MAP_INIT_WIDTH);
+    self.mapHeight = ko.observable(MAP_INIT_HEIGHT);
 
-    scf.saveMap = function () {
+    self.saveMap = function () {
         console.log("Save state");
 
         let path = dialog.showSaveDialog({
@@ -22,30 +22,29 @@ let mapViewModc = function (shouter, state, gfxEventHandler) {
         });
     };
 
-    scf.loadMap = function () {
+    self.loadMap = function () {
         console.log("Load state");
 
         let path = dialog.showOpenDialog()[0];
 
         let newState = JSON.parse(fs.readFileSync(path, 'utf-8'));
 
-        state.items = Object.assign({}, newState.items);
-        state.map.setMap(newState.map.grid);
+        state.load(newState);
 
-        scf.informGFX();
+        self.informGFX();
     };
 
-    scf.applyMapSize = function () {
-        if (scf.mapHeight() > 0 && scf.mapWidth() > 0) {
+    self.applyMapSize = function () {
+        if (self.mapHeight() > 0 && self.mapWidth() > 0) {
             console.log("Apply map size");
 
-            state.map.changeMapSize(scf.mapHeight(), scf.mapWidth(), true);
+            state.map.changeMapSize(self.mapHeight(), self.mapWidth(), true);
 
-            scf.informGFX();
+            self.informGFX();
         }
     };
 
-    scf.informGFX = function() {
+    self.informGFX = function() {
         // Inform GFX that the map size changed
         gfxEventHandler({
             type: GFX_EVENT_TYPE.INIT,
@@ -114,11 +113,11 @@ let mapViewModc = function (shouter, state, gfxEventHandler) {
 
     // Events
     shouter.subscribe(function (map) {
-        scf.mapHeight(map.length);
-        scf.mapWidth(map[0].length);
+        self.mapHeight(map.length);
+        self.mapWidth(map[0].length);
 
-        scf.informGFX();
-    }, scf, SHOUT_MAP_TEMP_APPLIED);
+        self.informGFX();
+    }, self, SHOUT_MAP_TEMP_APPLIED);
 };
 
-module.exports = mapViewModc;
+module.exports = mapViewModel;
