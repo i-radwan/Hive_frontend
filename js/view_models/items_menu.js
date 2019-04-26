@@ -80,6 +80,18 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
 
         return true;
     };
+
+    let clear = function() {
+        self.searchValue("");
+        self.newItemID(state.nextIDs.item);
+        self.newItemWeight("");
+        self.items(ko.mapping.fromJS(state.items)()); // ToDo: check if it works
+    };
+
+    // Events
+    shouter.subscribe(function () {
+        clear();
+    }, self, SHOUT_STATE_UPDATED);
 };
 
 module.exports = itemsViewModel;

@@ -230,14 +230,29 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.unselect = function () {
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let unselect = function () {
         self.activeRobotRow = self.activeRobotCol = -1;
         self.applyVisible(false);
     };
 
-    self.handleEsc = function () {
-        self.unselect();
+    let clear = function () {
+        self.id(state.nextIDs.robot);
+        self.color("#FF0000");
+        self.loadCap(100);
+        self.batteryCap(10000);
+        self.ip("");
     };
+
+    // Events
+    shouter.subscribe(function () {
+        unselect();
+        clear();
+    }, self, SHOUT_STATE_UPDATED);
 };
 
 module.exports = robotViewModel;

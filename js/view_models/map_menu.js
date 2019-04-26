@@ -30,8 +30,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
         let newState = JSON.parse(fs.readFileSync(path, 'utf-8'));
 
         state.load(newState);
-
-        self.informGFX();
+        shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
     };
 
     self.applyMapSize = function () {
@@ -40,7 +39,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
 
             state.map.changeMapSize(self.mapHeight(), self.mapWidth(), true);
 
-            self.informGFX();
+            shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
         }
     };
 
@@ -112,12 +111,12 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     // Events
-    shouter.subscribe(function (map) {
-        self.mapHeight(map.length);
-        self.mapWidth(map[0].length);
+    shouter.subscribe(function () {
+        self.mapHeight(state.map.length);
+        self.mapWidth(state.map[0].length);
 
         self.informGFX();
-    }, self, SHOUT_MAP_TEMP_APPLIED);
+    }, self, SHOUT_STATE_UPDATED);
 };
 
 module.exports = mapViewModel;

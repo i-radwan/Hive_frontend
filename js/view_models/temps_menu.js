@@ -103,7 +103,7 @@ let tempsViewModel = function (shouter, state) {
         state.items = self.temps[idx()].temp.items;
         state.map.setMap(self.temps[idx()].temp.map);
 
-        shouter.notifySubscribers(self.temps[idx()].temp.map, SHOUT_MAP_TEMP_APPLIED);
+        shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
     };
 };
 

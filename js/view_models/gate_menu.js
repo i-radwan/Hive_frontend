@@ -174,14 +174,25 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.unselect = function () {
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let unselect = function () {
         self.activeGateRow = self.activeGateCol = -1;
         self.applyVisible(false);
     };
 
-    self.handleEsc = function () {
-        self.unselect();
+    let clear = function() {
+        self.id(state.nextIDs.gate);
     };
+
+    // Events
+    shouter.subscribe(function () {
+        unselect();
+        clear();
+    }, self, SHOUT_STATE_UPDATED);
 };
 
 module.exports = gateViewModel;

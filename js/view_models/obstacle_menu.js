@@ -173,14 +173,25 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.unselect = function () {
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let unselect = function () {
         self.activeObstacleRow = self.activeObstacleCol = -1;
         self.applyVisible(false);
     };
 
-    self.handleEsc = function () {
-        self.unselect();
+    let clear = function() {
+        self.id(state.nextIDs.obstacle);
     };
+
+    // Events
+    shouter.subscribe(function () {
+        unselect();
+        clear();
+    }, self, SHOUT_STATE_UPDATED);
 };
 
 module.exports = obstacleViewModel;

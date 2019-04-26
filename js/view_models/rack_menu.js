@@ -200,7 +200,10 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         if (load > parseInt(self.capacity())) {
-            shouter.notifySubscribers({text: "Rack load is " + load + " which exceeds the capacity!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({
+                text: "Rack load is " + load + " which exceeds the capacity!",
+                type: MSG_ERROR
+            }, SHOUT_MSG);
 
             return false;
         }
@@ -274,6 +277,13 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
+    /**
+     * Fill the rack during simulation upon server request.
+     *
+     * @param rack_id
+     * @param item_id
+     * @param item_quantity
+     */
     self.fillRack = function (rack_id, item_id, item_quantity) {
         for (let i = 0; i < state.map.height; ++i) {
             for (let j = 0; j < state.map.width; ++j) {
@@ -293,14 +303,29 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         state.adjustItemQuantity(item_id, item_quantity);
     };
 
-    self.unselect = function() {
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let unselect = function () {
         self.activeRackRow = self.activeRackCol = -1;
         self.applyVisible(false);
     };
 
-    self.handleEsc = function () {
-        self.unselect();
+    let clear = function () {
+        self.id(state.nextIDs.rack);
+        self.capacity(RACK_CAP);
+        self.items.removeAll();
+        self.itemID("");
+        self.itemQuantity("");
     };
+
+    // Events
+    shouter.subscribe(function () {
+        unselect();
+        clear();
+    }, self, SHOUT_STATE_UPDATED);
 };
 
 module.exports = rackViewModel;

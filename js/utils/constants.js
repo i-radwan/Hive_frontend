@@ -37,7 +37,7 @@ MAP_CELL = {
 };
 
 // Shouting codes
-SHOUT_MAP_TEMP_APPLIED = 0;
+SHOUT_STATE_UPDATED = 0;
 SHOUT_MSG = 1;
 
 // Msgs configs

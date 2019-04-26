@@ -57,7 +57,10 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
                 dst_col: dstCol
             });
         } else {
-            shouter.notifySubscribers({text: "(" + dstRow + ", " + dstCol + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({
+                text: "(" + dstRow + ", " + dstCol + ") is occupied!",
+                type: MSG_ERROR
+            }, SHOUT_MSG);
 
             gfxEventHandler({
                 type: GFX_EVENT_TYPE.OBJECT_DRAG,
@@ -170,14 +173,25 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.unselect = function () {
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let unselect = function () {
         self.activeStationRow = self.activeStationCol = -1;
         self.applyVisible(false);
     };
 
-    self.handleEsc = function () {
-        self.unselect();
+    let clear = function() {
+        self.id(state.nextIDs.station);
     };
+
+    // Events
+    shouter.subscribe(function () {
+        unselect();
+        clear();
+    }, self, SHOUT_STATE_UPDATED);
 };
 
 module.exports = stationViewModel;
