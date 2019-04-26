@@ -30,6 +30,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             };
 
             self.id(parseInt(self.id()) + 1);
+            state.nextIDs.rack = Math.max(state.nextIDs.rack, parseInt(self.id()));
 
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
@@ -97,7 +98,8 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
                 col: col
             });
 
-            self.unselect();
+            unselect();
+            clear();
 
             return true;
         }
@@ -149,9 +151,12 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             items: ko.mapping.toJS(self.items())
         };
 
+        state.nextIDs.rack = Math.max(state.nextIDs.rack, parseInt(self.id()) + 1);
+
         shouter.notifySubscribers({text: "Rack updated successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-        self.unselect();
+        unselect();
+        clear();
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC

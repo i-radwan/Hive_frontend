@@ -22,6 +22,7 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
             };
 
             self.id(parseInt(self.id()) + 1);
+            state.nextIDs.gate = Math.max(state.nextIDs.gate, parseInt(self.id()));
 
             shouter.notifySubscribers({text: "Gate placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
@@ -85,7 +86,8 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
                 col: col
             });
 
-            self.unselect();
+            unselect();
+            clear();
 
             return true;
         }
@@ -132,9 +134,12 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
             id: parseInt(self.id())
         };
 
+        state.nextIDs.gate = Math.max(state.nextIDs.gate, parseInt(self.id()) + 1);
+
         shouter.notifySubscribers({text: "Gate updated successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-        self.unselect();
+        unselect();
+        clear();
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC

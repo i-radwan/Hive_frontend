@@ -22,6 +22,7 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
             };
 
             self.id(parseInt(self.id()) + 1);
+            state.nextIDs.obstacle = Math.max(state.nextIDs.obstacle, parseInt(self.id()));
 
             shouter.notifySubscribers({text: "Obstacle placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
@@ -84,7 +85,8 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
                 col: col
             });
 
-            self.unselect();
+            unselect();
+            clear();
 
             return true;
         }
@@ -131,9 +133,12 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
             id: parseInt(self.id())
         };
 
+        state.nextIDs.obstacle = Math.max(state.nextIDs.obstacle, parseInt(self.id()) + 1);
+
         shouter.notifySubscribers({text: "Obstacle updated successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-        self.unselect();
+        unselect();
+        clear();
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC

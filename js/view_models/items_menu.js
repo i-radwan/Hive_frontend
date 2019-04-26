@@ -36,13 +36,15 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
 
         // Auto increment
         self.newItemID(parseInt(self.newItemID()) + 1);
+        state.nextIDs.item = Math.max(state.nextIDs.item, parseInt(self.newItemID()));
 
         // Subscribe to any changes
         id.subscribe(function (newID) {
             state.items = ko.mapping.toJS(self.items());
+            state.nextIDs.item = Math.max(state.nextIDs.item, parseInt(newID) + 1);
         });
 
-        weight.subscribe(function (newID) {
+        weight.subscribe(function (newWeight) {
             state.items = ko.mapping.toJS(self.items());
         });
 

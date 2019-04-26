@@ -29,6 +29,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             };
 
             self.id(parseInt(self.id()) + 1);
+            state.nextIDs.robot = Math.max(state.nextIDs.robot, parseInt(self.id()));
 
             shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
@@ -101,7 +102,8 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
                 col: col
             });
 
-            self.unselect();
+            unselect();
+            clear();
 
             return true;
         }
@@ -156,9 +158,12 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             ip: self.ip()
         };
 
+        state.nextIDs.robot = Math.max(state.nextIDs.robot, parseInt(self.id()) + 1);
+
         shouter.notifySubscribers({text: "Robot updated successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-        self.unselect();
+        unselect();
+        clear();
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC
