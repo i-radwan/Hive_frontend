@@ -82,7 +82,8 @@ SERVER_EVENT_TYPE = {
     MSG: 3,
     INIT: 4,
     ORDER_NEW: 5,
-    ACK: 6
+    ACK: 6,
+    FILL_RACK: 7
 };
 
 // GFX

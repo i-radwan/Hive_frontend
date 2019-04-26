@@ -44,6 +44,9 @@ $(document).ready(() => {
                     dst_col: msg.dst_col
                 });
                 break;
+            case SERVER_EVENT_TYPE.FILL_RACK:
+                mainVM.leftMenuVM.rackVM.fillRack(msg.rack_id, msg.item_id, msg.item_quantity);
+                break;
             case SERVER_EVENT_TYPE.LOG:
                 mainVM.rightMenuVM.addLog(msg.level, msg.object, msg.text);
                 break;

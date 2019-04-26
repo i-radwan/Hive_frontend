@@ -274,6 +274,25 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
+    self.fillRack = function (rack_id, item_id, item_quantity) {
+        for (let i = 0; i < state.map.height; ++i) {
+            for (let j = 0; j < state.map.width; ++j) {
+                let c = state.map.grid[i][j].facility;
+
+                if (c !== undefined && c.type === MAP_CELL.RACK && c.id === rack_id) {
+                    for (let k = 0; k < c.items; ++k) {
+                        if (c.items[k].id === item_id) {
+                            c.items[k].quantity += item_quantity;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Inform the state
+        state.adjustItemQuantity(item_id, item_quantity);
+    };
+
     self.unselect = function() {
         self.activeRackRow = self.activeRackCol = -1;
         self.applyVisible(false);
