@@ -213,6 +213,9 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
+        if (state.map.grid[dstRow][dstCol].facility === undefined && state.map.grid[dstRow][dstCol].robot === undefined)
+            return;
+
         if (state.map.grid[srcRow][srcCol].robot !== undefined) {
             self.robotVM.drag(srcRow, srcCol, dstRow, dstCol);
         } else if (state.map.grid[srcRow][srcCol].facility !== undefined) {
@@ -221,7 +224,7 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
                     self.gateVM.drag(srcRow, srcCol, dstRow, dstCol);
                     break;
                 case MAP_CELL.RACK:
-                    self.rackVM.dragRack(srcRow, srcCol, dstRow, dstCol);
+                    self.rackVM.drag(srcRow, srcCol, dstRow, dstCol);
                     break;
                 case MAP_CELL.STATION:
                     self.stationVM.drag(srcRow, srcCol, dstRow, dstCol);

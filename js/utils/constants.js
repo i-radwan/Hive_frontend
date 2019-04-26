@@ -81,7 +81,8 @@ SERVER_EVENT_TYPE = {
     STATS: 2,
     MSG: 3,
     INIT: 4,
-    ORDER_NEW: 5
+    ORDER_NEW: 5,
+    ACK: 6
 };
 
 // GFX

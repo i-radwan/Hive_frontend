@@ -52,7 +52,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         // state.map.grid[srcRow][srcCol].facility = undefined;
     };
 
-    self.dragRack = function (srcRow, srcCol, dstRow, dstCol) {
+    self.drag = function (srcRow, srcCol, dstRow, dstCol) {
         if (state.map.grid[dstRow][dstCol].facility === undefined) {
             state.map.grid[dstRow][dstCol].facility = Object.assign({}, state.map.grid[srcRow][srcCol].facility);
             state.map.grid[srcRow][srcCol] = undefined;
