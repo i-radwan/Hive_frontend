@@ -265,7 +265,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         // Check if item exists
-        if (state.getItem(id) === -1) {
+        if (state.getItem(id) === undefined) {
             shouter.notifySubscribers({text: "Items IDs doesn't exist!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;

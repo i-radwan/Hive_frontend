@@ -82,7 +82,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     });
 
-    let prepare = function() {
+    let prepare = function () {
         // Fill the stock before simulation
         for (let i = 0; i < state.map.height; ++i) {
             for (let j = 0; j < state.map.width; ++j) {
@@ -92,7 +92,11 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                     for (let i = 0; i < c.items.length; ++i) {
                         let it = c.items[i];
 
-                        state.stock[it.id] += it.quantity;
+                        if (state.stock[it.id] === undefined) {
+                            state.stock[it.id] = it.quantity;
+                        } else {
+                            state.stock[it.id] += it.quantity;
+                        }
                     }
                 }
             }
@@ -100,6 +104,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         // ToDo: take copy of the state
         self.preSimState = Object.assign({}, state);
+
+        return true;
     };
 
     let sendState = function () {
@@ -112,7 +118,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         // });
     };
 
-    let informGFX = function() {
+    let informGFX = function () {
         // Inform GFX that the map changed
         gfxEventHandler({
             type: GFX_EVENT_TYPE.INIT,

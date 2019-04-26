@@ -209,7 +209,7 @@
                                data-bind="textInput: leftMenuVM.stationVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="left-menu-details-bottom-actions"
-                         data-bind="css: {hidden: !leftMenuVM.gateVM.applyVisible()}">
+                         data-bind="css: {hidden: !leftMenuVM.stationVM.applyVisible()}">
                         <i class="fas fa-check"
                            data-bind="click: function() {if(leftMenuVM.stationVM.update()) leftMenuVM.activeMenu(LEFT_MENU.STATION)}"></i>
                     </div>
@@ -222,7 +222,7 @@
                                data-bind="textInput: leftMenuVM.obstacleVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="left-menu-details-bottom-actions"
-                         data-bind="css: {hidden: !leftMenuVM.gateVM.applyVisible()}">
+                         data-bind="css: {hidden: !leftMenuVM.obstacleVM.applyVisible()}">
                         <i class="fas fa-check"
                            data-bind="click: function() {if(leftMenuVM.obstacleVM.update()) leftMenuVM.activeMenu(LEFT_MENU.OBSTACLE)}"></i>
                     </div>
