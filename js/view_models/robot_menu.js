@@ -61,7 +61,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[dstRow][dstCol].robot === undefined) {
+        if (state.map.grid[dstRow][dstCol].robot === undefined && state.map.grid[dstRow][dstCol].facility === undefined) {
             state.map.grid[dstRow][dstCol].robot = Object.assign({}, state.map.grid[srcRow][srcCol].robot);
             state.map.grid[srcRow][srcCol].robot = undefined;
 
@@ -144,9 +144,8 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.update = function () {
-        if (!self.check()) { // ToDo: this will cause an issue if the ID didn't change
+        if (!self.check()) // ToDo: this will cause an issue if the ID didn't change
             return false;
-        }
 
         state.map.grid[self.activeRobotRow][self.activeRobotCol].robot = {
             type: MAP_CELL.ROBOT,

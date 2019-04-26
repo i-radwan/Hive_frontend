@@ -4,14 +4,24 @@ let ko = require('knockout');
 let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
+    self.id = ko.observable(1);
+
+    self.applyVisible = ko.observable(false);
     self.activeObstacleRow = -1;
     self.activeObstacleCol = -1;
 
     self.add = function (row, col) {
         if (state.map.grid[row][col].facility === undefined && self.activeObstacleRow === -1 && self.activeObstacleCol === -1) {
+            if (!self.check()) {
+                return;
+            }
+
             state.map.grid[row][col].facility = {
+                id: parseInt(self.id()),
                 type: MAP_CELL.OBSTACLE
             };
+
+            self.id(parseInt(self.id()) + 1);
 
             shouter.notifySubscribers({text: "Obstacle placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
@@ -34,7 +44,7 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[dstRow][dstCol].facility === undefined) {
+        if (state.map.grid[dstRow][dstCol].robot === undefined && state.map.grid[dstRow][dstCol].facility === undefined) {
             state.map.grid[dstRow][dstCol] = Object.assign({}, state.map.grid[srcRow][srcCol]);
             state.map.grid[srcRow][srcCol] = undefined;
 
@@ -83,6 +93,13 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.fill = function (row, col) {
+        let facility = state.map.grid[row][col].facility;
+
+        if (facility === undefined || facility.type !== MAP_CELL.OBSTACLE)
+            return;
+
+        self.id(facility.id);
+
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
             object: MAP_CELL.OBSTACLE,
@@ -92,6 +109,11 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.edit = function (row, col) {
+        self.fill(row, col);
+        self.applyVisible(true);
+        self.activeObstacleRow = row;
+        self.activeObstacleCol = col;
+
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
             object: MAP_CELL.OBSTACLE,
@@ -101,14 +123,59 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.update = function () {
+        if (!self.check())
+            return false;
+
+        state.map.grid[self.activeObstacleRow][self.activeObstacleCol].facility = {
+            type: MAP_CELL.OBSTACLE,
+            id: parseInt(self.id())
+        };
+
+        shouter.notifySubscribers({text: "Obstacle updated successfully!", type: MSG_INFO}, SHOUT_MSG);
+
+        self.unselect();
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.ESC
+        });
+
         return true;
     };
 
     self.check = function () {
+        if (self.id().length === 0) {
+            shouter.notifySubscribers({text: "Obstacle ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // Duplicate ID check
+        for (let i = 0; i < state.map.height; ++i) {
+            for (let j = 0; j < state.map.width; ++j) {
+                let c = state.map.grid[i][j].facility;
+
+                if (c !== undefined && c.type === MAP_CELL.OBSTACLE && c.id === parseInt(self.id()) &&
+                    !(i === self.activeObstacleRow && j === self.activeObstacleCol)) {
+                    shouter.notifySubscribers({text: "Obstacle ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+                    return false;
+                }
+            }
+        }
+
+        // -ve values
+        if (parseInt(self.id()) < 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        return true;
     };
 
     self.unselect = function () {
         self.activeObstacleRow = self.activeObstacleCol = -1;
+        self.applyVisible(false);
     };
 
     self.handleEsc = function () {

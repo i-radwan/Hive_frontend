@@ -4,14 +4,24 @@ let ko = require('knockout');
 let stationViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
+    self.id = ko.observable(1);
+
+    self.applyVisible = ko.observable(false);
     self.activeStationRow = -1;
     self.activeStationCol = -1;
 
     self.add = function (row, col) {
         if (state.map.grid[row][col].facility === undefined && self.activeStationRow === -1 && self.activeStationCol === -1) {
+            if (!self.check()) {
+                return;
+            }
+
             state.map.grid[row][col].facility = {
+                id: parseInt(self.id()),
                 type: MAP_CELL.STATION
             };
+
+            self.id(parseInt(self.id()) + 1);
 
             shouter.notifySubscribers({text: "Station placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
@@ -34,7 +44,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[dstRow][dstCol].facility === undefined) {
+        if (state.map.grid[dstRow][dstCol].robot === undefined && state.map.grid[dstRow][dstCol].facility === undefined) {
             state.map.grid[dstRow][dstCol].facility = Object.assign({}, state.map.grid[srcRow][srcCol].facility);
             state.map.grid[srcRow][srcCol].facility = undefined;
 
@@ -80,6 +90,13 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.fill = function (row, col) {
+        let facility = state.map.grid[row][col].facility;
+
+        if (facility === undefined || facility.type !== MAP_CELL.STATION)
+            return;
+
+        self.id(facility.id);
+
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
             object: MAP_CELL.STATION,
@@ -89,6 +106,11 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.edit = function (row, col) {
+        self.fill(row, col);
+        self.applyVisible(true);
+        self.activeStationRow = row;
+        self.activeStationCol = col;
+
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
             object: MAP_CELL.STATION,
@@ -98,14 +120,59 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.update = function () {
+        if (!self.check())
+            return false;
+
+        state.map.grid[self.activeStationRow][self.activeStationCol].facility = {
+            type: MAP_CELL.STATION,
+            id: parseInt(self.id())
+        };
+
+        shouter.notifySubscribers({text: "Station updated successfully!", type: MSG_INFO}, SHOUT_MSG);
+
+        self.unselect();
+
+        gfxEventHandler({
+            type: GFX_EVENT_TYPE.ESC
+        });
+
         return true;
     };
 
     self.check = function () {
+        if (self.id().length === 0) {
+            shouter.notifySubscribers({text: "Station ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // Duplicate ID check
+        for (let i = 0; i < state.map.height; ++i) {
+            for (let j = 0; j < state.map.width; ++j) {
+                let c = state.map.grid[i][j].facility;
+
+                if (c !== undefined && c.type === MAP_CELL.STATION && c.id === parseInt(self.id()) &&
+                    !(i === self.activeStationRow && j === self.activeStationCol)) {
+                    shouter.notifySubscribers({text: "Station ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+                    return false;
+                }
+            }
+        }
+
+        // -ve values
+        if (parseInt(self.id()) < 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        return true;
     };
 
     self.unselect = function () {
         self.activeStationRow = self.activeStationCol = -1;
+        self.applyVisible(false);
     };
 
     self.handleEsc = function () {

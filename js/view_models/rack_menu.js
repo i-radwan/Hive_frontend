@@ -7,6 +7,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
     self.capacity = ko.observable(RACK_CAP);
 
+    self.id = ko.observable(1);
     self.items = ko.observableArray();
     self.itemID = ko.observable();
     self.itemQuantity = ko.observable();
@@ -22,10 +23,13 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             }
 
             state.map.grid[row][col].facility = {
+                id: parseInt(self.id()),
                 type: MAP_CELL.RACK,
                 capacity: parseInt(self.capacity()),
                 items: ko.mapping.toJS(self.items())
             };
+
+            self.id(parseInt(self.id()) + 1);
 
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
@@ -53,7 +57,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[dstRow][dstCol].facility === undefined) {
+        if (state.map.grid[dstRow][dstCol].robot === undefined && state.map.grid[dstRow][dstCol].facility === undefined) {
             state.map.grid[dstRow][dstCol].facility = Object.assign({}, state.map.grid[srcRow][srcCol].facility);
             state.map.grid[srcRow][srcCol] = undefined;
 
@@ -102,13 +106,14 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.fill = function (row, col) {
-        let rack = state.map.grid[row][col].facility;
+        let facility = state.map.grid[row][col].facility;
 
-        if (rack.type !== MAP_CELL.RACK)
+        if (facility === undefined || facility.type !== MAP_CELL.RACK)
             return;
 
-        self.capacity(rack.capacity);
-        self.items(ko.mapping.fromJS(rack.items)());
+        self.id(facility.id);
+        self.capacity(facility.capacity);
+        self.items(ko.mapping.fromJS(facility.items)());
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
@@ -139,6 +144,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
         state.map.grid[self.activeRackRow][self.activeRackCol].facility = {
             type: MAP_CELL.RACK,
+            id: parseInt(self.id()),
             capacity: parseInt(self.capacity()),
             items: ko.mapping.toJS(self.items())
         };
@@ -155,12 +161,33 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.check = function () {
+        if (self.id().length === 0) {
+            shouter.notifySubscribers({text: "Rack ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         if (self.items().length === 0) {
             shouter.notifySubscribers({text: "Rack must contain items!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
+        // Duplicate ID check
+        for (let i = 0; i < state.map.height; ++i) {
+            for (let j = 0; j < state.map.width; ++j) {
+                let c = state.map.grid[i][j].facility;
+
+                if (c !== undefined && c.type === MAP_CELL.RACK && c.id === parseInt(self.id()) &&
+                    !(i === self.activeRackRow && j === self.activeRackCol)) {
+                    shouter.notifySubscribers({text: "Rack ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+                    return false;
+                }
+            }
+        }
+
+        // Rack load
         let load = 0;
 
         for (let i = 0; i < self.items().length; ++i) {
@@ -174,6 +201,13 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
         if (load > parseInt(self.capacity())) {
             shouter.notifySubscribers({text: "Rack load is " + load + " which exceeds the capacity!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // -ve values
+        if (parseInt(self.id()) < 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }

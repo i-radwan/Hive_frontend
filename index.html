@@ -68,8 +68,7 @@
             </div>
             <div class="col-md-9 left-menu-details">
                 <div class="left-menu-details-empty"
-                     data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.EMPTY && leftMenuVM.activeMenu() !== LEFT_MENU.GATE &&
-                     leftMenuVM.activeMenu() !== LEFT_MENU.STATION && leftMenuVM.activeMenu() !== LEFT_MENU.OBSTACLE}">
+                     data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.EMPTY}">
                     <p class="text-light text-muted text-center">No info!</p>
                 </div>
                 <div class="left-menu-details-temps"
@@ -99,7 +98,16 @@
                 </div>
                 <div class="left-menu-details-gate"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.GATE}">
-                    <p class="text-light text-muted text-center">No info!</p>
+                    <div class="form-group">
+                        <label>Gate ID</label>
+                        <input type="number" class="form-control bg-dark text-light" placeholder="Gate ID"
+                               data-bind="textInput: leftMenuVM.gateVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
+                    </div>
+                    <div class="left-menu-details-bottom-actions"
+                         data-bind="css: {hidden: !leftMenuVM.gateVM.applyVisible()}">
+                        <i class="fas fa-check"
+                           data-bind="click: function() {if(leftMenuVM.gateVM.update()) leftMenuVM.activeMenu(LEFT_MENU.EMPTY)}"></i>
+                    </div>
                 </div>
                 <div class="left-menu-details-robot"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.ROBOT}">
@@ -141,6 +149,11 @@
                 </div>
                 <div class="left-menu-details-rack"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.RACK}">
+                    <div class="form-group">
+                        <label>Rack ID</label>
+                        <input type="number" class="form-control bg-dark text-light" placeholder="Rack ID"
+                               data-bind="textInput: leftMenuVM.rackVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
+                    </div>
                     <div class="form-group">
                         <label>Capacity</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Capacity (Kg)"
@@ -190,11 +203,29 @@
                 </div>
                 <div class="left-menu-details-station"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.STATION}">
-                    <p class="text-light text-muted text-center">No info!</p>
+                    <div class="form-group">
+                        <label>Station ID</label>
+                        <input type="number" class="form-control bg-dark text-light" placeholder="Station ID"
+                               data-bind="textInput: leftMenuVM.stationVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
+                    </div>
+                    <div class="left-menu-details-bottom-actions"
+                         data-bind="css: {hidden: !leftMenuVM.gateVM.applyVisible()}">
+                        <i class="fas fa-check"
+                           data-bind="click: function() {if(leftMenuVM.stationVM.update()) leftMenuVM.activeMenu(LEFT_MENU.STATION)}"></i>
+                    </div>
                 </div>
                 <div class="left-menu-details-obstacle"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.OBSTACLE}">
-                    <p class="text-light text-muted text-center">No info!</p>
+                    <div class="form-group">
+                        <label>Obstacle ID</label>
+                        <input type="number" class="form-control bg-dark text-light" placeholder="Obstacle ID"
+                               data-bind="textInput: leftMenuVM.obstacleVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
+                    </div>
+                    <div class="left-menu-details-bottom-actions"
+                         data-bind="css: {hidden: !leftMenuVM.gateVM.applyVisible()}">
+                        <i class="fas fa-check"
+                           data-bind="click: function() {if(leftMenuVM.obstacleVM.update()) leftMenuVM.activeMenu(LEFT_MENU.OBSTACLE)}"></i>
+                    </div>
                 </div>
                 <div class="left-menu-details-order"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.ORDER}">
