@@ -169,7 +169,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             if (!self.checkItem(parseInt(item.id()), parseInt(item.quantity()), 1))
                 return false;
 
-            load += parseInt(item.quantity()) * state.getItemWeight(parseInt(item.id()));
+            load += parseInt(item.quantity()) * state.getItem(parseInt(item.id())).weight;
         }
 
         if (load > parseInt(self.capacity())) {
@@ -231,7 +231,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         // Check if item exists
-        if (state.getItemWeight(id) === -1) {
+        if (state.getItem(id) === -1) {
             shouter.notifySubscribers({text: "Items IDs doesn't exist!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;

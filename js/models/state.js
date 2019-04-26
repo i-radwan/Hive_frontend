@@ -8,20 +8,29 @@ let State = function () {
     self.map = new Map();
     self.items = [];
 
-    /**
-     * Returns the weight of an item given its iD.
-     *
-     * @param id     The required item ID.
-     * @return {*}   Item weight: if the item exists, -1 otherwise.
-     */
-    self.getItemWeight = function(id) {
+    self.getItem = function (id) {
         for (let i = 0; i < self.items.length; ++i) {
             if (parseInt(self.items[i].id) === parseInt(id))
-                return parseFloat(self.items[i].weight);
+                return {id: id, weight: parseFloat(self.items[i].weight)};
         }
 
-        return -1;
-    }
+        return undefined;
+    };
+
+    self.adjustItemQuantity = function (id, quantity) {
+        if (quantity <= 0)
+            return;
+
+        for (let i = 0; i < self.items.length; ++i) {
+            if (parseInt(self.items[i].id) === parseInt(id) && self.items[i].quantity + quantity >= 0) {
+                self.items[i].quantity += quantity;
+
+                return true;
+            }
+        }
+
+        return false;
+    };
 };
 
 module.exports = State;

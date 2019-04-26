@@ -13,6 +13,13 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
     self.addItem = function () {
         if (!self.itemID() || !self.itemQuantity()) return;
 
+        // Check if item exists
+        if (state.getItem(self.itemID()) === undefined) {
+            shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         console.log("Add item");
 
         self.items.push({

@@ -69,10 +69,11 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     let sendState = function () {
         console.log(JSON.stringify(state, null, 2));
 
-        commSender({
-            type: SERVER_EVENT_TYPE.INIT,
-            data: JSON.stringify(state, null, 2)
-        });
+        // TODO
+        // commSender({
+        //     type: SERVER_EVENT_TYPE.INIT,
+        //     data: JSON.stringify(state, null, 2)
+        // });
     };
 };
 
