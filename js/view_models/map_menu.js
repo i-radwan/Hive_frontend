@@ -30,6 +30,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
         let newState = JSON.parse(fs.readFileSync(path, 'utf-8'));
 
         state.load(newState);
+
         shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
     };
 
@@ -112,8 +113,11 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
 
     // Events
     shouter.subscribe(function () {
-        self.mapHeight(state.map.length);
-        self.mapWidth(state.map[0].length);
+        console.log(state);
+        console.log(state.map);
+
+        self.mapHeight(state.map.height);
+        self.mapWidth(state.map.width);
 
         self.informGFX();
     }, self, SHOUT_STATE_UPDATED);

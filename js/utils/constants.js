@@ -105,7 +105,7 @@ KEY_CODE = {
     ESC: 27
 };
 
-// GFX Events TODO: rename, use keyword first: OBJECT_*
+// GFX Events
 GFX_EVENT_TYPE = {
     INIT: 0,
     OBJECT_HOVER: 1,

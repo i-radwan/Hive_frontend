@@ -11,6 +11,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
     self.newItemWeight = ko.observable("");
 
     self.filteredItems = ko.computed(function () {
+        console.log(self.items());
         return self.items().filter(function (item) {
             return self.searchValue().length === 0 || parseInt(item.id()) === parseInt(self.searchValue());
         });
@@ -87,7 +88,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
         self.searchValue("");
         self.newItemID(state.nextIDs.item);
         self.newItemWeight("");
-        self.items(ko.mapping.fromJS(state.items)()); // ToDo: check if it works
+        self.items(ko.mapping.fromJS(state.items)());
     };
 
     // Events

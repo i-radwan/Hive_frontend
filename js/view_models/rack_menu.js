@@ -53,8 +53,8 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
     self.move = function (srcRow, srcCol, dstRow, dstCol) {
         // TODO: rack to be moved with the robot carrying it :'D
-        // state.map.grid[dstRow][dstCol].facility = state.map.grid[srcRow][srcCol].facility;
-        // state.map.grid[srcRow][srcCol].facility = undefined;
+        state.map.grid[dstRow][dstCol].facility = state.map.grid[srcRow][srcCol].facility;
+        state.map.grid[srcRow][srcCol].facility = undefined;
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {

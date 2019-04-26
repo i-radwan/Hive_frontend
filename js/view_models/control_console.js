@@ -16,7 +16,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             runningMode(RUNNING_MODE.DESIGN);
             self.playing(false);
 
-            // ToDo: set state = preSimState
             state.load(self.preSimState);
             shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
         } else {
@@ -34,7 +33,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         runningMode(RUNNING_MODE.DESIGN);
         self.playing(false);
 
-        // ToDo: set state = preSimState
         state.load(self.preSimState);
         shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
     };
@@ -102,7 +100,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             }
         }
 
-        // ToDo: take copy of the state
         self.preSimState = Object.assign({}, state);
 
         return true;
