@@ -144,7 +144,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.update = function () {
-        if (!self.check()) // ToDo: this will cause an issue if the ID didn't change
+        if (!self.check())
             return false;
 
         state.map.grid[self.activeRobotRow][self.activeRobotCol].robot = {
@@ -197,7 +197,8 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             for (let j = 0; j < state.map.width; ++j) {
                 let c = state.map.grid[i][j].robot;
 
-                if (c !== undefined && c.id === parseInt(self.id())) {
+                if (c !== undefined && c.id === parseInt(self.id()) &&
+                    !(i === self.activeGateRow && j === self.activeGateCol)) {
                     shouter.notifySubscribers({text: "Robot ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
 
                     return false;
