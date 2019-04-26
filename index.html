@@ -91,8 +91,8 @@
                                data-bind="textInput: leftMenuVM.mapVM.mapWidth, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="left-menu-details-map-actions">
-                        <i class="fas fa-save save" data-bind="click: leftMenuVM.mapVM.saveMap"></i>
-                        <i class="fas fa-download load" data-bind="click: leftMenuVM.mapVM.loadMap"></i>
+                        <i data-toggle="tooltip" title="Save" class="fas fa-upload save" data-bind="click: leftMenuVM.mapVM.saveMap"></i>
+                        <i data-toggle="tooltip" title="Load" class="fas fa-download load" data-bind="click: leftMenuVM.mapVM.loadMap"></i>
                         <i class="fas fa-check apply" data-bind="click: leftMenuVM.mapVM.applyMapSize"></i>
                     </div>
                 </div>

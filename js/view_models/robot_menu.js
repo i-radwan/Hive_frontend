@@ -203,7 +203,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
                 let c = state.map.grid[i][j].robot;
 
                 if (c !== undefined && c.id === parseInt(self.id()) &&
-                    !(i === self.activeGateRow && j === self.activeGateCol)) {
+                    !(i === self.activeRobotRow && j === self.activeRobotCol)) {
                     shouter.notifySubscribers({text: "Robot ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
 
                     return false;
