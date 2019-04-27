@@ -7,7 +7,6 @@ let State = function () {
 
     self.map = new Map();
     self.items = [];
-    self.orders = [];
     self.stock = {};
     self.nextIDs = { // Holds next IDs in the auto increment fashion
         gate: 1,
@@ -44,7 +43,6 @@ let State = function () {
 
     self.load = function (newState) {
         self.items = Object.assign([], newState.items);
-        self.orders = Object.assign([], newState.orders);
         self.stock = Object.assign({}, newState.stock);
         self.nextID = Object.assign({}, newState.nextID);
         self.map.setMap(newState.map.grid);

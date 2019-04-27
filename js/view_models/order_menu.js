@@ -149,8 +149,28 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
         }
 
         // Duplicate ID check
-        for (let i = 0; i < state.orders.length; ++i) {
-            let o = state.orders[i];
+        for (let i = 0; i < self.ongoingOrders().length; ++i) {
+            let o = self.ongoingOrders()[i];
+
+            if (o.id === parseInt(self.id())) {
+                shouter.notifySubscribers({text: "Order ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+                return false;
+            }
+        }
+
+        for (let i = 0; i < self.upcomingOrders().length; ++i) {
+            let o = self.upcomingOrders()[i];
+
+            if (o.id === parseInt(self.id())) {
+                shouter.notifySubscribers({text: "Order ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+                return false;
+            }
+        }
+
+        for (let i = 0; i < self.finishedOrders().length; ++i) {
+            let o = self.finishedOrders()[i];
 
             if (o.id === parseInt(self.id())) {
                 shouter.notifySubscribers({text: "Order ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
