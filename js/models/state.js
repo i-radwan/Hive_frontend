@@ -46,15 +46,8 @@ let State = function () {
         self.items = Object.assign([], newState.items);
         self.orders = Object.assign([], newState.orders);
         self.stock = Object.assign({}, newState.stock);
+        self.nextID = Object.assign({}, newState.nextID);
         self.map.setMap(newState.map.grid);
-
-        // Update next IDs
-        self.nextIDs.item = newState.nextIDs.item;
-        self.nextIDs.gate = newState.nextIDs.gate;
-        self.nextIDs.rack = newState.nextIDs.rack;
-        self.nextIDs.robot = newState.nextIDs.robot;
-        self.nextIDs.station = newState.nextIDs.station;
-        self.nextIDs.obstacle = newState.nextIDs.obstacle;
     };
 };
 

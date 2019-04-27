@@ -1,11 +1,11 @@
-/**
-Fonts
- */
+/*==============================================================*/
+/*=========================== FONTS ============================*/
+/*==============================================================*/
 @import url('https://fonts.googleapis.com/css?family=Asap:400,500,700');
 
-/**
-Styles
- */
+/*==============================================================*/
+/*========================== GENERAL ===========================*/
+/*==============================================================*/
 
 body {
     height: 100%;
@@ -13,126 +13,187 @@ body {
     background-color: #393c3e;
 }
 
-.left-menu {
+.clear {
+    clear: both;
+}
+
+.mirror {
+    -moz-transform: scale(-1, 1) !important;
+    -webkit-transform: scale(-1, 1) !important;;
+    -o-transform: scale(-1, 1) !important;;
+    -ms-transform: scale(-1, 1) !important;;
+    transform: scale(-1, 1) !important;;
+}
+
+.hidden {
+    display: none;
+}
+
+::-webkit-scrollbar:not(.right-menu-logs) {
+    width: 0;
+    background: transparent;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/*==============================================================*/
+/*========================= LEFT MENU ==========================*/
+/*==============================================================*/
+
+.lmenu {
     box-shadow: 0 0 10px black;
     background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
 }
 
-.left-menu-tiles {
+.lmenu-tiles {
     overflow: hidden;
     height: 640px;
     padding: 0;
 }
 
-.left-menu-tiles-list {
+.lmenu-tiles ul {
     list-style: none;
     padding: 0;
     color: #bababa;
     text-align: center;
 }
 
-.left-menu-tiles-list li {
+.lmenu-tiles ul li {
     background-color: #282b2d;
     padding: 15px 0;
 }
 
-.left-menu-tiles-list li:hover {
+.lmenu-tiles ul li:hover {
     background-color: #323234;
     cursor: pointer;
 }
 
-.left-menu-tiles-list li.inactive {
+.lmenu-tiles ul li.inactive {
     cursor: default;
     background-color: #282b2d;
     color: #4b4b4b;
 }
 
-.left-menu-tiles-list li.inactive:hover {
+.lmenu-tiles ul li.inactive:hover {
     background-color: #282b2d;
 }
 
-.left-menu-tiles-list li.active {
+.lmenu-tiles ul li.active {
     cursor: default;
     background-color: transparent;
     color: #e09500;
 }
 
-.left-menu-tiles-list li.active:hover {
+.lmenu-tiles ul li.active:hover {
     background-color: transparent;
 }
 
-.left-menu-tiles-list li div {
-}
-
-.left-menu-tiles-list li i {
+.lmenu-tiles ul li i {
     font-size: 33px;
 }
 
-.left-menu-tiles-list span {
+.lmenu-tiles ul span {
     width: 100%;
     display: block;
     text-align: center;
     font-size: 10px;
 }
 
-.left-menu-details {
+/*==============================================================*/
+/*===================== LEFT MENU DETAILS ======================*/
+/*==============================================================*/
+
+.lmenu-details {
     overflow-y: scroll;
     height: 640px;
     padding-bottom: 20px;
 }
 
-.left-menu-details-empty {
+.lmenu-details-empty {
     width: 100%;
     height: 100%;
     text-align: center;
     vertical-align: middle;
 }
 
-.left-menu-details-empty p {
+.lmenu-details-empty p {
     text-align: center;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
 }
 
-.left-menu-details-temps img {
+.lmenu-details-bottom-actions {
+    position: absolute;
+    bottom: 20px;
+    right: 17px;
+}
+
+.lmenu-details-bottom-actions i {
+    color: #bababa;
+    cursor: pointer;
+    font-size: 22px;
+    border-radius: 30px;
+    border: 2px solid #bababa;
+    padding: 0.45em 0.4em;
+}
+
+.lmenu-details-bottom-actions i:hover {
+    color: #e09500;
+    border: 2px solid #e09500;
+    box-shadow: 0 0 5px #e09500;
+}
+
+/*==============================================================*/
+/*========================= TEMPS MENU =========================*/
+/*==============================================================*/
+
+.lmenu-details-temps img {
     cursor: pointer;
     opacity: 0.8;
     margin-top: 20px;
     width: 100%;
 }
 
-.left-menu-details-temps img:hover {
+.lmenu-details-temps img:hover {
     animation: fade-in 0.4s ease;
     animation-fill-mode: forwards;
 }
 
-.left-menu-details-map {
+/*==============================================================*/
+/*========================= MAPS MENU ==========================*/
+/*==============================================================*/
+
+.lmenu-details-map {
     padding: 0;
 }
 
-.left-menu-details-map .form-group {
+.lmenu-details-map .form-group {
     margin-top: 20px;
 }
 
-.left-menu-details-map label {
+.lmenu-details-map label {
     font-size: 17px;
     color: #bababa;
 }
 
-.left-menu-details-map input {
+.lmenu-details-map input {
     border-color: transparent;
     color: #bababa !important;
 }
 
-.left-menu-details-map-actions {
+.lmenu-details-map-actions {
     position: absolute;
     bottom: 20px;
     width: 100%;
     padding: 0 0px;
 }
 
-.left-menu-details-map-actions i {
+.lmenu-details-map-actions i {
     position: relative;
     left: 0;
     color: #bababa;
@@ -144,13 +205,13 @@ body {
     padding: 0.4em 0.4em;
 }
 
-.left-menu-details-map-actions i:hover {
+.lmenu-details-map-actions i:hover {
     color: #e09500;
     border: 2px solid #e09500;
     box-shadow: 0 0 5px #e09500;
 }
 
-.left-menu-details-map-actions .apply {
+.lmenu-details-map-actions .apply {
     color: #bababa;
     margin-right: 9px;
     cursor: pointer;
@@ -161,88 +222,140 @@ body {
     margin-left: 82px;
 }
 
-.left-menu-details-gate .form-group {
+/*==============================================================*/
+/*========================= GATE MENU ==========================*/
+/*==============================================================*/
+
+.lmenu-details-gate .form-group {
     margin-top: 20px;
 }
 
-.left-menu-details-gate label {
+.lmenu-details-gate label {
     font-size: 17px;
     color: #bababa;
 }
 
-.left-menu-details-gate input {
+.lmenu-details-gate input {
     border-color: transparent;
     color: #bababa !important;
 }
 
-.left-menu-details-robot {
+/*==============================================================*/
+/*========================= ROBOT MENU ==========================*/
+/*==============================================================*/
+
+.lmenu-details-robot {
     padding: 0;
 }
 
-.left-menu-details-robot .form-group {
+.lmenu-details-robot .form-group {
     margin-top: 20px;
 }
 
-.left-menu-details-robot label {
+.lmenu-details-robot label {
     font-size: 17px;
     color: #bababa;
 }
 
-.left-menu-details-robot input {
+.lmenu-details-robot input {
     border-color: transparent;
     color: #bababa !important;
 }
 
-.left-menu-details-rack {
+/*==============================================================*/
+/*========================= RACK MENU ==========================*/
+/*==============================================================*/
+
+.lmenu-details-rack {
     padding: 0;
 }
 
-.left-menu-items-menu {
-}
-
-.left-menu-items-menu input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-.left-menu-items-menu label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.left-menu-details-rack .form-group {
+.lmenu-details-rack .form-group {
     margin-top: 20px;
 }
 
-.left-menu-details-rack label {
+.lmenu-details-rack label {
     font-size: 17px;
     color: #bababa;
 }
 
-.left-menu-details-rack input {
+.lmenu-details-rack input {
     border-color: transparent;
     color: #bababa !important;
 }
+
+.lmenu-items-menu {
+}
+
+.lmenu-items-menu input {
+    border-color: transparent;
+    color: #bababa !important;
+}
+
+.lmenu-items-menu label {
+    font-size: 17px;
+    color: #bababa;
+}
+
+/*==============================================================*/
+/*======================= STATION MENU =========================*/
+/*==============================================================*/
+
+.lmenu-details-station .form-group {
+    margin-top: 20px;
+}
+
+.lmenu-details-station label {
+    font-size: 17px;
+    color: #bababa;
+}
+
+.lmenu-details-station input {
+    border-color: transparent;
+    color: #bababa !important;
+}
+
+/*==============================================================*/
+/*======================= OBSTACLE MENU ========================*/
+/*==============================================================*/
+
+.lmenu-details-obstacle .form-group {
+    margin-top: 20px;
+}
+
+.lmenu-details-obstacle label {
+    font-size: 17px;
+    color: #bababa;
+}
+
+.lmenu-details-obstacle input {
+    border-color: transparent;
+    color: #bababa !important;
+}
+
+/*==============================================================*/
+/*======================== ORDERS MENU =========================*/
+/*==============================================================*/
 
 .orders-separator {
     background-color: #818181;
     margin: 0;
 }
 
-.left-menu-details-order label {
+.lmenu-details-order label {
     font-size: 17px;
     color: #bababa;
 }
 
-.left-menu-details-order {
+.lmenu-details-order {
     padding: 0;
 }
 
-.left-menu-details-order .form-group {
+.lmenu-details-order .form-group {
     margin-top: 20px;
 }
 
-.left-menu-details-order input {
+.lmenu-details-order input {
     border-color: transparent;
     color: #bababa !important;
 }
@@ -291,58 +404,10 @@ body {
     color: red;
 }
 
-.left-menu-details-station .form-group {
-    margin-top: 20px;
-}
+/*==============================================================*/
+/*========================= RIGHT MENU =========================*/
+/*==============================================================*/
 
-.left-menu-details-station label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.left-menu-details-station input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-.left-menu-details-obstacle .form-group {
-    margin-top: 20px;
-}
-
-.left-menu-details-obstacle label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.left-menu-details-obstacle input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-.left-menu-details-bottom-actions {
-    position: absolute;
-    bottom: 20px;
-    right: 17px;
-}
-
-.left-menu-details-bottom-actions i {
-    color: #bababa;
-    cursor: pointer;
-    font-size: 22px;
-    border-radius: 30px;
-    border: 2px solid #bababa;
-    padding: 0.45em 0.4em;
-}
-
-.left-menu-details-bottom-actions i:hover {
-    color: #e09500;
-    border: 2px solid #e09500;
-    box-shadow: 0 0 5px #e09500;
-}
-
-/**
-Right menu.
- */
 .right-menu {
     box-shadow: 0 0 10px black;
     background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
@@ -361,6 +426,10 @@ Right menu.
     top: 50%;
     transform: translateY(-50%);
 }
+
+/*==============================================================*/
+/*========================= LOGS MENU =========================*/
+/*==============================================================*/
 
 .right-menu-logs {
     overflow: hidden;
@@ -450,6 +519,10 @@ Right menu.
     width: 15%;
 }
 
+/*==============================================================*/
+/*========================= STATS MENU =========================*/
+/*==============================================================*/
+
 .right-menu-stats {
     padding: 15px 0;
     overflow: hidden;
@@ -480,6 +553,10 @@ Right menu.
     padding: 0;
     margin: 0;
 }
+
+/*==============================================================*/
+/*======================== ITEMS MENU ==========================*/
+/*==============================================================*/
 
 .right-menu-items-menu {
     padding: 15px 0;
@@ -593,24 +670,27 @@ Right menu.
     color: lawngreen;
 }
 
-/**
-Center
- */
+/*==============================================================*/
+/*======================== CENTER COL ==========================*/
+/*==============================================================*/
+
 .center-col {
     height: 640px;
     padding: 0 30px;
 }
 
-/**
-Map
- */
+/*==============================================================*/
+/*======================== CENTER MAP ==========================*/
+/*==============================================================*/
+
 .map-row {
     height: 80%;
 }
 
-/**
-Control
- */
+/*==============================================================*/
+/*====================== CENTER CONTROLS =======================*/
+/*==============================================================*/
+
 .control-row {
     height: 20%;
     box-shadow: 0 0 10px black;
@@ -725,11 +805,10 @@ Control
     height: 100px;
 }
 
-/**
-Components
- */
+/*==============================================================*/
+/*========================= COMPONENTS =========================*/
+/*==============================================================*/
 
-/*Toggle Button*/
 .right-menu-stats-toggle #container {
     font-family: 'Asap', sans-serif;
     width: 180px;
@@ -783,39 +862,10 @@ Components
     right: 0;
 }
 
-/**
-General
- */
-.clear {
-    clear: both;
-}
+/*==============================================================*/
+/*========================= ANIMATIONS =========================*/
+/*==============================================================*/
 
-.mirror {
-    -moz-transform: scale(-1, 1) !important;
-    -webkit-transform: scale(-1, 1) !important;;
-    -o-transform: scale(-1, 1) !important;;
-    -ms-transform: scale(-1, 1) !important;;
-    transform: scale(-1, 1) !important;;
-}
-
-.hidden {
-    display: none;
-}
-
-::-webkit-scrollbar:not(.right-menu-logs) {
-    width: 0;
-    background: transparent;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-/**
-Animations
- */
 @keyframes fade-in {
     0% {
         opacity: 0.8;

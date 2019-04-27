@@ -20,7 +20,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
     self.remove = function () {
         self.items.remove(this);
 
-        state.items = ko.mapping.toJS(self.items()); // TODO try w/o brackets
+        state.items = ko.mapping.toJS(self.items());
     };
 
     self.add = function () {
@@ -49,7 +49,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
             state.items = ko.mapping.toJS(self.items());
         });
 
-        state.items = ko.mapping.toJS(self.items()); // TODO try w/o brackets
+        state.items = ko.mapping.toJS(self.items());
     };
 
     self.check = function () {
