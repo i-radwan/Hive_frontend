@@ -44,7 +44,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
         }
     };
 
-    self.informGFX = function() {
+    let informGFX = function() {
         // Inform GFX that the map size changed
         gfxEventHandler({
             type: GFX_EVENT_TYPE.INIT,
@@ -119,7 +119,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
         self.mapHeight(state.map.height);
         self.mapWidth(state.map.width);
 
-        self.informGFX();
+        informGFX();
     }, self, SHOUT_STATE_UPDATED);
 };
 

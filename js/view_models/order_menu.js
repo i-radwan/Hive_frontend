@@ -21,8 +21,6 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
             return false;
         }
 
-        console.log("Add item");
-
         self.items.push({
             id: ko.observable(parseInt(self.itemID())),
             quantity: ko.observable(parseInt(self.itemQuantity()))
@@ -33,13 +31,11 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
     };
 
     self.removeItem = function () {
-        console.log("Remove item");
-
         self.items.remove(this);
     };
 
     self.addOrder = function () {
-        if (!self.check())
+        if (!check())
             return;
 
         console.log("Add order");
@@ -56,6 +52,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
             state.stock[i.id()] -= i.quantity();
         });
 
+        // ToDo: send order
         // commSender({
         //     type: SERVER_EVENT_TYPE.ORDER_NEW,
         //     data: {
@@ -67,14 +64,17 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
 
         shouter.notifySubscribers({text: "Order placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
-        // Clear the fields
+        clear();
+    };
+
+    let clear = function() {
         self.gateID("");
         self.items.removeAll();
         self.itemID("");
         self.itemQuantity("");
     };
 
-    self.check = function() {
+    let check = function() {
         if (self.id().length === 0) {
             shouter.notifySubscribers({text: "Order ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 

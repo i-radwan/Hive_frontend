@@ -9,6 +9,19 @@ let mainViewModel = require("./view_models/main");
 
 // Apply the binding
 $(document).ready(() => {
+    let koConfig = function () {
+        ko.subscribable.fn.subscribeChanged = function (callback) {
+            var oldValue;
+            this.subscribe(function (_oldValue) {
+                oldValue = _oldValue;
+            }, this, 'beforeChange');
+
+            this.subscribe(function (newValue) {
+                callback(newValue, oldValue);
+            });
+        };
+    }();
+
     // TODO: replace with GFX
     let gfxEventHandler = function(event) {
         console.log(event);
@@ -26,7 +39,7 @@ $(document).ready(() => {
     let w = map.width();
 
     map.click(function(e) {
-        mainVM.handleCellClick(Math.floor(e.offsetY / h * mainVM.state.map.height), Math.floor(e.offsetX / w * mainVM.state.map.width));
+        mainVM.eventHandler({row: Math.floor(e.offsetY / h * mainVM.state.map.height), col: Math.floor(e.offsetX / w * mainVM.state.map.width)});
         console.log(mainVM.state.map);
     });
 

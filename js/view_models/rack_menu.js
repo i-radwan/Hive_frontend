@@ -18,7 +18,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
     self.add = function (row, col) {
         if (state.map.grid[row][col].facility === undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
-            if (!self.check()) {
+            if (!check()) {
                 return;
             }
 
@@ -140,7 +140,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.update = function () {
-        if (!self.check()) {
+        if (!check()) {
             return false;
         }
 
@@ -165,7 +165,54 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.check = function () {
+    self.addItem = function () {
+        if (!checkItem(parseInt(self.itemID()), parseInt(self.itemQuantity()), 0))
+            return;
+
+        self.items.push({
+            id: ko.observable(parseInt(self.itemID())),
+            quantity: ko.observable(parseInt(self.itemQuantity()))
+        });
+
+        console.log(state.map);
+    };
+
+    self.removeItem = function () {
+        self.items.remove(this);
+    };
+
+    /**
+     * Fill the rack during simulation upon server request.
+     *
+     * @param rack_id
+     * @param item_id
+     * @param item_quantity
+     */
+    self.fillRack = function (rack_id, item_id, item_quantity) {
+        for (let i = 0; i < state.map.height; ++i) {
+            for (let j = 0; j < state.map.width; ++j) {
+                let c = state.map.grid[i][j].facility;
+
+                if (c !== undefined && c.type === MAP_CELL.RACK && c.id === rack_id) {
+                    for (let k = 0; k < c.items; ++k) {
+                        if (c.items[k].id === item_id) {
+                            c.items[k].quantity += item_quantity;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Inform the state
+        state.adjustItemQuantity(item_id, item_quantity);
+    };
+
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let check = function () {
         if (self.id().length === 0) {
             shouter.notifySubscribers({text: "Rack ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -223,23 +270,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.addItem = function () {
-        if (!self.checkItem(parseInt(self.itemID()), parseInt(self.itemQuantity()), 0))
-            return;
-
-        self.items.push({
-            id: ko.observable(parseInt(self.itemID())),
-            quantity: ko.observable(parseInt(self.itemQuantity()))
-        });
-
-        console.log(state.map);
-    };
-
-    self.removeItem = function () {
-        self.items.remove(this);
-    };
-
-    self.checkItem = function (id, quantity, count) {
+    let checkItem = function (id, quantity, count) {
         if (id.length === 0) {
             shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -280,37 +311,6 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         return true;
-    };
-
-    /**
-     * Fill the rack during simulation upon server request.
-     *
-     * @param rack_id
-     * @param item_id
-     * @param item_quantity
-     */
-    self.fillRack = function (rack_id, item_id, item_quantity) {
-        for (let i = 0; i < state.map.height; ++i) {
-            for (let j = 0; j < state.map.width; ++j) {
-                let c = state.map.grid[i][j].facility;
-
-                if (c !== undefined && c.type === MAP_CELL.RACK && c.id === rack_id) {
-                    for (let k = 0; k < c.items; ++k) {
-                        if (c.items[k].id === item_id) {
-                            c.items[k].quantity += item_quantity;
-                        }
-                    }
-                }
-            }
-        }
-
-        // Inform the state
-        state.adjustItemQuantity(item_id, item_quantity);
-    };
-
-    self.handleEsc = function () {
-        unselect();
-        clear();
     };
 
     let unselect = function () {

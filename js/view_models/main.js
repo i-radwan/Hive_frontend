@@ -31,40 +31,40 @@ let mainViewModel = function (gfxEventHandler, commSender) {
     self.eventHandler = function (event) {
         switch (event.type) {
             case LOGIC_EVENT_TYPE.CELL_CLICK:
-                self.leftMenuVM.handleCellClick(event.row, event.col);
+                handleCellClick(event.row, event.col);
                 break;
             case LOGIC_EVENT_TYPE.CELL_DRAG:
-                self.leftMenuVM.handleCellDrag(event.src_row, event.src_col, event.dst_row, event.dst_col);
+                handleCellDrag(event.src_row, event.src_col, event.dst_row, event.dst_col);
                 break;
             case LOGIC_EVENT_TYPE.OBJECT_MOVE:
-                self.leftMenuVM.handleObjectMove();
+                handleObjectMove();
                 break;
             case LOGIC_EVENT_TYPE.CELL_DELETE:
-                self.leftMenuVM.handleCellDeleteClick(event.row, event.col);
+                handleCellDeleteClick(event.row, event.col);
                 break;
             case LOGIC_EVENT_TYPE.ESC:
-                self.handleEsc();
+                handleEsc();
                 break;
         }
     };
 
-    self.handleCellClick = function (row, col) {
+    let handleCellClick = function (row, col) {
         self.leftMenuVM.handleCellClick(row, col);
     };
 
-    self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
+    let handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
         self.leftMenuVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
     };
 
-    self.handleObjectMove = function (srcRow, srcCol, dstRow, dstCol) {
+    let handleObjectMove = function (srcRow, srcCol, dstRow, dstCol) {
         self.leftMenuVM.handleObjectMove(srcRow, srcCol, dstRow, dstCol);
     };
 
-    self.handleCellDeleteClick = function (row, col) {
+    let handleCellDeleteClick = function (row, col) {
         self.leftMenuVM.handleCellDeleteClick(row, col);
     };
 
-    self.handleEsc = function () {
+    let handleEsc = function () {
         self.leftMenuVM.handleEsc();
         self.controlConsoleVM.handleEsc();
         self.rightMenuVM.handleEsc();

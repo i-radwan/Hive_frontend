@@ -77,7 +77,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     }, self, SHOUT_MSG);
 
     runningMode.subscribe(function (newRunningMode) {
-
     });
 
     let prepare = function () {

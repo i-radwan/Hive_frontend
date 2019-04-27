@@ -12,7 +12,7 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
 
     self.add = function (row, col) {
         if (state.map.grid[row][col].facility === undefined && self.activeGateRow === -1 && self.activeGateCol === -1) {
-            if (!self.check()) {
+            if (!check()) {
                 return;
             }
 
@@ -126,7 +126,7 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.update = function () {
-        if (!self.check())
+        if (!check())
             return false;
 
         state.map.grid[self.activeGateRow][self.activeGateCol].facility = {
@@ -148,7 +148,12 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.check = function () {
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let check = function () {
         if (self.id().length === 0) {
             shouter.notifySubscribers({text: "Gate ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -177,11 +182,6 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         return true;
-    };
-
-    self.handleEsc = function () {
-        unselect();
-        clear();
     };
 
     let unselect = function () {

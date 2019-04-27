@@ -16,7 +16,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
 
     self.add = function (row, col) {
         if (state.map.grid[row][col].robot === undefined && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
-            if (!self.check()) {
+            if (!check()) {
                 return;
             }
 
@@ -146,7 +146,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.update = function () {
-        if (!self.check())
+        if (!check())
             return false;
 
         state.map.grid[self.activeRobotRow][self.activeRobotCol].robot = {
@@ -172,7 +172,12 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.check = function () {
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let check = function () {
         if (self.id().length === 0) {
             shouter.notifySubscribers({text: "Robot ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -233,11 +238,6 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         return true;
-    };
-
-    self.handleEsc = function () {
-        unselect();
-        clear();
     };
 
     let unselect = function () {

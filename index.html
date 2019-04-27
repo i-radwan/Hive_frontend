@@ -215,10 +215,10 @@
                                 <div class="row item-container">
                                     <div class="col-md-10 item-container-fields">
                                         <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                                               data-bind="textInput: id, enable: $parent.runningMode() === RUNNING_MODE.DESIGN">
+                                               data-bind="textInput: id, enable: false">
                                         <input type="number" class="form-control bg-dark text-light"
                                                placeholder="Quantity"
-                                               data-bind="textInput: quantity, enable: $parent.runningMode() === RUNNING_MODE.DESIGN">
+                                               data-bind="textInput: quantity, enable: false">
                                     </div>
                                     <div class="col-md-2 item-container-icon">
                                         <i class="fas fa-minus"
@@ -325,10 +325,10 @@
                                 <div class="row item-container">
                                    <div class="col-md-10 item-container-fields">
                                       <input type="number" class="form-control bg-dark text-light" placeholder="Number"
-                                             data-bind="textInput: id">
+                                             data-bind="textInput: id, enable: false">
                                       <input type="number" class="form-control bg-dark text-light"
                                              placeholder="Quantity"
-                                             data-bind="textInput: quantity">
+                                             data-bind="textInput: quantity, enable: false">
                                    </div>
                                    <div class="col-md-2 item-container-icon">
                                       <i class="fas fa-minus"
@@ -433,9 +433,9 @@
                     <span data-bind="foreach: rightMenuVM.itemsVM.filteredItems">
                         <div class="row item-container"><div class="col-md-10 item-container-fields">
                             <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                                   data-bind="textInput: id">
+                                   data-bind="textInput: id, enable: false">
                               <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
-                                     data-bind="textInput: weight">
+                                     data-bind="textInput: weight, enable: false">
                            </div>
                            <div class="col-md-2 item-container-icon">
                               <i class="fas fa-minus"

@@ -33,19 +33,19 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
     self.toggle = function (id) {
         if (runningMode() === RUNNING_MODE.DESIGN) {
             if (id === LEFT_MENU.TEMPS) {
-                self.toggleTemps();
+                toggleTemps();
             } else if (id === LEFT_MENU.MAP) {
-                self.toggleMap();
+                toggleMap();
             } else if (id === LEFT_MENU.GATE) {
-                self.toggleGate();
+                toggleGate();
             } else if (id === LEFT_MENU.RACK) {
-                self.toggleRack();
+                toggleRack();
             } else if (id === LEFT_MENU.OBSTACLE) {
-                self.toggleObstacle();
+                toggleObstacle();
             } else if (id === LEFT_MENU.ROBOT) {
-                self.toggleRobot();
+                toggleRobot();
             } else if (id === LEFT_MENU.STATION) {
-                self.toggleStation();
+                toggleStation();
             } else {
                 return;
             }
@@ -53,60 +53,61 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
             self.activeMenu(id);
         } else {
             if (id === LEFT_MENU.ORDER) {
-                self.toggleOrder();
+                toggleOrder();
+
                 self.activeMenu(id);
             }
         }
     };
 
-    self.toggleTemps = function () {
+    let toggleTemps = function () {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC
         });
     };
 
-    self.toggleMap = function () {
+    let toggleMap = function () {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC
         });
     };
 
-    self.toggleGate = function () {
+    let toggleGate = function () {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.GATE
         });
     };
 
-    self.toggleRobot = function () {
+    let toggleRobot = function () {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.ROBOT
         });
     };
 
-    self.toggleRack = function () {
+    let toggleRack = function () {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.RACK
         });
     };
 
-    self.toggleStation = function () {
+    let toggleStation = function () {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.STATION
         });
     };
 
-    self.toggleObstacle = function () {
+    let toggleObstacle = function () {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HOVER,
             object: MAP_CELL.OBSTACLE
         });
     };
 
-    self.toggleOrder = function () {
+    let toggleOrder = function () {
         gfxEventHandler({
             type: GFX_EVENT_TYPE.ESC
         });

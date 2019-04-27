@@ -12,7 +12,7 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
 
     self.add = function (row, col) {
         if (state.map.grid[row][col].facility === undefined && self.activeObstacleRow === -1 && self.activeObstacleCol === -1) {
-            if (!self.check()) {
+            if (!check()) {
                 return;
             }
 
@@ -125,7 +125,7 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.update = function () {
-        if (!self.check())
+        if (!check())
             return false;
 
         state.map.grid[self.activeObstacleRow][self.activeObstacleCol].facility = {
@@ -147,7 +147,12 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.check = function () {
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let check = function () {
         if (self.id().length === 0) {
             shouter.notifySubscribers({text: "Obstacle ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -176,11 +181,6 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         return true;
-    };
-
-    self.handleEsc = function () {
-        unselect();
-        clear();
     };
 
     let unselect = function () {

@@ -12,7 +12,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
 
     self.add = function (row, col) {
         if (state.map.grid[row][col].facility === undefined && self.activeStationRow === -1 && self.activeStationCol === -1) {
-            if (!self.check()) {
+            if (!check()) {
                 return;
             }
 
@@ -125,7 +125,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.update = function () {
-        if (!self.check())
+        if (!check())
             return false;
 
         state.map.grid[self.activeStationRow][self.activeStationCol].facility = {
@@ -147,7 +147,12 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    self.check = function () {
+    self.handleEsc = function () {
+        unselect();
+        clear();
+    };
+
+    let check = function () {
         if (self.id().length === 0) {
             shouter.notifySubscribers({text: "Station ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -176,11 +181,6 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         return true;
-    };
-
-    self.handleEsc = function () {
-        unselect();
-        clear();
     };
 
     let unselect = function () {

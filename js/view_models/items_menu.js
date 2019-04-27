@@ -24,7 +24,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.add = function () {
-        if (!self.check())
+        if (!check())
             return;
 
         let id = ko.observable(parseInt(self.newItemID()));
@@ -39,20 +39,10 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
         self.newItemID(parseInt(self.newItemID()) + 1);
         state.nextIDs.item = Math.max(state.nextIDs.item, parseInt(self.newItemID()));
 
-        // Subscribe to any changes
-        id.subscribe(function (newID) {
-            state.items = ko.mapping.toJS(self.items());
-            state.nextIDs.item = Math.max(state.nextIDs.item, parseInt(newID) + 1);
-        });
-
-        weight.subscribe(function (newWeight) {
-            state.items = ko.mapping.toJS(self.items());
-        });
-
         state.items = ko.mapping.toJS(self.items());
     };
 
-    self.check = function () {
+    let check = function () {
         if (self.newItemID().length === 0) {
             shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
