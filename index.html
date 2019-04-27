@@ -302,28 +302,32 @@
 
                 <div class="order"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.ORDER}">
-                    <div class="form-group">
-                        <label>Order ID</label>
-                        <input type="text" class="form-control bg-dark text-light"
-                               placeholder="Order ID" data-bind="textInput: leftMenuVM.orderVM.id">
-                    </div>
-                    <div class="form-group">
-                        <label>Gate ID</label>
-                        <input type="number" class="form-control bg-dark text-light"
-                               placeholder="Gate ID (Blank for automatic)"
-                               data-bind="textInput: leftMenuVM.orderVM.gateID">
-                    </div>
 
-                    <!--====================== ITEMS LIST ======================-->
-                    <hr class="items-separator" data-bind="css: {hidden: leftMenuVM.orderVM.items().length === 0}">
-
-                    <div class="items-container"
-                         data-bind="css: {hidden: leftMenuVM.orderVM.items().length === 0}">
+                    <!--========================= ADD NEW ORDER =========================-->
+                    <div class="add hidden">
                         <div class="form-group">
+                            <label>Order ID</label>
+                            <input type="text" class="form-control bg-dark text-light"
+                                   placeholder="Order ID" data-bind="textInput: leftMenuVM.orderVM.id">
+                        </div>
+                        <div class="form-group">
+                            <label>Gate ID</label>
+                            <input type="number" class="form-control bg-dark text-light"
+                                   placeholder="Gate ID (Blank for automatic)"
+                                   data-bind="textInput: leftMenuVM.orderVM.gateID">
+                        </div>
+
+                        <!--====================== ITEMS LIST ======================-->
+                        <hr class="items-separator" data-bind="css: {hidden: leftMenuVM.orderVM.items().length === 0}">
+
+                        <div class="items-container"
+                             data-bind="css: {hidden: leftMenuVM.orderVM.items().length === 0}">
+                            <div class="form-group">
                             <span data-bind="foreach: leftMenuVM.orderVM.items">
                                 <div class="row item-container">
                                     <div class="col-md-10 item-container-fields">
-                                        <input type="number" class="form-control bg-dark text-light" placeholder="Number"
+                                        <input type="number" class="form-control bg-dark text-light"
+                                               placeholder="Number"
                                                data-bind="textInput: id" readonly>
                                         <input type="number" class="form-control bg-dark text-light"
                                                placeholder="Quantity"
@@ -335,30 +339,111 @@
                                     </div>
                                 </div>
                            </span>
+                            </div>
+                        </div>
+
+                        <!--========================= ADD ITEM =========================-->
+                        <hr class="items-separator">
+
+                        <div class="form-group">
+                            <label>Add Item</label>
+                            <div class="row item-container">
+                                <div class="col-md-10 item-container-fields">
+                                    <input type="number" class="form-control bg-dark text-light" placeholder="Number"
+                                           data-bind="textInput: leftMenuVM.orderVM.itemID">
+                                    <input type="number" class="form-control bg-dark text-light" placeholder="Quantity"
+                                           data-bind="textInput: leftMenuVM.orderVM.itemQuantity">
+                                </div>
+                                <div class="col-md-2 item-container-icon">
+                                    <i class="fas fa-plus" data-bind="click: leftMenuVM.orderVM.addItem"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--======================== BOTTOM ACTIONS ========================-->
+                        <div class="lmenu-details-bottom-actions">
+                            <i class="fas fa-check" data-bind="click: leftMenuVM.orderVM.add"></i>
                         </div>
                     </div>
 
-                    <!--========================= ADD ITEM =========================-->
-                    <hr class="items-separator">
+                    <!--========================= ONGOING ORDERS =========================-->
+                    <div class="ongoing">
 
-                    <div class="form-group">
-                        <label>Add Item</label>
-                        <div class="row item-container">
-                            <div class="col-md-10 item-container-fields">
-                                <input type="number" class="form-control bg-dark text-light" placeholder="Number"
-                                       data-bind="textInput: leftMenuVM.orderVM.itemID">
-                                <input type="number" class="form-control bg-dark text-light" placeholder="Quantity"
-                                       data-bind="textInput: leftMenuVM.orderVM.itemQuantity">
-                            </div>
-                            <div class="col-md-2 item-container-icon">
-                                <i class="fas fa-plus" data-bind="click: leftMenuVM.orderVM.addItem"></i>
-                            </div>
+                        <!--========================= SEARCH =========================-->
+                        <div class="form-group search">
+                            <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
+                                   data-bind="textInput: leftMenuVM.orderVM.ongoingSearchValue">
+                        </div>
+
+                        <!--====================== ORDERS LIST =======================-->
+                        <div class="form-group orders-list">
+                            <span data-bind="foreach: leftMenuVM.orderVM.filteredOngoingOrders">
+                                <div class="cont">
+                                    <div class="row main-row">
+                                        <div class="col-md-3 icon">
+                                            <span class="fas fa-box" data-toggle="tooltip" data-bind="attr: {title: function() {return comp_ratio + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + comp_ratio + '%, #404548 ' + comp_ratio + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
+                                        </div>
+                                        <div class="row col-md-9 details">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <div class="row">
+                                                        <div class="col-md-5">Order:</div>
+                                                        <div class="col-md-7"><b data-bind="text: id"></b></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-5">Gate:</div>
+                                                        <div class="col-md-7"><b data-bind="text: gate_id"></b></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 more">
+                                                    <i class="fas fa-ellipsis-h cwise-rotated-90"></i>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Start:</div>
+                                                <div class="col-md-8"><small data-bind="text: start_time"></small></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Full.:</div>
+                                                <div class="col-md-8"><small data-bind="text: fulfilled_time"></small></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr class="sep" data-bind="css: {'hidden': items.length === 0}">
+
+                                    <div data-bind="css: {'hidden': items.length === 0}">
+                                        <span data-bind="foreach: items" class="items">
+                                            <div class="row items-row">
+                                                <div class="col-md-3 id">Item#&nbsp;&nbsp;<b data-bind="text: id"></b></div>
+                                                <div class="col-md-9 state"><b data-bind="text: delivered"></b>/<span data-bind="text: quantity"></span>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </span>
                         </div>
                     </div>
 
-                    <!--======================== BOTTOM ACTIONS ========================-->
-                    <div class="lmenu-details-bottom-actions">
-                        <i class="fas fa-check" data-bind="click: leftMenuVM.orderVM.add"></i>
+                    <!--========================= UPCOMING ORDERS =========================-->
+                    <div class="upcoming hidden">
+
+                        <!--========================= SEARCH =========================-->
+                        <div class="form-group search">
+                            <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
+                                   data-bind="textInput: leftMenuVM.orderVM.upcomingSearchValue">
+                        </div>
+                    </div>
+
+                    <!--========================= FINISHED ORDERS =========================-->
+                    <div class="finished hidden">
+
+                        <!--========================= SEARCH =========================-->
+                        <div class="form-group search">
+                            <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
+                                   data-bind="textInput: leftMenuVM.orderVM.finishedSearchValue">
+                        </div>
                     </div>
                 </div>
             </div>

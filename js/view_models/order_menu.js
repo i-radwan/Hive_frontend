@@ -12,11 +12,121 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
     self.itemID = ko.observable();
     self.itemQuantity = ko.observable();
 
+    self.ongoingOrders = ko.observableArray();
+    self.upcomingOrders = ko.observableArray();
+    self.finisehdOrders = ko.observableArray();
+
+    self.ongoingSearchValue = ko.observable("");
+    self.upcomingSearchValue = ko.observable("");
+    self.finishedSearchValue = ko.observable("");
+
+    self.ongoingOrders.push({
+        id: 1,
+        gate_id: 1,
+        start_time: "16:56 Apr 4, 19",
+        fulfilled_time: "16:59 Apr 4, 19",
+        comp_ratio: 50,
+        items: [
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            },
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            },
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            },
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            }
+        ],
+        robots_ids: "1, 2, 3"
+    }, {
+        id: 1,
+        gate_id: 1,
+        start_time: "16:56 Apr 4, 19",
+        fulfilled_time: "16:59 Apr 4, 19",
+        comp_ratio: 100,
+        items: [],
+        robots_ids: "1, 2, 3"
+    }, {
+        id: 1,
+        gate_id: 1,
+        start_time: "16:56 Apr 4, 19",
+        fulfilled_time: "16:59 Apr 4, 19",
+        comp_ratio: 20,
+        items: [
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            },
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            },
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            },
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            }
+        ],
+        robots_ids: "1, 2, 3"
+    }, {
+        id: 1,
+        gate_id: 1,
+        start_time: "16:56 Apr 4, 19",
+        fulfilled_time: "16:59 Apr 4, 19",
+        comp_ratio: 0,
+        items: [
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            },
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            },
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            },
+            {
+                id: 1,
+                quantity: 10,
+                delivered: 5
+            }
+        ],
+        robots_ids: "1, 2, 3"
+    });
+
+    self.filteredOngoingOrders = ko.computed(function () {
+        return self.ongoingOrders().filter(function (order) {
+            return true;
+            // return self.ongoingSearchValue().length === 0 || parseInt(order.id()) === parseInt(self.ongoingSearchValue());
+        });
+    });
+
     self.add = function () {
         if (!check())
             return;
-
-        console.log("Add order");
 
         state.orders.push({
             id: parseInt(self.id()),
