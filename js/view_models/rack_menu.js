@@ -1,5 +1,6 @@
 require('../utils/constants');
 require('knockout-mapping');
+let $ = require('jquery');
 let ko = require('knockout');
 
 let rackViewModel = function (shouter, state, gfxEventHandler) {
@@ -175,6 +176,10 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         });
 
         console.log(state.map);
+
+        // Scroll view to bottom
+        let container = $(".lmenu .rack .items-container");
+        container.animate({scrollTop: container[0].scrollHeight}, 250);
     };
 
     self.removeItem = function () {
@@ -245,7 +250,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         for (let i = 0; i < self.items().length; ++i) {
             let item = self.items()[i];
 
-            if (!self.checkItem(parseInt(item.id()), parseInt(item.quantity()), 1))
+            if (!checkItem(parseInt(item.id()), parseInt(item.quantity()), 1))
                 return false;
 
             load += parseInt(item.quantity()) * state.getItem(parseInt(item.id())).weight;

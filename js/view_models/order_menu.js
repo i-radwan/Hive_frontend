@@ -1,5 +1,6 @@
 require('../utils/constants');
 require('knockout-mapping');
+let $ = require('jquery');
 let ko = require('knockout');
 
 let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
@@ -11,30 +12,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
     self.itemID = ko.observable();
     self.itemQuantity = ko.observable();
 
-    self.addItem = function () {
-        if (!self.itemID() || !self.itemQuantity()) return;
-
-        // Check if item exists
-        if (state.getItem(self.itemID()) === undefined) {
-            shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_ERROR}, SHOUT_MSG);
-
-            return false;
-        }
-
-        self.items.push({
-            id: ko.observable(parseInt(self.itemID())),
-            quantity: ko.observable(parseInt(self.itemQuantity()))
-        });
-
-        self.itemID("");
-        self.itemQuantity("");
-    };
-
-    self.removeItem = function () {
-        self.items.remove(this);
-    };
-
-    self.addOrder = function () {
+    self.add = function () {
         if (!check())
             return;
 
@@ -67,16 +45,43 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
         clear();
     };
 
-    let clear = function() {
+    self.addItem = function () {
+        if (!checkItem())
+            return;
+
+        self.items.push({
+            id: ko.observable(parseInt(self.itemID())),
+            quantity: ko.observable(parseInt(self.itemQuantity()))
+        });
+
+        self.itemID("");
+        self.itemQuantity("");
+
+        // Scroll view to bottom
+        let container = $(".lmenu .order .items-container");
+        container.animate({scrollTop: container[0].scrollHeight}, 250);
+    };
+
+    self.removeItem = function () {
+        self.items.remove(this);
+    };
+
+    let clear = function () {
         self.gateID("");
         self.items.removeAll();
         self.itemID("");
         self.itemQuantity("");
     };
 
-    let check = function() {
+    let check = function () {
         if (self.id().length === 0) {
             shouter.notifySubscribers({text: "Order ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (self.items().length === 0) {
+            shouter.notifySubscribers({text: "Order must contain items!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
@@ -131,13 +136,60 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
         });
 
         if (!e) {
-            shouter.notifySubscribers({text: "Stock isn't enough for the items: " + itemsIDs + "!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({
+                text: "Stock isn't enough for the items: " + itemsIDs + "!",
+                type: MSG_ERROR
+            }, SHOUT_MSG);
 
             return false;
         }
 
         return true;
-    }
+    };
+
+    let checkItem = function () {
+        if (self.itemID().length === 0) {
+            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (self.itemQuantity().length === 0) {
+            shouter.notifySubscribers({text: "Quantity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // -ve values
+        if (parseInt(self.itemID()) < 0 || parseInt(self.itemQuantity()) <= 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // Duplicates
+        let cnt = 0;
+        for (let i = 0; i < self.items().length; ++i) {
+            if (parseInt(self.items()[i].id()) === parseInt(self.itemID())) {
+                cnt++;
+            }
+        }
+
+        if (cnt > 0) {
+            shouter.notifySubscribers({text: "Items IDs should be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        // Check if item exists
+        if (state.getItem(parseInt(self.itemID())) === undefined) {
+            shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        return true;
+    };
 };
 
 module.exports = orderViewModel;

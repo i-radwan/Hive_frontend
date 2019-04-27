@@ -320,7 +320,6 @@
                     <div class="items-container"
                          data-bind="css: {hidden: leftMenuVM.orderVM.items().length === 0}">
                         <div class="form-group">
-                            <label>Items</label>
                             <span data-bind="foreach: leftMenuVM.orderVM.items">
                                 <div class="row item-container">
                                    <div class="col-md-10 item-container-fields">
@@ -359,7 +358,7 @@
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lmenu-details-bottom-actions">
-                        <i class="fas fa-check" data-bind="click: leftMenuVM.orderVM.addOrder"></i>
+                        <i class="fas fa-check" data-bind="click: leftMenuVM.orderVM.add"></i>
                     </div>
                 </div>
             </div>
@@ -382,7 +381,7 @@
         <!--======================= CONTROL CENTER =======================-->
         <!--==============================================================-->
 
-        <div class="row control-row" id="control-console">
+        <div class="row control-row">
             <div class="controls">
                 <div class="logo">
                     <img src="images/meta/logo_3.png">
@@ -421,8 +420,7 @@
 
             <!--========================= SEARCH =========================-->
             <div class="form-group search">
-                <input type="text" class="form-control bg-dark text-light" id="search_value"
-                       name="search_value" placeholder="Search (ID) ..."
+                <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
                        data-bind="textInput: rightMenuVM.itemsVM.searchValue">
             </div>
 
@@ -431,7 +429,8 @@
             <div class="items-container" data-bind="css: {hidden: rightMenuVM.itemsVM.items().length === 0}">
                 <div class="form-group">
                     <span data-bind="foreach: rightMenuVM.itemsVM.filteredItems">
-                        <div class="row item-container"><div class="col-md-10 item-container-fields">
+                        <div class="row item-container">
+                            <div class="col-md-10 item-container-fields">
                             <input type="number" class="form-control bg-dark text-light" placeholder="ID"
                                    data-bind="textInput: id, enable: false">
                               <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
@@ -481,7 +480,7 @@
                             <p>Stats</p>
                         </div>
                     </div>
-                    <div class="inner-container" id='toggle-container'
+                    <div class="inner-container"
                          data-bind="style: {'clip-path': rightMenuVM.activeMenu() === RIGHT_MENU.LOGS ? 'inset(0 50% 0 0)' : 'inset(0 0 0 50%)' }">
                         <div class="toggle">
                             <p>Logs</p>

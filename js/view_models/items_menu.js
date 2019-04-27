@@ -1,5 +1,6 @@
 require('../utils/constants');
 require('knockout-mapping');
+let $ = require('jquery');
 let ko = require('knockout');
 
 let itemsViewModel = function (shouter, state, gfxEventHandler) {
@@ -40,6 +41,10 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
         state.nextIDs.item = Math.max(state.nextIDs.item, parseInt(self.newItemID()));
 
         state.items = ko.mapping.toJS(self.items());
+
+        // Scroll view to bottom
+        let container = $(".rmenu .items .items-container");
+        container.animate({scrollTop: container[0].scrollHeight}, 250);
     };
 
     let check = function () {
@@ -74,7 +79,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
         return true;
     };
 
-    let clear = function() {
+    let clear = function () {
         self.searchValue("");
         self.newItemID(state.nextIDs.item);
         self.newItemWeight("");

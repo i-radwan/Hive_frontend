@@ -23,7 +23,7 @@ $(document).ready(() => {
     }();
 
     // TODO: replace with GFX
-    let gfxEventHandler = function(event) {
+    let gfxEventHandler = function (event) {
         console.log(event);
     };
 
@@ -38,8 +38,13 @@ $(document).ready(() => {
     let h = map.height();
     let w = map.width();
 
-    map.click(function(e) {
-        mainVM.eventHandler({row: Math.floor(e.offsetY / h * mainVM.state.map.height), col: Math.floor(e.offsetX / w * mainVM.state.map.width)});
+    map.click(function (e) {
+        mainVM.eventHandler({
+            type: LOGIC_EVENT_TYPE.CELL_CLICK,
+            row: Math.floor(e.offsetY / h * mainVM.state.map.height),
+            col: Math.floor(e.offsetX / w * mainVM.state.map.width)
+        });
+
         console.log(mainVM.state.map);
     });
 
