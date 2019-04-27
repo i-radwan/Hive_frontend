@@ -148,6 +148,13 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
             return false;
         }
 
+        // -ve values
+        if (parseInt(self.id()) < 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         // Duplicate ID check
         for (let i = 0; i < self.ongoingOrders().length; ++i) {
             let o = self.ongoingOrders()[i];
@@ -177,13 +184,6 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
 
                 return false;
             }
-        }
-
-        // -ve values
-        if (parseInt(self.id()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
-
-            return false;
         }
 
         // Gate exists

@@ -57,6 +57,13 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
             return false;
         }
 
+        // -ve values
+        if (parseInt(self.newItemID()) < 0 || parseInt(self.newItemWeight()) < 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
             if (parseInt(self.items()[i].id) === parseInt(self.newItemID())) {
@@ -64,13 +71,6 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
 
                 return false;
             }
-        }
-
-        // -ve values
-        if (parseInt(self.newItemID()) < 0 || parseInt(self.newItemWeight()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
-
-            return false;
         }
 
         return true;

@@ -160,6 +160,13 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
             return false;
         }
 
+        // -ve values
+        if (parseInt(self.id()) < 0) {
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         // Duplicate ID check
         for (let i = 0; i < state.map.height; ++i) {
             for (let j = 0; j < state.map.width; ++j) {
@@ -172,13 +179,6 @@ let gateViewModel = function (shouter, state, gfxEventHandler) {
                     return false;
                 }
             }
-        }
-
-        // -ve values
-        if (parseInt(self.id()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
-
-            return false;
         }
 
         return true;
