@@ -250,10 +250,10 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         for (let i = 0; i < self.items().length; ++i) {
             let item = self.items()[i];
 
-            if (!checkItem(parseInt(item.id()), parseInt(item.quantity()), 1))
+            if (!checkItem(parseInt(item.id), parseInt(item.quantity), 1))
                 return false;
 
-            load += parseInt(item.quantity()) * state.getItem(parseInt(item.id())).weight;
+            load += parseInt(item.quantity) * state.getItem(parseInt(item.id)).weight;
         }
 
         if (load > parseInt(self.capacity())) {
@@ -297,7 +297,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
         let cnt = 0;
         for (let i = 0; i < self.items().length; ++i) {
-            if (parseInt(self.items()[i].id()) === id) {
+            if (parseInt(self.items()[i].id) === id) {
                 cnt++;
             }
         }

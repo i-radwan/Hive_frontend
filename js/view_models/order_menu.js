@@ -25,19 +25,19 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
 
     self.filteredOngoingOrders = ko.computed(function () {
         return self.ongoingOrders().filter(function (order) {
-            return self.ongoingSearchValue().length === 0 || parseInt(order.id()) === parseInt(self.ongoingSearchValue());
+            return self.ongoingSearchValue().length === 0 || parseInt(order.id) === parseInt(self.ongoingSearchValue());
         });
     });
 
     self.filteredUpcomingOrders = ko.computed(function () {
         return self.upcomingOrders().filter(function (order) {
-            return self.upcomingSearchValue().length === 0 || parseInt(order.id()) === parseInt(self.upcomingSearchValue());
+            return self.upcomingSearchValue().length === 0 || parseInt(order.id) === parseInt(self.upcomingSearchValue());
         });
     });
 
     self.filteredFinishedOrders = ko.computed(function () {
         return self.finishedOrders().filter(function (order) {
-            return self.finishedSearchValue().length === 0 || parseInt(order.id()) === parseInt(self.finishedSearchValue());
+            return self.finishedSearchValue().length === 0 || parseInt(order.id) === parseInt(self.finishedSearchValue());
         });
     });
 
@@ -63,7 +63,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
             i.delivered = ko.observable(0);
             items.push(i);
 
-            state.stock[i.id()] -= i.quantity();
+            state.stock[i.id] -= i.quantity;
         });
 
         self.ongoingOrders.push({
@@ -79,7 +79,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
 
                 items().forEach(function (i) {
                     del += i.delivered();
-                    tot += i.quantity();
+                    tot += i.quantity;
                 });
 
                 return del / tot;
@@ -190,8 +190,8 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
         let itemsIDs = "";
 
         self.items().forEach(function (i) {
-            if (state.stock[i.id()] === undefined || state.stock[i.id()] < i.quantity()) {
-                itemsIDs += i.id() + " ";
+            if (state.stock[i.id] === undefined || state.stock[i.id] < i.quantity) {
+                itemsIDs += i.id + " ";
 
                 e = false;
             }
@@ -234,7 +234,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
         // Duplicates
         let cnt = 0;
         for (let i = 0; i < self.items().length; ++i) {
-            if (parseInt(self.items()[i].id()) === parseInt(self.itemID())) {
+            if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
                 cnt++;
             }
         }

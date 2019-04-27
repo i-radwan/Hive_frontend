@@ -14,7 +14,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
     self.filteredItems = ko.computed(function () {
         console.log(self.items());
         return self.items().filter(function (item) {
-            return self.searchValue().length === 0 || parseInt(item.id()) === parseInt(self.searchValue());
+            return self.searchValue().length === 0 || parseInt(item.id) === parseInt(self.searchValue());
         });
     });
 
@@ -28,12 +28,9 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
         if (!check())
             return;
 
-        let id = ko.observable(parseInt(self.newItemID()));
-        let weight = ko.observable(parseFloat(self.newItemWeight()));
-
         self.items.push({
-            id: id,
-            weight: weight
+            id: parseInt(self.newItemID()),
+            weight: parseFloat(self.newItemWeight())
         });
 
         // Auto increment
@@ -62,7 +59,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
 
         // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
-            if (parseInt(self.items()[i].id()) === parseInt(self.newItemID())) {
+            if (parseInt(self.items()[i].id) === parseInt(self.newItemID())) {
                 shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
 
                 return false;

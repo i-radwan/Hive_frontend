@@ -354,7 +354,7 @@
                         <div class="form-group">
                             <label>Start DateTime</label>
                             <input type="datetime" class="form-control bg-dark text-light"
-                                   placeholder="16:59 Apr 4, 19"
+                                   placeholder="Now"
                                    data-bind="textInput: leftMenuVM.orderVM.startDateTime">
                         </div>
 
@@ -417,6 +417,8 @@
                         </div>
 
                         <!--====================== ORDERS LIST =======================-->
+                        <p class="empty text-light text-muted text-center" data-bind="css: {hidden: leftMenuVM.orderVM.filteredOngoingOrders().length !== 0}">No Orders!</p>
+
                         <div class="form-group orders-list">
                             <span data-bind="foreach: leftMenuVM.orderVM.filteredOngoingOrders">
                                 <div class="cont">
@@ -478,6 +480,8 @@
                         </div>
 
                         <!--====================== ORDERS LIST =======================-->
+                        <p class="empty text-light text-muted text-center" data-bind="css: {hidden: leftMenuVM.orderVM.filteredUpcomingOrders().length !== 0}">No Orders!</p>
+
                         <div class="form-group orders-list">
                             <span data-bind="foreach: leftMenuVM.orderVM.filteredUpcomingOrders">
                                 <div class="cont">
@@ -539,6 +543,8 @@
                         </div>
 
                         <!--====================== ORDERS LIST =======================-->
+                        <p class="empty text-light text-muted text-center" data-bind="css: {hidden: leftMenuVM.orderVM.filteredFinishedOrders().length !== 0}">No Orders!</p>
+
                         <div class="form-group orders-list">
                             <span data-bind="foreach: leftMenuVM.orderVM.filteredFinishedOrders">
                                 <div class="cont">
