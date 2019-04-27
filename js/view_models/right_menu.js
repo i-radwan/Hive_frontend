@@ -6,7 +6,7 @@ let itemsViewModel = require('./items_menu');
 let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, commSender) {
     let self = this;
 
-    self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
+    self.activeMenu = ko.observable(RIGHT_MENU.ITEMS);
     self.logs = ko.observableArray();
     self.stats = ko.observableArray();
 

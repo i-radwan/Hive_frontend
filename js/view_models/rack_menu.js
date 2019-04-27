@@ -171,8 +171,8 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             return;
 
         self.items.push({
-            id: ko.observable(parseInt(self.itemID())),
-            quantity: ko.observable(parseInt(self.itemQuantity()))
+            id: parseInt(self.itemID()),
+            quantity: parseInt(self.itemQuantity())
         });
 
         console.log(state.map);

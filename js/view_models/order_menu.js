@@ -6,139 +6,87 @@ let ko = require('knockout');
 let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
     let self = this;
 
+    self.activeMenu = ko.observable(ORDER_MENU.ADD);
+
     self.id = ko.observable(1);
     self.gateID = ko.observable("");
+    self.startDateTime = ko.observable("16:59 Apr 4, 19");
     self.items = ko.observableArray();
     self.itemID = ko.observable();
     self.itemQuantity = ko.observable();
 
     self.ongoingOrders = ko.observableArray();
     self.upcomingOrders = ko.observableArray();
-    self.finisehdOrders = ko.observableArray();
+    self.finishedOrders = ko.observableArray();
 
     self.ongoingSearchValue = ko.observable("");
     self.upcomingSearchValue = ko.observable("");
     self.finishedSearchValue = ko.observable("");
 
-    self.ongoingOrders.push({
-        id: 1,
-        gate_id: 1,
-        start_time: "16:56 Apr 4, 19",
-        fulfilled_time: "16:59 Apr 4, 19",
-        comp_ratio: 50,
-        items: [
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            },
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            },
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            },
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            }
-        ],
-        robots_ids: "1, 2, 3"
-    }, {
-        id: 1,
-        gate_id: 1,
-        start_time: "16:56 Apr 4, 19",
-        fulfilled_time: "16:59 Apr 4, 19",
-        comp_ratio: 100,
-        items: [],
-        robots_ids: "1, 2, 3"
-    }, {
-        id: 1,
-        gate_id: 1,
-        start_time: "16:56 Apr 4, 19",
-        fulfilled_time: "16:59 Apr 4, 19",
-        comp_ratio: 20,
-        items: [
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            },
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            },
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            },
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            }
-        ],
-        robots_ids: "1, 2, 3"
-    }, {
-        id: 1,
-        gate_id: 1,
-        start_time: "16:56 Apr 4, 19",
-        fulfilled_time: "16:59 Apr 4, 19",
-        comp_ratio: 0,
-        items: [
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            },
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            },
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            },
-            {
-                id: 1,
-                quantity: 10,
-                delivered: 5
-            }
-        ],
-        robots_ids: "1, 2, 3"
-    });
-
     self.filteredOngoingOrders = ko.computed(function () {
         return self.ongoingOrders().filter(function (order) {
-            return true;
-            // return self.ongoingSearchValue().length === 0 || parseInt(order.id()) === parseInt(self.ongoingSearchValue());
+            return self.ongoingSearchValue().length === 0 || parseInt(order.id()) === parseInt(self.ongoingSearchValue());
         });
+    });
+
+    self.filteredUpcomingOrders = ko.computed(function () {
+        return self.upcomingOrders().filter(function (order) {
+            return self.upcomingSearchValue().length === 0 || parseInt(order.id()) === parseInt(self.upcomingSearchValue());
+        });
+    });
+
+    self.filteredFinishedOrders = ko.computed(function () {
+        return self.finishedOrders().filter(function (order) {
+            return self.finishedSearchValue().length === 0 || parseInt(order.id()) === parseInt(self.finishedSearchValue());
+        });
+    });
+
+    self.tabsClipPath = ko.computed(function () {
+        if (self.activeMenu() === ORDER_MENU.ADD) {
+            return 'polygon(0% 0%, 25% 0%, 25% 100%, 0% 100%)';
+        } else if (self.activeMenu() === ORDER_MENU.ONGOING) {
+            return 'polygon(25% 0%, 50% 0%, 50% 100%, 25% 100%)';
+        } else if (self.activeMenu() === ORDER_MENU.UPCOMING) {
+            return 'polygon(50% 0%, 75% 0%, 75% 100%, 50% 100%)';
+        } else if (self.activeMenu() === ORDER_MENU.FINISHED) {
+            return 'polygon(75% 0%, 100% 0%, 100% 100%, 75% 100%)';
+        }
     });
 
     self.add = function () {
         if (!check())
             return;
 
-        state.orders.push({
+        let items = ko.observableArray();
+
+        self.items().forEach(function (i) {
+            i.delivered = ko.observable(0);
+            items.push(i);
+
+            state.stock[i.id()] -= i.quantity();
+        });
+
+        self.ongoingOrders.push({
             id: parseInt(self.id()),
-            gate_id: parseInt(self.gateID()),
-            items: ko.mapping.toJS(self.items())
+            gate_id: self.gateID().length ? parseInt(self.gateID()) : "-", // ToDo: get gate from server
+            items: items,
+            more: ko.observable(false),
+            start_time: self.startDateTime(),
+            fullfilled_time: ko.observable("TBD"),
+            progress: ko.computed(function () {
+                let del = 0;
+                let tot = 0;
+
+                items().forEach(function (i) {
+                    del += i.delivered();
+                    tot += i.quantity();
+                });
+
+                return del / tot;
+            })
         });
 
         self.id(parseInt(self.id()) + 1);
-
-        self.items().forEach(function (i) {
-            state.stock[i.id()] -= i.quantity();
-        });
 
         // ToDo: send order
         // commSender({
@@ -160,8 +108,8 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
             return;
 
         self.items.push({
-            id: ko.observable(parseInt(self.itemID())),
-            quantity: ko.observable(parseInt(self.itemQuantity()))
+            id: parseInt(self.itemID()),
+            quantity: parseInt(self.itemQuantity())
         });
 
         self.itemID("");
@@ -174,6 +122,10 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
 
     self.removeItem = function () {
         self.items.remove(this);
+    };
+
+    self.toggleActiveOrdersMenu = function (m) {
+        self.activeMenu(m);
     };
 
     let clear = function () {
@@ -253,6 +205,8 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
 
             return false;
         }
+
+        // ToDo: check the startDateTime (validDateTime && inFuture) or black or NOW
 
         return true;
     };

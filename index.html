@@ -303,8 +303,43 @@
                 <div class="order"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.ORDER}">
 
+                    <!--========================= TABS =========================-->
+                    <div class="tab">
+                        <div class="container">
+                            <div class="inner-container">
+                                <div class="toggle" data-bind="click: function(){leftMenuVM.orderVM.toggleActiveOrdersMenu(ORDER_MENU.ADD)}">
+                                    <p><i class="fas fa-plus"></i></p>
+                                </div>
+                                <div class="toggle" data-bind="click: function(){leftMenuVM.orderVM.toggleActiveOrdersMenu(ORDER_MENU.ONGOING)}">
+                                    <p><i class="fas fa-redo-alt"></i></p>
+                                </div>
+                                <div class="toggle" data-bind="click: function(){leftMenuVM.orderVM.toggleActiveOrdersMenu(ORDER_MENU.UPCOMING)}">
+                                    <p><i class="far fa-hourglass"></i></p>
+                                </div>
+                                <div class="toggle" data-bind="click: function(){leftMenuVM.orderVM.toggleActiveOrdersMenu(ORDER_MENU.FINISHED)}">
+                                    <p><i class="fas fa-check"></i></p>
+                                </div>
+                            </div>
+                            <div class="inner-container"
+                                 data-bind="style: {'clip-path': leftMenuVM.orderVM.tabsClipPath}">
+                                <div class="toggle" data-bind="click: function(){leftMenuVM.orderVM.toggleActiveOrdersMenu(ORDER_MENU.ADD)}">
+                                    <p><i class="fas fa-plus"></i></p>
+                                </div>
+                                <div class="toggle" data-bind="click: function(){leftMenuVM.orderVM.toggleActiveOrdersMenu(ORDER_MENU.ONGOING)}">
+                                    <p><i class="fas fa-redo-alt"></i></p>
+                                </div>
+                                <div class="toggle" data-bind="click: function(){leftMenuVM.orderVM.toggleActiveOrdersMenu(ORDER_MENU.UPCOMING)}">
+                                    <p><i class="far fa-hourglass"></i></p>
+                                </div>
+                                <div class="toggle" data-bind="click: function(){leftMenuVM.orderVM.toggleActiveOrdersMenu(ORDER_MENU.FINISHED)}">
+                                    <p><i class="fas fa-check"></i></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!--========================= ADD NEW ORDER =========================-->
-                    <div class="add hidden">
+                    <div class="add" data-bind="css: {hidden: leftMenuVM.orderVM.activeMenu() !== ORDER_MENU.ADD}">
                         <div class="form-group">
                             <label>Order ID</label>
                             <input type="text" class="form-control bg-dark text-light"
@@ -315,6 +350,12 @@
                             <input type="number" class="form-control bg-dark text-light"
                                    placeholder="Gate ID (Blank for automatic)"
                                    data-bind="textInput: leftMenuVM.orderVM.gateID">
+                        </div>
+                        <div class="form-group">
+                            <label>Start DateTime</label>
+                            <input type="datetime" class="form-control bg-dark text-light"
+                                   placeholder="16:59 Apr 4, 19"
+                                   data-bind="textInput: leftMenuVM.orderVM.startDateTime">
                         </div>
 
                         <!--====================== ITEMS LIST ======================-->
@@ -367,7 +408,7 @@
                     </div>
 
                     <!--========================= ONGOING ORDERS =========================-->
-                    <div class="ongoing">
+                    <div class="ongoing" data-bind="css: {hidden: leftMenuVM.orderVM.activeMenu() !== ORDER_MENU.ONGOING}">
 
                         <!--========================= SEARCH =========================-->
                         <div class="form-group search">
@@ -381,7 +422,7 @@
                                 <div class="cont">
                                     <div class="row main-row">
                                         <div class="col-md-3 icon">
-                                            <span class="fas fa-box" data-toggle="tooltip" data-bind="attr: {title: function() {return comp_ratio + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + comp_ratio + '%, #404548 ' + comp_ratio + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
+                                            <span class="fas fa-box" data-toggle="tooltip" data-bind="attr: {title: function() {return progress() + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + progress() + '%, #404548 ' + progress() + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
                                         </div>
                                         <div class="row col-md-9 details">
                                             <div class="row">
@@ -395,24 +436,25 @@
                                                         <div class="col-md-7"><b data-bind="text: gate_id"></b></div>
                                                     </div>
                                                 </div>
+
                                                 <div class="col-md-2 more">
-                                                    <i class="fas fa-ellipsis-h cwise-rotated-90"></i>
+                                                    <i class="fas fa-ellipsis-h" data-bind="click: function(){more(!more())}, css: {'cwise-rotated-90': more}"></i>
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row" data-bind="css: {hidden: !more()}">
                                                 <div class="col-md-4">Start:</div>
                                                 <div class="col-md-8"><small data-bind="text: start_time"></small></div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row" data-bind="css: {hidden: !more()}">
                                                 <div class="col-md-4">Full.:</div>
-                                                <div class="col-md-8"><small data-bind="text: fulfilled_time"></small></div>
+                                                <div class="col-md-8"><small data-bind="text: fullfilled_time"></small></div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <hr class="sep" data-bind="css: {'hidden': items.length === 0}">
+                                    <hr class="sep" data-bind="css: {'hidden': items().length === 0 || !more()}">
 
-                                    <div data-bind="css: {'hidden': items.length === 0}">
+                                    <div data-bind="css: {'hidden': items().length === 0 || !more()}">
                                         <span data-bind="foreach: items" class="items">
                                             <div class="row items-row">
                                                 <div class="col-md-3 id">Item#&nbsp;&nbsp;<b data-bind="text: id"></b></div>
@@ -427,22 +469,124 @@
                     </div>
 
                     <!--========================= UPCOMING ORDERS =========================-->
-                    <div class="upcoming hidden">
+                    <div class="upcoming" data-bind="css: {hidden: leftMenuVM.orderVM.activeMenu() !== ORDER_MENU.UPCOMING}">
 
                         <!--========================= SEARCH =========================-->
                         <div class="form-group search">
                             <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
                                    data-bind="textInput: leftMenuVM.orderVM.upcomingSearchValue">
                         </div>
+
+                        <!--====================== ORDERS LIST =======================-->
+                        <div class="form-group orders-list">
+                            <span data-bind="foreach: leftMenuVM.orderVM.filteredUpcomingOrders">
+                                <div class="cont">
+                                    <div class="row main-row">
+                                        <div class="col-md-3 icon">
+                                            <span class="fas fa-box" data-toggle="tooltip" data-bind="attr: {title: function() {return progress() + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + progress() + '%, #404548 ' + progress() + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
+                                        </div>
+                                        <div class="row col-md-9 details">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <div class="row">
+                                                        <div class="col-md-5">Order:</div>
+                                                        <div class="col-md-7"><b data-bind="text: id"></b></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-5">Gate:</div>
+                                                        <div class="col-md-7"><b data-bind="text: gate_id"></b></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2 more">
+                                                    <i class="fas fa-ellipsis-h" data-bind="click: function(){more(!more())}, css: {'cwise-rotated-90': more}"></i>
+                                                </div>
+                                            </div>
+                                            <div class="row" data-bind="css: {hidden: !more()}">
+                                                <div class="col-md-4">Start:</div>
+                                                <div class="col-md-8"><small data-bind="text: start_time"></small></div>
+                                            </div>
+                                            <div class="row" data-bind="css: {hidden: !more()}">
+                                                <div class="col-md-4">Full.:</div>
+                                                <div class="col-md-8"><small data-bind="text: fullfilled_time"></small></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr class="sep" data-bind="css: {'hidden': items().length === 0 || !more()}">
+
+                                    <div data-bind="css: {'hidden': items().length === 0 || !more()}">
+                                        <span data-bind="foreach: items" class="items">
+                                            <div class="row items-row">
+                                                <div class="col-md-3 id">Item#&nbsp;&nbsp;<b data-bind="text: id"></b></div>
+                                                <div class="col-md-9 state"><b data-bind="text: delivered"></b>/<span data-bind="text: quantity"></span>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
                     </div>
 
                     <!--========================= FINISHED ORDERS =========================-->
-                    <div class="finished hidden">
+                    <div class="finished" data-bind="css: {hidden: leftMenuVM.orderVM.activeMenu() !== ORDER_MENU.FINISHED}">
 
                         <!--========================= SEARCH =========================-->
                         <div class="form-group search">
                             <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
                                    data-bind="textInput: leftMenuVM.orderVM.finishedSearchValue">
+                        </div>
+
+                        <!--====================== ORDERS LIST =======================-->
+                        <div class="form-group orders-list">
+                            <span data-bind="foreach: leftMenuVM.orderVM.filteredFinishedOrders">
+                                <div class="cont">
+                                    <div class="row main-row">
+                                        <div class="col-md-3 icon">
+                                            <span class="fas fa-box" data-toggle="tooltip" data-bind="attr: {title: function() {return progress() + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + progress() + '%, #404548 ' + progress() + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
+                                        </div>
+                                        <div class="row col-md-9 details">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <div class="row">
+                                                        <div class="col-md-5">Order:</div>
+                                                        <div class="col-md-7"><b data-bind="text: id"></b></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-5">Gate:</div>
+                                                        <div class="col-md-7"><b data-bind="text: gate_id"></b></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2 more">
+                                                    <i class="fas fa-ellipsis-h" data-bind="click: function(){more(!more())}, css: {'cwise-rotated-90': more}"></i>
+                                                </div>
+                                            </div>
+                                            <div class="row" data-bind="css: {hidden: !more()}">
+                                                <div class="col-md-4">Start:</div>
+                                                <div class="col-md-8"><small data-bind="text: start_time"></small></div>
+                                            </div>
+                                            <div class="row" data-bind="css: {hidden: !more()}">
+                                                <div class="col-md-4">Full.:</div>
+                                                <div class="col-md-8"><small data-bind="text: fullfilled_time"></small></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr class="sep" data-bind="css: {'hidden': items().length === 0 || !more()}">
+
+                                    <div data-bind="css: {'hidden': items().length === 0 || !more()}">
+                                        <span data-bind="foreach: items" class="items">
+                                            <div class="row items-row">
+                                                <div class="col-md-3 id">Item#&nbsp;&nbsp;<b data-bind="text: id"></b></div>
+                                                <div class="col-md-9 state"><b data-bind="text: delivered"></b>/<span data-bind="text: quantity"></span>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </span>
                         </div>
                     </div>
                 </div>

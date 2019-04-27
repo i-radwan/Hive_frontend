@@ -1,3 +1,18 @@
+// Server
+SERVER_IP = 0;
+SERVER_PORT = 12346;
+
+// Shouting codes
+SHOUT_STATE_UPDATED = 0;
+SHOUT_MSG = 1;
+
+// Running modes
+RUNNING_MODE = {
+    DESIGN: 0,
+    SIMULATE: 1,
+    DEPLOY: 2
+};
+
 // Menu tiles
 LEFT_MENU = {
     EMPTY: 0,
@@ -18,11 +33,11 @@ RIGHT_MENU = {
     ITEMS: 3
 };
 
-// Running modes
-RUNNING_MODE = {
-    DESIGN: 0,
-    SIMULATE: 1,
-    DEPLOY: 2
+ORDER_MENU = {
+    ADD: 0,
+    ONGOING: 1,
+    UPCOMING: 2,
+    FINISHED: 3
 };
 
 // Map
@@ -35,10 +50,6 @@ MAP_CELL = {
     STATION: 3,
     OBSTACLE: 4
 };
-
-// Shouting codes
-SHOUT_STATE_UPDATED = 0;
-SHOUT_MSG = 1;
 
 // Msgs configs
 MSG_TIMEOUT = 1500; // ms
@@ -61,18 +72,19 @@ LOG_OBJECT_SIMULATION = 3;
 REG_HTML_COLOR = "^#([A-Fa-f0-9]{6})$";
 REG_IP = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
 
-// Logic Events
-LOGIC_EVENT_TYPE = {
-    CELL_CLICK: 0,
-    CELL_DRAG: 1,
-    CELL_DELETE: 2,
-    OBJECT_MOVE: 3,
-    ESC: 4
+RACK_CAP = 250;
+
+// Order status
+ORDER_STATUS = {
+    PENDING: 0,
+    ONGOING: 1,
+    UPCOMING: 2,
+    FINISHED: 3
 };
 
-// Server
-SERVER_IP = 0;
-SERVER_PORT = 12346;
+//
+// Events
+//
 
 // Server Events
 SERVER_EVENT_TYPE = {
@@ -86,7 +98,31 @@ SERVER_EVENT_TYPE = {
     FILL_RACK: 7
 };
 
+// Logic Events
+LOGIC_EVENT_TYPE = {
+    CELL_CLICK: 0,
+    CELL_DRAG: 1,
+    CELL_DELETE: 2,
+    OBJECT_MOVE: 3,
+    ESC: 4
+};
+
+// GFX Events
+GFX_EVENT_TYPE = {
+    INIT: 0,
+    OBJECT_HOVER: 1,
+    OBJECT_ADD: 2,
+    OBJECT_DELETE: 3,
+    OBJECT_DRAG: 4,
+    OBJECT_MOVE: 5,
+    OBJECT_HIGHLIGHT: 6,
+    ESC: 7
+};
+
+
+//
 // GFX
+//
 GRID_CELL_LENGTH = 50;
 MAX_ZOOM_VAL = 8;
 MIN_ZOOM_VAL = 0.06;
@@ -104,19 +140,4 @@ KEY_CODE = {
     DELETE: 46,
     ESC: 27
 };
-
-// GFX Events
-GFX_EVENT_TYPE = {
-    INIT: 0,
-    OBJECT_HOVER: 1,
-    OBJECT_ADD: 2,
-    OBJECT_DELETE: 3,
-    OBJECT_DRAG: 4,
-    OBJECT_MOVE: 5,
-    OBJECT_HIGHLIGHT: 6,
-    ESC: 7
-};
-
-// Logic
-RACK_CAP = 250;
 
