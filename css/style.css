@@ -29,7 +29,7 @@ body {
     display: none;
 }
 
-::-webkit-scrollbar:not(.right-menu-logs) {
+::-webkit-scrollbar {
     width: 0;
     background: transparent;
 }
@@ -40,585 +40,18 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-/*==============================================================*/
-/*========================= LEFT MENU ==========================*/
-/*==============================================================*/
-
-.lmenu {
-    box-shadow: 0 0 10px black;
-    background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
-}
-
-.lmenu-tiles {
-    overflow: hidden;
-    height: 640px;
-    padding: 0;
-}
-
-.lmenu-tiles ul {
-    list-style: none;
-    padding: 0;
-    color: #bababa;
-    text-align: center;
-}
-
-.lmenu-tiles ul li {
-    background-color: #282b2d;
-    padding: 15px 0;
-}
-
-.lmenu-tiles ul li:hover {
-    background-color: #323234;
-    cursor: pointer;
-}
-
-.lmenu-tiles ul li.inactive {
-    cursor: default;
-    background-color: #282b2d;
-    color: #4b4b4b;
-}
-
-.lmenu-tiles ul li.inactive:hover {
-    background-color: #282b2d;
-}
-
-.lmenu-tiles ul li.active {
-    cursor: default;
-    background-color: transparent;
-    color: #e09500;
-}
-
-.lmenu-tiles ul li.active:hover {
-    background-color: transparent;
-}
-
-.lmenu-tiles ul li i {
-    font-size: 33px;
-}
-
-.lmenu-tiles ul span {
-    width: 100%;
-    display: block;
-    text-align: center;
-    font-size: 10px;
-}
-
-/*==============================================================*/
-/*===================== LEFT MENU DETAILS ======================*/
-/*==============================================================*/
-
-.lmenu-details {
-    overflow-y: scroll;
-    height: 640px;
-    padding-bottom: 20px;
-}
-
-.lmenu-details-empty {
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    vertical-align: middle;
-}
-
-.lmenu-details-empty p {
-    text-align: center;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.lmenu-details-bottom-actions {
-    position: absolute;
-    bottom: 20px;
-    right: 17px;
-}
-
-.lmenu-details-bottom-actions i {
-    color: #bababa;
-    cursor: pointer;
-    font-size: 22px;
-    border-radius: 30px;
-    border: 2px solid #bababa;
-    padding: 0.45em 0.4em;
-}
-
-.lmenu-details-bottom-actions i:hover {
-    color: #e09500;
-    border: 2px solid #e09500;
-    box-shadow: 0 0 5px #e09500;
-}
-
-/*==============================================================*/
-/*========================= TEMPS MENU =========================*/
-/*==============================================================*/
-
-.lmenu-details-temps img {
-    cursor: pointer;
-    opacity: 0.8;
-    margin-top: 20px;
-    width: 100%;
-}
-
-.lmenu-details-temps img:hover {
-    animation: fade-in 0.4s ease;
-    animation-fill-mode: forwards;
-}
-
-/*==============================================================*/
-/*========================= MAPS MENU ==========================*/
-/*==============================================================*/
-
-.lmenu-details-map {
-    padding: 0;
-}
-
-.lmenu-details-map .form-group {
+.form-group {
     margin-top: 20px;
 }
 
-.lmenu-details-map label {
+.form-group label {
     font-size: 17px;
     color: #bababa;
 }
 
-.lmenu-details-map input {
+.form-group input {
     border-color: transparent;
     color: #bababa !important;
-}
-
-.lmenu-details-map-actions {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    padding: 0 0px;
-}
-
-.lmenu-details-map-actions i {
-    position: relative;
-    left: 0;
-    color: #bababa;
-    margin-right: 9px;
-    cursor: pointer;
-    font-size: 13px;
-    border-radius: 30px;
-    border: 2px solid #bababa;
-    padding: 0.4em 0.4em;
-}
-
-.lmenu-details-map-actions i:hover {
-    color: #e09500;
-    border: 2px solid #e09500;
-    box-shadow: 0 0 5px #e09500;
-}
-
-.lmenu-details-map-actions .apply {
-    color: #bababa;
-    margin-right: 9px;
-    cursor: pointer;
-    font-size: 22px;
-    border-radius: 30px;
-    border: 2px solid #bababa;
-    padding: 0.4em 0.4em;
-    margin-left: 82px;
-}
-
-/*==============================================================*/
-/*========================= GATE MENU ==========================*/
-/*==============================================================*/
-
-.lmenu-details-gate .form-group {
-    margin-top: 20px;
-}
-
-.lmenu-details-gate label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.lmenu-details-gate input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-/*==============================================================*/
-/*========================= ROBOT MENU ==========================*/
-/*==============================================================*/
-
-.lmenu-details-robot {
-    padding: 0;
-}
-
-.lmenu-details-robot .form-group {
-    margin-top: 20px;
-}
-
-.lmenu-details-robot label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.lmenu-details-robot input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-/*==============================================================*/
-/*========================= RACK MENU ==========================*/
-/*==============================================================*/
-
-.lmenu-details-rack {
-    padding: 0;
-}
-
-.lmenu-details-rack .form-group {
-    margin-top: 20px;
-}
-
-.lmenu-details-rack label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.lmenu-details-rack input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-.lmenu-items-menu {
-}
-
-.lmenu-items-menu input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-.lmenu-items-menu label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-/*==============================================================*/
-/*======================= STATION MENU =========================*/
-/*==============================================================*/
-
-.lmenu-details-station .form-group {
-    margin-top: 20px;
-}
-
-.lmenu-details-station label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.lmenu-details-station input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-/*==============================================================*/
-/*======================= OBSTACLE MENU ========================*/
-/*==============================================================*/
-
-.lmenu-details-obstacle .form-group {
-    margin-top: 20px;
-}
-
-.lmenu-details-obstacle label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.lmenu-details-obstacle input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-/*==============================================================*/
-/*======================== ORDERS MENU =========================*/
-/*==============================================================*/
-
-.orders-separator {
-    background-color: #818181;
-    margin: 0;
-}
-
-.lmenu-details-order label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.lmenu-details-order {
-    padding: 0;
-}
-
-.lmenu-details-order .form-group {
-    margin-top: 20px;
-}
-
-.lmenu-details-order input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-.quantity-container div {
-    display: inline;
-}
-
-.quantity-container input {
-    width: 50%;
-    float: left;
-    margin: 0;
-    padding-right: 0;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    display: inline-block;
-}
-
-.quantity-container-fields {
-    padding-right: 5px !important;
-}
-
-.quantity-container-icon {
-    padding-top: 8px !important;
-    padding-left: 5px;
-}
-
-.quantity-container-icon i {
-    cursor: pointer;
-    color: #bababa;
-    font-size: 20px;
-}
-
-.quantity-container-icon i:hover {
-    color: lawngreen;
-}
-
-.order-items-container {
-    max-height: 350px;
-    overflow: hidden;
-    overflow-y: scroll;
-}
-
-.order-items-container i:hover {
-    color: red;
-}
-
-/*==============================================================*/
-/*========================= RIGHT MENU =========================*/
-/*==============================================================*/
-
-.right-menu {
-    box-shadow: 0 0 10px black;
-    background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
-}
-
-.right-menu-empty {
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    vertical-align: middle;
-}
-
-.right-menu-empty p {
-    text-align: center;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/*==============================================================*/
-/*========================= LOGS MENU =========================*/
-/*==============================================================*/
-
-.right-menu-logs {
-    overflow: hidden;
-    overflow-y: scroll;
-    height: 570px;
-    color: #bababa;
-    font-size: 11px;
-}
-
-.right-menu-log-item {
-    height: 40px;
-    margin-top: 20px;
-    padding: 0 16px;
-}
-
-.right-menu-log-item-icon {
-    padding: 0;
-}
-
-.right-menu-log-item i.info {
-    color: #3972bf;
-}
-
-.right-menu-log-item i.warning {
-    color: #7ba428;
-}
-
-.right-menu-log-item i.error {
-    color: #8b0000;
-}
-
-.right-menu-log-item i.large {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 35px;
-}
-
-.right-menu-log-item i.small {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    font-size: 10px;
-    padding: 4px;
-    border-radius: 50px;
-    background: #1d1d1e;
-}
-
-.right-menu-log-item i.fa-truck-loading {
-    font-size: 8px;
-}
-
-.right-menu-log-item i.fa-boxes {
-    font-size: 8px;
-}
-
-.right-menu-log-item-text {
-    width: 100%;
-    height: 100%;
-    vertical-align: middle;
-}
-
-.right-menu-log-item-text span {
-    display: block;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.right-menu-log-sep {
-    margin: 15px 0;
-    vertical-align: middle;
-    color: #8b8b8b;
-}
-
-.right-menu-log-sep span {
-    display: block;
-    transform: translateY(25%);
-    padding: 0 2%;
-    width: 70%;
-    text-align: center;
-}
-
-.right-menu-log-sep hr {
-    color: #8b8b8b;
-    background: #8b8b8b;
-    width: 15%;
-}
-
-/*==============================================================*/
-/*========================= STATS MENU =========================*/
-/*==============================================================*/
-
-.right-menu-stats {
-    padding: 15px 0;
-    overflow: hidden;
-    overflow-y: scroll;
-    height: 615px;
-}
-
-.stats-row {
-    padding: 0;
-    margin: 10px 0 0 0;
-    font-family: 'Asap', sans-serif;
-}
-
-.stats-row-key {
-    float: left;
-    font-size: 12px;
-    width: 50%;
-    color: #bababa;
-    padding: 0;
-    margin: 0;
-}
-
-.stats-row-value {
-    float: right;
-    font-size: 12px;
-    width: 50%;
-    color: #e09500;
-    padding: 0;
-    margin: 0;
-}
-
-/*==============================================================*/
-/*======================== ITEMS MENU ==========================*/
-/*==============================================================*/
-
-.right-menu-items-menu {
-    padding: 15px 0;
-}
-
-.right-menu-items-menu input {
-    border-color: transparent;
-    color: #bababa !important;
-}
-
-.right-menu-items-menu label {
-    font-size: 17px;
-    color: #bababa;
-}
-
-.right-menu-items-menu .form-group {
-    margin-top: 20px;
-}
-
-.items-search-container {
-    margin-top: 20px;
-}
-
-.right-menu-items-title {
-
-}
-
-#right-menu-items-title-container {
-    font-family: 'Asap', sans-serif;
-    width: 180px;
-    height: 36px;
-    margin: auto;
-    position: relative;
-    overflow: hidden;
-    user-select: none;
-}
-
-#right-menu-items-title-container .inner-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: inherit;
-    height: inherit;
-    text-transform: uppercase;
-    font-size: .7em;
-    letter-spacing: .2em;
-    background: transparent;
-    color: #e09500;
-    border-bottom: 1px #e09500 solid;
-    font-weight: bolder;
-}
-
-#right-menu-items-title-container .toggle {
-    width: 100%;
-    position: absolute;
-    height: inherit;
-    display: flex;
-    box-sizing: border-box;
-}
-
-#right-menu-items-title-container .toggle p {
-    margin: auto;
 }
 
 .items-separator {
@@ -630,10 +63,6 @@ input[type=number]::-webkit-outer-spin-button {
     max-height: 390px;
     overflow: hidden;
     overflow-y: scroll;
-}
-
-.items-container i:hover {
-    color: red;
 }
 
 .item-container div {
@@ -666,8 +95,459 @@ input[type=number]::-webkit-outer-spin-button {
     font-size: 20px;
 }
 
-.item-container-icon i:hover {
+.item-container-icon .fa-plus:hover {
     color: lawngreen;
+}
+
+.item-container-icon .fa-minus:hover {
+    color: red;
+}
+
+/*==============================================================*/
+/*========================= LEFT MENU ==========================*/
+/*==============================================================*/
+
+.lmenu {
+    box-shadow: 0 0 10px black;
+    background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
+}
+
+.lmenu .tiles {
+    padding: 0;
+}
+
+.lmenu .tiles ul {
+    list-style: none;
+    padding: 0;
+    color: #bababa;
+    text-align: center;
+    margin-bottom: 0 !important;
+}
+
+.lmenu .tiles ul li {
+    background-color: #282b2d;
+    padding: 15px 0;
+}
+
+.lmenu .tiles ul li:hover {
+    background-color: #323234;
+    cursor: pointer;
+}
+
+.lmenu .tiles ul li.inactive {
+    cursor: default;
+    background-color: #282b2d;
+    color: #4b4b4b;
+}
+
+.lmenu .tiles ul li.inactive:hover {
+    background-color: #282b2d;
+}
+
+.lmenu .tiles ul li.active {
+    cursor: default;
+    background-color: transparent;
+    color: #e09500;
+}
+
+.lmenu .tiles ul li.active:hover {
+    background-color: transparent;
+}
+
+.lmenu .tiles ul li i {
+    font-size: 33px;
+}
+
+.lmenu .tiles ul span {
+    width: 100%;
+    display: block;
+    text-align: center;
+    font-size: 10px;
+}
+
+/*==============================================================*/
+/*===================== LEFT MENU DETAILS ======================*/
+/*==============================================================*/
+
+.lmenu .details {
+    overflow-y: scroll;
+    height: calc(100vh - 30px);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.lmenu-details-bottom-actions {
+    position: absolute;
+    bottom: 20px;
+    right: 17px;
+}
+
+.lmenu-details-bottom-actions i {
+    color: #bababa;
+    cursor: pointer;
+    font-size: 22px;
+    border-radius: 30px;
+    border: 2px solid #bababa;
+    padding: 0.45em 0.4em;
+}
+
+.lmenu-details-bottom-actions i:hover {
+    color: #e09500;
+    border: 2px solid #e09500;
+    box-shadow: 0 0 5px #e09500;
+}
+
+/*==============================================================*/
+/*========================= EMPTY MENU =========================*/
+/*==============================================================*/
+
+.lmenu .details .empty {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.lmenu .details .empty p {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/*==============================================================*/
+/*========================= TEMPS MENU =========================*/
+/*==============================================================*/
+
+.lmenu .details .temps img {
+    cursor: pointer;
+    opacity: 0.8;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.lmenu .details .temps img:hover {
+    opacity: 1;
+}
+
+/*==============================================================*/
+/*========================= MAPS MENU ==========================*/
+/*==============================================================*/
+
+.lmenu .details .map {
+    padding: 0;
+}
+
+.lmenu .details .map .actions {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    padding: 0;
+}
+
+.lmenu .details .map .actions i {
+    position: relative;
+    left: 0;
+    color: #bababa;
+    margin-right: 9px;
+    cursor: pointer;
+    font-size: 13px;
+    border-radius: 30px;
+    border: 2px solid #bababa;
+    padding: 0.4em 0.4em;
+}
+
+.lmenu .details .map .actions i:hover {
+    color: #e09500;
+    border: 2px solid #e09500;
+    box-shadow: 0 0 5px #e09500;
+}
+
+.lmenu .details .map .actions .apply {
+    color: #bababa;
+    margin-right: 9px;
+    cursor: pointer;
+    font-size: 22px;
+    border-radius: 30px;
+    border: 2px solid #bababa;
+    padding: 0.4em 0.4em;
+    margin-left: 82px;
+}
+
+/*==============================================================*/
+/*========================= GATE MENU ==========================*/
+/*==============================================================*/
+
+/*==============================================================*/
+/*========================= ROBOT MENU =========================*/
+/*==============================================================*/
+
+/*==============================================================*/
+/*========================= RACK MENU ==========================*/
+/*==============================================================*/
+.lmenu .details .rack .items-container {
+    max-height: 270px;
+}
+
+/*==============================================================*/
+/*======================= STATION MENU =========================*/
+/*==============================================================*/
+
+/*==============================================================*/
+/*======================= OBSTACLE MENU ========================*/
+/*==============================================================*/
+
+/*==============================================================*/
+/*======================== ORDERS MENU =========================*/
+/*==============================================================*/
+.lmenu .details .order .items-container {
+    max-height: 270px;
+}
+
+/*==============================================================*/
+/*========================= RIGHT MENU =========================*/
+/*==============================================================*/
+
+.rmenu {
+    box-shadow: 0 0 10px black;
+    background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
+}
+
+/*==============================================================*/
+/*========================= LOGS MENU =========================*/
+/*==============================================================*/
+
+.rmenu .logs {
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 570px;
+    color: #bababa;
+    font-size: 11px;
+}
+
+.rmenu .logs .item {
+    height: 40px;
+    margin-top: 20px;
+    padding: 0 16px;
+}
+
+.rmenu .logs .item .icon {
+    padding: 0;
+}
+
+.rmenu .logs .item i.info {
+    color: #3972bf;
+}
+
+.rmenu .logs .item i.warning {
+    color: #7ba428;
+}
+
+.rmenu .logs .item i.error {
+    color: #8b0000;
+}
+
+.rmenu .logs .item i.large {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 35px;
+}
+
+.rmenu .logs .item i.small {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 10px;
+    padding: 4px;
+    border-radius: 50px;
+    background: #1d1d1e;
+}
+
+.rmenu .logs .item i.fa-truck-loading {
+    font-size: 8px;
+}
+
+.rmenu .logs .item i.fa-boxes {
+    font-size: 8px;
+}
+
+.rmenu .logs .item .text {
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.rmenu .logs .item .text span {
+    display: block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.rmenu .logs .sep {
+    margin: 15px 0;
+    vertical-align: middle;
+    color: #8b8b8b;
+}
+
+.rmenu .logs .sep span {
+    display: block;
+    transform: translateY(25%);
+    padding: 0 2%;
+    width: 70%;
+    text-align: center;
+}
+
+.rmenu .logs .sep hr {
+    color: #8b8b8b;
+    background: #8b8b8b;
+    width: 15%;
+}
+
+/*==============================================================*/
+/*========================= STATS MENU =========================*/
+/*==============================================================*/
+
+.rmenu .sim {
+    padding: 15px 0;
+}
+
+.rmenu .stats {
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 570px;
+}
+
+.stats .row {
+    padding: 0;
+    margin: 10px 0 0 0;
+    font-family: 'Asap', sans-serif;
+}
+
+.stats .row .key {
+    float: left;
+    font-size: 12px;
+    width: 50%;
+    color: #bababa;
+    padding: 0;
+    margin: 0;
+}
+
+.stats .row .value {
+    float: right;
+    font-size: 12px;
+    width: 50%;
+    color: #e09500;
+    padding: 0;
+    margin: 0;
+}
+
+/*==============================================================*/
+/*====================== RIGHT ITEMS MENU ======================*/
+/*==============================================================*/
+
+.rmenu .items {
+    padding: 15px 0;
+}
+
+.rmenu .items .search {
+    margin-top: 20px;
+}
+
+.rmenu .items .tab {
+    font-family: 'Asap', sans-serif;
+    width: 180px;
+    height: 36px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+.rmenu .items .tab .inner-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: inherit;
+    height: inherit;
+    text-transform: uppercase;
+    font-size: .7em;
+    letter-spacing: .2em;
+    background: transparent;
+    color: #e09500;
+    border-bottom: 1px #e09500 solid;
+    font-weight: bolder;
+}
+
+.rmenu .items .tab .toggle {
+    width: 100%;
+    position: absolute;
+    height: inherit;
+    display: flex;
+    box-sizing: border-box;
+}
+
+.rmenu .items .tab .toggle p {
+    margin: auto;
+}
+
+/*==============================================================*/
+/*======================= RIGHT SIM MENU =======================*/
+/*==============================================================*/
+
+.rmenu .sim .tab .container {
+    font-family: 'Asap', sans-serif;
+    width: 180px;
+    height: 36px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    cursor: pointer;
+}
+
+.rmenu .sim .tab .inner-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: inherit;
+    height: inherit;
+    text-transform: uppercase;
+    font-size: .7em;
+    letter-spacing: .2em;
+}
+
+.rmenu .sim .tab .inner-container:first-child {
+    background: transparent;
+    border-bottom: 1px #bababa solid;
+    color: #bababa;
+}
+
+.rmenu .sim .tab .inner-container:nth-child(2) {
+    background: transparent;
+    color: #e09500;
+    border-bottom: 1px #e09500 solid;
+    font-weight: bolder;
+    transition: .3s cubic-bezier(0, 0, 0, 1);
+    clip-path: inset(0 50% 0 0);
+}
+
+.rmenu .sim .tab .toggle {
+    width: 50%;
+    position: absolute;
+    height: inherit;
+    display: flex;
+    box-sizing: border-box;
+}
+
+.rmenu .sim .tab .toggle p {
+    margin: auto;
+}
+
+.rmenu .sim .tab .toggle:nth-child(2) {
+    right: 0;
 }
 
 /*==============================================================*/
@@ -806,74 +686,5 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*==============================================================*/
-/*========================= COMPONENTS =========================*/
-/*==============================================================*/
-
-.right-menu-stats-toggle #container {
-    font-family: 'Asap', sans-serif;
-    width: 180px;
-    height: 36px;
-    margin: auto;
-    position: relative;
-    overflow: hidden;
-    user-select: none;
-    cursor: pointer;
-}
-
-.right-menu-stats-toggle .inner-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: inherit;
-    height: inherit;
-    text-transform: uppercase;
-    font-size: .7em;
-    letter-spacing: .2em;
-}
-
-.right-menu-stats-toggle .inner-container:first-child {
-    background: transparent;
-    border-bottom: 1px #bababa solid;
-    color: #bababa;
-}
-
-.right-menu-stats-toggle .inner-container:nth-child(2) {
-    background: transparent;
-    color: #e09500;
-    border-bottom: 1px #e09500 solid;
-    font-weight: bolder;
-    transition: .3s cubic-bezier(0, 0, 0, 1);
-    clip-path: inset(0 50% 0 0);
-}
-
-.right-menu-stats-toggle .toggle {
-    width: 50%;
-    position: absolute;
-    height: inherit;
-    display: flex;
-    box-sizing: border-box;
-}
-
-.right-menu-stats-toggle .toggle p {
-    margin: auto;
-}
-
-.right-menu-stats-toggle .toggle:nth-child(2) {
-    right: 0;
-}
-
-/*==============================================================*/
 /*========================= ANIMATIONS =========================*/
 /*==============================================================*/
-
-@keyframes fade-in {
-    0% {
-        opacity: 0.8;
-    }
-    50% {
-        opacity: 0.9;
-    }
-    100% {
-        opacity: 1;
-    }
-}
