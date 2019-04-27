@@ -96,9 +96,9 @@
 
                 <div class="temps"
                      data-bind="css: {hidden: leftMenuVM.activeMenu() !== LEFT_MENU.TEMPS}">
-                     <span data-bind="foreach: leftMenuVM.tempVM.temps">
-                     <img data-bind="attr: {src: img}, click: $parent.leftMenuVM.tempVM.tempClicked.bind($data, $index)">
-                     </span>
+                    <span data-bind="foreach: leftMenuVM.tempVM.temps">
+                        <img data-bind="attr: {src: img}, click: $parent.leftMenuVM.tempVM.tempClicked.bind($data, $index)">
+                    </span>
                 </div>
 
                 <!--==============================================================-->
@@ -323,15 +323,15 @@
                             <span data-bind="foreach: leftMenuVM.orderVM.items">
                                 <div class="row item-container">
                                    <div class="col-md-10 item-container-fields">
-                                      <input type="number" class="form-control bg-dark text-light" placeholder="Number"
-                                             data-bind="textInput: id, enable: false">
-                                      <input type="number" class="form-control bg-dark text-light"
-                                             placeholder="Quantity"
-                                             data-bind="textInput: quantity, enable: false">
+                                        <input type="number" class="form-control bg-dark text-light" placeholder="Number"
+                                               data-bind="textInput: id, enable: false">
+                                        <input type="number" class="form-control bg-dark text-light"
+                                               placeholder="Quantity"
+                                               data-bind="textInput: quantity, enable: false">
                                    </div>
                                    <div class="col-md-2 item-container-icon">
-                                      <i class="fas fa-minus"
-                                         data-bind="click: $parent.leftMenuVM.orderVM.removeItem"></i>
+                                        <i class="fas fa-minus"
+                                           data-bind="click: $parent.leftMenuVM.orderVM.removeItem"></i>
                                    </div>
                                 </div>
                            </span>
@@ -433,12 +433,12 @@
                             <div class="col-md-10 item-container-fields">
                             <input type="number" class="form-control bg-dark text-light" placeholder="ID"
                                    data-bind="textInput: id, enable: false">
-                              <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
-                                     data-bind="textInput: weight, enable: false">
+                            <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
+                                   data-bind="textInput: weight, enable: false">
                            </div>
                            <div class="col-md-2 item-container-icon">
-                              <i class="fas fa-minus"
-                                 data-bind="click: $parent.rightMenuVM.itemsVM.remove"></i>
+                                <i class="fas fa-minus"
+                                   data-bind="click: $parent.rightMenuVM.itemsVM.remove"></i>
                            </div>
                         </div>
                     </span>
@@ -492,32 +492,31 @@
                 </div>
             </div>
 
-            <!--========================= SIM =========================-->
             <div>
 
                 <!--========================= LOGS =========================-->
                 <div class="logs" data-bind="css: {hidden: rightMenuVM.activeMenu() !== RIGHT_MENU.LOGS}">
-                     <span data-bind="foreach: rightMenuVM.logs">
-                         <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
-                             <div class="row item">
-                                 <div class="col-md-3 icon">
-                                     <i class="fas large"
-                                        data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
-                                     <i class="fas small"
-                                        data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style {color: color}"></i>
-                                 </div>
-                                 <div class="col-md-9 text">
-                                     <span data-bind="html: msg"></span>
-                                 </div>
-                             </div>
-                         </span>
-                         <span data-bind="if: object === LOG_OBJECT_SIMULATION">
+                    <span data-bind="foreach: rightMenuVM.logs">
+                        <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
+                            <div class="row item">
+                                <div class="col-md-3 icon">
+                                    <i class="fas large"
+                                       data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
+                                    <i class="fas small"
+                                       data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style {color: color}"></i>
+                                </div>
+                                <div class="col-md-9 text">
+                                    <span data-bind="html: msg"></span>
+                                </div>
+                            </div>
+                        </span>
+                        <span data-bind="if: object === LOG_OBJECT_SIMULATION">
                             <div class="row sep">
                                <hr>
                                <span data-bind="text: msg"></span>
                                <hr>
                             </div>
-                         </span>
+                        </span>
                      </span>
                 </div>
 
