@@ -215,10 +215,10 @@
                                 <div class="row item-container">
                                     <div class="col-md-10 item-container-fields">
                                         <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                                               data-bind="textInput: id, enable: false">
+                                               data-bind="textInput: id" readonly>
                                         <input type="number" class="form-control bg-dark text-light"
                                                placeholder="Quantity"
-                                               data-bind="textInput: quantity, enable: false">
+                                               data-bind="textInput: quantity" readonly>
                                     </div>
                                     <div class="col-md-2 item-container-icon">
                                         <i class="fas fa-minus"
@@ -322,17 +322,17 @@
                         <div class="form-group">
                             <span data-bind="foreach: leftMenuVM.orderVM.items">
                                 <div class="row item-container">
-                                   <div class="col-md-10 item-container-fields">
+                                    <div class="col-md-10 item-container-fields">
                                         <input type="number" class="form-control bg-dark text-light" placeholder="Number"
-                                               data-bind="textInput: id, enable: false">
+                                               data-bind="textInput: id" readonly>
                                         <input type="number" class="form-control bg-dark text-light"
                                                placeholder="Quantity"
-                                               data-bind="textInput: quantity, enable: false">
-                                   </div>
-                                   <div class="col-md-2 item-container-icon">
+                                               data-bind="textInput: quantity" readonly>
+                                    </div>
+                                    <div class="col-md-2 item-container-icon">
                                         <i class="fas fa-minus"
                                            data-bind="click: $parent.leftMenuVM.orderVM.removeItem"></i>
-                                   </div>
+                                    </div>
                                 </div>
                            </span>
                         </div>
@@ -432,9 +432,9 @@
                         <div class="row item-container">
                             <div class="col-md-10 item-container-fields">
                             <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                                   data-bind="textInput: id, enable: false">
+                                   data-bind="textInput: id" readonly>
                             <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
-                                   data-bind="textInput: weight, enable: false">
+                                   data-bind="textInput: weight" readonly>
                            </div>
                            <div class="col-md-2 item-container-icon">
                                 <i class="fas fa-minus"
