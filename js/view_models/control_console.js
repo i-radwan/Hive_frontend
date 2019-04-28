@@ -70,11 +70,11 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.toggleSettings = function () {
         if (self.settingsVisible()) {
             $("#settings-icon").removeClass("rotated");
-            $(".map-row").removeClass("shadowless");
+            $(".map-row").removeClass("back");
             $("#settings").slideUp(250);
         } else {
             $("#settings-icon").addClass("rotated");
-            $(".map-row").addClass("shadowless");
+            $(".map-row").addClass("back");
             $("#settings").slideDown(250);
         }
 
