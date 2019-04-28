@@ -1,5 +1,6 @@
 require('../utils/constants');
 require('knockout-mapping');
+require('flatpickr');
 let $ = require('jquery');
 let ko = require('knockout');
 
@@ -10,7 +11,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
 
     self.id = ko.observable(1);
     self.gateID = ko.observable("");
-    self.startDateTime = ko.observable("16:59 Apr 4, 19");
+    self.startDateTime = ko.observable(flatpickr.formatDate(new Date(), "Y-m-d H:i"));
     self.items = ko.observableArray();
     self.itemID = ko.observable();
     self.itemQuantity = ko.observable();
@@ -54,6 +55,8 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
     });
 
     self.add = function () {
+        console.log(picker.input);
+
         if (!check())
             return;
 
@@ -72,7 +75,8 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
             items: items,
             more: ko.observable(false),
             start_time: self.startDateTime(),
-            fullfilled_time: ko.observable("TBD"),
+            start_time_formatted: flatpickr.formatDate(flatpickr.parseDate(self.startDateTime(), "Y-m-d H:i"), "H:i M j, y"),
+            fullfilled_time_formatted: ko.observable("TBD"),
             progress: ko.computed(function () {
                 let del = 0;
                 let tot = 0;
@@ -226,8 +230,6 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
             return false;
         }
 
-        // ToDo: check the startDateTime (validDateTime && inFuture) or black or NOW
-
         return true;
     };
 
@@ -274,6 +276,16 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
 
         return true;
     };
+
+    // Configure date time picker
+    let picker = flatpickr("#order_datetime", {
+        enableTime: true,
+        altInput: true,
+        dateFormat: "Y-m-d H:i",
+        altFormat: "H:i M j, y",
+        defaultDate: new Date(),
+        minDate: new Date(),
+    });
 };
 
 module.exports = orderViewModel;
