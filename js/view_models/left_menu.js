@@ -23,7 +23,7 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
     self.rackVM = new rackViewModel(shouter, state, gfxEventHandler, sendToServer);
     self.stationVM = new stationViewModel(shouter, state, gfxEventHandler, sendToServer);
     self.obstacleVM = new obstacleViewModel(shouter, state, gfxEventHandler, sendToServer);
-    self.orderVM = new orderViewModel(shouter, state, gfxEventHandler, sendToServer);
+    self.orderVM = new orderViewModel(shouter, state, gfxEventHandler, sendToServer, runningMode);
 
     /**
      * Handles menu tiles clicks.

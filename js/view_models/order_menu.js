@@ -4,7 +4,7 @@ require('flatpickr');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer) {
+let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, runningMode) {
     let self = this;
 
     self.activeMenu = ko.observable(ORDER_MENU.ADD);
@@ -54,7 +54,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer) {
         }
     });
 
-    self.consumeUpcomingOrders = setInterval(function () {
+    self.consumeUpcomingOrders = function () {
         let now = new Date();
 
         let o = self.upcomingOrders.remove(function (or) {
@@ -68,7 +68,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer) {
 
             // ToDo: send the order to the server
         });
-    }, 1000);
+    };
 
     self.ongoingOrderFinished = function (id) {
         let o = self.ongoingOrders.remove(function (or) {
@@ -319,6 +319,15 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer) {
         return true;
     };
 
+    // Listen for mode change
+    runningMode.subscribe(function (newRunningMode) {
+        if (newRunningMode === RUNNING_MODE.SIMULATE || newRunningMode === RUNNING_MODE.DEPLOY) {
+            self.consumeUpcomingOrdersInterval = setInterval(self.consumeUpcomingOrders, UPCOMING_ORDERS_CONSUMPTION_INTERVAL);
+        } else {
+            clearInterval(self.consumeUpcomingOrdersInterval);
+        }
+    });
+
     // Configure date time picker
     let picker = flatpickr("#order_datetime", {
         enableTime: true,
@@ -327,6 +336,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer) {
         altFormat: "H:i M j, y",
         defaultDate: new Date(),
         minDate: new Date(),
+        minuteIncrement: 1
     });
 };
 

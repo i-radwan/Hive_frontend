@@ -82,6 +82,8 @@ ORDER_STATUS = {
     FINISHED: 2
 };
 
+UPCOMING_ORDERS_CONSUMPTION_INTERVAL = 1000 * 60; // 1 Min
+
 //
 // Events
 //
