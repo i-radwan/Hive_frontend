@@ -10,8 +10,8 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
 
     self.id = ko.observable(1);
     self.items = ko.observableArray();
-    self.itemID = ko.observable();
-    self.itemQuantity = ko.observable();
+    self.itemID = ko.observable("");
+    self.itemQuantity = ko.observable("");
 
     self.applyVisible = ko.observable(false);
     self.activeRackRow = -1;
@@ -167,7 +167,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     self.addItem = function () {
-        if (!checkItem(parseInt(self.itemID()), parseInt(self.itemQuantity()), 0))
+        if (!checkItem(self.itemID(), self.itemQuantity(), 0))
             return;
 
         self.items.push({
@@ -289,7 +289,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         // -ve values
-        if (id < 0 || quantity < 0) {
+        if (parseInt(id) < 0 || parseInt(quantity) < 0) {
             shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
@@ -309,7 +309,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         }
 
         // Check if item exists
-        if (state.getItem(id) === undefined) {
+        if (state.getItem(parseInt(id)) === undefined) {
             shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;

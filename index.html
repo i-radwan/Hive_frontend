@@ -505,7 +505,7 @@
                         <div class="form-group orders-list"
                              data-bind="css: {hidden: leftMenuVM.orderVM.filteredUpcomingOrders().length === 0}">
                             <span data-bind="foreach: leftMenuVM.orderVM.filteredUpcomingOrders">
-                                <div class="cont">
+                                <div class="cont bordered">
                                     <div class="row main-row">
                                         <div class="col-md-3 icon">
                                             <span class="fas fa-box" data-toggle="tooltip"
@@ -531,11 +531,11 @@
                                             </div>
                                             <div class="row" data-bind="css: {hidden: !more()}">
                                                 <div class="col-md-4">Start:</div>
-                                                <div class="col-md-8"><small data-bind="text: start_time"></small></div>
+                                                <div class="col-md-8"><small data-bind="text: start_time_formatted"></small></div>
                                             </div>
                                             <div class="row" data-bind="css: {hidden: !more()}">
                                                 <div class="col-md-4">Full.:</div>
-                                                <div class="col-md-8"><small data-bind="text: fullfilled_time"></small></div>
+                                                <div class="col-md-8"><small data-bind="text: fullfilled_time_formatted"></small></div>
                                             </div>
                                         </div>
                                     </div>
@@ -576,7 +576,7 @@
                         <div class="form-group orders-list"
                              data-bind="css: {hidden: leftMenuVM.orderVM.filteredFinishedOrders().length === 0}">
                             <span data-bind="foreach: leftMenuVM.orderVM.filteredFinishedOrders">
-                                <div class="cont">
+                                <div class="cont bordered">
                                     <div class="row main-row">
                                         <div class="col-md-3 icon">
                                             <span class="fas fa-box" data-toggle="tooltip"
@@ -602,11 +602,11 @@
                                             </div>
                                             <div class="row" data-bind="css: {hidden: !more()}">
                                                 <div class="col-md-4">Start:</div>
-                                                <div class="col-md-8"><small data-bind="text: start_time"></small></div>
+                                                <div class="col-md-8"><small data-bind="text: start_time_formatted"></small></div>
                                             </div>
                                             <div class="row" data-bind="css: {hidden: !more()}">
                                                 <div class="col-md-4">Full.:</div>
-                                                <div class="col-md-8"><small data-bind="text: fullfilled_time"></small></div>
+                                                <div class="col-md-8"><small data-bind="text: fullfilled_time_formatted"></small></div>
                                             </div>
                                         </div>
                                     </div>

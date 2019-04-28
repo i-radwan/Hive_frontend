@@ -54,6 +54,42 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
         }
     });
 
+    self.consumeUpcomingOrders = setInterval(function () {
+        let now = new Date();
+
+        let o = self.upcomingOrders.remove(function (or) {
+            return flatpickr.parseDate(or.start_time, "Y-m-d H:i") <= now;
+        });
+
+        console.log(o);
+
+        o.forEach(function (or) {
+            self.ongoingOrders.push(or);
+
+            // ToDo: send the order to the server
+        });
+    }, 1000);
+
+    self.ongoingOrderFinished = function (id) {
+        let o = self.ongoingOrders.remove(function (or) {
+            return or.id === id;
+        });
+
+        o.forEach(function (or) {
+            self.finishedOrders.push(or);
+        });
+    };
+
+    self.ongoingOrderUpdate = function (id, update) {
+        for (let i = 0; i < self.ongoingOrders().length(); ++i) {
+            if (self.ongoingOrders()[i].id === id) {
+                self.ongoingOrders()[i].gate_id(update.gate_id);
+
+                break;
+            }
+        }
+    };
+
     self.add = function () {
         console.log(picker.input);
 
@@ -69,9 +105,9 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
             state.stock[i.id] -= i.quantity;
         });
 
-        self.ongoingOrders.push({
+        let order = {
             id: parseInt(self.id()),
-            gate_id: self.gateID().length ? parseInt(self.gateID()) : "-", // ToDo: get gate from server
+            gate_id: ko.observable(self.gateID().length ? parseInt(self.gateID()) : "-"), // ToDo: get gate from server
             items: items,
             more: ko.observable(false),
             start_time: self.startDateTime(),
@@ -88,19 +124,25 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
 
                 return del / tot;
             })
-        });
+        };
+
+        if (flatpickr.parseDate(self.startDateTime(), "Y-m-d H:i") > new Date()) {
+            self.upcomingOrders.push(order);
+        } else {
+            self.ongoingOrders.push(order);
+
+            // ToDo: send order
+            // commSender({
+            //     type: SERVER_EVENT_TYPE.ORDER_NEW,
+            //     data: {
+            //         id: self.id(),
+            //         gate_id: self.gateID(),
+            //         items: ko.mapping.toJS(self.items())
+            //     }
+            // });
+        }
 
         self.id(parseInt(self.id()) + 1);
-
-        // ToDo: send order
-        // commSender({
-        //     type: SERVER_EVENT_TYPE.ORDER_NEW,
-        //     data: {
-        //         id: self.id(),
-        //         gate_id: self.gateID(),
-        //         items: ko.mapping.toJS(self.items())
-        //     }
-        // });
 
         shouter.notifySubscribers({text: "Order placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
