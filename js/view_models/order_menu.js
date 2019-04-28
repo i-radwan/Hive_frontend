@@ -319,7 +319,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
         return true;
     };
 
-    // Listen for mode change
+    // Listen for mode change to start/stop upcoming orders consumption
     runningMode.subscribe(function (newRunningMode) {
         if (newRunningMode === RUNNING_MODE.SIMULATE || newRunningMode === RUNNING_MODE.DEPLOY) {
             self.consumeUpcomingOrdersInterval = setInterval(self.consumeUpcomingOrders, UPCOMING_ORDERS_CONSUMPTION_INTERVAL);
