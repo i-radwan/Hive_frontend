@@ -769,7 +769,18 @@ input[type=number]::-webkit-outer-spin-button {
 /*==============================================================*/
 
 .map-row {
-    height: 80%;
+    height: calc(80% - 15px);
+    margin-bottom: 15px;
+    position: relative;
+    z-index: -2;
+    background: #1d1d1e;
+    box-shadow: 0 0 10px black;
+    transition: .25s;
+}
+
+.map-row.shadowless {
+    box-shadow: 0 0 0 black;
+    transition: .25s;
 }
 
 /*==============================================================*/
@@ -779,11 +790,12 @@ input[type=number]::-webkit-outer-spin-button {
 .control-row {
     height: 20%;
     box-shadow: 0 0 10px black;
-    background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
+    background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>") 0 15px;
     vertical-align: middle;
 }
 
 .controls {
+    z-index: 0;
     display: block;
     height: 72px;
     position: relative;
@@ -793,6 +805,17 @@ input[type=number]::-webkit-outer-spin-button {
     text-align: center;
     padding: 0 20px;
     color: #bababa;
+}
+
+.logo {
+    position: absolute;
+    left: 13px;
+    top: 0;
+    transform: translate(0, -13px);
+}
+
+.logo img {
+    height: 100px;
 }
 
 .controls .play-pause {
@@ -879,15 +902,88 @@ input[type=number]::-webkit-outer-spin-button {
     color: #78c631;
 }
 
-.logo {
+.settings {
+    z-index: -1;
+    display: none;
+    margin-left: 15px;
+    margin-right: 15px;
     position: absolute;
-    left: 13px;
-    top: 0;
-    transform: translate(0, -13px);
+    left: 0;
+    right: 0;
+    bottom: 20%;
+    color: #bababa;
+    width: auto;
+    height: 80%;
+    box-shadow: 0 0 10px black;
+    background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>") 0 27px;
 }
 
-.logo img {
-    height: 100px;
+.settings .cont {
+    height: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.settings .col-md-4 {
+    height: calc(100vh - 41%);
+    overflow-y: scroll;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.settings .col-md-4:before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 7.5%;
+    width: 1px;
+    height: 85%;
+    border-right: 1px solid #434343;
+}
+
+.settings .col-md-4:last-child:before {
+    border-right: 0 solid transparent;
+}
+.settings .btn-cont {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.settings .btn-cont button {
+    color: #bababa !important;
+    padding: 5px 15px;
+    font-size: 1rem;
+}
+
+.controls .settings-icon {
+    font-size: 22px;
+    color: #8b8b8b;
+    position: absolute;
+    right: 16px;
+    top: 37%;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.controls .settings-icon.rotated {
+    top: 37%;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    transition: .25s;
+}
+
+.controls .settings-icon:hover {
+    color: #bababa;
 }
 
 /*==============================================================*/

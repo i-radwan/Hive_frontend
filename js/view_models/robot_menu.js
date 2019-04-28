@@ -9,6 +9,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
     self.loadCap = ko.observable(100);
     self.batteryCap = ko.observable(10000);
     self.ip = ko.observable("");
+    self.port = ko.observable("");
 
     self.applyVisible = ko.observable(false);
     self.activeRobotRow = -1;
@@ -25,7 +26,8 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
                 color: self.color(),
                 load_cap: parseInt(self.loadCap()),
                 battery_cap: parseInt(self.batteryCap()),
-                ip: self.ip()
+                ip: self.ip(),
+                port: self.port()
             };
 
             self.id(parseInt(self.id()) + 1);
@@ -42,7 +44,8 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
                 load_cap: parseInt(self.loadCap()),
                 battery_cap: parseInt(self.batteryCap()),
                 color: self.color(),
-                ip: self.ip()
+                ip: self.ip(),
+                port: self.port()
             });
         } else if (state.map.grid[row][col].robot !== undefined && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
@@ -122,6 +125,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
         self.loadCap(robot.load_cap);
         self.batteryCap(robot.battery_cap);
         self.ip(robot.ip);
+        self.port(robot.port);
 
         gfxEventHandler({
             type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
@@ -155,7 +159,8 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             color: self.color(),
             load_cap: parseInt(self.loadCap()),
             battery_cap: parseInt(self.batteryCap()),
-            ip: self.ip()
+            ip: self.ip(),
+            port: self.port()
         };
 
         state.nextIDs.robot = Math.max(state.nextIDs.robot, parseInt(self.id()) + 1);
@@ -230,9 +235,14 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             return false;
         }
 
-        if (self.ip().length > 0 &&
-            !self.ip().match(REG_IP)) {
+        if (self.ip().length > 0 && !self.ip().match(REG_IP)) {
             shouter.notifySubscribers({text: "Invalid IP address!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (self.port().length > 0 && isNaN(self.port())) {
+            shouter.notifySubscribers({text: "Invalid Port!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
@@ -251,6 +261,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
         self.loadCap(100);
         self.batteryCap(10000);
         self.ip("");
+        self.port("");
     };
 
     // Events

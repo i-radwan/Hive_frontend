@@ -29,7 +29,7 @@ $(document).ready(() => {
 
     let comm = new communicator();
 
-    let mainVM = new mainViewModel(gfxEventHandler, comm.send);
+    let mainVM = new mainViewModel(gfxEventHandler, comm);
 
     ko.applyBindings(mainVM, $("#main")[0]);
 
@@ -77,7 +77,7 @@ $(document).ready(() => {
         }
     };
 
-    comm.connect(SERVER_IP, SERVER_PORT, rcv);
+    comm.rcv = rcv;
 
     // Simulation logic
 

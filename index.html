@@ -180,6 +180,11 @@
                         <input type="text" class="form-control bg-dark text-light" placeholder="Robot IP (192.168.0.1)"
                                data-bind="textInput: leftMenuVM.robotVM.ip, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
+                    <div class="form-group">
+                        <label>Robot Port</label>
+                        <input type="text" class="form-control bg-dark text-light" placeholder="Robot Port (12345)"
+                               data-bind="textInput: leftMenuVM.robotVM.port, enable: runningMode() === RUNNING_MODE.DESIGN">
+                    </div>
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lmenu-details-bottom-actions"
@@ -662,14 +667,40 @@
         <!--==============================================================-->
 
         <div class="row control-row">
+            <div class="settings" id="settings">
+                <div class="row cont">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Server IP</label>
+                            <input type="text" class="form-control bg-dark text-light" placeholder="Server IP (192.168.0.1)"
+                                   data-bind="textInput: controlConsoleVM.ip, enable: runningMode() === RUNNING_MODE.DESIGN">
+                        </div>
+                        <div class="form-group">
+                            <label>Server Port</label>
+                            <input type="text" class="form-control bg-dark text-light" placeholder="Server Port (12345)"
+                                   data-bind="textInput: controlConsoleVM.port, enable: runningMode() === RUNNING_MODE.DESIGN">
+                        </div>
+                        <div class="form-group btn-cont">
+                            <button class="btn-dark text-muted" data-bind="click: controlConsoleVM.connect">Connect</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            </div>
             <div class="controls">
                 <div class="logo">
                     <img src="images/meta/logo_3.png">
                 </div>
+
                 <i class="fas fa-stop stop" data-bind="click: controlConsoleVM.stop"></i>
                 <i class="fas play-pause"
                    data-bind="click: controlConsoleVM.play, css: {'fa-play play': !controlConsoleVM.playing(), 'fa-pause pause': controlConsoleVM.playing()}"></i>
                 <div class="deploy-switch" data-bind="click: controlConsoleVM.deploy">Deploy</div>
+
+                <i class="fas fa-cog settings-icon" id="settings-icon" data-bind="click: controlConsoleVM.toggleSettings"></i>
             </div>
             <div class="text-sm-center msg"
                  data-bind="text: controlConsoleVM.msg, css: {'error-msg': controlConsoleVM.msgType() === MSG_ERROR, 'info-msg': controlConsoleVM.msgType() === MSG_INFO}"></div>

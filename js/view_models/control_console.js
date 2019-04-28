@@ -1,13 +1,18 @@
 require('../utils/constants');
+let $ = require('jquery');
 let ko = require('knockout');
 
-let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
+let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHandler, comm) {
     let self = this;
 
+    self.settingsVisible = ko.observable(false);
     self.playing = ko.observable(false);
     self.msg = ko.observable("");
     self.msgType = ko.observable(MSG_INFO);
     self.timer = null;
+
+    self.ip = ko.observable("");
+    self.port = ko.observable("");
 
     self.preSimState = null;
 
@@ -60,6 +65,50 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     };
 
     self.handleEsc = function () {
+    };
+
+    self.toggleSettings = function () {
+        if (self.settingsVisible()) {
+            $("#settings-icon").removeClass("rotated");
+            $(".map-row").removeClass("shadowless");
+            $("#settings").slideUp(250);
+        } else {
+            $("#settings-icon").addClass("rotated");
+            $(".map-row").addClass("shadowless");
+            $("#settings").slideDown(250);
+        }
+
+        self.settingsVisible(!self.settingsVisible());
+    };
+
+    self.connect = function () {
+        // ToDo connect to the server
+
+        if (self.ip().length === 0 || !self.ip().match(REG_IP)) {
+            shouter.notifySubscribers({text: "Invalid IP address!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (self.port().length === 0 || isNaN(self.port())) {
+            shouter.notifySubscribers({text: "Invalid Port!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        try {
+            let d = comm.connect(self.ip(), self.port());
+
+            if (d) {
+                shouter.notifySubscribers({text: "Connected to Server!", type: MSG_INFO}, SHOUT_MSG);
+
+                return true;
+            }
+        } catch (e) {}
+
+        shouter.notifySubscribers({text: "Couldn't Connect to the Server!", type: MSG_ERROR}, SHOUT_MSG);
+
+        return false;
     };
 
     shouter.subscribe(function (msg) {

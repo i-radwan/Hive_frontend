@@ -6,6 +6,14 @@ let comm = function () {
     let self = this;
 
     self.connect = function (ip, port, rcv) {
+        if (rcv !== undefined)
+            self.rcv = rcv;
+        else if (self.rcv === undefined) {
+            throw "Error, no rcv function defined!";
+        }
+
+        let d = false;
+
         self.wss = new WebSocketServer({
             host: ip, port: port
         });
@@ -15,9 +23,13 @@ let comm = function () {
 
             ws.on('message', function (message) {
                 console.log('received: %s', message);
-                rcv(message);
+                self.rcv(message);
             });
+
+            d = true;
         });
+
+        return d;
     };
 
     self.send = function (msg) {
