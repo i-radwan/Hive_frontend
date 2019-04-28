@@ -3,7 +3,7 @@ let ko = require('knockout');
 
 let itemsViewModel = require('./items_menu');
 
-let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, commSender) {
+let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
     let self = this;
 
     self.activeMenu = ko.observable(RIGHT_MENU.ITEMS);

@@ -10,20 +10,20 @@ let stationViewModel = require('./station_menu');
 let obstacleViewModel = require('./obstacle_menu');
 let orderViewModel = require('./order_menu');
 
-let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, commSender) {
+let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
 
     // Sub view models
-    self.tempVM = new tempViewModel(shouter, state, gfxEventHandler, commSender);
-    self.mapVM = new mapViewModel(shouter, state, gfxEventHandler, commSender);
-    self.gateVM = new gateViewModel(shouter, state, gfxEventHandler, commSender);
-    self.robotVM = new robotViewModel(shouter, state, gfxEventHandler, commSender);
-    self.rackVM = new rackViewModel(shouter, state, gfxEventHandler, commSender);
-    self.stationVM = new stationViewModel(shouter, state, gfxEventHandler, commSender);
-    self.obstacleVM = new obstacleViewModel(shouter, state, gfxEventHandler, commSender);
-    self.orderVM = new orderViewModel(shouter, state, gfxEventHandler, commSender);
+    self.tempVM = new tempViewModel(shouter, state, gfxEventHandler, sendToServer);
+    self.mapVM = new mapViewModel(shouter, state, gfxEventHandler, sendToServer);
+    self.gateVM = new gateViewModel(shouter, state, gfxEventHandler, sendToServer);
+    self.robotVM = new robotViewModel(shouter, state, gfxEventHandler, sendToServer);
+    self.rackVM = new rackViewModel(shouter, state, gfxEventHandler, sendToServer);
+    self.stationVM = new stationViewModel(shouter, state, gfxEventHandler, sendToServer);
+    self.obstacleVM = new obstacleViewModel(shouter, state, gfxEventHandler, sendToServer);
+    self.orderVM = new orderViewModel(shouter, state, gfxEventHandler, sendToServer);
 
     /**
      * Handles menu tiles clicks.

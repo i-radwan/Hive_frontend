@@ -111,6 +111,26 @@ input[type=number]::-webkit-outer-spin-button {
     color: red;
 }
 
+.sep {
+    margin: 15px 0;
+    vertical-align: middle;
+    color: #8b8b8b;
+}
+
+.sep span {
+    display: block;
+    transform: translateY(25%);
+    padding: 0 2%;
+    width: 70%;
+    text-align: center;
+}
+
+.sep hr {
+    color: #8b8b8b;
+    background: #8b8b8b;
+    width: 15%;
+}
+
 /*==============================================================*/
 /*========================= LEFT MENU ==========================*/
 /*==============================================================*/
@@ -396,7 +416,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .orders-list .cont.bordered {
-    border: 1px #494949 solid;
+    border-bottom: 1px #494949 solid;
 }
 
 .orders-list .main-row {
@@ -452,9 +472,12 @@ input[type=number]::-webkit-outer-spin-button {
     color: lawngreen;
 }
 
-.orders-list .sep {
-    background-color: #494949;
-    margin: 15px 0 0;
+.orders-list .sep span {
+    width: 40%;
+}
+
+.orders-list .sep hr {
+    width: 30%;
 }
 
 .orders-list .items {

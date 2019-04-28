@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHandler, commSender) {
+let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
     let self = this;
 
     self.playing = ko.observable(false);
@@ -105,7 +105,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         // console.log(JSON.stringify(state, null, 2));
 
         // TODO
-        // commSender({
+        // sendToServer({
         //     type: SERVER_EVENT_TYPE.INIT,
         //     data: JSON.stringify(state, null, 2)
         // });

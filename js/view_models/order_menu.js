@@ -4,7 +4,7 @@ require('flatpickr');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
+let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer) {
     let self = this;
 
     self.activeMenu = ko.observable(ORDER_MENU.ADD);
@@ -132,7 +132,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, commSender) {
             self.ongoingOrders.push(order);
 
             // ToDo: send order
-            // commSender({
+            // sendToServer({
             //     type: SERVER_EVENT_TYPE.ORDER_NEW,
             //     data: {
             //         id: self.id(),

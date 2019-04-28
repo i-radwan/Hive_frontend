@@ -9,7 +9,7 @@ let leftMenuViewModel = require("./left_menu");
 let controlConsoleViewModel = require("./control_console");
 let rightMenuViewModel = require("./right_menu");
 
-let mainViewModel = function (gfxEventHandler, commSender) {
+let mainViewModel = function (gfxEventHandler, sendToServer) {
     let self = this;
 
     self.state = new State();
@@ -20,9 +20,9 @@ let mainViewModel = function (gfxEventHandler, commSender) {
 
     self.gfxEventHandler = gfxEventHandler;
 
-    self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, commSender);
-    self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, commSender);
-    self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, commSender);
+    self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, sendToServer);
+    self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, sendToServer);
+    self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, sendToServer);
 
     self.setGFXEventHandler = function (gfxEventHandler) {
         self.gfxEventHandler = gfxEventHandler;
