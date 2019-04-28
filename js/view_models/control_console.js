@@ -13,11 +13,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     self.play = function () {
         if (self.playing()) {
-            runningMode(RUNNING_MODE.DESIGN);
+            runningMode(RUNNING_MODE.PAUSE);
             self.playing(false);
-
-            state.load(self.preSimState);
-            shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
         } else {
             if (!prepare())
                 return false;

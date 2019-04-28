@@ -706,7 +706,7 @@
                            </div>
                            <div class="col-md-2 item-container-icon">
                                 <i class="fas fa-minus"
-                                   data-bind="click: $parent.rightMenuVM.itemsVM.remove"></i>
+                                   data-bind="click: $parent.rightMenuVM.itemsVM.remove, enabled: runningMode() === RUNNING_MODE.DESIGN"></i>
                            </div>
                         </div>
                     </span>
@@ -720,12 +720,12 @@
                 <div class="row item-container">
                     <div class="col-md-10 item-container-fields">
                         <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                               data-bind="textInput: rightMenuVM.itemsVM.newItemID">
+                               data-bind="textInput: rightMenuVM.itemsVM.newItemID, enabled: runningMode() === RUNNING_MODE.DESIGN">
                         <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
-                               data-bind="textInput: rightMenuVM.itemsVM.newItemWeight">
+                               data-bind="textInput: rightMenuVM.itemsVM.newItemWeight, enabled: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="col-md-2 item-container-icon">
-                        <i class="fas fa-plus" data-bind="click: rightMenuVM.itemsVM.add"></i>
+                        <i class="fas fa-plus" data-bind="click: rightMenuVM.itemsVM.add, enabled: runningMode() === RUNNING_MODE.DESIGN"></i>
                     </div>
                 </div>
             </div>

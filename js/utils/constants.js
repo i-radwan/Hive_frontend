@@ -10,7 +10,8 @@ SHOUT_MSG = 1;
 RUNNING_MODE = {
     DESIGN: 0,
     SIMULATE: 1,
-    DEPLOY: 2
+    DEPLOY: 2,
+    PAUSE: 3
 };
 
 // Menu tiles
@@ -76,10 +77,9 @@ RACK_CAP = 250;
 
 // Order status
 ORDER_STATUS = {
-    PENDING: 0,
-    ONGOING: 1,
-    UPCOMING: 2,
-    FINISHED: 3
+    ONGOING: 0,
+    UPCOMING: 1,
+    FINISHED: 2
 };
 
 //
