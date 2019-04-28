@@ -85,6 +85,27 @@ ORDER_STATUS = {
 UPCOMING_ORDERS_CONSUMPTION_INTERVAL = 1000 * 60; // 1 Min
 
 //
+// GFX
+//
+GRID_CELL_LENGTH = 50;
+MAX_ZOOM_VAL = 8;
+MIN_ZOOM_VAL = 0.06;
+KEYBOARD_DRAG_SPEED = 4;
+
+ARROW = {
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40
+};
+
+KEY_CODE = {
+    F5: 116,
+    DELETE: 46,
+    ESC: 27
+};
+
+//
 // Events
 //
 
@@ -118,28 +139,10 @@ GFX_EVENT_TYPE = {
     OBJECT_DRAG: 4,
     OBJECT_MOVE: 5,
     OBJECT_HIGHLIGHT: 6,
-    ESC: 7
+    ESC: 7,
+    SIMULATION_START: 8,
+    SIMULATION_PAUSE: 9,
+    SIMULATION_RESUME: 10,
+    SIMULATION_END: 11,
+    ANIMATE_OBJECT: 12
 };
-
-
-//
-// GFX
-//
-GRID_CELL_LENGTH = 50;
-MAX_ZOOM_VAL = 8;
-MIN_ZOOM_VAL = 0.06;
-KEYBOARD_DRAG_SPEED = 4;
-
-ARROW = {
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40
-};
-
-KEY_CODE = {
-    F5: 116,
-    DELETE: 46,
-    ESC: 27
-};
-

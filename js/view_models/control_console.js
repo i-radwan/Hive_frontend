@@ -71,10 +71,12 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         if (self.settingsVisible()) {
             $("#settings-icon").removeClass("rotated");
             $(".map-row").removeClass("back");
+            $(".settings").removeClass("front");
             $("#settings").slideUp(250);
         } else {
             $("#settings-icon").addClass("rotated");
             $(".map-row").addClass("back");
+            $(".settings").addClass("front");
             $("#settings").slideDown(250);
         }
 
