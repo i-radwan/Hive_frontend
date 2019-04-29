@@ -1,12 +1,12 @@
-// Server
-SERVER_IP = 0;
-SERVER_PORT = 12346;
-
+//
 // Shouting codes
+//
 SHOUT_STATE_UPDATED = 0;
 SHOUT_MSG = 1;
 
+//
 // Running modes
+//
 RUNNING_MODE = {
     DESIGN: 0,
     SIMULATE: 1,
@@ -14,7 +14,7 @@ RUNNING_MODE = {
     PAUSE: 3
 };
 
-// Menu tiles
+// Menus
 LEFT_MENU = {
     EMPTY: 0,
     TEMPS: 1,
@@ -109,7 +109,44 @@ KEY_CODE = {
 // Events
 //
 
-// Server Events
+// Server Msgs
+MSG_TO_SERVER = {
+    CONFIG: 0,
+    ORDER: 1,
+    PAUSE: 2,
+    STOP: 3,
+    RESUME: 4,
+    ACK_ACTION: 5
+};
+
+MSG_FROM_SERVER = {
+    ACK_CONFIG: 0,
+    ACK_RESUME: 1,
+    ACK_ORDER: 2,
+    UPDATE: 3,
+    MSG: 4
+};
+
+CONFIG_MODE = {
+    SIMULATE: 0,
+    DEPLOY: 1
+};
+
+ACK_CONFIG_STATUS = {
+    OK: 0,
+    ERROR: 1
+};
+
+ACK_RESUME_STATUS = {
+    OK: 0,
+    ERROR: 1
+};
+
+ACK_ORDER_STATUS = {
+    OK: 0,
+    ERROR: 1
+};
+
 SERVER_EVENT_TYPE = {
     OBJECT_UPDATE: 0,
     LOG: 1,
@@ -121,17 +158,16 @@ SERVER_EVENT_TYPE = {
     FILL_RACK: 7
 };
 
-// Logic Events
-LOGIC_EVENT_TYPE = {
+// GFX Events
+EVENT_FROM_GFX = {
     CELL_CLICK: 0,
     CELL_DRAG: 1,
     CELL_DELETE: 2,
-    OBJECT_MOVE: 3,
+    ACK_ACTION: 3,
     ESC: 4
 };
 
-// GFX Events
-GFX_EVENT_TYPE = {
+EVENT_TO_GFX = {
     INIT: 0,
     OBJECT_HOVER: 1,
     OBJECT_ADD: 2,
@@ -139,10 +175,13 @@ GFX_EVENT_TYPE = {
     OBJECT_DRAG: 4,
     OBJECT_MOVE: 5,
     OBJECT_HIGHLIGHT: 6,
-    ESC: 7,
-    SIMULATION_START: 8,
-    SIMULATION_PAUSE: 9,
-    SIMULATION_RESUME: 10,
-    SIMULATION_END: 11,
-    ANIMATE_OBJECT: 12
+    OBJECT_COLORIZE: 7,
+    OBJECTS_BIND: 8,
+    OBJECTS_UNBIND: 9,
+    SIMULATION_START: 10,
+    SIMULATION_PAUSE: 11,
+    SIMULATION_RESUME: 12,
+    SIMULATION_STOP: 13,
+    ANIMATE_OBJECT: 14,
+    ESC: 15
 };

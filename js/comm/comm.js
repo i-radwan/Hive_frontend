@@ -1,8 +1,7 @@
 require('../utils/constants');
-let ko = require('knockout');
 let WebSocketServer = require('ws').Server;
 
-let comm = function () {
+let comm = function (serverMW) {
     let self = this;
 
     self.connect = function (ip, port, rcv) {
@@ -23,7 +22,7 @@ let comm = function () {
 
             ws.on('message', function (message) {
                 console.log('received: %s', message);
-                self.rcv(message);
+                self.rcv(serverMW.receive(message));
             });
 
             d = true;
@@ -33,7 +32,7 @@ let comm = function () {
     };
 
     self.send = function (msg) {
-        self.ws.send(msg);
+        self.ws.send(serverMW.send(msg));
     };
 };
 

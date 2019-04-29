@@ -10,20 +10,20 @@ let stationViewModel = require('./station_menu');
 let obstacleViewModel = require('./obstacle_menu');
 let orderViewModel = require('./order_menu');
 
-let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
+let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
     self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
 
     // Sub view models
-    self.tempVM = new tempViewModel(shouter, state, gfxEventHandler, sendToServer);
-    self.mapVM = new mapViewModel(shouter, state, gfxEventHandler, sendToServer);
-    self.gateVM = new gateViewModel(shouter, state, gfxEventHandler, sendToServer);
-    self.robotVM = new robotViewModel(shouter, state, gfxEventHandler, sendToServer);
-    self.rackVM = new rackViewModel(shouter, state, gfxEventHandler, sendToServer);
-    self.stationVM = new stationViewModel(shouter, state, gfxEventHandler, sendToServer);
-    self.obstacleVM = new obstacleViewModel(shouter, state, gfxEventHandler, sendToServer);
-    self.orderVM = new orderViewModel(shouter, state, gfxEventHandler, sendToServer, runningMode);
+    self.tempVM = new tempViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.mapVM = new mapViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.gateVM = new gateViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.robotVM = new robotViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.rackVM = new rackViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.stationVM = new stationViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.obstacleVM = new obstacleViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.orderVM = new orderViewModel(shouter, state, gfxEventHandler, sendToServer, runningMode, logger);
 
     /**
      * Handles menu tiles clicks.
@@ -62,54 +62,54 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
 
     let toggleTemps = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.ESC
+            type: EVENT_TO_GFX.ESC
         });
     };
 
     let toggleMap = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.ESC
+            type: EVENT_TO_GFX.ESC
         });
     };
 
     let toggleGate = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            type: EVENT_TO_GFX.OBJECT_HOVER,
             object: MAP_CELL.GATE
         });
     };
 
     let toggleRobot = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            type: EVENT_TO_GFX.OBJECT_HOVER,
             object: MAP_CELL.ROBOT
         });
     };
 
     let toggleRack = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            type: EVENT_TO_GFX.OBJECT_HOVER,
             object: MAP_CELL.RACK
         });
     };
 
     let toggleStation = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            type: EVENT_TO_GFX.OBJECT_HOVER,
             object: MAP_CELL.STATION
         });
     };
 
     let toggleObstacle = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HOVER,
+            type: EVENT_TO_GFX.OBJECT_HOVER,
             object: MAP_CELL.OBSTACLE
         });
     };
 
     let toggleOrder = function () {
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.ESC
+            type: EVENT_TO_GFX.ESC
         });
     };
 

@@ -2,7 +2,7 @@ require('../utils/constants');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHandler, comm) {
+let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHandler, comm, logger) {
     let self = this;
 
     self.settingsVisible = ko.observable(false);
@@ -18,20 +18,47 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     self.play = function () {
         if (self.playing()) {
+            comm.send({
+                type: MSG_TO_SERVER.PAUSE,
+                data: {
+                    mode: runningMode() === RUNNING_MODE.SIMULATE ? CONFIG_MODE.SIMULATE : CONFIG_MODE.DEPLOY
+                }
+            });
+
+            logger({
+                level: LOG_LEVEL_INFO,
+                object: LOG_OBJECT_SIMULATION,
+                msg: "Simulation Paused"
+            });
+
+            gfxEventHandler({
+                type: EVENT_TO_GFX.SIMULATION_PAUSE
+            });
+
             runningMode(RUNNING_MODE.PAUSE);
             self.playing(false);
         } else {
-            if (!prepare())
-                return false;
+            sendStateToServer(CONFIG_MODE.SIMULATE);
 
-            sendState();
-
-            runningMode(RUNNING_MODE.SIMULATE);
-            self.playing(true);
+            // ToDo: loading animation
         }
     };
 
     self.stop = function () {
+        comm.send({
+            type: MSG_TO_SERVER.STOP
+        });
+
+        logger({
+            level: LOG_LEVEL_INFO,
+            object: LOG_OBJECT_SIMULATION,
+            msg: "Simulation Stopped"
+        });
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.SIMULATION_STOP
+        });
+
         runningMode(RUNNING_MODE.DESIGN);
         self.playing(false);
 
@@ -58,10 +85,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             }
         }
 
-        sendState();
-
-        runningMode(RUNNING_MODE.DEPLOY);
-        self.playing(true);
+        sendStateToServer(CONFIG_MODE.DEPLOY);
     };
 
     self.handleEsc = function () {
@@ -125,6 +149,54 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         return false;
     };
 
+    self.handleServerMsg = function (msg) {
+        if (msg.type === MSG_FROM_SERVER.ACK_CONFIG) {
+            let data = msg.data;
+
+            if (data.status === ACK_CONFIG_STATUS.OK) {
+                prepare();
+
+                runningMode(data.mode);
+                self.playing(true);
+
+                logger({
+                    level: LOG_LEVEL_INFO,
+                    object: LOG_OBJECT_SIMULATION,
+                    msg: "Simulation Started"
+                });
+
+                gfxEventHandler({
+                    type: EVENT_TO_GFX.SIMULATION_START
+                });
+
+                // ToDo: hide the loading animation
+            } else if (data.status === ACK_CONFIG_STATUS.ERROR) {
+                shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+            }
+        } else if (msg.type === MSG_FROM_SERVER.ACK_RESUME) {
+            let data = msg.data;
+
+            if (data.status === ACK_RESUME_STATUS.OK) {
+                runningMode(data.mode);
+                self.playing(true);
+
+                logger({
+                    level: LOG_LEVEL_INFO,
+                    object: LOG_OBJECT_SIMULATION,
+                    msg: "Simulation Resumed"
+                });
+
+                gfxEventHandler({
+                    type: EVENT_TO_GFX.SIMULATION_RESUME
+                });
+
+                // ToDo: hide the loading animation
+            } else if (data.status === ACK_RESUME_STATUS.ERROR) {
+                shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+            }
+        }
+    };
+
     shouter.subscribe(function (msg) {
         self.msg(msg.text);
         self.msgType(msg.type);
@@ -160,18 +232,24 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         }
 
         self.preSimState = Object.assign({}, state);
-
-        return true;
     };
 
-    let sendState = function () {
-        // console.log(JSON.stringify(state, null, 2));
+    let sendStateToServer = function (mode) {
+        console.log(JSON.stringify(state, null, 2));
 
-        // TODO
-        // sendToServer({
-        //     type: SERVER_EVENT_TYPE.INIT,
-        //     data: JSON.stringify(state, null, 2)
-        // });
+        if (runningMode() === RUNNING_MODE.DESIGN) {
+            comm.send({
+                type: MSG_TO_SERVER.CONFIG,
+                data: {
+                    mode: mode,
+                    state: JSON.stringify(state, null, 2)
+                }
+            });
+        } else if (runningMode() === RUNNING_MODE.PAUSE) {
+            comm.send({
+                type: MSG_TO_SERVER.RESUME
+            })
+        }
     };
 };
 

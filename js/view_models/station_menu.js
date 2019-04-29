@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let stationViewModel = function (shouter, state, gfxEventHandler) {
+let stationViewModel = function (shouter, state, gfxEventHandler, logger) {
     let self = this;
 
     self.id = ko.observable(1);
@@ -27,7 +27,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
             shouter.notifySubscribers({text: "Station placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_ADD,
+                type: EVENT_TO_GFX.OBJECT_ADD,
                 object: MAP_CELL.STATION,
                 row: row,
                 col: col
@@ -36,7 +36,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         } else if (state.map.grid[row][col].facility === undefined && self.activeStationRow !== -1 && self.activeStationCol !== -1) {
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.ESC
+                type: EVENT_TO_GFX.ESC
             });
         }
     };
@@ -50,7 +50,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
             state.map.grid[srcRow][srcCol].facility = undefined;
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_DRAG,
+                type: EVENT_TO_GFX.OBJECT_DRAG,
                 object: MAP_CELL.STATION,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -64,7 +64,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
             }, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_DRAG,
+                type: EVENT_TO_GFX.OBJECT_DRAG,
                 object: MAP_CELL.STATION,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -79,7 +79,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
             state.map.grid[row][col].facility = undefined;
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_DELETE,
+                type: EVENT_TO_GFX.OBJECT_DELETE,
                 object: MAP_CELL.STATION,
                 row: row,
                 col: col
@@ -103,7 +103,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
         self.id(facility.id);
 
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             object: MAP_CELL.STATION,
             row: row,
             col: col
@@ -117,7 +117,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
         self.activeStationCol = col;
 
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             object: MAP_CELL.STATION,
             row: row,
             col: col
@@ -141,7 +141,7 @@ let stationViewModel = function (shouter, state, gfxEventHandler) {
         clear();
 
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.ESC
+            type: EVENT_TO_GFX.ESC
         });
 
         return true;

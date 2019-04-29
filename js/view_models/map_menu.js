@@ -3,7 +3,7 @@ let fs = require('fs');
 let ko = require('knockout');
 const {dialog} = require('electron').remote;
 
-let mapViewModel = function (shouter, state, gfxEventHandler) {
+let mapViewModel = function (shouter, state, gfxEventHandler, logger) {
     let self = this;
 
     self.mapWidth = ko.observable(MAP_INIT_WIDTH);
@@ -47,7 +47,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
     let informGFX = function() {
         // Inform GFX that the map size changed
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.INIT,
+            type: EVENT_TO_GFX.INIT,
             width: state.map.width,
             height: state.map.height
         });
@@ -59,7 +59,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
 
                 if (c.robot !== undefined) {
                     gfxEventHandler({
-                        type: GFX_EVENT_TYPE.OBJECT_ADD,
+                        type: EVENT_TO_GFX.OBJECT_ADD,
                         object: MAP_CELL.ROBOT,
                         row: i,
                         col: j,
@@ -73,7 +73,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
                     switch (c.facility.type) {
                         case MAP_CELL.GATE:
                             gfxEventHandler({
-                                type: GFX_EVENT_TYPE.OBJECT_ADD,
+                                type: EVENT_TO_GFX.OBJECT_ADD,
                                 object: MAP_CELL.GATE,
                                 row: i,
                                 col: j
@@ -81,7 +81,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
                             break;
                         case MAP_CELL.RACK:
                             gfxEventHandler({
-                                type: GFX_EVENT_TYPE.OBJECT_ADD,
+                                type: EVENT_TO_GFX.OBJECT_ADD,
                                 object: MAP_CELL.RACK,
                                 row: i,
                                 col: j,
@@ -91,7 +91,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
                             break;
                         case MAP_CELL.STATION:
                             gfxEventHandler({
-                                type: GFX_EVENT_TYPE.OBJECT_ADD,
+                                type: EVENT_TO_GFX.OBJECT_ADD,
                                 object: MAP_CELL.STATION,
                                 row: i,
                                 col: j
@@ -99,7 +99,7 @@ let mapViewModel = function (shouter, state, gfxEventHandler) {
                             break;
                         case MAP_CELL.OBSTACLE:
                             gfxEventHandler({
-                                type: GFX_EVENT_TYPE.OBJECT_ADD,
+                                type: EVENT_TO_GFX.OBJECT_ADD,
                                 object: MAP_CELL.OBSTACLE,
                                 row: i,
                                 col: j

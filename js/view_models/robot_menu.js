@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let robotViewModel = function (shouter, state, gfxEventHandler) {
+let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
     let self = this;
 
     self.id = ko.observable(1);
@@ -36,7 +36,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_ADD,
+                type: EVENT_TO_GFX.OBJECT_ADD,
                 object: MAP_CELL.ROBOT,
                 row: row,
                 col: col,
@@ -51,7 +51,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         } else if (state.map.grid[row][col].robot === undefined && self.activeRobotRow !== -1 && self.activeRobotCol !== -1) {
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.ESC
+                type: EVENT_TO_GFX.ESC
             });
         }
     };
@@ -70,7 +70,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             state.map.grid[srcRow][srcCol].robot = undefined;
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_DRAG,
+                type: EVENT_TO_GFX.OBJECT_DRAG,
                 object: MAP_CELL.ROBOT,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -84,7 +84,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             }, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_DRAG,
+                type: EVENT_TO_GFX.OBJECT_DRAG,
                 object: MAP_CELL.ROBOT,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -99,7 +99,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
             state.map.grid[row][col].robot = undefined;
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_DELETE,
+                type: EVENT_TO_GFX.OBJECT_DELETE,
                 object: MAP_CELL.ROBOT,
                 row: row,
                 col: col
@@ -128,7 +128,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
         self.port(robot.port);
 
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             object: MAP_CELL.ROBOT,
             row: row,
             col: col
@@ -142,7 +142,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
         self.activeRobotCol = col;
 
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             object: MAP_CELL.ROBOT,
             row: row,
             col: col
@@ -171,7 +171,7 @@ let robotViewModel = function (shouter, state, gfxEventHandler) {
         clear();
 
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.ESC
+            type: EVENT_TO_GFX.ESC
         });
 
         return true;

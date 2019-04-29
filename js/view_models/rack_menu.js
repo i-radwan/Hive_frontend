@@ -3,7 +3,7 @@ require('knockout-mapping');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let rackViewModel = function (shouter, state, gfxEventHandler) {
+let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
     let self = this;
 
     self.capacity = ko.observable(RACK_CAP);
@@ -36,7 +36,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_ADD,
+                type: EVENT_TO_GFX.OBJECT_ADD,
                 object: MAP_CELL.RACK,
                 row: row,
                 col: col,
@@ -47,7 +47,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
         } else if (state.map.grid[row][col].facility === undefined && self.activeRackRow !== -1 && self.activeRackCol !== -1) {
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.ESC
+                type: EVENT_TO_GFX.ESC
             });
         }
     };
@@ -64,7 +64,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             state.map.grid[srcRow][srcCol] = undefined;
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_DRAG,
+                type: EVENT_TO_GFX.OBJECT_DRAG,
                 object: MAP_CELL.RACK,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -78,7 +78,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             }, SHOUT_MSG);
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_DRAG,
+                type: EVENT_TO_GFX.OBJECT_DRAG,
                 object: MAP_CELL.RACK,
                 src_row: srcRow,
                 src_col: srcCol,
@@ -93,7 +93,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
             state.map.grid[row][col].facility = undefined;
 
             gfxEventHandler({
-                type: GFX_EVENT_TYPE.OBJECT_DELETE,
+                type: EVENT_TO_GFX.OBJECT_DELETE,
                 object: MAP_CELL.RACK,
                 row: row,
                 col: col
@@ -119,7 +119,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         self.items(ko.mapping.fromJS(facility.items)());
 
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             object: MAP_CELL.RACK,
             row: row,
             col: col
@@ -133,7 +133,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         self.activeRackCol = col;
 
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.OBJECT_HIGHLIGHT,
+            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             object: MAP_CELL.RACK,
             row: row,
             col: col
@@ -160,7 +160,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler) {
         clear();
 
         gfxEventHandler({
-            type: GFX_EVENT_TYPE.ESC
+            type: EVENT_TO_GFX.ESC
         });
 
         return true;

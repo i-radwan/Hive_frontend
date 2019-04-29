@@ -4,7 +4,7 @@ require('flatpickr');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, runningMode) {
+let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, runningMode, logger) {
     let self = this;
 
     self.activeMenu = ko.observable(ORDER_MENU.ADD);
@@ -91,62 +91,19 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
     };
 
     self.add = function () {
-        console.log(picker.input);
-
         if (!check())
             return;
 
-        let items = ko.observableArray();
-
-        self.items().forEach(function (i) {
-            i.delivered = ko.observable(0);
-            items.push(i);
-
-            state.stock[i.id] -= i.quantity;
-        });
-
         let order = {
             id: parseInt(self.id()),
-            gate_id: ko.observable(self.gateID().length ? parseInt(self.gateID()) : "-"), // ToDo: get gate from server
-            items: items,
-            more: ko.observable(false),
-            start_time: self.startDateTime(),
-            start_time_formatted: flatpickr.formatDate(flatpickr.parseDate(self.startDateTime(), "Y-m-d H:i"), "H:i M j, y"),
-            fullfilled_time_formatted: ko.observable("TBD"),
-            progress: ko.computed(function () {
-                let del = 0;
-                let tot = 0;
-
-                items().forEach(function (i) {
-                    del += i.delivered();
-                    tot += i.quantity;
-                });
-
-                return del / tot;
-            })
+            gate_id: (self.gateID().length ? parseInt(self.gateID()) : "-"),
+            items: ko.mapping.toJS(self.items()),
+            start_time: self.startDateTime()
         };
 
-        if (flatpickr.parseDate(self.startDateTime(), "Y-m-d H:i") > new Date()) {
-            self.upcomingOrders.push(order);
-        } else {
-            self.ongoingOrders.push(order);
+        sendOrderToServer(order);
 
-            // ToDo: send order
-            // sendToServer({
-            //     type: SERVER_EVENT_TYPE.ORDER_NEW,
-            //     data: {
-            //         id: self.id(),
-            //         gate_id: self.gateID(),
-            //         items: ko.mapping.toJS(self.items())
-            //     }
-            // });
-        }
-
-        self.id(parseInt(self.id()) + 1);
-
-        shouter.notifySubscribers({text: "Order placed successfully!", type: MSG_INFO}, SHOUT_MSG);
-
-        clear();
+        // ToDo: show loading animation
     };
 
     self.addItem = function () {
@@ -172,6 +129,71 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
 
     self.toggleActiveOrdersMenu = function (m) {
         self.activeMenu(m);
+    };
+
+    self.handleServerMsg = function (msg) {
+        if (msg.type === MSG_FROM_SERVER.ACK_ORDER) {
+            let data = msg.data;
+
+            if (data.status === ACK_ORDER_STATUS.OK) {
+                let o = data.order;
+
+                let items = ko.observableArray();
+
+                for (let i = 0; i < o.items.length; ++i) {
+                    o.items[i].delivered = ko.observable(0);
+                    items.push(o.items[i]);
+                }
+
+                let order = {
+                    id: o.id,
+                    gate_id: o.gate_id,
+                    items: items,
+                    more: ko.observable(false),
+                    start_time: o.start_time,
+                    start_time_formatted: flatpickr.formatDate(flatpickr.parseDate(o.start_time, "Y-m-d H:i"), "H:i M j, y"),
+                    fullfilled_time_formatted: ko.observable("TBD"),
+                    progress: ko.computed(function () {
+                        let del = 0;
+                        let tot = 0;
+
+                        items().forEach(function (i) {
+                            del += i.delivered();
+                            tot += i.quantity;
+                        });
+
+                        return del / tot;
+                    })
+                };
+
+                if (flatpickr.parseDate(o.start_time, "Y-m-d H:i") > new Date()) {
+                    self.upcomingOrders.push(order);
+                } else {
+                    self.ongoingOrders.push(order);
+                }
+
+                items().forEach(function (i) {
+                    state.stock[i.id] -= i.quantity;
+                });
+
+                self.id(parseInt(self.id()) + 1);
+
+                shouter.notifySubscribers({text: "Order placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+
+                clear();
+
+                // ToDo: hide the loading animation
+            } else if (data.status === ACK_ORDER_STATUS.ERROR) {
+                shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+            }
+        }
+    };
+
+    let sendOrderToServer = function (order) {
+        sendToServer({
+            type: MSG_TO_SERVER.ORDER,
+            data: order
+        });
     };
 
     let clear = function () {
