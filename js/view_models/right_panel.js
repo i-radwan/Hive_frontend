@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let itemsViewModel = require('./items_panel');
+let itemsPanelViewModel = require('./items_panel');
 
 let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
     let self = this;
@@ -11,7 +11,7 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.stats = ko.observableArray();
 
     // Sub view models
-    self.itemsVM = new itemsViewModel(shouter, state, gfxEventHandler);
+    self.itemsVM = new itemsPanelViewModel(shouter, state, gfxEventHandler);
 
     // TODO: listen to events
     self.logs.push({

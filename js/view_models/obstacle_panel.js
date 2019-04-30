@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let obstacleViewModel = function (shouter, state, gfxEventHandler, logger) {
+let obstaclePanelViewModel = function (shouter, state, gfxEventHandler, logger) {
     let self = this;
 
     self.id = ko.observable(1);
@@ -211,4 +211,4 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler, logger) {
     }, self, SHOUT_STATE_UPDATED);
 };
 
-module.exports = obstacleViewModel;
+module.exports = obstaclePanelViewModel;

@@ -3,7 +3,7 @@ require('knockout-mapping');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let itemsViewModel = function (shouter, state, gfxEventHandler) {
+let itemsPanelViewModel = function (shouter, state, gfxEventHandler) {
     let self = this;
 
     self.searchValue = ko.observable("");
@@ -89,4 +89,4 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
     }, self, SHOUT_STATE_UPDATED);
 };
 
-module.exports = itemsViewModel;
+module.exports = itemsPanelViewModel;

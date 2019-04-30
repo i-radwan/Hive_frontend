@@ -4,11 +4,11 @@ let ko = require('knockout');
 let tempViewModel = require('./temps_panel');
 let mapViewModel = require('./map_panel');
 let gateViewModel = require('./gate_panel');
-let robotViewModel = require('./robot_panel');
-let rackViewModel = require('./rack_panel');
-let stationViewModel = require('./station_panel');
+let robotPanelViewModel = require('./robot_panel');
+let rackPanelViewModel = require('./rack_panel');
+let stationPanelViewModel = require('./station_panel');
 let obstacleViewModel = require('./obstacle_panel');
-let orderViewModel = require('./order_panel');
+let orderPanelViewModel = require('./order_panel');
 
 let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
@@ -19,11 +19,11 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.tempVM = new tempViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
     self.mapVM = new mapViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
     self.gateVM = new gateViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.robotVM = new robotViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.rackVM = new rackViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.stationVM = new stationViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.robotVM = new robotPanelViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.rackVM = new rackPanelViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
+    self.stationVM = new stationPanelViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
     self.obstacleVM = new obstacleViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.orderVM = new orderViewModel(shouter, state, gfxEventHandler, sendToServer, runningMode, logger);
+    self.orderVM = new orderPanelViewModel(shouter, state, gfxEventHandler, sendToServer, runningMode, logger);
 
     /**
      * Handles panel tiles clicks.

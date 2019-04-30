@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let gateViewModel = function (shouter, state, gfxEventHandler, logger) {
+let gatePanelViewModel = function (shouter, state, gfxEventHandler, logger) {
     let self = this;
 
     self.id = ko.observable(1);
@@ -212,4 +212,4 @@ let gateViewModel = function (shouter, state, gfxEventHandler, logger) {
     }, self, SHOUT_STATE_UPDATED);
 };
 
-module.exports = gateViewModel;
+module.exports = gatePanelViewModel;

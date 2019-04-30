@@ -4,7 +4,7 @@ require('flatpickr');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, runningMode, logger) {
+let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer, runningMode, logger) {
     let self = this;
 
     self.activePanel = ko.observable(ORDER_PANEL.ADD);
@@ -383,4 +383,4 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
     });
 };
 
-module.exports = orderViewModel;
+module.exports = orderPanelViewModel;
