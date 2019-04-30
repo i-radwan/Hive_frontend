@@ -27,18 +27,10 @@ let State = function () {
     };
 
     self.adjustItemQuantity = function (id, quantity) {
-        if (quantity <= 0)
-            return;
+        if (self.stock[id].quantity + quantity < 0)
+            throw "Error: stock quantity cannot be -ve";
 
-        for (let i = 0; i < self.items.length; ++i) {
-            if (parseInt(self.items[i].id) === parseInt(id) && self.items[i].quantity + quantity >= 0) {
-                self.items[i].quantity += quantity;
-
-                return true;
-            }
-        }
-
-        return false;
+        self.stock[id].quantity += quantity;
     };
 
     self.load = function (newState) {

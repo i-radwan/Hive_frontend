@@ -53,9 +53,6 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
     };
 
     self.move = function (srcRow, srcCol, dstRow, dstCol) {
-        // TODO: rack to be moved with the robot carrying it :'D
-        state.map.grid[dstRow][dstCol].facility = state.map.grid[srcRow][srcCol].facility;
-        state.map.grid[srcRow][srcCol].facility = undefined;
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
@@ -186,30 +183,30 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
         self.items.remove(this);
     };
 
-    /**
-     * Fill the rack during simulation upon server request.
-     *
-     * @param rack_id
-     * @param item_id
-     * @param item_quantity
-     */
-    self.fillRack = function (rack_id, item_id, item_quantity) {
-        for (let i = 0; i < state.map.height; ++i) {
-            for (let j = 0; j < state.map.width; ++j) {
-                let c = state.map.grid[i][j].facility;
+    self.adjustRack = function (rack_id, rack_row, rack_col, item_id, item_quantity) {
+        let cell = state.map.grid[rack_row][rack_col];
 
-                if (c !== undefined && c.type === MAP_CELL.RACK && c.id === rack_id) {
-                    for (let k = 0; k < c.items; ++k) {
-                        if (c.items[k].id === item_id) {
-                            c.items[k].quantity += item_quantity;
-                        }
-                    }
-                }
+        if (cell.facility === undefined || cell.facility.type !== MAP_CELL.RACK) {
+            throw "Error: there should be a rack here!";
+        }
+
+        let items = cell.facility.items;
+
+        for (let j = 0; j < items.length; ++j) {
+            if (items[j].id === item_id) {
+                items[j].quantity += item_quantity;
+
+                // Inform the state
+                state.adjustItemQuantity(item_id, item_quantity);
             }
         }
 
-        // Inform the state
-        state.adjustItemQuantity(item_id, item_quantity);
+        logger({
+            level: LOG_LEVEL_INFO,
+            object: LOG_OBJECT_RACK,
+            color: "#bababa",
+            msg: "Rack <b>(#" + rack_id + ")</b> has been filled by (" + item_quantity + ") from Item#<b>(" + item_id + ")</b>."
+        });
     };
 
     self.handleEsc = function () {

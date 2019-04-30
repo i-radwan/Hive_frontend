@@ -54,42 +54,6 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
         }
     });
 
-    self.consumeUpcomingOrders = function () {
-        let now = new Date();
-
-        let o = self.upcomingOrders.remove(function (or) {
-            return flatpickr.parseDate(or.start_time, "Y-m-d H:i") <= now;
-        });
-
-        console.log(o);
-
-        o.forEach(function (or) {
-            self.ongoingOrders.push(or);
-
-            // ToDo: send the order to the server
-        });
-    };
-
-    self.ongoingOrderFinished = function (id) {
-        let o = self.ongoingOrders.remove(function (or) {
-            return or.id === id;
-        });
-
-        o.forEach(function (or) {
-            self.finishedOrders.push(or);
-        });
-    };
-
-    self.ongoingOrderUpdate = function (id, update) {
-        for (let i = 0; i < self.ongoingOrders().length(); ++i) {
-            if (self.ongoingOrders()[i].id === id) {
-                self.ongoingOrders()[i].gate_id(update.gate_id);
-
-                break;
-            }
-        }
-    };
-
     self.add = function () {
         if (!check())
             return;
@@ -131,6 +95,63 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
         self.activeMenu(m);
     };
 
+    self.consumeUpcomingOrders = function () {
+        let now = new Date();
+
+        let o = self.upcomingOrders.remove(function (or) {
+            return flatpickr.parseDate(or.start_time, "Y-m-d H:i") <= now;
+        });
+
+        console.log(o);
+
+        o.forEach(function (or) {
+            self.ongoingOrders.push(or);
+
+            // ToDo: send the order to the server
+        });
+    };
+
+    self.finishOngoingOrder = function (id) {
+        let o = self.ongoingOrders.remove(function (or) {
+            return or.id === id;
+        });
+
+        o.forEach(function (or) {
+            self.finishedOrders.push(or);
+        });
+
+        logger({
+            level: LOG_LEVEL_INFO,
+            object: LOG_OBJECT_ORDER,
+            color: "#bababa",
+            msg: "Order <b>(#" + order_id + ")</b> has been fulfilled."
+        });
+    };
+
+    self.updateOngoingOrder = function (id, update) {
+        for (let i = 0; i < self.ongoingOrders().length(); ++i) {
+            if (self.ongoingOrders()[i].id === id) {
+                self.ongoingOrders()[i].gate_id(update.gate_id);
+
+                break;
+            }
+        }
+    };
+
+    self.updateOrderDeliveredItems = function (order_id, item_id, item_quantity) {
+        self.ongoingOrders().forEach(function (o) {
+            if (o.id !== order_id)
+                return;
+
+            o.items().forEach(function (i) {
+                if (i.id !== item_id)
+                    return;
+
+                i.delivered(item_quantity);
+            });
+        });
+    };
+
     self.handleServerMsg = function (msg) {
         if (msg.type === MSG_FROM_SERVER.ACK_ORDER) {
             let data = msg.data;
@@ -152,7 +173,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
                     more: ko.observable(false),
                     start_time: o.start_time,
                     start_time_formatted: flatpickr.formatDate(flatpickr.parseDate(o.start_time, "Y-m-d H:i"), "H:i M j, y"),
-                    fullfilled_time_formatted: ko.observable("TBD"),
+                    fulfilled_time_formatted: ko.observable("TBD"),
                     progress: ko.computed(function () {
                         let del = 0;
                         let tot = 0;

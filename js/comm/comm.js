@@ -32,6 +32,10 @@ let comm = function (serverMW) {
     };
 
     self.send = function (msg) {
+        if (self.ws === undefined) {
+            throw "Error, socket is not open!";
+        }
+
         self.ws.send(serverMW.send(msg));
     };
 };

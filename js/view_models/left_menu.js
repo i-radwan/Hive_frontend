@@ -113,7 +113,6 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
         });
     };
 
-    // Outside events
     self.handleCellClick = function (row, col) {
         if (runningMode() === RUNNING_MODE.DESIGN) {
             if (state.map.grid[row][col].facility === undefined && state.map.grid[row][col].robot === undefined) {
@@ -229,27 +228,6 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
                     break;
                 case MAP_CELL.OBSTACLE:
                     self.obstacleVM.drag(srcRow, srcCol, dstRow, dstCol);
-                    break;
-            }
-        }
-    };
-
-    self.handleObjectMove = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[srcRow][srcCol].robot !== undefined) {
-            self.robotVM.move(srcRow, srcCol, dstRow, dstCol);
-        } else if (state.map.grid[srcRow][srcCol].facility !== undefined) {
-            switch (state.map.grid[srcRow][srcCol].type) {
-                case MAP_CELL.GATE:
-                    self.gateVM.move(srcRow, srcCol, dstRow, dstCol);
-                    break;
-                case MAP_CELL.RACK:
-                    self.rackVM.move(srcRow, srcCol, dstRow, dstCol);
-                    break;
-                case MAP_CELL.STATION:
-                    self.stationVM.move(srcRow, srcCol, dstRow, dstCol);
-                    break;
-                case MAP_CELL.OBSTACLE:
-                    self.obstacleVM.move(srcRow, srcCol, dstRow, dstCol);
                     break;
             }
         }

@@ -56,14 +56,6 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
         }
     };
 
-    self.move = function (srcRow, srcCol, dstRow, dstCol) {
-        // TODO (ALERT): this would certainly cause an error if robot 2 is moving
-        // to the old cell of robot 1, but the message of robot 2 arrives first from the
-        // gfxEventHandler
-        state.map.grid[dstRow][dstCol].robot = Object.assign({}, state.map.grid[srcRow][srcCol].robot);
-        state.map.grid[srcRow][srcCol].robot = undefined;
-    };
-
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
         if (state.map.grid[dstRow][dstCol].robot === undefined && state.map.grid[dstRow][dstCol].facility === undefined) {
             state.map.grid[dstRow][dstCol].robot = Object.assign({}, state.map.grid[srcRow][srcCol].robot);
@@ -175,6 +167,181 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
         });
 
         return true;
+    };
+
+    self.move = function (r, c, nr, nc) {
+        state.map.grid[nr][nc].robot = Object.assign({}, state.map.grid[r][c].robot);
+        state.map.grid[r][c].robot = undefined;
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_MOVE,
+            row: r,
+            col: c,
+            new_row: nr,
+            new_col: nc
+        });
+    };
+
+    self.bind = function (id, r, c) {
+        let cell = state.map.grid[r][c];
+
+        if (cell.facility === undefined) {
+            throw "Error: there should be facility here!";
+        }
+
+        cell.facility.bound = true;
+        cell.facility.bound_to_id = id;
+
+        cell.robot.bound = true;
+        cell.robot.bound_to = cell.facility.id;
+        cell.robot.bound_to_type = cell.facility.type;
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_BIND,
+            id: id,
+            row: r,
+            col: c,
+            object_id: cell.facility.id,
+            object_type: cell.facility.type
+        });
+
+        if (cell.facility.type === MAP_CELL.GATE) {
+            logger({
+                level: LOG_LEVEL_INFO,
+                object: LOG_OBJECT_ROBOT,
+                color: cell.robot.color,
+                msg: "Robot <b>(#" + cell.robot.id + ")</b> is bound to the Gate#<b>(" + cell.facility.id + ")</b>."
+            });
+        } else if (cell.facility.type === MAP_CELL.STATION) {
+            logger({
+                level: LOG_LEVEL_INFO,
+                object: LOG_OBJECT_ROBOT,
+                color: cell.robot.color,
+                msg: "Robot <b>(#" + cell.robot.id + ")</b> is charging at Station#<b>(" + cell.facility.id + ")</b>."
+            });
+        }
+    };
+
+    self.unbind = function (id, r, c) {
+        let cell = state.map.grid[r][c];
+
+        if (cell.facility === undefined) {
+            throw "Error: there should be facility here!";
+        }
+
+        cell.facility.bound = false;
+        cell.facility.bound_to_id = undefined;
+
+        cell.robot.bound = false;
+        cell.robot.bound_to = undefined;
+        cell.robot.bound_to_type = undefined;
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_UNBIND,
+            id: id,
+            row: r,
+            col: c,
+            object_id: cell.facility.id,
+            object_type: cell.facility.type
+        });
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_DISCOLORIZE,
+            object: cell.facility.type,
+            row: r,
+            col: c
+        });
+
+        if (cell.facility.type === MAP_CELL.GATE) {
+            logger({
+                level: LOG_LEVEL_INFO,
+                object: LOG_OBJECT_ROBOT,
+                color: cell.robot.color,
+                msg: "Robot <b>(#" + cell.robot.id + ")</b> is released from the Gate#<b>(" + cell.facility.id + ")</b>."
+            });
+        } else if (cell.facility.type === MAP_CELL.STATION) {
+            logger({
+                level: LOG_LEVEL_INFO,
+                object: LOG_OBJECT_ROBOT,
+                color: cell.robot.color,
+                msg: "Robot <b>(#" + cell.robot.id + ")</b> is leaving Station#<b>(" + cell.facility.id + ")</b>."
+            });
+        }
+    };
+
+    self.load = function (id, r, c) {
+        let cell = state.map.grid[r][c];
+
+        if (cell.facility === undefined || cell.facility.type !== MAP_CELL.RACK) {
+            throw "Error: there should be a rack here!";
+        }
+
+        cell.facility.loaded = true;
+        cell.facility.robot_id = id;
+
+        cell.robot.loaded = true;
+        cell.robot.loaded_rack_id = cell.facility.id;
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_LOAD,
+            id: cell.facility.id,
+            row: r,
+            col: c
+        });
+
+        logger({
+            level: LOG_LEVEL_INFO,
+            object: LOG_OBJECT_ROBOT,
+            color: cell.robot.color,
+            msg: "Robot <b>(#" + cell.robot.id + ")</b> loaded Rack#<b>(" + cell.facility.id + ")</b>."
+        });
+    };
+
+    self.offload = function (id, r, c) {
+        let cell = state.map.grid[r][c];
+
+        if (cell.facility === undefined || cell.facility.type !== MAP_CELL.RACK) {
+            throw "Error: there should be a rack here!";
+        }
+
+        cell.facility.loaded = false;
+        cell.facility.robot_id = undefined;
+
+        cell.robot.loaded = false;
+        cell.robot.loaded_rack_id = undefined;
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_OFFLOAD,
+            row: r,
+            col: c,
+            rack_id: cell.facility.id,
+        });
+
+        logger({
+            level: LOG_LEVEL_INFO,
+            object: LOG_OBJECT_ROBOT,
+            color: cell.robot.color,
+            msg: "Robot <b>(#" + cell.robot.id + ")</b> offloaded Rack#<b>(" + cell.facility.id + ")</b>."
+        });
+    };
+
+    self.assignTask = function (robot_id, robot_row, robot_col, rack_id, rack_row, rack_col) {
+        let cell = state.map.grid[robot_row][robot_col];
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_COLORIZE,
+            object: MAP_CELL.RACK,
+            row: rack_row,
+            col: rack_col,
+            color: cell.robot.color
+        });
+
+        logger({
+            level: LOG_LEVEL_INFO,
+            object: LOG_OBJECT_ROBOT,
+            color: cell.robot.color,
+            msg: "Robot <b>(#" + robot_id + ")</b> is assigned to Rack#<b>(" + rack_id + ")</b>."
+        });
     };
 
     self.handleEsc = function () {
