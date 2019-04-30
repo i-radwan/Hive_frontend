@@ -1,0 +1,300 @@
+type: data
+
+----------------
+TO SERVER:
+----------------
+
+CONFIG: {
+    mode: [SIMULATE|DEPLOY]
+    state: state*
+}
+
+RESUME: {}
+
+PAUSE: {
+    mode: [SIMULATE|DEPLOY]
+}
+
+STOP: {}
+
+ORDER: {
+    id: 
+    gate_id:
+    items: [{
+        id:
+        quantity:
+    }]
+    start_time: Y-m-d H:i                                           # To support orders scheduling 
+}
+
+ACK_ACTION: {}
+
+----------------
+FROM SERVER:
+----------------
+ACK_CONFIG: {
+    status: [OK|ERROR]
+    mode: [SIMULATE|DEPLOY]
+    msg: msg                                                        # In the ERROR case
+}
+
+ACK_RESUME: {
+    status: [OK|ERROR]
+    mode: [SIMULATE|DEPLOY]
+    msg: msg                                                        # In the ERROR case
+}
+
+ACK_ORDER: {
+    status: [OK|ERROR]
+    order: {
+        id: 
+        gate_id:
+        items: [{
+            id:
+            quantity:
+        }]
+        start_time: Y-m-d H:i                                       # To support orders scheduling 
+    }
+    msg: msg                                                        # In the ERROR case
+}
+
+UPDATE: {
+    timestep: 
+    actions: [
+    {
+        type: [MOVE|LOAD|OFFLOAD|BIND|UNBIND],
+        data: {...}
+    }, {
+        type: MOVE,
+        data: {
+            robot_id: 
+            robot_row:
+            robot_col:
+            robot_new_row:
+            robot_new_col:
+        }
+    }, {
+        type: BIND,
+        data: {
+            robot_id: 
+            robot_row:
+            robot_col:
+            facility_type:
+            facility_id:
+        }
+    }, {
+        type: UNBIND,
+        data: {
+            robot_id: 
+            robot_row:
+            robot_col:
+            facility_type:
+            facility_id:
+        }
+    }, {
+        type: LOAD,
+        data: {
+            robot_id: 
+            robot_row:
+            robot_col:
+            rack_id:
+            rack_row:                                               # Original rack row
+            rack_col:                                               # Original rack col
+        }
+    }, {
+        type: OFFLOAD,
+        data: {
+            robot_id: 
+            robot_row:
+            robot_col:
+            rack_id:
+            rack_row:                                               # Original rack row
+            rack_col:                                               # Original rack col
+        }
+    }],
+    logs: [
+    {
+        type: [TASK_ASSIGNED|ITEM_DELIVERED|ORDER_FULFILLED|RACK_ADJUSTED]
+        data: {...}
+    }, {
+        type: TASK_ASSIGNED
+        data: {
+            robot_id:
+            robot_row:
+            robot_col:
+            rack_id:
+            rack_row:                                               # Original rack row         
+            racK_col:                                               # Original rack col
+        }
+    }, {
+        type: ITEM_DELIVERED
+        data: {
+            order_id:
+            item_id:
+            item_quantity:                                          # Total for this order_id
+        }
+    }, {
+        type: ORDER_FULFILLED
+        data: {
+            order_id:
+        }
+    }, {
+        type: RACK_ADJUSTED
+        data: {
+            rack_id: 
+            rack_row:
+            rack_col:
+            item_id:
+            item_quantity: [+ve|-ve]
+        }
+    }],
+    statistics: [
+    ]
+}
+
+MSG: {
+    type: [INFO|ERROR]
+    text: msg
+}
+
+----------------
+TO GFX:
+----------------
+INIT: {
+    width:
+    height:
+}
+
+OBJECT_HOVER: {
+    type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+}
+
+OBJECT_ADD: {
+    type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    row:
+    col:
+}
+
+OBJECT_DELETE: {
+    type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    row:
+    col:
+}
+
+OBJECT_DRAG: {
+    type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    src_row:
+    src_col:
+    dst_row:
+    dst_col:
+}
+
+OBJECT_MOVE: { # Move the spcified robot and the bound rack (if any). Then send ACK when done
+    row:
+    col:
+    new_row:
+    new_col:
+}
+
+OBJECT_HIGHLIGHT: {
+    type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    row:
+    col:
+}
+
+OBJECT_COLORIZE: {
+    type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    row:
+    col:
+    color:                                                          # HTML
+}
+
+OBJECT_DISCOLORIZE: {
+    type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    row:
+    col:
+}
+
+OBJECT_BIND: { # Flash the bound object, send ACK
+    id:                                                             # Robot ID
+    row:                                                            # Robot row
+    col:
+    object_id:                                                      # Bound object ID
+    object_type: [MAP_CELL.GATE|MAP_CELL.STATION]
+}
+
+OBJECT_UNBIND: { # Send ACK
+    id:                                                             # Robot ID
+    row:                                                            # Robot row
+    col:
+    object_id:                                                      # Bound object ID
+    object_type: [MAP_CELL.GATE|MAP_CELL.STATION]
+}
+
+OBJECT_LOAD: { # Draw rack on top of the robot, send ACK
+    id:                                                             # Rack ID
+    row:                                                            # Rack row
+    col:
+}
+
+OBJECT_OFFLOAD: { # Send Ack
+    id:                                                             # Rack ID
+    row:                                                            # Rack row
+    col:
+}
+
+SIMULATION_START: {}
+
+SIMULATION_PAUSE: {}
+
+SIMULATION_RESUME: {}
+
+SIMULATION_STOP: {}
+
+SIMULATION_ESC: {}
+
+----------------
+FROM GFX:
+----------------
+CELL_CLICK: {
+    row:
+    col:
+}
+
+ACK_ACTION: {}
+
+CELL_DRAG: {
+    src_row:
+    src_col:
+    dst_row:
+    dst_col:
+}
+
+CELL_DRAG: {
+    src_row:
+    src_col:
+    dst_row:
+    dst_col:
+}
+
+CELL_DELETE: {
+    row:
+    col:
+}
+
+ESC: {
+    row:
+    col:
+}
+
+----------------
+----------------
+----------------
+
+* state = 
+
+
+----------------
+----------------
+----------------
+Note: all above constants have to match the front end constant.js file
