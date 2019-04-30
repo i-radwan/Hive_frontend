@@ -144,7 +144,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.gateVM.applyVisible()}">
                         <i class="fas fa-check"
-                           data-bind="click: function() {if(leftPanelVM.gateVM.update()) leftPanelVM.activePanel(LEFT_PANEL.EMPTY)}"></i>
+                           data-bind="click: leftPanelVM.gateVM.update"></i>
                     </div>
                 </div>
 
@@ -190,7 +190,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.robotVM.applyVisible()}">
                         <i class="fas fa-check"
-                           data-bind="click: function(){if(leftPanelVM.robotVM.update()) leftPanelVM.activePanel(LEFT_PANEL.EMPTY)}"></i>
+                           data-bind="click: leftPanelVM.robotVM.update"></i>
                     </div>
                 </div>
 
@@ -258,7 +258,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.rackVM.applyVisible()}">
                         <i class="fas fa-check"
-                           data-bind="click: function(){if(leftPanelVM.rackVM.update()) leftPanelVM.activePanel(LEFT_PANEL.EMPTY)}"></i>
+                           data-bind="click: leftPanelVM.rackVM.update"></i>
                     </div>
                 </div>
 
@@ -278,7 +278,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.stationVM.applyVisible()}">
                         <i class="fas fa-check"
-                           data-bind="click: function() {if(leftPanelVM.stationVM.update()) leftPanelVM.activePanel(LEFT_PANEL.STATION)}"></i>
+                           data-bind="click: leftPanelVM.stationVM.update"></i>
                     </div>
                 </div>
 
@@ -298,7 +298,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.obstacleVM.applyVisible()}">
                         <i class="fas fa-check"
-                           data-bind="click: function() {if(leftPanelVM.obstacleVM.update()) leftPanelVM.activePanel(LEFT_PANEL.OBSTACLE)}"></i>
+                           data-bind="click: leftPanelVM.obstacleVM.update"></i>
                     </div>
                 </div>
 

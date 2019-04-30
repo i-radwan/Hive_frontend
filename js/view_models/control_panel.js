@@ -5,18 +5,20 @@ let ko = require('knockout');
 let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHandler, comm, logger) {
     let self = this;
 
-    self.settingsVisible = ko.observable(false);
     self.playing = ko.observable(false);
     self.msg = ko.observable("");
     self.msgType = ko.observable(MSG_INFO);
     self.timer = null;
 
-    self.ip = ko.observable("");
-    self.port = ko.observable("");
-
     self.preSimState = null;
 
     self.play = function () {
+        if (!comm.connected) {
+            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return;
+        }
+
         if (self.playing()) {
             comm.send({
                 type: MSG_TO_SERVER.PAUSE,
@@ -45,6 +47,12 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     };
 
     self.stop = function () {
+        if (!comm.connected) {
+            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return;
+        }
+
         comm.send({
             type: MSG_TO_SERVER.STOP
         });
@@ -89,36 +97,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     };
 
     self.handleEsc = function () {
-    };
-
-    self.connect = function () {
-        // ToDo connect to the server
-
-        if (self.ip().length === 0 || !self.ip().match(REG_IP)) {
-            shouter.notifySubscribers({text: "Invalid IP address!", type: MSG_ERROR}, SHOUT_MSG);
-
-            return false;
-        }
-
-        if (self.port().length === 0 || isNaN(self.port())) {
-            shouter.notifySubscribers({text: "Invalid port!", type: MSG_ERROR}, SHOUT_MSG);
-
-            return false;
-        }
-
-        try {
-            let d = comm.connect(self.ip(), self.port());
-
-            if (d) {
-                shouter.notifySubscribers({text: "Connected to server!", type: MSG_INFO}, SHOUT_MSG);
-
-                return true;
-            }
-        } catch (e) {}
-
-        shouter.notifySubscribers({text: "Couldn't connect to the server!", type: MSG_ERROR}, SHOUT_MSG);
-
-        return false;
     };
 
     self.handleServerMsg = function (msg) {

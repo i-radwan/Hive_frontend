@@ -150,9 +150,8 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, logger) {
     };
 
     self.update = function () {
-        if (!check()) {
-            return false;
-        }
+        if (!check())
+            return;
 
         state.map.grid[self.activeRackRow][self.activeRackCol].facility = {
             type: MAP_CELL.RACK,
@@ -171,8 +170,6 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, logger) {
         gfxEventHandler({
             type: EVENT_TO_GFX.ESC
         });
-
-        return true;
     };
 
     self.addItem = function () {

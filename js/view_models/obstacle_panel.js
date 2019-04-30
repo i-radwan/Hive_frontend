@@ -138,7 +138,7 @@ let obstaclePanelViewModel = function (shouter, state, gfxEventHandler, logger) 
 
     self.update = function () {
         if (!check())
-            return false;
+            return;
 
         state.map.grid[self.activeObstacleRow][self.activeObstacleCol].facility = {
             type: MAP_CELL.OBSTACLE,
@@ -155,8 +155,6 @@ let obstaclePanelViewModel = function (shouter, state, gfxEventHandler, logger) 
         gfxEventHandler({
             type: EVENT_TO_GFX.ESC
         });
-
-        return true;
     };
 
     self.handleEsc = function () {

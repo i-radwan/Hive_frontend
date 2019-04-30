@@ -156,8 +156,6 @@ let gatePanelViewModel = function (shouter, state, gfxEventHandler, logger) {
         gfxEventHandler({
             type: EVENT_TO_GFX.ESC
         });
-
-        return true;
     };
 
     self.handleEsc = function () {

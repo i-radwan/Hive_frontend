@@ -155,7 +155,7 @@ let robotPanelViewModel = function (shouter, state, gfxEventHandler, logger) {
 
     self.update = function () {
         if (!check())
-            return false;
+            return;
 
         state.map.grid[self.activeRobotRow][self.activeRobotCol].robot = {
             type: MAP_CELL.ROBOT,
@@ -177,8 +177,6 @@ let robotPanelViewModel = function (shouter, state, gfxEventHandler, logger) {
         gfxEventHandler({
             type: EVENT_TO_GFX.ESC
         });
-
-        return true;
     };
 
     self.move = function (r, c, nr, nc) {
