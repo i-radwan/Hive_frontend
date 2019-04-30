@@ -12,8 +12,6 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
     };
 
     self.connect = function () {
-        // ToDo connect to the server
-
         if (self.ip().length === 0 || !self.ip().match(REG_IP)) {
             shouter.notifySubscribers({text: "Invalid IP address!", type: MSG_ERROR}, SHOUT_MSG);
 
@@ -27,6 +25,8 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
         }
 
         try {
+            shouter.notifySubscribers(true, SHOUT_LOADING);
+
             let d = comm.connect(self.ip(), self.port());
 
             if (d) {
@@ -35,6 +35,8 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 return true;
             }
         } catch (e) {}
+
+        shouter.notifySubscribers(false, SHOUT_LOADING);
 
         shouter.notifySubscribers({text: "Couldn't connect to the server!", type: MSG_ERROR}, SHOUT_MSG);
 

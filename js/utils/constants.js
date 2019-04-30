@@ -3,6 +3,7 @@
 //
 SHOUT_STATE_UPDATED = 0;
 SHOUT_MSG = 1;
+SHOUT_LOADING = 2;
 
 //
 // Running modes

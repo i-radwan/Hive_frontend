@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div class="overlay" data-bind="css: {hidden: !loadingVisible()}">
+    <div class="loaders">
+        <div class="loader"></div>
+    </div>
+</div>
 <div class="row">
     <!--==============================================================-->
     <!--========================= LEFT PANEL ==========================-->

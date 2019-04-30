@@ -28,6 +28,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     self.pendingActions = 0; // # of actions sent to graphics and waiting for their ACKs
 
+    self.loadingVisible = ko.observable(false);
+
     self.setGFXEventHandler = function (gfxEventHandler) {
         self.gfxEventHandler = gfxEventHandler;
     };
@@ -207,6 +209,12 @@ let mainViewModel = function (gfxEventHandler, comm) {
             height: self.state.map.height
         }
     });
+
+    // Events
+    self.shouter.subscribe(function (on) {
+        console.log(on);
+        self.loadingVisible(on);
+    }, self, SHOUT_LOADING);
 };
 
 module.exports = mainViewModel;
