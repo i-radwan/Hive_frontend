@@ -10,10 +10,10 @@ let stationViewModel = require('./station_panel');
 let obstacleViewModel = require('./obstacle_panel');
 let orderViewModel = require('./order_panel');
 
-let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
+let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
-    self.activeMenu = ko.observable(LEFT_MENU.TEMPS);
+    self.activePanel = ko.observable(LEFT_PANEL.TEMPS);
 
     // Sub view models
     self.tempVM = new tempViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
@@ -26,36 +26,36 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
     self.orderVM = new orderViewModel(shouter, state, gfxEventHandler, sendToServer, runningMode, logger);
 
     /**
-     * Handles menu tiles clicks.
+     * Handles panel tiles clicks.
      *
-     * @param id   The id of the clicked tile from the LEFT_MENU enum.
+     * @param id   The id of the clicked tile from the LEFT_PANEL enum.
      */
     self.toggle = function (id) {
         if (runningMode() === RUNNING_MODE.DESIGN) {
-            if (id === LEFT_MENU.TEMPS) {
+            if (id === LEFT_PANEL.TEMPS) {
                 toggleTemps();
-            } else if (id === LEFT_MENU.MAP) {
+            } else if (id === LEFT_PANEL.MAP) {
                 toggleMap();
-            } else if (id === LEFT_MENU.GATE) {
+            } else if (id === LEFT_PANEL.GATE) {
                 toggleGate();
-            } else if (id === LEFT_MENU.RACK) {
+            } else if (id === LEFT_PANEL.RACK) {
                 toggleRack();
-            } else if (id === LEFT_MENU.OBSTACLE) {
+            } else if (id === LEFT_PANEL.OBSTACLE) {
                 toggleObstacle();
-            } else if (id === LEFT_MENU.ROBOT) {
+            } else if (id === LEFT_PANEL.ROBOT) {
                 toggleRobot();
-            } else if (id === LEFT_MENU.STATION) {
+            } else if (id === LEFT_PANEL.STATION) {
                 toggleStation();
             } else {
                 return;
             }
 
-            self.activeMenu(id);
+            self.activePanel(id);
         } else {
-            if (id === LEFT_MENU.ORDER) {
+            if (id === LEFT_PANEL.ORDER) {
                 toggleOrder();
 
-                self.activeMenu(id);
+                self.activePanel(id);
             }
         }
     };
@@ -126,43 +126,43 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
     self.handleCellClick = function (row, col) {
         if (runningMode() === RUNNING_MODE.DESIGN) {
             if (state.map.grid[row][col].facility === undefined && state.map.grid[row][col].robot === undefined) {
-                switch (self.activeMenu()) {
-                    case LEFT_MENU.GATE:
+                switch (self.activePanel()) {
+                    case LEFT_PANEL.GATE:
                         self.gateVM.add(row, col);
                         break;
-                    case LEFT_MENU.ROBOT:
+                    case LEFT_PANEL.ROBOT:
                         self.robotVM.add(row, col);
                         break;
-                    case LEFT_MENU.RACK:
+                    case LEFT_PANEL.RACK:
                         self.rackVM.add(row, col);
                         break;
-                    case LEFT_MENU.STATION:
+                    case LEFT_PANEL.STATION:
                         self.stationVM.add(row, col);
                         break;
-                    case LEFT_MENU.OBSTACLE:
+                    case LEFT_PANEL.OBSTACLE:
                         self.obstacleVM.add(row, col);
                         break;
                 }
             } else {
                 if (state.map.grid[row][col].robot !== undefined) {
-                    self.activeMenu(LEFT_MENU.ROBOT);
+                    self.activePanel(LEFT_PANEL.ROBOT);
                     self.robotVM.edit(row, col);
                 } else if (state.map.grid[row][col].facility !== undefined) {
                     switch (state.map.grid[row][col].facility.type) {
                         case MAP_CELL.GATE:
-                            self.activeMenu(LEFT_MENU.GATE);
+                            self.activePanel(LEFT_PANEL.GATE);
                             self.gateVM.edit(row, col);
                             break;
                         case MAP_CELL.RACK:
-                            self.activeMenu(LEFT_MENU.RACK);
+                            self.activePanel(LEFT_PANEL.RACK);
                             self.rackVM.edit(row, col);
                             break;
                         case MAP_CELL.STATION:
-                            self.activeMenu(LEFT_MENU.STATION);
+                            self.activePanel(LEFT_PANEL.STATION);
                             self.stationVM.edit(row, col);
                             break;
                         case MAP_CELL.OBSTACLE:
-                            self.activeMenu(LEFT_MENU.OBSTACLE);
+                            self.activePanel(LEFT_PANEL.OBSTACLE);
                             self.obstacleVM.edit(row, col);
                             break;
                     }
@@ -170,24 +170,24 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
             }
         } else {
             if (state.map.grid[row][col].robot !== undefined) {
-                self.activeMenu(LEFT_MENU.ROBOT);
+                self.activePanel(LEFT_PANEL.ROBOT);
                 self.robotVM.fill(row, col);
             } else if (state.map.grid[row][col].facility !== undefined) {
                 switch (state.map.grid[row][col].facility.type) {
                     case MAP_CELL.GATE:
-                        self.activeMenu(LEFT_MENU.GATE);
+                        self.activePanel(LEFT_PANEL.GATE);
                         self.gateVM.fill(row, col);
                         break;
                     case MAP_CELL.RACK:
-                        self.activeMenu(LEFT_MENU.RACK);
+                        self.activePanel(LEFT_PANEL.RACK);
                         self.rackVM.fill(row, col);
                         break;
                     case MAP_CELL.STATION:
-                        self.activeMenu(LEFT_MENU.STATION);
+                        self.activePanel(LEFT_PANEL.STATION);
                         self.stationVM.fill(row, col);
                         break;
                     case MAP_CELL.OBSTACLE:
-                        self.activeMenu(LEFT_MENU.OBSTACLE);
+                        self.activePanel(LEFT_PANEL.OBSTACLE);
                         self.obstacleVM.fill(row, col);
                         break;
                 }
@@ -219,7 +219,7 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
 
         // Hide details panel after delete is done
         if (status)
-            self.activeMenu(LEFT_MENU.EMPTY);
+            self.activePanel(LEFT_PANEL.EMPTY);
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
@@ -250,17 +250,17 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
         self.stationVM.handleEsc();
         self.obstacleVM.handleEsc();
 
-        self.activeMenu(LEFT_MENU.EMPTY);
+        self.activePanel(LEFT_PANEL.EMPTY);
     };
 
     // Listen for mode change
     runningMode.subscribe(function (newRunningMode) {
         if (newRunningMode !== RUNNING_MODE.DESIGN) {
-            self.activeMenu(LEFT_MENU.ORDER);
+            self.activePanel(LEFT_PANEL.ORDER);
         } else {
-            self.activeMenu(LEFT_MENU.TEMPS);
+            self.activePanel(LEFT_PANEL.TEMPS);
         }
     });
 };
 
-module.exports = leftMenuViewModel;
+module.exports = leftPanelViewModel;

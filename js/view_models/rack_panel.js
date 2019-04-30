@@ -187,7 +187,7 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
         console.log(state.map);
 
         // Scroll view to bottom
-        let container = $(".lmenu .rack .items-container");
+        let container = $(".lpanel .rack .items-container");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
     };
 

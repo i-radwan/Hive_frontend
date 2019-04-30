@@ -5,9 +5,9 @@ let ko = require('knockout');
 let State = require('../models/state');
 
 // ViewModels
-let leftMenuViewModel = require("./left_panel");
+let leftPanelViewModel = require("./left_panel");
 let centerPanelViewModel = require("./center_panel");
-let rightMenuViewModel = require("./right_panel");
+let rightPanelViewModel = require("./right_panel");
 
 let mainViewModel = function (gfxEventHandler, comm) {
     let self = this;
@@ -20,11 +20,11 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     self.gfxEventHandler = gfxEventHandler;
 
-    self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, comm.send, self.logger);
+    self.leftPanelVM = new leftPanelViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, comm.send, self.logger);
     self.centerPanelVM = new centerPanelViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, comm, self.logger);
-    self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, comm.send);
+    self.rightPanelVM = new rightPanelViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, comm.send);
 
-    self.logger = self.rightMenuVM.addLog;
+    self.logger = self.rightPanelVM.addLog;
 
     self.pendingActions = 0; // # of actions sent to graphics and waiting for their ACKs
 
@@ -43,7 +43,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 break;
 
             case MSG_FROM_SERVER.ACK_ORDER:
-                self.leftMenuVM.orderVM.handleServerMsg(msg);
+                self.leftPanelVM.orderVM.handleServerMsg(msg);
                 break;
 
             case MSG_FROM_SERVER.UPDATE:
@@ -65,7 +65,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let nr = data.robot_new_row;
                         let nc = data.robot_new_col;
 
-                        self.leftMenuVM.robotVM.move(r, c, nr, nc);
+                        self.leftPanelVM.robotVM.move(r, c, nr, nc);
                     } else if (a.type === SERVER_ACTIONS.BIND) {
                         self.pendingActions++;
 
@@ -73,7 +73,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let r = data.robot_row;
                         let c = data.robot_col;
 
-                        self.leftMenuVM.robotVM.bind(id, r, c);
+                        self.leftPanelVM.robotVM.bind(id, r, c);
                     } else if (a.type === SERVER_ACTIONS.UNBIND) {
                         self.pendingActions++;
 
@@ -81,7 +81,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let r = data.robot_row;
                         let c = data.robot_col;
 
-                        self.leftMenuVM.robotVM.unbind(id, r, c);
+                        self.leftPanelVM.robotVM.unbind(id, r, c);
                     } else if (a.type === SERVER_ACTIONS.LOAD) {
                         self.pendingActions++;
 
@@ -89,7 +89,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let r = data.robot_row;
                         let c = data.robot_col;
 
-                        self.leftMenuVM.robotVM.load(id, r, c);
+                        self.leftPanelVM.robotVM.load(id, r, c);
                     } else if (a.type === SERVER_ACTIONS.OFFLOAD) {
                         self.pendingActions++;
 
@@ -97,7 +97,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let r = data.robot_row;
                         let c = data.robot_col;
 
-                        self.leftMenuVM.robotVM.offload(id, r, c);
+                        self.leftPanelVM.robotVM.offload(id, r, c);
                     }
                 }
 
@@ -113,7 +113,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let rack_row = data.rack_row;
                         let rack_col = data.rack_col;
 
-                        self.leftMenuVM.robotVM.assignTask(robot_id, robot_row, robot_col, rack_id, rack_row, rack_col);
+                        self.leftPanelVM.robotVM.assignTask(robot_id, robot_row, robot_col, rack_id, rack_row, rack_col);
                     } else if (l.type === SERVER_LOGS.ITEM_DELIVERED) {
                         let order_id = data.order_id;
                         let item_id = data.item_id;
@@ -131,7 +131,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let item_id = data.item_id;
                         let item_quantity = data.item_quantity;
 
-                        self.leftMenuVM.rackVM.adjustRack(rack_id, rack_row, rack_col, item_id, item_quantity);
+                        self.leftPanelVM.rackVM.adjustRack(rack_id, rack_row, rack_col, item_id, item_quantity);
                     }
                 }
 
@@ -171,15 +171,15 @@ let mainViewModel = function (gfxEventHandler, comm) {
     };
 
     let handleCellClick = function (row, col) {
-        self.leftMenuVM.handleCellClick(row, col);
+        self.leftPanelVM.handleCellClick(row, col);
     };
 
     let handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
-        self.leftMenuVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
+        self.leftPanelVM.handleCellDrag(srcRow, srcCol, dstRow, dstCol);
     };
 
     let handleCellDeleteClick = function (row, col) {
-        self.leftMenuVM.handleCellDeleteClick(row, col);
+        self.leftPanelVM.handleCellDeleteClick(row, col);
     };
 
     let handleActionAck = function () {
@@ -191,9 +191,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
     };
 
     let handleEsc = function () {
-        self.leftMenuVM.handleEsc();
+        self.leftPanelVM.handleEsc();
         self.centerPanelVM.controlConsoleVM.handleEsc();
-        self.rightMenuVM.handleEsc();
+        self.rightPanelVM.handleEsc();
 
         gfxEventHandler({
             type: EVENT_TO_GFX.ESC

@@ -132,19 +132,19 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*==============================================================*/
-/*========================= LEFT MENU ==========================*/
+/*========================= LEFT PANEL ==========================*/
 /*==============================================================*/
 
-.lmenu {
+.lpanel {
     box-shadow: 0 0 10px black;
     background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
 }
 
-.lmenu .tiles {
+.lpanel .tiles {
     padding: 0;
 }
 
-.lmenu .tiles ul {
+.lpanel .tiles ul {
     list-style: none;
     padding: 0;
     color: #bababa;
@@ -152,41 +152,41 @@ input[type=number]::-webkit-outer-spin-button {
     margin-bottom: 0 !important;
 }
 
-.lmenu .tiles ul li {
+.lpanel .tiles ul li {
     background-color: #282b2d;
     padding: 15px 0;
 }
 
-.lmenu .tiles ul li:hover {
+.lpanel .tiles ul li:hover {
     background-color: #323234;
     cursor: pointer;
 }
 
-.lmenu .tiles ul li.inactive {
+.lpanel .tiles ul li.inactive {
     cursor: default;
     background-color: #282b2d;
     color: #4b4b4b;
 }
 
-.lmenu .tiles ul li.inactive:hover {
+.lpanel .tiles ul li.inactive:hover {
     background-color: #282b2d;
 }
 
-.lmenu .tiles ul li.active {
+.lpanel .tiles ul li.active {
     cursor: default;
     background-color: transparent;
     color: #e09500;
 }
 
-.lmenu .tiles ul li.active:hover {
+.lpanel .tiles ul li.active:hover {
     background-color: transparent;
 }
 
-.lmenu .tiles ul li i {
+.lpanel .tiles ul li i {
     font-size: 33px;
 }
 
-.lmenu .tiles ul span {
+.lpanel .tiles ul span {
     width: 100%;
     display: block;
     text-align: center;
@@ -194,23 +194,23 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*==============================================================*/
-/*===================== LEFT MENU DETAILS ======================*/
+/*===================== LEFT PANEL DETAILS ======================*/
 /*==============================================================*/
 
-.lmenu .details {
+.lpanel .details {
     overflow-y: scroll;
     height: calc(100vh - 30px);
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-.lmenu-details-bottom-actions {
+.lpanel-details-bottom-actions {
     position: absolute;
     bottom: 20px;
     right: 17px;
 }
 
-.lmenu-details-bottom-actions i {
+.lpanel-details-bottom-actions i {
     color: #bababa;
     cursor: pointer;
     font-size: 22px;
@@ -219,24 +219,24 @@ input[type=number]::-webkit-outer-spin-button {
     padding: 0.45em 0.4em;
 }
 
-.lmenu-details-bottom-actions i:hover {
+.lpanel-details-bottom-actions i:hover {
     color: #e09500;
     border: 2px solid #e09500;
     box-shadow: 0 0 5px #e09500;
 }
 
 /*==============================================================*/
-/*========================= EMPTY MENU =========================*/
+/*========================= EMPTY PANEL =========================*/
 /*==============================================================*/
 
-.lmenu .details .empty {
+.lpanel .details .empty {
     width: 100%;
     height: 100%;
     text-align: center;
     vertical-align: middle;
 }
 
-.lmenu .details .empty p {
+.lpanel .details .empty p {
     text-align: center;
     position: relative;
     top: 50%;
@@ -244,10 +244,10 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*==============================================================*/
-/*========================= TEMPS MENU =========================*/
+/*========================= TEMPS PANEL =========================*/
 /*==============================================================*/
 
-.lmenu .details .temps img {
+.lpanel .details .temps img {
     cursor: pointer;
     opacity: 0.8;
     margin-top: 10px;
@@ -255,26 +255,26 @@ input[type=number]::-webkit-outer-spin-button {
     width: 100%;
 }
 
-.lmenu .details .temps img:hover {
+.lpanel .details .temps img:hover {
     opacity: 1;
 }
 
 /*==============================================================*/
-/*========================= MAPS MENU ==========================*/
+/*========================= MAPS PANEL ==========================*/
 /*==============================================================*/
 
-.lmenu .details .map {
+.lpanel .details .map {
     padding: 0;
 }
 
-.lmenu .details .map .actions {
+.lpanel .details .map .actions {
     position: absolute;
     bottom: 20px;
     width: 100%;
     padding: 0;
 }
 
-.lmenu .details .map .actions i {
+.lpanel .details .map .actions i {
     position: relative;
     left: 0;
     color: #bababa;
@@ -286,13 +286,13 @@ input[type=number]::-webkit-outer-spin-button {
     padding: 0.4em 0.4em;
 }
 
-.lmenu .details .map .actions i:hover {
+.lpanel .details .map .actions i:hover {
     color: #e09500;
     border: 2px solid #e09500;
     box-shadow: 0 0 5px #e09500;
 }
 
-.lmenu .details .map .actions .apply {
+.lpanel .details .map .actions .apply {
     color: #bababa;
     margin-right: 9px;
     cursor: pointer;
@@ -304,36 +304,36 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*==============================================================*/
-/*========================= GATE MENU ==========================*/
+/*========================= GATE PANEL ==========================*/
 /*==============================================================*/
 
 /*==============================================================*/
-/*========================= ROBOT MENU =========================*/
+/*========================= ROBOT PANEL =========================*/
 /*==============================================================*/
 
 /*==============================================================*/
-/*========================= RACK MENU ==========================*/
+/*========================= RACK PANEL ==========================*/
 /*==============================================================*/
-.lmenu .details .rack .items-container {
+.lpanel .details .rack .items-container {
     max-height: 260px;
 }
 
 /*==============================================================*/
-/*======================= STATION MENU =========================*/
+/*======================= STATION PANEL =========================*/
 /*==============================================================*/
 
 /*==============================================================*/
-/*======================= OBSTACLE MENU ========================*/
+/*======================= OBSTACLE PANEL ========================*/
 /*==============================================================*/
 
 /*==============================================================*/
-/*======================== ORDERS MENU =========================*/
+/*======================== ORDERS PANEL =========================*/
 /*==============================================================*/
-.lmenu .details .order .items-container {
+.lpanel .details .order .items-container {
     max-height: 260px;
 }
 
-.lmenu .order .tab .container {
+.lpanel .order .tab .container {
     font-family: 'Asap', sans-serif;
     width: 200px;
     height: 36px;
@@ -344,7 +344,7 @@ input[type=number]::-webkit-outer-spin-button {
     cursor: pointer;
 }
 
-.lmenu .order .tab .inner-container {
+.lpanel .order .tab .inner-container {
     position: absolute;
     left: 0;
     top: 0;
@@ -354,13 +354,13 @@ input[type=number]::-webkit-outer-spin-button {
     font-weight: bold;
 }
 
-.lmenu .order .tab .inner-container:nth-child(1) {
+.lpanel .order .tab .inner-container:nth-child(1) {
     background: transparent;
     border-bottom: 1px #bababa solid;
     color: #bababa;
 }
 
-.lmenu .order .tab .inner-container:nth-child(2) {
+.lpanel .order .tab .inner-container:nth-child(2) {
     background: transparent;
     color: #e09500;
     border-bottom: 1px #e09500 solid;
@@ -369,7 +369,7 @@ input[type=number]::-webkit-outer-spin-button {
     clip-path: polygon(0% 0%, 25% 0%, 25% 100%, 0% 100%);
 }
 
-.lmenu .order .tab .toggle {
+.lpanel .order .tab .toggle {
     width: 25%;
     position: absolute;
     height: inherit;
@@ -377,27 +377,27 @@ input[type=number]::-webkit-outer-spin-button {
     box-sizing: border-box;
 }
 
-.lmenu .order .tab .toggle p {
+.lpanel .order .tab .toggle p {
     margin: auto;
 }
 
-.lmenu .order .tab .toggle:nth-child(1) {
+.lpanel .order .tab .toggle:nth-child(1) {
     left: 0;
 }
 
-.lmenu .order .tab .toggle:nth-child(2) {
+.lpanel .order .tab .toggle:nth-child(2) {
     left: 25%;
 }
 
-.lmenu .order .tab .toggle:nth-child(3) {
+.lpanel .order .tab .toggle:nth-child(3) {
     left: 50%;
 }
 
-.lmenu .order .tab .toggle:nth-child(4) {
+.lpanel .order .tab .toggle:nth-child(4) {
     right: 0;
 }
 
-.lmenu .order .empty {
+.lpanel .order .empty {
     text-align: center;
     margin-top: 25px;
 }
@@ -509,19 +509,19 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*==============================================================*/
-/*========================= RIGHT MENU =========================*/
+/*========================= RIGHT PANEL =========================*/
 /*==============================================================*/
 
-.rmenu {
+.rpanel {
     box-shadow: 0 0 10px black;
     background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>");
 }
 
 /*==============================================================*/
-/*========================= LOGS MENU =========================*/
+/*========================= LOGS PANEL =========================*/
 /*==============================================================*/
 
-.rmenu .logs {
+.rpanel .logs {
     overflow: hidden;
     overflow-y: scroll;
     height: 570px;
@@ -529,36 +529,36 @@ input[type=number]::-webkit-outer-spin-button {
     font-size: 11px;
 }
 
-.rmenu .logs .item {
+.rpanel .logs .item {
     height: 40px;
     margin-top: 20px;
     padding: 0 16px;
 }
 
-.rmenu .logs .item .icon {
+.rpanel .logs .item .icon {
     padding: 0;
 }
 
-.rmenu .logs .item i.info {
+.rpanel .logs .item i.info {
     color: #3972bf;
 }
 
-.rmenu .logs .item i.warning {
+.rpanel .logs .item i.warning {
     color: #7ba428;
 }
 
-.rmenu .logs .item i.error {
+.rpanel .logs .item i.error {
     color: #8b0000;
 }
 
-.rmenu .logs .item i.large {
+.rpanel .logs .item i.large {
     position: absolute;
     top: 0;
     left: 0;
     font-size: 35px;
 }
 
-.rmenu .logs .item i.small {
+.rpanel .logs .item i.small {
     position: absolute;
     bottom: 2px;
     right: 2px;
@@ -568,15 +568,15 @@ input[type=number]::-webkit-outer-spin-button {
     background: #1d1d1e;
 }
 
-.rmenu .logs .item i.fa-truck-loading {
+.rpanel .logs .item i.fa-truck-loading {
     font-size: 8px;
 }
 
-.rmenu .logs .item i.fa-boxes {
+.rpanel .logs .item i.fa-boxes {
     font-size: 8px;
 }
 
-.rmenu .logs .item .text {
+.rpanel .logs .item .text {
     width: 100%;
     height: 100%;
     vertical-align: middle;
@@ -584,20 +584,20 @@ input[type=number]::-webkit-outer-spin-button {
     padding-right: 5px;
 }
 
-.rmenu .logs .item .text span {
+.rpanel .logs .item .text span {
     display: block;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
 }
 
-.rmenu .logs .sep {
+.rpanel .logs .sep {
     margin: 15px 0;
     vertical-align: middle;
     color: #8b8b8b;
 }
 
-.rmenu .logs .sep span {
+.rpanel .logs .sep span {
     display: block;
     transform: translateY(25%);
     padding: 0 2%;
@@ -605,21 +605,21 @@ input[type=number]::-webkit-outer-spin-button {
     text-align: center;
 }
 
-.rmenu .logs .sep hr {
+.rpanel .logs .sep hr {
     color: #8b8b8b;
     background: #8b8b8b;
     width: 15%;
 }
 
 /*==============================================================*/
-/*========================= STATS MENU =========================*/
+/*========================= STATS PANEL =========================*/
 /*==============================================================*/
 
-.rmenu .sim {
+.rpanel .sim {
     padding: 15px 0;
 }
 
-.rmenu .stats {
+.rpanel .stats {
     overflow: hidden;
     overflow-y: scroll;
     height: 570px;
@@ -650,18 +650,18 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*==============================================================*/
-/*====================== RIGHT ITEMS MENU ======================*/
+/*====================== RIGHT ITEMS PANEL ======================*/
 /*==============================================================*/
 
-.rmenu .items {
+.rpanel .items {
     padding: 15px 0;
 }
 
-.rmenu .items .search {
+.rpanel .items .search {
     margin-top: 20px;
 }
 
-.rmenu .items .tab {
+.rpanel .items .tab {
     font-family: 'Asap', sans-serif;
     width: 180px;
     height: 36px;
@@ -671,7 +671,7 @@ input[type=number]::-webkit-outer-spin-button {
     user-select: none;
 }
 
-.rmenu .items .tab .inner-container {
+.rpanel .items .tab .inner-container {
     position: absolute;
     left: 0;
     top: 0;
@@ -686,7 +686,7 @@ input[type=number]::-webkit-outer-spin-button {
     font-weight: bolder;
 }
 
-.rmenu .items .tab .toggle {
+.rpanel .items .tab .toggle {
     width: 100%;
     position: absolute;
     height: inherit;
@@ -694,15 +694,15 @@ input[type=number]::-webkit-outer-spin-button {
     box-sizing: border-box;
 }
 
-.rmenu .items .tab .toggle p {
+.rpanel .items .tab .toggle p {
     margin: auto;
 }
 
 /*==============================================================*/
-/*======================= RIGHT SIM MENU =======================*/
+/*======================= RIGHT SIM PANEL =======================*/
 /*==============================================================*/
 
-.rmenu .sim .tab .container {
+.rpanel .sim .tab .container {
     font-family: 'Asap', sans-serif;
     width: 180px;
     height: 36px;
@@ -713,7 +713,7 @@ input[type=number]::-webkit-outer-spin-button {
     cursor: pointer;
 }
 
-.rmenu .sim .tab .inner-container {
+.rpanel .sim .tab .inner-container {
     position: absolute;
     left: 0;
     top: 0;
@@ -724,13 +724,13 @@ input[type=number]::-webkit-outer-spin-button {
     letter-spacing: .2em;
 }
 
-.rmenu .sim .tab .inner-container:first-child {
+.rpanel .sim .tab .inner-container:first-child {
     background: transparent;
     border-bottom: 1px #bababa solid;
     color: #bababa;
 }
 
-.rmenu .sim .tab .inner-container:nth-child(2) {
+.rpanel .sim .tab .inner-container:nth-child(2) {
     background: transparent;
     color: #e09500;
     border-bottom: 1px #e09500 solid;
@@ -739,7 +739,7 @@ input[type=number]::-webkit-outer-spin-button {
     clip-path: inset(0 50% 0 0);
 }
 
-.rmenu .sim .tab .toggle {
+.rpanel .sim .tab .toggle {
     width: 50%;
     position: absolute;
     height: inherit;
@@ -747,11 +747,11 @@ input[type=number]::-webkit-outer-spin-button {
     box-sizing: border-box;
 }
 
-.rmenu .sim .tab .toggle p {
+.rpanel .sim .tab .toggle p {
     margin: auto;
 }
 
-.rmenu .sim .tab .toggle:nth-child(2) {
+.rpanel .sim .tab .toggle:nth-child(2) {
     right: 0;
 }
 

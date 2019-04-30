@@ -40,7 +40,7 @@ let itemsViewModel = function (shouter, state, gfxEventHandler) {
         state.items = ko.mapping.toJS(self.items());
 
         // Scroll view to bottom
-        let container = $(".rmenu .items .items-container");
+        let container = $(".rpanel .items .items-container");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
     };
 

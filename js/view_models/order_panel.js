@@ -7,7 +7,7 @@ let ko = require('knockout');
 let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, runningMode, logger) {
     let self = this;
 
-    self.activeMenu = ko.observable(ORDER_MENU.ADD);
+    self.activePanel = ko.observable(ORDER_PANEL.ADD);
 
     self.id = ko.observable(1);
     self.gateID = ko.observable("");
@@ -43,13 +43,13 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
     });
 
     self.tabsClipPath = ko.computed(function () {
-        if (self.activeMenu() === ORDER_MENU.ADD) {
+        if (self.activePanel() === ORDER_PANEL.ADD) {
             return 'polygon(0% 0%, 25% 0%, 25% 100%, 0% 100%)';
-        } else if (self.activeMenu() === ORDER_MENU.ONGOING) {
+        } else if (self.activePanel() === ORDER_PANEL.ONGOING) {
             return 'polygon(25% 0%, 50% 0%, 50% 100%, 25% 100%)';
-        } else if (self.activeMenu() === ORDER_MENU.UPCOMING) {
+        } else if (self.activePanel() === ORDER_PANEL.UPCOMING) {
             return 'polygon(50% 0%, 75% 0%, 75% 100%, 50% 100%)';
-        } else if (self.activeMenu() === ORDER_MENU.FINISHED) {
+        } else if (self.activePanel() === ORDER_PANEL.FINISHED) {
             return 'polygon(75% 0%, 100% 0%, 100% 100%, 75% 100%)';
         }
     });
@@ -83,7 +83,7 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
         self.itemQuantity("");
 
         // Scroll view to bottom
-        let container = $(".lmenu .order .items-container");
+        let container = $(".lpanel .order .items-container");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
     };
 
@@ -91,8 +91,8 @@ let orderViewModel = function (shouter, state, gfxEventHandler, sendToServer, ru
         self.items.remove(this);
     };
 
-    self.toggleActiveOrdersMenu = function (m) {
-        self.activeMenu(m);
+    self.toggleActiveOrdersPanel = function (m) {
+        self.activePanel(m);
     };
 
     self.consumeUpcomingOrders = function () {

@@ -14,8 +14,8 @@ RUNNING_MODE = {
     PAUSE: 3
 };
 
-// Menus
-LEFT_MENU = {
+// Panels
+LEFT_PANEL = {
     EMPTY: 0,
     TEMPS: 1,
     MAP: 2,
@@ -27,14 +27,14 @@ LEFT_MENU = {
     ORDER: 8
 };
 
-RIGHT_MENU = {
+RIGHT_PANEL = {
     EMPTY: 0,
     LOGS: 1,
     STATS: 2,
     ITEMS: 3
 };
 
-ORDER_MENU = {
+ORDER_PANEL = {
     ADD: 0,
     ONGOING: 1,
     UPCOMING: 2,

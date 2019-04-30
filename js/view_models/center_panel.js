@@ -2,7 +2,7 @@ require('../utils/constants');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let controlConsoleViewModel = require("./control_console");
+let controlConsoleViewModel = require("./control_panel");
 let settingsPanelViewModel = require("./settings_panel");
 
 let controlPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, comm, logger) {

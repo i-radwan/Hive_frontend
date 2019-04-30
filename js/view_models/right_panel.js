@@ -3,10 +3,10 @@ let ko = require('knockout');
 
 let itemsViewModel = require('./items_panel');
 
-let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
+let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
     let self = this;
 
-    self.activeMenu = ko.observable(RIGHT_MENU.ITEMS);
+    self.activePanel = ko.observable(RIGHT_PANEL.ITEMS);
     self.logs = ko.observableArray();
     self.stats = ko.observableArray();
 
@@ -168,21 +168,21 @@ let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.toggleActiveList = function () {
-        if (self.activeMenu() === RIGHT_MENU.LOGS) {
-            self.activeMenu(RIGHT_MENU.STATS);
+        if (self.activePanel() === RIGHT_PANEL.LOGS) {
+            self.activePanel(RIGHT_PANEL.STATS);
         }
-        else if (self.activeMenu() === RIGHT_MENU.STATS) {
-            self.activeMenu(RIGHT_MENU.LOGS)
+        else if (self.activePanel() === RIGHT_PANEL.STATS) {
+            self.activePanel(RIGHT_PANEL.LOGS)
         }
     };
 
     // Listen for mode change
     runningMode.subscribe(function (newRunningMode) {
         if (newRunningMode === RUNNING_MODE.DESIGN) {
-            self.activeMenu(RIGHT_MENU.ITEMS);
+            self.activePanel(RIGHT_PANEL.ITEMS);
         }
         else {
-            self.activeMenu(RIGHT_MENU.LOGS);
+            self.activePanel(RIGHT_PANEL.LOGS);
         }
     });
 
@@ -191,4 +191,4 @@ let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 };
 
-module.exports = rightMenuViewModel;
+module.exports = rightPanelViewModel;
