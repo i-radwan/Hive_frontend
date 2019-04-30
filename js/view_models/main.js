@@ -202,8 +202,10 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     gfxEventHandler({
         type: EVENT_TO_GFX.INIT,
-        width: self.state.map.width,
-        height: self.state.map.height
+        data: {
+            width: self.state.map.width,
+            height: self.state.map.height
+        }
     });
 };
 

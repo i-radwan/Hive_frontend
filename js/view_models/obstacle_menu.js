@@ -28,9 +28,11 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
-                object: MAP_CELL.OBSTACLE,
-                row: row,
-                col: col
+                data: {
+                    type: MAP_CELL.OBSTACLE,
+                    row: row,
+                    col: col
+                }
             });
         } else if (state.map.grid[row][col].facility !== undefined && self.activeObstacleRow === -1 && self.activeObstacleCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
@@ -51,11 +53,13 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
-                object: MAP_CELL.OBSTACLE,
-                src_row: srcRow,
-                src_col: srcCol,
-                dst_row: dstRow,
-                dst_col: dstCol
+                data: {
+                    type: MAP_CELL.OBSTACLE,
+                    src_row: srcRow,
+                    src_col: srcCol,
+                    dst_row: dstRow,
+                    dst_col: dstCol
+                }
             });
         } else {
             shouter.notifySubscribers({
@@ -65,11 +69,13 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
-                object: MAP_CELL.OBSTACLE,
-                src_row: srcRow,
-                src_col: srcCol,
-                dst_row: srcRow,
-                dst_col: srcCol
+                data: {
+                    type: MAP_CELL.OBSTACLE,
+                    src_row: srcRow,
+                    src_col: srcCol,
+                    dst_row: srcRow,
+                    dst_col: srcCol
+                }
             });
         }
     };
@@ -80,9 +86,11 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DELETE,
-                object: MAP_CELL.OBSTACLE,
-                row: row,
-                col: col
+                data: {
+                    type: MAP_CELL.OBSTACLE,
+                    row: row,
+                    col: col
+                }
             });
 
             unselect();
@@ -104,9 +112,11 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.OBSTACLE,
-            row: row,
-            col: col
+            data: {
+                type: MAP_CELL.OBSTACLE,
+                row: row,
+                col: col
+            }
         });
     };
 
@@ -118,9 +128,11 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.OBSTACLE,
-            row: row,
-            col: col
+            data: {
+                type: MAP_CELL.OBSTACLE,
+                row: row,
+                col: col
+            }
         });
     };
 
@@ -188,7 +200,7 @@ let obstacleViewModel = function (shouter, state, gfxEventHandler, logger) {
         self.applyVisible(false);
     };
 
-    let clear = function() {
+    let clear = function () {
         self.id(state.nextIDs.obstacle);
     };
 

@@ -37,15 +37,17 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
-                object: MAP_CELL.ROBOT,
-                row: row,
-                col: col,
-                id: parseInt(self.id()),
-                load_cap: parseInt(self.loadCap()),
-                battery_cap: parseInt(self.batteryCap()),
-                color: self.color(),
-                ip: self.ip(),
-                port: self.port()
+                data: {
+                    type: MAP_CELL.ROBOT,
+                    row: row,
+                    col: col,
+                    id: parseInt(self.id()),
+                    load_cap: parseInt(self.loadCap()),
+                    battery_cap: parseInt(self.batteryCap()),
+                    color: self.color(),
+                    ip: self.ip(),
+                    port: self.port()
+                }
             });
         } else if (state.map.grid[row][col].robot !== undefined && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
@@ -63,11 +65,13 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
-                object: MAP_CELL.ROBOT,
-                src_row: srcRow,
-                src_col: srcCol,
-                dst_row: dstRow,
-                dst_col: dstCol
+                data: {
+                    type: MAP_CELL.ROBOT,
+                    src_row: srcRow,
+                    src_col: srcCol,
+                    dst_row: dstRow,
+                    dst_col: dstCol
+                }
             });
         } else {
             shouter.notifySubscribers({
@@ -77,11 +81,13 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
-                object: MAP_CELL.ROBOT,
-                src_row: srcRow,
-                src_col: srcCol,
-                dst_row: srcRow,
-                dst_col: srcCol
+                data: {
+                    type: MAP_CELL.ROBOT,
+                    src_row: srcRow,
+                    src_col: srcCol,
+                    dst_row: srcRow,
+                    dst_col: srcCol
+                }
             });
         }
     };
@@ -92,9 +98,11 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DELETE,
-                object: MAP_CELL.ROBOT,
-                row: row,
-                col: col
+                data: {
+                    type: MAP_CELL.ROBOT,
+                    row: row,
+                    col: col
+                }
             });
 
             unselect();
@@ -121,9 +129,11 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.ROBOT,
-            row: row,
-            col: col
+            data: {
+                type: MAP_CELL.ROBOT,
+                row: row,
+                col: col
+            }
         });
     };
 
@@ -135,9 +145,11 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.ROBOT,
-            row: row,
-            col: col
+            data: {
+                type: MAP_CELL.ROBOT,
+                row: row,
+                col: col
+            }
         });
     };
 
@@ -175,10 +187,12 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_MOVE,
-            row: r,
-            col: c,
-            new_row: nr,
-            new_col: nc
+            data: {
+                row: r,
+                col: c,
+                new_row: nr,
+                new_col: nc
+            }
         });
     };
 
@@ -198,11 +212,13 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_BIND,
-            id: id,
-            row: r,
-            col: c,
-            object_id: cell.facility.id,
-            object_type: cell.facility.type
+            data: {
+                id: id,
+                row: r,
+                col: c,
+                object_id: cell.facility.id,
+                object_type: cell.facility.type
+            }
         });
 
         if (cell.facility.type === MAP_CELL.GATE) {
@@ -238,18 +254,22 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_UNBIND,
-            id: id,
-            row: r,
-            col: c,
-            object_id: cell.facility.id,
-            object_type: cell.facility.type
+            data: {
+                id: id,
+                row: r,
+                col: c,
+                object_id: cell.facility.id,
+                object_type: cell.facility.type
+            }
         });
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_DISCOLORIZE,
-            object: cell.facility.type,
-            row: r,
-            col: c
+            data: {
+                type: cell.facility.type,
+                row: r,
+                col: c
+            }
         });
 
         if (cell.facility.type === MAP_CELL.GATE) {
@@ -284,9 +304,11 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_LOAD,
-            id: cell.facility.id,
-            row: r,
-            col: c
+            data: {
+                id: cell.facility.id,
+                row: r,
+                col: c
+            }
         });
 
         logger({
@@ -312,9 +334,11 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_OFFLOAD,
-            row: r,
-            col: c,
-            rack_id: cell.facility.id,
+            data: {
+                row: r,
+                col: c,
+                rack_id: cell.facility.id
+            }
         });
 
         logger({
@@ -330,10 +354,12 @@ let robotViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_COLORIZE,
-            object: MAP_CELL.RACK,
-            row: rack_row,
-            col: rack_col,
-            color: cell.robot.color
+            data: {
+                type: MAP_CELL.RACK,
+                row: rack_row,
+                col: rack_col,
+                color: cell.robot.color
+            }
         });
 
         logger({

@@ -37,11 +37,13 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
-                object: MAP_CELL.RACK,
-                row: row,
-                col: col,
-                capacity: parseInt(self.capacity()),
-                items: ko.mapping.toJS(self.items())
+                data: {
+                    type: MAP_CELL.RACK,
+                    row: row,
+                    col: col,
+                    capacity: parseInt(self.capacity()),
+                    items: ko.mapping.toJS(self.items())
+                }
             });
         } else if (state.map.grid[row][col].facility !== undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
@@ -62,11 +64,13 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
-                object: MAP_CELL.RACK,
-                src_row: srcRow,
-                src_col: srcCol,
-                dst_row: dstRow,
-                dst_col: dstCol
+                data: {
+                    type: MAP_CELL.RACK,
+                    src_row: srcRow,
+                    src_col: srcCol,
+                    dst_row: dstRow,
+                    dst_col: dstCol
+                }
             });
         } else {
             shouter.notifySubscribers({
@@ -76,11 +80,13 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
-                object: MAP_CELL.RACK,
-                src_row: srcRow,
-                src_col: srcCol,
-                dst_row: srcRow,
-                dst_col: srcCol
+                data: {
+                    type: MAP_CELL.RACK,
+                    src_row: srcRow,
+                    src_col: srcCol,
+                    dst_row: srcRow,
+                    dst_col: srcCol
+                }
             });
         }
     };
@@ -91,9 +97,11 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DELETE,
-                object: MAP_CELL.RACK,
-                row: row,
-                col: col
+                data: {
+                    type: MAP_CELL.RACK,
+                    row: row,
+                    col: col
+                }
             });
 
             unselect();
@@ -117,9 +125,11 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.RACK,
-            row: row,
-            col: col
+            data: {
+                type: MAP_CELL.RACK,
+                row: row,
+                col: col
+            }
         });
     };
 
@@ -131,9 +141,11 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.RACK,
-            row: row,
-            col: col
+            data: {
+                type: MAP_CELL.RACK,
+                row: row,
+                col: col
+            }
         });
     };
 

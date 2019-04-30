@@ -48,8 +48,10 @@ let mapViewModel = function (shouter, state, gfxEventHandler, logger) {
         // Inform GFX that the map size changed
         gfxEventHandler({
             type: EVENT_TO_GFX.INIT,
-            width: state.map.width,
-            height: state.map.height
+            data: {
+                width: state.map.width,
+                height: state.map.height
+            }
         });
 
         // Add objects GFX events
@@ -60,49 +62,59 @@ let mapViewModel = function (shouter, state, gfxEventHandler, logger) {
                 if (c.robot !== undefined) {
                     gfxEventHandler({
                         type: EVENT_TO_GFX.OBJECT_ADD,
-                        object: MAP_CELL.ROBOT,
-                        row: i,
-                        col: j,
-                        id: c.robot.id,
-                        load_cap: c.robot.loadCap,
-                        battery_cap: c.robot.batteryCap,
-                        color: c.robot.color,
-                        ip: c.robot.ip
+                        data: {
+                            type: MAP_CELL.ROBOT,
+                            row: i,
+                            col: j,
+                            id: c.robot.id,
+                            load_cap: c.robot.loadCap,
+                            battery_cap: c.robot.batteryCap,
+                            color: c.robot.color,
+                            ip: c.robot.ip
+                        }
                     });
                 } else if (c.facility !== undefined) {
                     switch (c.facility.type) {
                         case MAP_CELL.GATE:
                             gfxEventHandler({
                                 type: EVENT_TO_GFX.OBJECT_ADD,
-                                object: MAP_CELL.GATE,
-                                row: i,
-                                col: j
+                                data: {
+                                    type: MAP_CELL.GATE,
+                                    row: i,
+                                    col: j
+                                }
                             });
                             break;
                         case MAP_CELL.RACK:
                             gfxEventHandler({
                                 type: EVENT_TO_GFX.OBJECT_ADD,
-                                object: MAP_CELL.RACK,
-                                row: i,
-                                col: j,
-                                capacity: c.facility.capacity,
-                                items: c.facility.items
+                                data: {
+                                    type: MAP_CELL.RACK,
+                                    row: i,
+                                    col: j,
+                                    capacity: c.facility.capacity,
+                                    items: c.facility.items
+                                }
                             });
                             break;
                         case MAP_CELL.STATION:
                             gfxEventHandler({
                                 type: EVENT_TO_GFX.OBJECT_ADD,
-                                object: MAP_CELL.STATION,
-                                row: i,
-                                col: j
+                                data: {
+                                    type: MAP_CELL.STATION,
+                                    row: i,
+                                    col: j
+                                }
                             });
                             break;
                         case MAP_CELL.OBSTACLE:
                             gfxEventHandler({
                                 type: EVENT_TO_GFX.OBJECT_ADD,
-                                object: MAP_CELL.OBSTACLE,
-                                row: i,
-                                col: j
+                                data: {
+                                    type: MAP_CELL.OBSTACLE,
+                                    row: i,
+                                    col: j
+                                }
                             });
                             break;
                     }

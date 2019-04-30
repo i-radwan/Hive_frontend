@@ -235,13 +235,13 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     };
 
     let sendStateToServer = function (mode) {
-        console.log(JSON.stringify(state, null, 2));
-
         if (!comm.connected) {
             shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);
             
             return;
         }
+
+        console.log(JSON.stringify(state, null, 2));
 
         if (runningMode() === RUNNING_MODE.DESIGN) {
             comm.send({

@@ -75,35 +75,45 @@ let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, 
     let toggleGate = function () {
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
-            object: MAP_CELL.GATE
+            data: {
+                type: MAP_CELL.GATE
+            }
         });
     };
 
     let toggleRobot = function () {
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
-            object: MAP_CELL.ROBOT
+            data: {
+                type: MAP_CELL.ROBOT
+            }
         });
     };
 
     let toggleRack = function () {
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
-            object: MAP_CELL.RACK
+            data: {
+                type: MAP_CELL.RACK
+            }
         });
     };
 
     let toggleStation = function () {
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
-            object: MAP_CELL.STATION
+            data: {
+                type: MAP_CELL.STATION
+            }
         });
     };
 
     let toggleObstacle = function () {
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
-            object: MAP_CELL.OBSTACLE
+            data: {
+                type: MAP_CELL.OBSTACLE
+            }
         });
     };
 

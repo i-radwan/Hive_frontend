@@ -28,10 +28,12 @@ let gateViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
-                object: MAP_CELL.GATE,
-                row: row,
-                col: col,
-                id: parseInt(self.id())
+                data: {
+                    type: MAP_CELL.GATE,
+                    row: row,
+                    col: col,
+                    id: parseInt(self.id())
+                }
             });
         } else if (state.map.grid[row][col].facility !== undefined && self.activeGateRow === -1 && self.activeGateCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
@@ -52,11 +54,13 @@ let gateViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
-                object: MAP_CELL.GATE,
-                src_row: srcRow,
-                src_col: srcCol,
-                dst_row: dstRow,
-                dst_col: dstCol
+                data: {
+                    type: MAP_CELL.GATE,
+                    src_row: srcRow,
+                    src_col: srcCol,
+                    dst_row: dstRow,
+                    dst_col: dstCol
+                }
             });
         } else {
             shouter.notifySubscribers({
@@ -66,11 +70,13 @@ let gateViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
-                object: MAP_CELL.GATE,
-                src_row: srcRow,
-                src_col: srcCol,
-                dst_row: srcRow,
-                dst_col: srcCol
+                data: {
+                    type: MAP_CELL.GATE,
+                    src_row: srcRow,
+                    src_col: srcCol,
+                    dst_row: srcRow,
+                    dst_col: srcCol
+                }
             });
         }
     };
@@ -81,9 +87,11 @@ let gateViewModel = function (shouter, state, gfxEventHandler, logger) {
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DELETE,
-                object: MAP_CELL.GATE,
-                row: row,
-                col: col
+                data: {
+                    type: MAP_CELL.GATE,
+                    row: row,
+                    col: col
+                }
             });
 
             unselect();
@@ -105,9 +113,11 @@ let gateViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.GATE,
-            row: row,
-            col: col
+            data: {
+                type: MAP_CELL.GATE,
+                row: row,
+                col: col
+            }
         });
     };
 
@@ -119,9 +129,11 @@ let gateViewModel = function (shouter, state, gfxEventHandler, logger) {
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            object: MAP_CELL.GATE,
-            row: row,
-            col: col
+            data: {
+                type: MAP_CELL.GATE,
+                row: row,
+                col: col
+            }
         });
     };
 
@@ -189,7 +201,7 @@ let gateViewModel = function (shouter, state, gfxEventHandler, logger) {
         self.applyVisible(false);
     };
 
-    let clear = function() {
+    let clear = function () {
         self.id(state.nextIDs.gate);
     };
 
