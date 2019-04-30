@@ -1,14 +1,14 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let tempViewModel = require('./temps_menu');
-let mapViewModel = require('./map_menu');
-let gateViewModel = require('./gate_menu');
-let robotViewModel = require('./robot_menu');
-let rackViewModel = require('./rack_menu');
-let stationViewModel = require('./station_menu');
-let obstacleViewModel = require('./obstacle_menu');
-let orderViewModel = require('./order_menu');
+let tempViewModel = require('./temps_panel');
+let mapViewModel = require('./map_panel');
+let gateViewModel = require('./gate_panel');
+let robotViewModel = require('./robot_panel');
+let rackViewModel = require('./rack_panel');
+let stationViewModel = require('./station_panel');
+let obstacleViewModel = require('./obstacle_panel');
+let orderViewModel = require('./order_panel');
 
 let leftMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;

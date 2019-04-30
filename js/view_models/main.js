@@ -5,9 +5,9 @@ let ko = require('knockout');
 let State = require('../models/state');
 
 // ViewModels
-let leftMenuViewModel = require("./left_menu");
-let controlConsoleViewModel = require("./control_console");
-let rightMenuViewModel = require("./right_menu");
+let leftMenuViewModel = require("./left_panel");
+let centerPanelViewModel = require("./center_panel");
+let rightMenuViewModel = require("./right_panel");
 
 let mainViewModel = function (gfxEventHandler, comm) {
     let self = this;
@@ -21,7 +21,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
     self.gfxEventHandler = gfxEventHandler;
 
     self.leftMenuVM = new leftMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, comm.send, self.logger);
-    self.controlConsoleVM = new controlConsoleViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, comm, self.logger);
+    self.centerPanelVM = new centerPanelViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, comm, self.logger);
     self.rightMenuVM = new rightMenuViewModel(self.runningMode, self.shouter, self.state, gfxEventHandler, comm.send);
 
     self.logger = self.rightMenuVM.addLog;
@@ -35,11 +35,11 @@ let mainViewModel = function (gfxEventHandler, comm) {
     self.handleServerMsg = function (msg) {
         switch (msg.type) {
             case MSG_FROM_SERVER.ACK_CONFIG:
-                self.controlConsoleVM.handleServerMsg(msg);
+                self.centerPanelVM.controlConsoleVM.handleServerMsg(msg);
                 break;
 
             case MSG_FROM_SERVER.ACK_RESUME:
-                self.controlConsoleVM.handleServerMsg(msg);
+                self.centerPanelVM.controlConsoleVM.handleServerMsg(msg);
                 break;
 
             case MSG_FROM_SERVER.ACK_ORDER:
@@ -192,7 +192,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     let handleEsc = function () {
         self.leftMenuVM.handleEsc();
-        self.controlConsoleVM.handleEsc();
+        self.centerPanelVM.controlConsoleVM.handleEsc();
         self.rightMenuVM.handleEsc();
 
         gfxEventHandler({

@@ -91,34 +91,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.handleEsc = function () {
     };
 
-    self.toggleSettings = function () {
-        if (self.settingsVisible()) {
-            $("#settings-icon").removeClass("rotated");
-            $("#settings").slideUp({
-                duration: 250,
-                progress: function (a, p) {
-                    if (p > 0.5) {
-                        $(".map-row").removeClass("back");
-                        $(".settings").removeClass("front");
-                    }
-                }
-            });
-        } else {
-            $("#settings-icon").addClass("rotated");
-            $("#settings").slideDown({
-                duration: 250,
-                progress: function (a, p) {
-                    if (p > 0.5) {
-                        $(".map-row").addClass("back");
-                        $(".settings").addClass("front");
-                    }
-                }
-            });
-        }
-
-        self.settingsVisible(!self.settingsVisible());
-    };
-
     self.connect = function () {
         // ToDo connect to the server
 

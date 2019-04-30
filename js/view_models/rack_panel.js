@@ -219,6 +219,10 @@ let rackViewModel = function (shouter, state, gfxEventHandler, logger) {
             color: "#bababa",
             msg: "Rack <b>(#" + rack_id + ")</b> has been filled by (" + item_quantity + ") from Item#<b>(" + item_id + ")</b>."
         });
+
+        // ToDo: check if this works
+        self.items(ko.mapping.fromJS(cell.facility.items)());
+        self.items.valueHasMutated();
     };
 
     self.handleEsc = function () {

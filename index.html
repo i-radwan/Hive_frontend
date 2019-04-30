@@ -672,15 +672,15 @@
                     <div class="form-group">
                         <label>Server IP</label>
                         <input type="text" class="form-control bg-dark text-light" placeholder="Server IP (192.168.0.1)"
-                               data-bind="textInput: controlConsoleVM.ip, enable: runningMode() === RUNNING_MODE.DESIGN">
+                               data-bind="textInput: centerPanelVM.settingsVM.ip, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="form-group">
                         <label>Server Port</label>
                         <input type="text" class="form-control bg-dark text-light" placeholder="Server Port (12345)"
-                               data-bind="textInput: controlConsoleVM.port, enable: runningMode() === RUNNING_MODE.DESIGN">
+                               data-bind="textInput: centerPanelVM.settingsVM.port, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="form-group btn-cont">
-                        <button class="btn-dark text-muted" data-bind="click: controlConsoleVM.connect">Connect</button>
+                        <button class="btn-dark text-muted" data-bind="click: centerPanelVM.settingsVM.connect">Connect</button>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -696,15 +696,15 @@
                     <img src="images/meta/logo_3.png">
                 </div>
 
-                <i class="fas fa-stop stop" data-bind="click: controlConsoleVM.stop"></i>
+                <i class="fas fa-stop stop" data-bind="click: centerPanelVM.controlConsoleVM.stop"></i>
                 <i class="fas play-pause"
-                   data-bind="click: controlConsoleVM.play, css: {'fa-play play': !controlConsoleVM.playing(), 'fa-pause pause': controlConsoleVM.playing()}"></i>
-                <div class="deploy-switch" data-bind="click: controlConsoleVM.deploy">Deploy</div>
+                   data-bind="click: centerPanelVM.controlConsoleVM.play, css: {'fa-play play': !centerPanelVM.controlConsoleVM.playing(), 'fa-pause pause': centerPanelVM.controlConsoleVM.playing()}"></i>
+                <div class="deploy-switch" data-bind="click: centerPanelVM.controlConsoleVM.deploy">Deploy</div>
 
-                <i class="fas fa-cog settings-icon" id="settings-icon" data-bind="click: controlConsoleVM.toggleSettings"></i>
+                <i class="fas fa-cog settings-icon" id="settings-icon" data-bind="click: centerPanelVM.toggleSettings"></i>
             </div>
             <div class="text-sm-center msg"
-                 data-bind="text: controlConsoleVM.msg, css: {'error-msg': controlConsoleVM.msgType() === MSG_ERROR, 'info-msg': controlConsoleVM.msgType() === MSG_INFO}"></div>
+                 data-bind="text: centerPanelVM.controlConsoleVM.msg, css: {'error-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_ERROR, 'info-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_INFO}"></div>
         </div>
     </div>
 

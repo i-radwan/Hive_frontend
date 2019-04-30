@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let itemsViewModel = require('./items_menu');
+let itemsViewModel = require('./items_panel');
 
 let rightMenuViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
     let self = this;
