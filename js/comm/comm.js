@@ -4,6 +4,8 @@ let WebSocketServer = require('ws').Server;
 let comm = function (serverMW) {
     let self = this;
 
+    self.connected = false;
+
     self.connect = function (ip, port, rcv) {
         if (rcv !== undefined)
             self.rcv = rcv;
@@ -19,6 +21,7 @@ let comm = function (serverMW) {
 
         self.wss.on('connection', function (ws) {
             self.ws = ws;
+            self.connected = true;
 
             ws.on('message', function (message) {
                 console.log('received: %s', message);

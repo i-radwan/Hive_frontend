@@ -129,7 +129,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         }
 
         if (self.port().length === 0 || isNaN(self.port())) {
-            shouter.notifySubscribers({text: "Invalid Port!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Invalid port!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
@@ -138,13 +138,13 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             let d = comm.connect(self.ip(), self.port());
 
             if (d) {
-                shouter.notifySubscribers({text: "Connected to Server!", type: MSG_INFO}, SHOUT_MSG);
+                shouter.notifySubscribers({text: "Connected to server!", type: MSG_INFO}, SHOUT_MSG);
 
                 return true;
             }
         } catch (e) {}
 
-        shouter.notifySubscribers({text: "Couldn't Connect to the Server!", type: MSG_ERROR}, SHOUT_MSG);
+        shouter.notifySubscribers({text: "Couldn't connect to the server!", type: MSG_ERROR}, SHOUT_MSG);
 
         return false;
     };
@@ -237,6 +237,12 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     let sendStateToServer = function (mode) {
         console.log(JSON.stringify(state, null, 2));
 
+        if (!comm.connected) {
+            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);
+            
+            return;
+        }
+
         if (runningMode() === RUNNING_MODE.DESIGN) {
             comm.send({
                 type: MSG_TO_SERVER.CONFIG,
@@ -248,7 +254,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         } else if (runningMode() === RUNNING_MODE.PAUSE) {
             comm.send({
                 type: MSG_TO_SERVER.RESUME
-            })
+            });
         }
     };
 };
