@@ -163,7 +163,7 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         if (!f) {
-            self.stats().push({
+            self.stats.push({
                 key: key,
                 value: ko.observable(value)
             });
