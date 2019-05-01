@@ -151,6 +151,7 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.addLog = function (log) {
         self.logs.push(log);
+        console.log(self.logs());
     };
 
     self.updateStats = function (key, value) {

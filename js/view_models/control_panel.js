@@ -127,6 +127,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                 shouter.notifySubscribers(false, SHOUT_LOADING);
             } else if (data.status === ACK_CONFIG_STATUS.ERROR) {
                 shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+
+                shouter.notifySubscribers(false, SHOUT_LOADING);
             }
         } else if (msg.type === MSG_FROM_SERVER.ACK_RESUME) {
             let data = msg.data;
@@ -153,6 +155,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                 shouter.notifySubscribers(false, SHOUT_LOADING);
             } else if (data.status === ACK_RESUME_STATUS.ERROR) {
                 shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+
+                shouter.notifySubscribers(false, SHOUT_LOADING);
             }
         }
     };

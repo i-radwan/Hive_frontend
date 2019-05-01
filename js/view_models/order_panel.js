@@ -206,6 +206,8 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
                 shouter.notifySubscribers(false, SHOUT_LOADING);
             } else if (data.status === ACK_ORDER_STATUS.ERROR) {
                 shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+
+                shouter.notifySubscribers(false, SHOUT_LOADING);
             }
         }
     };

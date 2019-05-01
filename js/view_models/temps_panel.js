@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let tempsPanelViewModel = function (shouter, state, logger) {
+let tempsPanelViewModel = function (shouter, state, sendToServer, logger) {
     let self = this;
 
     /**

@@ -187,7 +187,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
     let handleActionAck = function () {
         if (--self.pendingActions === 0) { // All actions are done
             comm.send({
-                type: MSG_TO_SERVER.ACK_ACTION
+                type: MSG_TO_SERVER.ACK
             });
         }
     };

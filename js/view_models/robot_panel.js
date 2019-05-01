@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let robotPanelViewModel = function (shouter, state, gfxEventHandler, logger) {
+let robotPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
     self.id = ko.observable(1);
@@ -358,6 +358,13 @@ let robotPanelViewModel = function (shouter, state, gfxEventHandler, logger) {
                 col: rack_col,
                 color: cell.robot.color
             }
+        });
+
+        console.log({
+            level: LOG_LEVEL_INFO,
+            object: LOG_OBJECT_ROBOT,
+            color: cell.robot.color,
+            msg: "Robot <b>(#" + robot_id + ")</b> is assigned to Rack#<b>(" + rack_id + ")</b>."
         });
 
         logger({

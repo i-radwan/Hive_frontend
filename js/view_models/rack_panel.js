@@ -3,7 +3,7 @@ require('knockout-mapping');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let rackPanelViewModel = function (shouter, state, gfxEventHandler, logger) {
+let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer, ogger) {
     let self = this;
 
     self.capacity = ko.observable(RACK_CAP);

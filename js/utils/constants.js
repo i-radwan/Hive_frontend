@@ -120,7 +120,8 @@ MSG_TO_SERVER = {
     PAUSE: 2,
     STOP: 3,
     RESUME: 4,
-    ACK_ACTION: 5
+    ACK: 5,
+    ERROR: 6
 };
 
 MSG_FROM_SERVER = {
