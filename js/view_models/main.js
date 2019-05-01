@@ -212,7 +212,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     // Events
     self.shouter.subscribe(function (on) {
-        console.log(on);
         self.loadingVisible(on);
     }, self, SHOUT_LOADING);
 };

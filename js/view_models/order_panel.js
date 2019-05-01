@@ -67,7 +67,7 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
 
         sendOrderToServer(order);
 
-        // ToDo: show loading animation
+        shouter.notifySubscribers(true, SHOUT_LOADING);
     };
 
     self.addItem = function () {
@@ -203,7 +203,7 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
 
                 clear();
 
-                // ToDo: hide the loading animation
+                shouter.notifySubscribers(false, SHOUT_LOADING);
             } else if (data.status === ACK_ORDER_STATUS.ERROR) {
                 shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
             }

@@ -42,7 +42,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         } else {
             sendStateToServer(CONFIG_MODE.SIMULATE);
 
-            // ToDo: loading animation
+            shouter.notifySubscribers(true, SHOUT_LOADING);
         }
     };
 
@@ -106,7 +106,12 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             if (data.status === ACK_CONFIG_STATUS.OK) {
                 prepare();
 
-                runningMode(data.mode);
+                if (data.mode === CONFIG_MODE.SIMULATE) {
+                    runningMode(RUNNING_MODE.SIMULATE);
+                } else if (data.mode === CONFIG_MODE.DEPLOY) {
+                    runningMode(RUNNING_MODE.DEPLOY);
+                }
+
                 self.playing(true);
 
                 logger({
@@ -119,7 +124,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                     type: EVENT_TO_GFX.SIMULATION_START
                 });
 
-                // ToDo: hide the loading animation
+                shouter.notifySubscribers(false, SHOUT_LOADING);
             } else if (data.status === ACK_CONFIG_STATUS.ERROR) {
                 shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
             }
@@ -127,7 +132,12 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             let data = msg.data;
 
             if (data.status === ACK_RESUME_STATUS.OK) {
-                runningMode(data.mode);
+                if (data.mode === CONFIG_MODE.SIMULATE) {
+                    runningMode(RUNNING_MODE.SIMULATE);
+                } else if (data.mode === CONFIG_MODE.DEPLOY) {
+                    runningMode(RUNNING_MODE.DEPLOY);
+                }
+
                 self.playing(true);
 
                 logger({
@@ -140,7 +150,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                     type: EVENT_TO_GFX.SIMULATION_RESUME
                 });
 
-                // ToDo: hide the loading animation
+                shouter.notifySubscribers(false, SHOUT_LOADING);
             } else if (data.status === ACK_RESUME_STATUS.ERROR) {
                 shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
             }
@@ -187,11 +197,9 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     let sendStateToServer = function (mode) {
         if (!comm.connected) {
             shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);
-            
+
             return;
         }
-
-        console.log(JSON.stringify(state, null, 2));
 
         if (runningMode() === RUNNING_MODE.DESIGN) {
             comm.send({

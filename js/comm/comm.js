@@ -1,37 +1,33 @@
 require('../utils/constants');
-let WebSocketServer = require('ws').Server;
 
 let comm = function (serverMW) {
     let self = this;
 
     self.connected = false;
 
-    self.connect = function (ip, port, rcv) {
-        if (rcv !== undefined)
-            self.rcv = rcv;
-        else if (self.rcv === undefined) {
+    self.connect = function (ip, port, callback) {
+        if (self.rcv === undefined) {
             throw "Error, no rcv function defined!";
         }
 
-        let d = false;
+        self.ws = new WebSocket("ws://" + ip + ":" + port);
 
-        self.wss = new WebSocketServer({
-            host: ip, port: port
-        });
-
-        self.wss.on('connection', function (ws) {
-            self.ws = ws;
+        self.ws.onopen = function () {
             self.connected = true;
 
-            ws.on('message', function (message) {
-                console.log('received: %s', message);
-                self.rcv(serverMW.receive(message));
-            });
+            callback();
+        };
 
-            d = true;
-        });
+        self.ws.onerror = function (error) {
+        };
 
-        return d;
+        self.ws.onmessage = function (e) {
+            let msg = JSON.parse(e.data);
+
+            console.log('received:', msg);
+
+            self.rcv(serverMW.receive(msg));
+        };
     };
 
     self.send = function (msg) {
@@ -39,7 +35,7 @@ let comm = function (serverMW) {
             throw "Error, socket is not open!";
         }
 
-        self.ws.send(serverMW.send(msg));
+        self.ws.send(JSON.stringify(serverMW.send(msg)));
     };
 };
 

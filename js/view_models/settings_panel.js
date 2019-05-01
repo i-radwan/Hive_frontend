@@ -5,8 +5,8 @@ let ko = require('knockout');
 let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, comm, logger) {
     let self = this;
 
-    self.ip = ko.observable("");
-    self.port = ko.observable("");
+    self.ip = ko.observable(SERVER_IP);
+    self.port = ko.observable(SERVER_PORT);
 
     self.handleEsc = function () {
     };
@@ -27,13 +27,10 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
         try {
             shouter.notifySubscribers(true, SHOUT_LOADING);
 
-            let d = comm.connect(self.ip(), self.port());
-
-            if (d) {
+            comm.connect(self.ip(), self.port(), function () {
                 shouter.notifySubscribers({text: "Connected to server!", type: MSG_INFO}, SHOUT_MSG);
+            });
 
-                return true;
-            }
         } catch (e) {}
 
         shouter.notifySubscribers(false, SHOUT_LOADING);
