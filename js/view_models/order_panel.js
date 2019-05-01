@@ -106,8 +106,6 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
 
         o.forEach(function (or) {
             self.ongoingOrders.push(or);
-
-            // ToDo: send the order to the server
         });
     };
 

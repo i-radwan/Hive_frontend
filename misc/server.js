@@ -197,7 +197,7 @@ wsServer.on('request', function (request) {
                 });
             }
         } else if (parseInt(i[0]) === 3) {
-            let k = parseInt(i[1]);
+            let k = i[1];
             let v = parseFloat(i[2]);
 
             stats.push({

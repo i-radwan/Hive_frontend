@@ -139,7 +139,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 }
 
                 for (let i = 0; i < statistics.length; ++i) {
-                    // ToDo
+                    self.rightPanelVM.updateStats(statistics[i].key, statistics[i].value);
                 }
                 break;
 
