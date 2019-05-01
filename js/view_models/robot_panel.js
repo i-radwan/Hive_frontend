@@ -360,13 +360,6 @@ let robotPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
             }
         });
 
-        console.log({
-            level: LOG_LEVEL_INFO,
-            object: LOG_OBJECT_ROBOT,
-            color: cell.robot.color,
-            msg: "Robot <b>(#" + robot_id + ")</b> is assigned to Rack#<b>(" + rack_id + ")</b>."
-        });
-
         logger({
             level: LOG_LEVEL_INFO,
             object: LOG_OBJECT_ROBOT,

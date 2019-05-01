@@ -146,6 +146,7 @@ UPDATE: {
             type: ORDER_FULFILLED
             data: {
                 order_id:
+                fulfilled_time: Y-m-d H:i
             }
         }, {
             type: RACK_ADJUSTED

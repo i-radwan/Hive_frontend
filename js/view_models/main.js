@@ -121,11 +121,12 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let item_id = data.item_id;
                         let item_quantity = data.item_quantity;
 
-                        self.orderVM.updateOrderDeliveredItems(order_id, item_id, item_quantity);
+                        self.leftPanelVM.orderVM.updateOrderDeliveredItems(order_id, item_id, item_quantity);
                     } else if (l.type === SERVER_LOGS.ORDER_FULFILLED) {
                         let order_id = data.order_id;
+                        let order_fulfilled_time = data.fulfilled_time;
 
-                        self.orderVM.finishOngoingOrder(order_id);
+                        self.leftPanelVM.orderVM.finishOngoingOrder(order_id, order_fulfilled_time);
                     } else if (l.type === SERVER_LOGS.RACK_ADJUSTED) {
                         let rack_id = data.rack_id;
                         let rack_row = data.rack_row;

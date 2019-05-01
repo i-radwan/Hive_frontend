@@ -111,12 +111,14 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
         });
     };
 
-    self.finishOngoingOrder = function (id) {
+    self.finishOngoingOrder = function (id, order_fulfilled_time) {
         let o = self.ongoingOrders.remove(function (or) {
             return or.id === id;
         });
 
         o.forEach(function (or) {
+            or.fulfilled_time_formatted(flatpickr.formatDate(flatpickr.parseDate(order_fulfilled_time, "Y-m-d H:i"), "H:i M j, y"));
+
             self.finishedOrders.push(or);
         });
 
@@ -124,7 +126,7 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
             level: LOG_LEVEL_INFO,
             object: LOG_OBJECT_ORDER,
             color: "#bababa",
-            msg: "Order <b>(#" + order_id + ")</b> has been fulfilled."
+            msg: "Order <b>(#" + id + ")</b> has been fulfilled."
         });
     };
 
@@ -142,6 +144,8 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
         self.ongoingOrders().forEach(function (o) {
             if (o.id !== order_id)
                 return;
+
+            console.log(o);
 
             o.items().forEach(function (i) {
                 if (i.id !== item_id)
@@ -181,9 +185,11 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
                         items().forEach(function (i) {
                             del += i.delivered();
                             tot += i.quantity;
+
+                            console.log(del + " --- " + tot);
                         });
 
-                        return del / tot;
+                        return (del / tot) * 100;
                     })
                 };
 

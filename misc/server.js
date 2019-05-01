@@ -89,121 +89,122 @@ wsServer.on('request', function (request) {
     stdin.addListener("data", function (d) {
         let i = d.toString().trim().split(" ");
 
-        if (i[0] === "0") {
+        if (parseInt(i[0]) === 0) {
             ts = parseInt(i[1]);
-        } else if (i[0] === "1") {
+        } else if (parseInt(i[0]) === 1) {
             let t = parseInt(i[1]);
 
             if (t === SERVER_ACTIONS.MOVE) {
                 actions.push({
                     type: SERVER_ACTIONS.MOVE,
                     data: {
-                        robot_id: i[2],
-                        robot_row: i[3],
-                        robot_col: i[4],
-                        robot_new_row: i[5],
-                        robot_new_col: i[6]
+                        robot_id: parseInt(i[2]),
+                        robot_row: parseInt(i[3]),
+                        robot_col: parseInt(i[4]),
+                        robot_new_row: parseInt(i[5]),
+                        robot_new_col: parseInt(i[6])
                     }
                 });
             } else if (t === SERVER_ACTIONS.BIND) {
                 actions.push({
                     type: SERVER_ACTIONS.BIND,
                     data: {
-                        robot_id: i[2],
-                        robot_row: i[3],
-                        robot_col: i[4],
-                        facility_type: i[5],
-                        facility_id: i[6]
+                        robot_id: parseInt(i[2]),
+                        robot_row: parseInt(i[3]),
+                        robot_col: parseInt(i[4]),
+                        facility_type: parseInt(i[5]),
+                        facility_id: parseInt(i[6])
                     }
                 });
             } else if (t === SERVER_ACTIONS.UNBIND) {
                 actions.push({
                     type: SERVER_ACTIONS.UNBIND,
                     data: {
-                        robot_id: i[2],
-                        robot_row: i[3],
-                        robot_col: i[4],
-                        facility_type: i[5],
-                        facility_id: i[6]
+                        robot_id: parseInt(i[2]),
+                        robot_row: parseInt(i[3]),
+                        robot_col: parseInt(i[4]),
+                        facility_type: parseInt(i[5]),
+                        facility_id: parseInt(i[6])
                     }
                 });
             } else if (t === SERVER_ACTIONS.LOAD) {
                 actions.push({
                     type: SERVER_ACTIONS.LOAD,
                     data: {
-                        robot_id: i[2],
-                        robot_row: i[3],
-                        robot_col: i[4],
-                        rack_id: i[5],
-                        rack_row: i[6],
-                        rack_col: i[7]
+                        robot_id: parseInt(i[2]),
+                        robot_row: parseInt(i[3]),
+                        robot_col: parseInt(i[4]),
+                        rack_id: parseInt(i[5]),
+                        rack_row: parseInt(i[6]),
+                        rack_col: parseInt(i[7])
                     }
                 });
             } else if (t === SERVER_ACTIONS.OFFLOAD) {
                 actions.push({
                     type: SERVER_ACTIONS.OFFLOAD,
                     data: {
-                        robot_id: i[2],
-                        robot_row: i[3],
-                        robot_col: i[4],
-                        rack_id: i[5],
-                        rack_row: i[6],
-                        rack_col: i[7]
+                        robot_id: parseInt(i[2]),
+                        robot_row: parseInt(i[3]),
+                        robot_col: parseInt(i[4]),
+                        rack_id: parseInt(i[5]),
+                        rack_row: parseInt(i[6]),
+                        rack_col: parseInt(i[7])
                     }
                 });
             }
-        } else if (i[0] === "2") {
+        } else if (parseInt(i[0]) === 2) {
             let t = parseInt(i[1]);
 
             if (t === SERVER_LOGS.TASK_ASSIGNED) {
                 logs.push({
                     type: SERVER_LOGS.TASK_ASSIGNED,
                     data: {
-                        robot_id: i[2],
-                        robot_row: i[3],
-                        robot_col: i[4],
-                        rack_id: i[5],
-                        rack_row: i[6],
-                        rack_col: i[7]
+                        robot_id: parseInt(i[2]),
+                        robot_row: parseInt(i[3]),
+                        robot_col: parseInt(i[4]),
+                        rack_id: parseInt(i[5]),
+                        rack_row: parseInt(i[6]),
+                        rack_col: parseInt(i[7])
                     }
                 });
             } else if (t === SERVER_LOGS.ITEM_DELIVERED) {
                 logs.push({
                     type: SERVER_LOGS.ITEM_DELIVERED,
                     data: {
-                        order_id: i[2],
-                        item_id: i[3],
-                        item_quantity: i[4]
+                        order_id: parseInt(i[2]),
+                        item_id: parseInt(i[3]),
+                        item_quantity: parseInt(i[4])
                     }
                 });
             } else if (t === SERVER_LOGS.ORDER_FULFILLED) {
                 logs.push({
-                    type: SERVER_LOGS.ITEM_DELIVERED,
+                    type: SERVER_LOGS.ORDER_FULFILLED,
                     data: {
-                        order_id: i[2]
+                        order_id: parseInt(i[2]),
+                        fulfilled_time: i[3] + " " + i[4]
                     }
                 });
             } else if (t === SERVER_LOGS.RACK_ADJUSTED) {
                 logs.push({
                     type: SERVER_LOGS.RACK_ADJUSTED,
                     data: {
-                        rack_id: i[2],
-                        rack_row: i[3],
-                        rack_col: i[4],
-                        item_id: i[5],
-                        item_quantity: i[6]
+                        rack_id: parseInt(i[2]),
+                        rack_row: parseInt(i[3]),
+                        rack_col: parseInt(i[4]),
+                        item_id: parseInt(i[5]),
+                        item_quantity: parseInt(i[6])
                     }
                 });
             }
-        } else if (i[0] === "3") {
+        } else if (parseInt(i[0]) === 3) {
             let k = parseInt(i[1]);
-            let v = parseInt(i[2]);
+            let v = parseFloat(i[2]);
 
             stats.push({
                 key: k,
                 value: v
             })
-        } else if (i[0] === "4") {
+        } else if (parseInt(i[0]) === 4) {
             let m = JSON.stringify({
                 type: MSG_FROM_SERVER.UPDATE,
                 data: {
@@ -221,7 +222,7 @@ wsServer.on('request', function (request) {
             stats = [];
             logs = [];
             actions = [];
-        } else if (i[0] === "5") {
+        } else if (parseInt(i[0]) === 5) {
             stats = [];
             logs = [];
             actions = [];
