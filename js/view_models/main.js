@@ -37,15 +37,15 @@ let mainViewModel = function (gfxEventHandler, comm) {
     self.handleServerMsg = function (msg) {
         switch (msg.type) {
             case MSG_FROM_SERVER.ACK_CONFIG:
-                self.centerPanelVM.controlConsoleVM.handleServerMsg(msg);
+                self.centerPanelVM.controlConsoleVM.handleAckConfig(msg);
                 break;
 
             case MSG_FROM_SERVER.ACK_RESUME:
-                self.centerPanelVM.controlConsoleVM.handleServerMsg(msg);
+                self.centerPanelVM.controlConsoleVM.handleAckResume(msg);
                 break;
 
             case MSG_FROM_SERVER.ACK_ORDER:
-                self.leftPanelVM.orderVM.handleServerMsg(msg);
+                self.leftPanelVM.orderVM.handleAckOrder(msg);
                 break;
 
             case MSG_FROM_SERVER.UPDATE:

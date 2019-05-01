@@ -154,65 +154,63 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
         });
     };
 
-    self.handleServerMsg = function (msg) {
-        if (msg.type === MSG_FROM_SERVER.ACK_ORDER) {
-            let data = msg.data;
+    self.handleAckOrder = function (msg) {
+        let data = msg.data;
 
-            if (data.status === ACK_ORDER_STATUS.OK) {
-                let o = data.order;
+        if (data.status === ACK_ORDER_STATUS.OK) {
+            let o = data.order;
 
-                let items = ko.observableArray();
+            let items = ko.observableArray();
 
-                for (let i = 0; i < o.items.length; ++i) {
-                    o.items[i].delivered = ko.observable(0);
-                    items.push(o.items[i]);
-                }
-
-                let order = {
-                    id: o.id,
-                    gate_id: o.gate_id,
-                    items: items,
-                    more: ko.observable(false),
-                    start_time: o.start_time,
-                    start_time_formatted: flatpickr.formatDate(flatpickr.parseDate(o.start_time, "Y-m-d H:i"), "H:i M j, y"),
-                    fulfilled_time_formatted: ko.observable("TBD"),
-                    progress: ko.computed(function () {
-                        let del = 0;
-                        let tot = 0;
-
-                        items().forEach(function (i) {
-                            del += i.delivered();
-                            tot += i.quantity;
-
-                            console.log(del + " --- " + tot);
-                        });
-
-                        return (del / tot) * 100;
-                    })
-                };
-
-                if (flatpickr.parseDate(o.start_time, "Y-m-d H:i") > new Date()) {
-                    self.upcomingOrders.push(order);
-                } else {
-                    self.ongoingOrders.push(order);
-                }
-
-                items().forEach(function (i) {
-                    state.stock[i.id] -= i.quantity;
-                });
-
-                self.id(parseInt(self.id()) + 1);
-
-                shouter.notifySubscribers({text: "Order placed successfully!", type: MSG_INFO}, SHOUT_MSG);
-
-                clear();
-
-                shouter.notifySubscribers(false, SHOUT_LOADING);
-            } else if (data.status === ACK_ORDER_STATUS.ERROR) {
-                shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
-
-                shouter.notifySubscribers(false, SHOUT_LOADING);
+            for (let i = 0; i < o.items.length; ++i) {
+                o.items[i].delivered = ko.observable(0);
+                items.push(o.items[i]);
             }
+
+            let order = {
+                id: o.id,
+                gate_id: o.gate_id,
+                items: items,
+                more: ko.observable(false),
+                start_time: o.start_time,
+                start_time_formatted: flatpickr.formatDate(flatpickr.parseDate(o.start_time, "Y-m-d H:i"), "H:i M j, y"),
+                fulfilled_time_formatted: ko.observable("TBD"),
+                progress: ko.computed(function () {
+                    let del = 0;
+                    let tot = 0;
+
+                    items().forEach(function (i) {
+                        del += i.delivered();
+                        tot += i.quantity;
+
+                        console.log(del + " --- " + tot);
+                    });
+
+                    return (del / tot) * 100;
+                })
+            };
+
+            if (flatpickr.parseDate(o.start_time, "Y-m-d H:i") > new Date()) {
+                self.upcomingOrders.push(order);
+            } else {
+                self.ongoingOrders.push(order);
+            }
+
+            items().forEach(function (i) {
+                state.stock[i.id] -= i.quantity;
+            });
+
+            self.id(parseInt(self.id()) + 1);
+
+            shouter.notifySubscribers({text: "Order placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+
+            clear();
+
+            shouter.notifySubscribers(false, SHOUT_LOADING);
+        } else if (data.status === ACK_ORDER_STATUS.ERROR) {
+            shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+
+            shouter.notifySubscribers(false, SHOUT_LOADING);
         }
     };
 

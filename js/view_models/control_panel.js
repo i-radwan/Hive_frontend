@@ -99,65 +99,65 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.handleEsc = function () {
     };
 
-    self.handleServerMsg = function (msg) {
-        if (msg.type === MSG_FROM_SERVER.ACK_CONFIG) {
-            let data = msg.data;
+    self.handleAckConfig = function (msg) {
+        let data = msg.data;
 
-            if (data.status === ACK_CONFIG_STATUS.OK) {
-                prepare();
+        if (data.status === ACK_CONFIG_STATUS.OK) {
+            prepare();
 
-                if (data.mode === CONFIG_MODE.SIMULATE) {
-                    runningMode(RUNNING_MODE.SIMULATE);
-                } else if (data.mode === CONFIG_MODE.DEPLOY) {
-                    runningMode(RUNNING_MODE.DEPLOY);
-                }
-
-                self.playing(true);
-
-                logger({
-                    level: LOG_LEVEL_INFO,
-                    object: LOG_OBJECT_SIMULATION,
-                    msg: "Simulation Started"
-                });
-
-                gfxEventHandler({
-                    type: EVENT_TO_GFX.SIMULATION_START
-                });
-
-                shouter.notifySubscribers(false, SHOUT_LOADING);
-            } else if (data.status === ACK_CONFIG_STATUS.ERROR) {
-                shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
-
-                shouter.notifySubscribers(false, SHOUT_LOADING);
+            if (data.mode === CONFIG_MODE.SIMULATE) {
+                runningMode(RUNNING_MODE.SIMULATE);
+            } else if (data.mode === CONFIG_MODE.DEPLOY) {
+                runningMode(RUNNING_MODE.DEPLOY);
             }
-        } else if (msg.type === MSG_FROM_SERVER.ACK_RESUME) {
-            let data = msg.data;
 
-            if (data.status === ACK_RESUME_STATUS.OK) {
-                if (data.mode === CONFIG_MODE.SIMULATE) {
-                    runningMode(RUNNING_MODE.SIMULATE);
-                } else if (data.mode === CONFIG_MODE.DEPLOY) {
-                    runningMode(RUNNING_MODE.DEPLOY);
-                }
+            self.playing(true);
 
-                self.playing(true);
+            logger({
+                level: LOG_LEVEL_INFO,
+                object: LOG_OBJECT_SIMULATION,
+                msg: "Simulation Started"
+            });
 
-                logger({
-                    level: LOG_LEVEL_INFO,
-                    object: LOG_OBJECT_SIMULATION,
-                    msg: "Simulation Resumed"
-                });
+            gfxEventHandler({
+                type: EVENT_TO_GFX.SIMULATION_START
+            });
 
-                gfxEventHandler({
-                    type: EVENT_TO_GFX.SIMULATION_RESUME
-                });
+            shouter.notifySubscribers(false, SHOUT_LOADING);
+        } else if (data.status === ACK_CONFIG_STATUS.ERROR) {
+            shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
 
-                shouter.notifySubscribers(false, SHOUT_LOADING);
-            } else if (data.status === ACK_RESUME_STATUS.ERROR) {
-                shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers(false, SHOUT_LOADING);
+        }
+    };
 
-                shouter.notifySubscribers(false, SHOUT_LOADING);
+    self.handleAckResume = function (msg) {
+        let data = msg.data;
+
+        if (data.status === ACK_RESUME_STATUS.OK) {
+            if (data.mode === CONFIG_MODE.SIMULATE) {
+                runningMode(RUNNING_MODE.SIMULATE);
+            } else if (data.mode === CONFIG_MODE.DEPLOY) {
+                runningMode(RUNNING_MODE.DEPLOY);
             }
+
+            self.playing(true);
+
+            logger({
+                level: LOG_LEVEL_INFO,
+                object: LOG_OBJECT_SIMULATION,
+                msg: "Simulation Resumed"
+            });
+
+            gfxEventHandler({
+                type: EVENT_TO_GFX.SIMULATION_RESUME
+            });
+
+            shouter.notifySubscribers(false, SHOUT_LOADING);
+        } else if (data.status === ACK_RESUME_STATUS.ERROR) {
+            shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+
+            shouter.notifySubscribers(false, SHOUT_LOADING);
         }
     };
 

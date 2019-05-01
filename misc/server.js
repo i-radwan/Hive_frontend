@@ -77,7 +77,7 @@ wsServer.on('request', function (request) {
     con.on('close', function (con) {
     });
 
-    console.log("0: Timestep, 1: Action, 2: Log, 3: Statistics, 4: Send, 5: Clear");
+    console.log("0: Timestep, 1: Action, 2: Log, 3: Statistics, 4: Send, 5: Clear, 6: Msg");
 
     let ts = undefined;
     let actions = [];
