@@ -3,7 +3,7 @@ require('knockout-mapping');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer, ogger) {
+let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
     self.capacity = ko.observable(RACK_CAP);
@@ -121,7 +121,11 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer
 
         self.id(facility.id);
         self.capacity(facility.capacity);
-        self.items(ko.mapping.fromJS(facility.items)());
+
+        self.items.removeAll();
+        for (let i = 0; i < facility.items.length; ++i) {
+            self.items.push(facility.items[i]);
+        }
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
@@ -173,7 +177,7 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer
     };
 
     self.addItem = function () {
-        if (!checkItem(self.itemID(), self.itemQuantity(), 0))
+        if (!checkItem())
             return;
 
         self.items.push({
@@ -217,8 +221,10 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer
             msg: "Rack <b>(#" + rack_id + ")</b> has been filled by (" + item_quantity + ") from Item#<b>(" + item_id + ")</b>."
         });
 
-        // ToDo: check if this works
-        self.items(ko.mapping.fromJS(cell.facility.items)());
+        self.items.removeAll();
+        for (let i = 0; i < cell.facility.items.length; ++i) {
+            self.items.push(cell.facility.items[i]);
+        }
         self.items.valueHasMutated();
     };
 
@@ -267,9 +273,6 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer
         for (let i = 0; i < self.items().length; ++i) {
             let item = self.items()[i];
 
-            if (!checkItem(parseInt(item.id), parseInt(item.quantity), 1))
-                return false;
-
             load += parseInt(item.quantity) * state.getItem(parseInt(item.id)).weight;
         }
 
@@ -285,41 +288,37 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer
         return true;
     };
 
-    let checkItem = function (id, quantity, count) {
-        if (id.length === 0) {
+    let checkItem = function () {
+        if (self.itemID().length === 0) {
             shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
-        if (quantity.length === 0) {
+        if (self.itemQuantity().length === 0) {
             shouter.notifySubscribers({text: "Quantity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
         // -ve values
-        if (parseInt(id) < 0 || parseInt(quantity) < 0) {
+        if (parseInt(self.itemID()) < 0 || parseInt(self.itemQuantity()) < 0) {
             shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
-        let cnt = 0;
+        // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
-            if (parseInt(self.items()[i].id) === id) {
-                cnt++;
+            if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
+                shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+                return false;
             }
         }
 
-        if (cnt > count) {
-            shouter.notifySubscribers({text: "Items IDs should be unique!", type: MSG_ERROR}, SHOUT_MSG);
-
-            return false;
-        }
-
         // Check if item exists
-        if (state.getItem(parseInt(id)) === undefined) {
+        if (state.getItem(parseInt(self.itemID())) === undefined) {
             shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;

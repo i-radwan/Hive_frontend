@@ -8,11 +8,10 @@ let itemsPanelViewModel = function (shouter, state, gfxEventHandler) {
 
     self.searchValue = ko.observable("");
     self.items = ko.observableArray();
-    self.newItemID = ko.observable(1);
-    self.newItemWeight = ko.observable("");
+    self.itemID = ko.observable(1);
+    self.itemWeight = ko.observable("");
 
     self.filteredItems = ko.computed(function () {
-        console.log(self.items());
         return self.items().filter(function (item) {
             return self.searchValue().length === 0 || parseInt(item.id) === parseInt(self.searchValue());
         });
@@ -29,15 +28,16 @@ let itemsPanelViewModel = function (shouter, state, gfxEventHandler) {
             return;
 
         self.items.push({
-            id: parseInt(self.newItemID()),
-            weight: parseFloat(self.newItemWeight())
+            id: parseInt(self.itemID()),
+            weight: parseFloat(self.itemWeight())
         });
 
         // Auto increment
-        self.newItemID(parseInt(self.newItemID()) + 1);
-        state.nextIDs.item = Math.max(state.nextIDs.item, parseInt(self.newItemID()));
+        self.itemID(parseInt(self.itemID()) + 1);
+        state.nextIDs.item = Math.max(state.nextIDs.item, parseInt(self.itemID()));
 
         state.items = ko.mapping.toJS(self.items());
+        console.log(state.items);
 
         // Scroll view to bottom
         let container = $(".rpanel .items .items-container");
@@ -45,20 +45,20 @@ let itemsPanelViewModel = function (shouter, state, gfxEventHandler) {
     };
 
     let check = function () {
-        if (self.newItemID().length === 0) {
+        if (self.itemID().length === 0) {
             shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
-        if (self.newItemWeight().length === 0) {
+        if (self.itemWeight().length === 0) {
             shouter.notifySubscribers({text: "Item weight is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
         }
 
         // -ve values
-        if (parseInt(self.newItemID()) < 0 || parseInt(self.newItemWeight()) < 0) {
+        if (parseInt(self.itemID()) < 0 || parseInt(self.itemWeight()) < 0) {
             shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
 
             return false;
@@ -66,7 +66,7 @@ let itemsPanelViewModel = function (shouter, state, gfxEventHandler) {
 
         // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
-            if (parseInt(self.items()[i].id) === parseInt(self.newItemID())) {
+            if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
                 shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
 
                 return false;
@@ -78,9 +78,15 @@ let itemsPanelViewModel = function (shouter, state, gfxEventHandler) {
 
     let clear = function () {
         self.searchValue("");
-        self.newItemID(state.nextIDs.item);
-        self.newItemWeight("");
-        self.items(ko.mapping.fromJS(state.items)());
+        self.itemID(state.nextIDs.item);
+        self.itemWeight("");
+
+        self.items.removeAll();
+        for (let i = 0; i < state.items.length; ++i) {
+            self.items.push(state.items[i]);
+        }
+
+        console.log(self.items());
     };
 
     // Events

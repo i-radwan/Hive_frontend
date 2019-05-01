@@ -346,18 +346,13 @@ let orderPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
             return false;
         }
 
-        // Duplicates
-        let cnt = 0;
+        // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
             if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
-                cnt++;
+                shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+
+                return false;
             }
-        }
-
-        if (cnt > 0) {
-            shouter.notifySubscribers({text: "Items IDs should be unique!", type: MSG_ERROR}, SHOUT_MSG);
-
-            return false;
         }
 
         // Check if item exists
