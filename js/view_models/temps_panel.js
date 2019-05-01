@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let tempsPanelViewModel = function (shouter, state, sendToServer, logger) {
+let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, logger) {
     let self = this;
 
     /**
@@ -98,6 +98,18 @@ let tempsPanelViewModel = function (shouter, state, sendToServer, logger) {
     self.temps = self.fetchTemps();
 
     self.tempClicked = function (idx) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if (idx < 0 || idx >= self.temps.length) {
+            shouter.notifySubscribers({text: "Invalid template!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         console.log("Template " + idx() + " applied!");
 
         state.items = self.temps[idx()].temp.items;

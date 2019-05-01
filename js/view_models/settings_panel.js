@@ -12,6 +12,12 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
     };
 
     self.connect = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({text: "Connection is allowed only in design mode!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return;
+        }
+
         if (self.ip().length === 0 || !self.ip().match(REG_IP)) {
             shouter.notifySubscribers({text: "Invalid IP address!", type: MSG_ERROR}, SHOUT_MSG);
 

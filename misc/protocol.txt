@@ -82,32 +82,11 @@ UPDATE: {
                 robot_new_col:
             }
         }, {
-            type: BIND,
-            data: {
-                robot_id:
-                robot_row:
-                robot_col:
-                facility_type:
-                facility_id:
-            }
-        }, {
-            type: UNBIND,
-            data: {
-                robot_id:
-                robot_row:
-                robot_col:
-                facility_type:
-                facility_id:
-            }
-        }, {
             type: LOAD,
             data: {
                 robot_id:
                 robot_row:
                 robot_col:
-                rack_id:
-                rack_row:                                               # Original rack row
-                rack_col:                                               # Original rack col
             }
         }, {
             type: OFFLOAD,
@@ -115,9 +94,20 @@ UPDATE: {
                 robot_id:
                 robot_row:
                 robot_col:
-                rack_id:
-                rack_row:                                               # Original rack row
-                rack_col:                                               # Original rack col
+            }
+        }, {
+            type: BIND,
+            data: {
+                robot_id:
+                robot_row:
+                robot_col:
+            }
+        }, {
+            type: UNBIND,
+            data: {
+                robot_id:
+                robot_row:
+                robot_col:
             }
         }
     ],

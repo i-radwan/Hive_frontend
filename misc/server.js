@@ -111,9 +111,7 @@ wsServer.on('request', function (request) {
                     data: {
                         robot_id: parseInt(i[2]),
                         robot_row: parseInt(i[3]),
-                        robot_col: parseInt(i[4]),
-                        facility_type: parseInt(i[5]),
-                        facility_id: parseInt(i[6])
+                        robot_col: parseInt(i[4])
                     }
                 });
             } else if (t === SERVER_ACTIONS.UNBIND) {
@@ -122,9 +120,7 @@ wsServer.on('request', function (request) {
                     data: {
                         robot_id: parseInt(i[2]),
                         robot_row: parseInt(i[3]),
-                        robot_col: parseInt(i[4]),
-                        facility_type: parseInt(i[5]),
-                        facility_id: parseInt(i[6])
+                        robot_col: parseInt(i[4])
                     }
                 });
             } else if (t === SERVER_ACTIONS.LOAD) {
@@ -133,10 +129,7 @@ wsServer.on('request', function (request) {
                     data: {
                         robot_id: parseInt(i[2]),
                         robot_row: parseInt(i[3]),
-                        robot_col: parseInt(i[4]),
-                        rack_id: parseInt(i[5]),
-                        rack_row: parseInt(i[6]),
-                        rack_col: parseInt(i[7])
+                        robot_col: parseInt(i[4])
                     }
                 });
             } else if (t === SERVER_ACTIONS.OFFLOAD) {
@@ -145,10 +138,7 @@ wsServer.on('request', function (request) {
                     data: {
                         robot_id: parseInt(i[2]),
                         robot_row: parseInt(i[3]),
-                        robot_col: parseInt(i[4]),
-                        rack_id: parseInt(i[5]),
-                        rack_row: parseInt(i[6]),
-                        rack_col: parseInt(i[7])
+                        robot_col: parseInt(i[4])
                     }
                 });
             }

@@ -16,14 +16,14 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.activePanel = ko.observable(LEFT_PANEL.TEMPS);
 
     // Sub view models
-    self.tempVM = new tempViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.mapVM = new mapViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.gateVM = new gateViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.robotVM = new robotPanelViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.rackVM = new rackPanelViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.stationVM = new stationPanelViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.obstacleVM = new obstacleViewModel(shouter, state, gfxEventHandler, sendToServer, logger);
-    self.orderVM = new orderPanelViewModel(shouter, state, gfxEventHandler, sendToServer, runningMode, logger);
+    self.tempVM = new tempViewModel(runningMode, shouter, state, gfxEventHandler, sendToServer, logger);
+    self.mapVM = new mapViewModel(runningMode, shouter, state, gfxEventHandler, sendToServer, logger);
+    self.gateVM = new gateViewModel(runningMode, shouter, state, gfxEventHandler, sendToServer, logger);
+    self.robotVM = new robotPanelViewModel(runningMode, shouter, state, gfxEventHandler, sendToServer, logger);
+    self.rackVM = new rackPanelViewModel(runningMode, shouter, state, gfxEventHandler, sendToServer, logger);
+    self.stationVM = new stationPanelViewModel(runningMode, shouter, state, gfxEventHandler, sendToServer, logger);
+    self.obstacleVM = new obstacleViewModel(runningMode, shouter, state, gfxEventHandler, sendToServer, logger);
+    self.orderVM = new orderPanelViewModel(runningMode, shouter, state, gfxEventHandler, sendToServer, logger);
 
     /**
      * Handles panel tiles clicks.
@@ -173,6 +173,11 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 self.activePanel(LEFT_PANEL.ROBOT);
                 self.robotVM.fill(row, col);
             } else if (state.map.grid[row][col].facility !== undefined) {
+                let f = state.map.grid[row][col].facility;
+
+                if (f.type === MAP_CELL.RACK && f.loaded)
+                    return;
+
                 switch (state.map.grid[row][col].facility.type) {
                     case MAP_CELL.GATE:
                         self.activePanel(LEFT_PANEL.GATE);

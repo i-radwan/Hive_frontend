@@ -11,7 +11,7 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.stats = ko.observableArray();
 
     // Sub view models
-    self.itemsVM = new itemsPanelViewModel(shouter, state, gfxEventHandler);
+    self.itemsVM = new itemsPanelViewModel(runningMode, shouter, state, gfxEventHandler);
 
     // self.logs.push({
     //     level: LOG_LEVEL_INFO,

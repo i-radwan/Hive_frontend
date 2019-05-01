@@ -1,7 +1,7 @@
 require('../utils/constants');
 let ko = require('knockout');
 
-let robotPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer, logger) {
+let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
     self.id = ko.observable(1);
@@ -154,8 +154,14 @@ let robotPanelViewModel = function (shouter, state, gfxEventHandler, sendToServe
     };
 
     self.update = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         if (!check())
-            return;
+            return false;
 
         state.map.grid[self.activeRobotRow][self.activeRobotCol].robot = {
             type: MAP_CELL.ROBOT,

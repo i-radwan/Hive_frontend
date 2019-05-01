@@ -3,7 +3,7 @@ require('knockout-mapping');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer, logger) {
+let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
     self.capacity = ko.observable(RACK_CAP);
@@ -154,8 +154,14 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer
     };
 
     self.update = function () {
-        if (!check())
-            return;
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
+        if(!check())
+            return false;
 
         state.map.grid[self.activeRackRow][self.activeRackCol].facility = {
             type: MAP_CELL.RACK,
@@ -177,6 +183,12 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer
     };
 
     self.addItem = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         if (!checkItem())
             return;
 
@@ -193,6 +205,12 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer
     };
 
     self.removeItem = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return;
+        }
+
         self.items.remove(this);
     };
 

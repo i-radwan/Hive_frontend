@@ -124,7 +124,7 @@
                     </div>
 
                     <!--======================== BOTTOM ACTIONS ========================-->
-                    <div class="actions">
+                    <div class="actions" data-bind="css: {hidden: runningMode() !== RUNNING_MODE.DESIGN}">
                         <i data-toggle="tooltip" title="Save" class="fas fa-upload save"
                            data-bind="click: leftPanelVM.mapVM.saveMap"></i>
                         <i data-toggle="tooltip" title="Load" class="fas fa-download load"
@@ -147,9 +147,9 @@
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lpanel-details-bottom-actions"
-                         data-bind="css: {hidden: !leftPanelVM.gateVM.applyVisible()}">
+                         data-bind="css: {hidden: !leftPanelVM.gateVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
-                           data-bind="click: runningMode() === RUNNING_MODE.DESIGN ? leftPanelVM.gateVM.update : function(){}"></i>
+                           data-bind="click: leftPanelVM.gateVM.update"></i>
                     </div>
                 </div>
 
@@ -193,9 +193,9 @@
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lpanel-details-bottom-actions"
-                         data-bind="css: {hidden: !leftPanelVM.robotVM.applyVisible()}">
+                         data-bind="css: {hidden: !leftPanelVM.robotVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
-                           data-bind="click: runningMode() === RUNNING_MODE.DESIGN ? leftPanelVM.robotVM.update : function(){}"></i>
+                           data-bind="click: leftPanelVM.robotVM.update"></i>
                     </div>
                 </div>
 
@@ -233,7 +233,7 @@
                                     </div>
                                     <div class="col-md-2 item-container-icon">
                                         <i class="fas fa-minus"
-                                           data-bind="click: $parent.runningMode() === RUNNING_MODE.DESIGN ? $parent.leftPanelVM.rackVM.removeItem : function(){}"></i>
+                                           data-bind="click: $parent.leftPanelVM.rackVM.removeItem"></i>
                                     </div>
                                 </div>
                             </span>
@@ -253,7 +253,7 @@
                                 </div>
                                 <div class="col-md-2 item-container-icon">
                                     <i class="fas fa-plus"
-                                       data-bind="click: runningMode() === RUNNING_MODE.DESIGN ? leftPanelVM.rackVM.addItem : function(){}"></i>
+                                       data-bind="click: leftPanelVM.rackVM.addItem"></i>
                                 </div>
                             </div>
                         </div>
@@ -263,7 +263,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.rackVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
-                           data-bind="click: runningMode() === RUNNING_MODE.DESIGN ? leftPanelVM.rackVM.update : function(){}"></i>
+                           data-bind="click: leftPanelVM.rackVM.update"></i>
                     </div>
                 </div>
 
@@ -276,14 +276,14 @@
                     <div class="form-group">
                         <label>Station ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Station ID"
-                               data-bind="textInput: runningMode() === RUNNING_MODE.DESIGN ? leftPanelVM.stationVM.id : function(){}">
+                               data-bind="textInput: leftPanelVM.stationVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.stationVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
-                           data-bind="click: runningMode() === RUNNING_MODE.DESIGN ? leftPanelVM.stationVM.update : function(){}"></i>
+                           data-bind="click: leftPanelVM.stationVM.update"></i>
                     </div>
                 </div>
 
@@ -303,7 +303,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.obstacleVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
-                           data-bind="click: runningMode() === RUNNING_MODE.DESIGN ? leftPanelVM.obstacleVM.update : function(){}"></i>
+                           data-bind="click: leftPanelVM.obstacleVM.update"></i>
                     </div>
                 </div>
 
@@ -685,7 +685,7 @@
                                data-bind="textInput: centerPanelVM.settingsVM.port, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="form-group btn-cont">
-                        <button class="btn-dark text-muted" data-bind="click: runningMode() === RUNNING_MODE.DESIGN ? centerPanelVM.settingsVM.connect : function(){}">Connect</button>
+                        <button class="btn-dark text-muted" data-bind="click: centerPanelVM.settingsVM.connect">Connect</button>
                     </div>
                 </div>
                 <div class="col-md-4">

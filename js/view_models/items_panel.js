@@ -3,7 +3,7 @@ require('knockout-mapping');
 let $ = require('jquery');
 let ko = require('knockout');
 
-let itemsPanelViewModel = function (shouter, state, gfxEventHandler) {
+let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler) {
     let self = this;
 
     self.searchValue = ko.observable("");
