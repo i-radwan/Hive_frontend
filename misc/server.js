@@ -226,6 +226,22 @@ wsServer.on('request', function (request) {
             stats = [];
             logs = [];
             actions = [];
+        } else if (parseInt(i[0]) === 6) {
+            let t = parseInt(i[1]);
+
+            let m = "";
+
+            for (let j = 2; j < i.length; ++j) {
+                m += i[j] + " ";
+            }
+
+            con.sendUTF(JSON.stringify({
+                type: MSG_FROM_SERVER.MSG,
+                data: {
+                    type: t,
+                    text: m
+                }
+            }));
         }
     });
 });
