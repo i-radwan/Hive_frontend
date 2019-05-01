@@ -218,7 +218,7 @@ let rackPanelViewModel = function (shouter, state, gfxEventHandler, sendToServer
             level: LOG_LEVEL_INFO,
             object: LOG_OBJECT_RACK,
             color: "#bababa",
-            msg: "Rack <b>(#" + rack_id + ")</b> has been filled by (" + item_quantity + ") from Item#<b>(" + item_id + ")</b>."
+            msg: "Rack <b>(#" + rack_id + ")</b> has been " + (item_quantity > 0 ? "filled" : "discharged") + " by <b>(" + item_quantity + ")</b> from Item#<b>(" + item_id + ")</b>."
         });
 
         self.items.removeAll();
