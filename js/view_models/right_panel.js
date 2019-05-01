@@ -154,11 +154,20 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.updateStats = function (key, value) {
+        let f = false;
         self.stats().forEach(function (elem) {
             if (elem.key === key) {
                 elem.value(value);
+                f = true;
             }
         });
+
+        if (!f) {
+            self.stats().push({
+                key: key,
+                value: ko.observable(value)
+            });
+        }
     };
 
     self.toggleActiveList = function () {
@@ -180,7 +189,7 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     });
 
-    self.handleEsc = function() {
+    self.handleEsc = function () {
 
     };
 };
