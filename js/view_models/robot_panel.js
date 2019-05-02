@@ -190,7 +190,13 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.move = function (r, c, nr, nc) {
+    self.move = function (r, c) {
+        let cell = state.map.grid[r][c];
+        let robot = cell.robot;
+
+        let nr = r + ROW_DELTA[robot.direction];
+        let nc = c + COL_DELTA[robot.direction];
+
         state.map.grid[nr][nc].robot = Object.assign({}, state.map.grid[r][c].robot);
         state.map.grid[r][c].robot = undefined;
 
@@ -200,9 +206,60 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             type: EVENT_TO_GFX.OBJECT_MOVE,
             data: {
                 row: r,
-                col: c,
-                new_row: nr,
-                new_col: nc
+                col: c
+            }
+        });
+    };
+
+    self.rotateRight = function (r, c) {
+        let cell = state.map.grid[r][c];
+        let robot = cell.robot;
+
+        robot.direction = (robot.direction - 1 + ROBOT_DIR_CNT) % ROBOT_DIR_CNT;
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_ROTATE_RIGHT,
+            data: {
+                row: r,
+                col: c
+            }
+        });
+    };
+
+    self.rotateLeft = function (r, c) {
+        let cell = state.map.grid[r][c];
+        let robot = cell.robot;
+
+        robot.direction = (robot.direction + 1) % ROBOT_DIR_CNT;
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_ROTATE_LEFT,
+            data: {
+                row: r,
+                col: c
+            }
+        });
+    };
+
+    self.retreat = function (r, c) {
+        let cell = state.map.grid[r][c];
+        let robot = cell.robot;
+
+        let or = r - ROW_DELTA[robot.direction];
+        let oc = c - COL_DELTA[robot.direction];
+
+        robot.direction = (robot.direction + 2) % ROBOT_DIR_CNT;
+
+        state.map.grid[or][oc].robot = Object.assign({}, robot);
+        state.map.grid[r][c].robot = undefined;
+
+        state.map.grid[or][oc].robot.moving = true;
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_RETREAT,
+            data: {
+                row: r,
+                col: c
             }
         });
     };

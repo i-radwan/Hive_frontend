@@ -26,7 +26,7 @@ ORDER: {
             quantity:
         }
     ]
-    start_time: Y-m-d H:i                                           # To support orders scheduling 
+    start_time: Y-m-d H:i                       # To support orders scheduling
 }
 
 ACK: {}
@@ -49,19 +49,19 @@ FROM SERVER:
 ACK_CONFIG: {
     status: [OK|ERROR]
     mode: [SIMULATE|DEPLOY]
-    msg: msg                                                        # In the ERROR case
+    msg: msg                                    # In the ERROR case
 }
 
 ACK_RESUME: {
     status: [OK|ERROR]
     mode: [SIMULATE|DEPLOY]
-    msg: msg                                                        # In the ERROR case
+    msg: msg                                    # In the ERROR case
 }
 
 ACK_ORDER: {
     status: [OK|ERROR]
     order: {
-        id: 
+        id:
         gate_id:
         items: [
             {
@@ -69,53 +69,72 @@ ACK_ORDER: {
                 quantity:
             }
         ]
-        start_time: Y-m-d H:i                                       # To support orders scheduling 
+        start_time: Y-m-d H:i                   # To support orders scheduling
     }
-    msg: msg                                                        # In the ERROR case
+    msg: msg                                    # In the ERROR case
 }
 
 UPDATE: {
-    timestep: 
+    timestep:
     actions: [
         {
-            type: [MOVE|LOAD|OFFLOAD|BIND|UNBIND],
+            type: [MOVE|ROTATE_RIGHT|ROTATE_LEFT|RETREAT|LOAD|OFFLOAD|BIND|UNBIND],
             data: {...}
         }, {
             type: MOVE,
             data: {
-                robot_id:
-                robot_row:
-                robot_col:
-                robot_new_row:
-                robot_new_col:
+                id
+                row:
+                col:
+            }
+        }, {
+            type: ROTATE_RIGHT,
+            data: {
+                id:
+                row:
+                col:
+            }
+        }, {
+            type: ROTATE_LEFT,
+            data: {
+                id:
+                row:
+                col:
+            }
+        }, {
+            type: RETREAT,
+            data: {
+                id:
+                row:                            # The row that the robot was supposed to move to
+                col:                            # The col that the robot was supposed to move to
             }
         }, {
             type: LOAD,
             data: {
-                robot_id:
-                robot_row:
-                robot_col:
+                id:
+                row:
+                col:
             }
-        }, {
+        },
             type: OFFLOAD,
             data: {
-                robot_id:
-                robot_row:
-                robot_col:
+                id:
+                row:
+                col:
             }
         }, {
             type: BIND,
             data: {
-                robot_id:
-                robot_row:
-                robot_col:
+                id:
+                row:
+                col:
             }
         }, {
             type: UNBIND,
             data: {
-                robot_id:
-                robot_row:
-                robot_col:
+                id:
+                row:
+                col:
             }
         }
     ],
@@ -130,15 +149,15 @@ UPDATE: {
                 robot_row:
                 robot_col:
                 rack_id:
-                rack_row:                                               # Original rack row
-                racK_col:                                               # Original rack col
+                rack_row:                           # Original rack row
+                racK_col:                           # Original rack col
             }
         }, {
             type: ITEM_DELIVERED
             data: {
                 order_id:
                 item_id:
-                item_quantity:                                          # Total for this order_id
+                item_quantity:                      # Total for this order_id
             }
         }, {
             type: ORDER_FULFILLED
@@ -157,7 +176,7 @@ UPDATE: {
             }
         }
     ],
-    statistics: [                                                       # All statistics at once
+    statistics: [                                   # All statistics at once
         {
             key:
             value:
@@ -186,7 +205,7 @@ OBJECT_HOVER: {
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
 }
 
-OBJECT_ADD: {
+OBJECT_ADD: { # Default ROBOT direction = ROBOT_DIR.RIGHT
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     row:
     col:
@@ -207,10 +226,24 @@ OBJECT_DRAG: {
 }
 
 OBJECT_MOVE: { # Move the specified robot and the bound rack (if any). Then send ACK when done
+               # Move one step forward by the current direction
     row:
     col:
-    new_row:
-    new_col:
+}
+
+OBJECT_ROTATE_RIGHT: { # Move the specified robot and the bound rack (if any). Then send ACK when done
+    row:
+    col:
+}
+
+OBJECT_ROTATE_LEFT: { # Move the specified robot and the bound rack (if any). Then send ACK when done
+    row:
+    col:
+}
+
+OBJECT_RETREAT: { # Rotate the robot 180 degree, the move back to the previous position. Then send ACK when done
+    row:
+    col:
 }
 
 OBJECT_HIGHLIGHT: {
@@ -223,7 +256,7 @@ OBJECT_COLORIZE: {
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     row:
     col:
-    color:                                                          # HTML
+    color:                                      # HTML
 }
 
 OBJECT_DISCOLORIZE: {
@@ -233,49 +266,49 @@ OBJECT_DISCOLORIZE: {
 }
 
 OBJECT_BIND: { # Flash the bound object, send ACK
-    id:                                                             # Robot ID
-    row:                                                            # Robot row
+    id:                                         # Robot ID
+    row:                                        # Robot row
     col:
-    object_id:                                                      # Bound object ID
+    object_id:                                  # Bound object ID
     object_type: [MAP_CELL.GATE|MAP_CELL.STATION]
 }
 
 OBJECT_UNBIND: { # Send ACK
-    id:                                                             # Robot ID
-    row:                                                            # Robot row
+    id:                                         # Robot ID
+    row:                                        # Robot row
     col:
-    object_id:                                                      # Bound object ID
+    object_id:                                  # Bound object ID
     object_type: [MAP_CELL.GATE|MAP_CELL.STATION]
 }
 
 OBJECT_LOAD: { # Draw rack on top of the robot, send ACK
-    id:                                                             # Rack ID
-    row:                                                            # Rack row
+    id:                                         # Rack ID
+    row:                                        # Rack row
     col:
 }
 
 OBJECT_OFFLOAD: { # Send ACK
-    id:                                                             # Rack ID
-    row:                                                            # Rack row
+    id:                                         # Rack ID
+    row:                                        # Rack row
     col:
 }
 
 OBJECT_FAILURE: { # Stop, Send ACK, Flash red
     id:
-    row:                                                            # The new row/col (the one that this robot was
-    col:                                                            # supposed to be at after finishing the current move)
+    row:                                        # The new row/col (the one that this robot was
+    col:                                        # supposed to be at after finishing the current move)
 }
 
 OBJECT_STOP: { # Stop, Send ACK
     id:
-    row:                                                            # The new row/col (the one that this robot was
-    col:                                                            # supposed to be at after finishing the current move)
+    row:                                        # The new row/col (the one that this robot was
+    col:                                        # supposed to be at after finishing the current move)
 }
 
 OBJECT_FIXED: { # Resume last move, Send ACK
     id:
-    row:                                                            # The new row/col (the one that this robot was
-    col:                                                            # supposed to be at after finishing the current move)
+    row:                                        # The new row/col (the one that this robot was
+    col:                                        # supposed to be at after finishing the current move)
 }
 
 SIMULATION_START: {}
@@ -297,8 +330,8 @@ CELL_CLICK: {
 }
 
 ACK_ACTION: {
-    type:                                                           # Echo event type
-    data:                                                           # Echo event data
+    type:                                       # Echo event type
+    data:                                       # Echo event data
 }
 
 CELL_DRAG: {

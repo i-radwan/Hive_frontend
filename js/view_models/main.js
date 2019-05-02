@@ -60,47 +60,24 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     let data = actions[i].data;
 
                     if (a.type === SERVER_ACTIONS.MOVE) {
-                        self.pendingActions++;
-
-                        let r = data.robot_row;
-                        let c = data.robot_col;
-                        let nr = data.robot_new_row;
-                        let nc = data.robot_new_col;
-
-                        self.leftPanelVM.robotVM.move(r, c, nr, nc);
+                        self.leftPanelVM.robotVM.move(data.row, data.col);
+                    } else if (a.type === SERVER_ACTIONS.ROTATE_RIGHT) {
+                        self.leftPanelVM.robotVM.rotateRight(data.row, data.col);
+                    } else if (a.type === SERVER_ACTIONS.ROTATE_LEFT) {
+                        self.leftPanelVM.robotVM.rotateLeft(data.row, data.col);
+                    } else if (a.type === SERVER_ACTIONS.RETREAT) {
+                        self.leftPanelVM.robotVM.retreat(data.row, data.col);
                     } else if (a.type === SERVER_ACTIONS.BIND) {
-                        self.pendingActions++;
-
-                        let id = data.robot_id;
-                        let r = data.robot_row;
-                        let c = data.robot_col;
-
-                        self.leftPanelVM.robotVM.bind(id, r, c);
+                        self.leftPanelVM.robotVM.bind(data.id, data.row, data.col);
                     } else if (a.type === SERVER_ACTIONS.UNBIND) {
-                        self.pendingActions++;
-
-                        let id = data.robot_id;
-                        let r = data.robot_row;
-                        let c = data.robot_col;
-
-                        self.leftPanelVM.robotVM.unbind(id, r, c);
+                        self.leftPanelVM.robotVM.unbind(data.id, data.row, data.col);
                     } else if (a.type === SERVER_ACTIONS.LOAD) {
-                        self.pendingActions++;
-
-                        let id = data.robot_id;
-                        let r = data.robot_row;
-                        let c = data.robot_col;
-
-                        self.leftPanelVM.robotVM.load(id, r, c);
+                        self.leftPanelVM.robotVM.load(data.id, data.row, data.col);
                     } else if (a.type === SERVER_ACTIONS.OFFLOAD) {
-                        self.pendingActions++;
-
-                        let id = data.robot_id;
-                        let r = data.robot_row;
-                        let c = data.robot_col;
-
-                        self.leftPanelVM.robotVM.offload(id, r, c);
+                        self.leftPanelVM.robotVM.offload(data.id, data.row, data.col);
                     }
+
+                    self.pendingActions++;
                 }
 
                 for (let i = 0; i < logs.length; ++i) {
@@ -188,8 +165,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
     let handleActionAck = function (ack) {
         let data = ack.data;
 
-        if (data.type === EVENT_TO_GFX.OBJECT_MOVE) {
-            self.leftPanelVM.robotVM.updateRobotMovingState(id, data.data.new_row, data.data.new_col);
+        if (data.type === EVENT_TO_GFX.OBJECT_MOVE || data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
+            self.leftPanelVM.robotVM.updateRobotMovingState(id, data.data.row, data.data.col);
         }
 
         if (--self.pendingActions === 0) { // All actions are done
