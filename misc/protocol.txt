@@ -31,8 +31,16 @@ ORDER: {
 
 ACK: {}
 
-ERROR: {
-    robot_id:
+DEACTIVATE: {
+    id:
+}
+
+ACTIVATE: {
+    id:
+}
+
+BLOCKED: {
+    id:
 }
 
 ----------------
@@ -246,10 +254,28 @@ OBJECT_LOAD: { # Draw rack on top of the robot, send ACK
     col:
 }
 
-OBJECT_OFFLOAD: { # Send Ack
+OBJECT_OFFLOAD: { # Send ACK
     id:                                                             # Rack ID
     row:                                                            # Rack row
     col:
+}
+
+OBJECT_FAILURE: { # Stop, Send ACK, Flash red
+    id:
+    row:                                                            # The new row/col (the one that this robot was
+    col:                                                            # supposed to be at after finishing the current move)
+}
+
+OBJECT_STOP: { # Stop, Send ACK
+    id:
+    row:                                                            # The new row/col (the one that this robot was
+    col:                                                            # supposed to be at after finishing the current move)
+}
+
+OBJECT_FIXED: { # Resume last move, Send ACK
+    id:
+    row:                                                            # The new row/col (the one that this robot was
+    col:                                                            # supposed to be at after finishing the current move)
 }
 
 SIMULATION_START: {}
@@ -270,7 +296,10 @@ CELL_CLICK: {
     col:
 }
 
-ACK_ACTION: {}
+ACK_ACTION: {
+    type:                                                           # Echo event type
+    data:                                                           # Echo event data
+}
 
 CELL_DRAG: {
     src_row:

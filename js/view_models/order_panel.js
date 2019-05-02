@@ -280,7 +280,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
 
         // Gate exists
-        let f = (self.gateID().length === 0); // Blank gate allows for dynamic selection via our task allocation algorithm
+        let f = false;
 
         for (let i = 0; i < state.map.height && !f; ++i) {
             for (let j = 0; j < state.map.width && !f; ++j) {
@@ -288,6 +288,12 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
                 if (c !== undefined && c.type === MAP_CELL.GATE && c.id === parseInt(self.gateID())) {
                     f = true;
+
+                    if (c.na === true) {
+                        shouter.notifySubscribers({text: "This gate is blocked!", type: MSG_ERROR}, SHOUT_MSG);
+
+                        return false;
+                    }
                 }
             }
         }

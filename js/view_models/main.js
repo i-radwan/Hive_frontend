@@ -185,7 +185,13 @@ let mainViewModel = function (gfxEventHandler, comm) {
         self.leftPanelVM.handleCellDeleteClick(row, col);
     };
 
-    let handleActionAck = function () {
+    let handleActionAck = function (ack) {
+        let data = ack.data;
+
+        if (data.type === EVENT_TO_GFX.OBJECT_MOVE) {
+            self.leftPanelVM.robotVM.updateRobotMovingState(id, data.data.new_row, data.data.new_col);
+        }
+
         if (--self.pendingActions === 0) { // All actions are done
             comm.send({
                 type: MSG_TO_SERVER.ACK

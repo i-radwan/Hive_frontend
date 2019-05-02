@@ -10,6 +10,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.batteryCap = ko.observable(10000);
     self.ip = ko.observable("");
     self.port = ko.observable("");
+    self.deactivated = ko.observable(false);
 
     self.applyVisible = ko.observable(false);
     self.activeRobotRow = -1;
@@ -24,6 +25,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             state.map.grid[row][col].robot = {
                 id: parseInt(self.id()),
                 color: self.color(),
+                direction: ROBOT_DIR.RIGHT,
                 load_cap: parseInt(self.loadCap()),
                 battery_cap: parseInt(self.batteryCap()),
                 ip: self.ip(),
@@ -155,7 +157,10 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.update = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_ERROR
+            }, SHOUT_MSG);
 
             return false;
         }
@@ -188,6 +193,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.move = function (r, c, nr, nc) {
         state.map.grid[nr][nc].robot = Object.assign({}, state.map.grid[r][c].robot);
         state.map.grid[r][c].robot = undefined;
+
+        state.map.grid[nr][nc].robot.moving = true;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_MOVE,
@@ -372,6 +379,152 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             color: cell.robot.color,
             msg: "Robot <b>(#" + robot_id + ")</b> is assigned to Rack#<b>(" + rack_id + ")</b>."
         });
+    };
+
+    self.toggleActivation = function () {
+        if (!self.deactivated()) { // Deactivate the robot
+            sendToServer({
+                type: MSG_TO_SERVER.DEACTIVATE,
+                data: {
+                    id: parseInt(self.id())
+                }
+            });
+
+            // ToDo: active robot row,col aren't yet visually clear that the user should click there
+            // ToDo: GFX should send me the new robot row and col
+            let cell = state.map.grid[self.activeRobotRow][self.activeRobotCol];
+            let robot = state.map.grid[self.activeRobotRow][self.activeRobotCol].robot;
+
+            if (robot.loaded) { // Remove loaded rack items from the stock
+                for (let i = 0; i < state.map.height; ++i) {
+                    for (let j = 0; j < state.map.width; ++j) {
+                        let f = state.map.grid[i][j].facility;
+
+                        if (f === undefined || f.id !== parseInt(robot.loaded_rack_id))
+                            continue;
+
+                        for (let k = 0; k < f.items.length; ++k) {
+                            state.adjustItemQuantity(f.items[k].id, -f.items[k].quantity);
+                        }
+                    }
+                }
+            }
+
+            if (robot.moving) { // Two cells has to be marked as na (not available)
+                let previousRow = self.activeRobotRow - ROW_DELTA[robot.direction];
+                let previousCol = self.activeRobotCol - COL_DELTA[robot.direction];
+                let previousCell = state.map.grid[previousRow][previousCol];
+
+                cell.na = true;
+                previousCell.na = true;
+
+                // Check if there's another robot was going to the previous cell
+                if (previousCell.robot) {
+                    sendToServer({
+                        type: MSG_TO_SERVER.BLOCKED,
+                        data: {
+                            id: parseInt(previousCell.robot.id)
+                        }
+                    });
+
+                    gfxEventHandler({
+                        type: EVENT_TO_GFX.OBJECT_FAILURE,
+                        data: {
+                            id: parseInt(previousCell.robot.id),
+                            row: previousRow,
+                            col: previousCol
+                        }
+                    });
+
+                    logger({
+                        level: LOG_LEVEL_ERROR,
+                        object: LOG_OBJECT_ROBOT,
+                        color: cell.robot.color,
+                        msg: "Robot <b>(#" + parseInt(previousCell.robot.id) + ")</b> cannot move</b>."
+                    });
+                }
+            } else {
+                cell.na = true; // Not available
+            }
+
+            gfxEventHandler({
+                type: EVENT_TO_GFX.OBJECT_STOP,
+                data: {
+                    id: parseInt(self.id()),
+                    row: self.activeRobotRow,
+                    col: self.activeRobotCol
+                }
+            });
+
+            logger({
+                level: LOG_LEVEL_ERROR,
+                object: LOG_OBJECT_ROBOT,
+                color: cell.robot.color,
+                msg: "Robot <b>(#" + parseInt(self.id()) + ")</b> has failed</b>."
+            });
+        } else {
+            sendToServer({
+                type: MSG_TO_SERVER.ACTIVATE,
+                data: {
+                    id: parseInt(self.id())
+                }
+            });
+
+            // ToDo: active robot row,col aren't yet visually clear that the user should click there
+            // ToDo: GFX should send me the new robot row and col
+            let cell = state.map.grid[self.activeRobotRow][self.activeRobotCol];
+            let robot = state.map.grid[self.activeRobotRow][self.activeRobotCol].robot;
+
+            if (robot.loaded) { // Remove loaded rack items from the stock
+                for (let i = 0; i < state.map.height; ++i) {
+                    for (let j = 0; j < state.map.width; ++j) {
+                        let f = state.map.grid[i][j].facility;
+
+                        if (f === undefined || f.id !== parseInt(robot.loaded_rack_id))
+                            continue;
+
+                        for (let k = 0; k < f.items.length; ++k) {
+                            state.adjustItemQuantity(f.items[k].id, f.items[k].quantity);
+                        }
+                    }
+                }
+            }
+
+            if (robot.moving) { // Two cells has to be marked as na (not available)
+                let previousRow = self.activeRobotRow - ROW_DELTA[robot.direction];
+                let previousCol = self.activeRobotCol - COL_DELTA[robot.direction];
+                let previousCell = state.map.grid[previousRow][previousCol];
+
+                cell.na = false;
+                previousCell.na = false;
+            } else {
+                cell.na = false; // Available
+            }
+
+            gfxEventHandler({
+                type: EVENT_TO_GFX.OBJECT_FIXED,
+                data: {
+                    id: parseInt(self.id()),
+                    row: self.activeRobotRow,
+                    col: self.activeRobotCol
+                }
+            });
+
+            logger({
+                level: LOG_LEVEL_ERROR,
+                object: LOG_OBJECT_ROBOT,
+                color: cell.robot.color,
+                msg: "Robot <b>(#" + parseInt(self.id()) + ")</b> is back</b>."
+            });
+        }
+
+        self.deactivated(!self.deactivated());
+    };
+
+    self.updateRobotMovingState = function (id, row, col) {
+        let cell = state.map.grid[row][col];
+
+        cell.robot.moving = false;
     };
 
     self.handleEsc = function () {
