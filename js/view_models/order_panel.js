@@ -60,7 +60,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let order = {
             id: parseInt(self.id()),
-            gate_id: (self.gateID().length ? parseInt(self.gateID()) : "-"),
+            gate_id: parseInt(self.gateID()),
             items: ko.mapping.toJS(self.items()),
             start_time: self.startDateTime()
         };
@@ -105,7 +105,57 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         console.log(o);
 
         o.forEach(function (or) {
-            self.ongoingOrders.push(or);
+            // Check if the order is still satisfiable (blocked racks may affect the available stock,
+            // or gate has become na)
+            let f = false;
+
+            for (let i = 0; i < state.map.height && !f; ++i) {
+                for (let j = 0; j < state.map.width && !f; ++j) {
+                    let c = state.map.grid[i][j].facility;
+
+                    if (c !== undefined && c.type === MAP_CELL.GATE && c.id === parseInt(or.gate_id)) {
+
+                        f = true;
+
+                        if (c.na === true) {
+                            logger({
+                                level: LOG_LEVEL_ERROR,
+                                object: LOG_OBJECT_ORDER,
+                                color: "#bababa",
+                                msg: "Order <b>(#" + or.id + ")</b> cannot be issued (gate is not available)."
+                            });
+
+                            return;
+                        }
+                    }
+                }
+            }
+
+            let satisfiable = true;
+
+            or.items().forEach(function (i) {
+                if (state.stock[i.id] < i.quantity) {
+                    satisfiable = false;
+                }
+            });
+
+            if (!satisfiable) {
+                logger({
+                    level: LOG_LEVEL_ERROR,
+                    object: LOG_OBJECT_ORDER,
+                    color: "#bababa",
+                    msg: "Order <b>(#" + or.id + ")</b> cannot be issued (stocks isn't sufficient)."
+                });
+            } else {
+                logger({
+                    level: LOG_LEVEL_INFO,
+                    object: LOG_OBJECT_ORDER,
+                    color: "#bababa",
+                    msg: "Order <b>(#" + or.id + ")</b> has been issued."
+                });
+
+                self.ongoingOrders.push(or);
+            }
         });
     };
 
