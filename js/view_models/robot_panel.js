@@ -196,11 +196,12 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let nr = r + ROW_DELTA[robot.direction];
         let nc = c + COL_DELTA[robot.direction];
+        let ncell = state.map.grid[nr][nc];
 
-        state.map.grid[nr][nc].robot = Object.assign({}, state.map.grid[r][c].robot);
-        state.map.grid[r][c].robot = undefined;
+        ncell.robot = Object.assign({}, robot);
+        cell.robot = undefined;
 
-        state.map.grid[nr][nc].robot.moving = true;
+        ncell.robot.moving = true;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_MOVE,
@@ -248,12 +249,14 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let or = r - ROW_DELTA[robot.direction];
         let oc = c - COL_DELTA[robot.direction];
 
+        let ocell = state.map.grid[or][oc];
+
         robot.direction = (robot.direction + 2) % ROBOT_DIR_CNT;
 
-        state.map.grid[or][oc].robot = Object.assign({}, robot);
-        state.map.grid[r][c].robot = undefined;
+        ocell.robot = Object.assign({}, robot);
+        cell.robot = undefined;
 
-        state.map.grid[or][oc].robot.moving = true;
+        ocell.robot.moving = true;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_RETREAT,
