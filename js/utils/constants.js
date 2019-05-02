@@ -142,7 +142,9 @@ MSG_FROM_SERVER = {
     ACK_RESUME: 1,
     ACK_ORDER: 2,
     UPDATE: 3,
-    MSG: 4
+    DEACTIVATE: 4,
+    ACTIVATE: 5,
+    MSG: 6
 };
 
 CONFIG_MODE = {

@@ -120,6 +120,18 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 }
                 break;
 
+            case MSG_FROM_SERVER.DEACTIVATE:
+                self.leftPanelVM.robotVM.deactivateRobot(msg.data.row, msg.data.col);
+
+                self.pendingActions++;
+                break;
+
+            case MSG_FROM_SERVER.ACTIVATE:
+                self.leftPanelVM.robotVM.activateRobot(msg.data.row, msg.data.col);
+
+                self.pendingActions++;
+                break;
+
             case MSG_FROM_SERVER.MSG:
                 self.shouter.notifySubscribers({text: msg.data.text, type: msg.data.type}, SHOUT_MSG);
                 break;

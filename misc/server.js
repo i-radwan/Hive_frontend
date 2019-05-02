@@ -98,47 +98,72 @@ wsServer.on('request', function (request) {
                 actions.push({
                     type: SERVER_ACTIONS.MOVE,
                     data: {
-                        robot_id: parseInt(i[2]),
-                        robot_row: parseInt(i[3]),
-                        robot_col: parseInt(i[4]),
-                        robot_new_row: parseInt(i[5]),
-                        robot_new_col: parseInt(i[6])
+                        id: parseInt(i[2]),
+                        row: parseInt(i[3]),
+                        col: parseInt(i[4])
+                    }
+                });
+            } else if (t === SERVER_ACTIONS.ROTATE_RIGHT) {
+                actions.push({
+                    type: SERVER_ACTIONS.ROTATE_RIGHT,
+                    data: {
+                        id: parseInt(i[2]),
+                        row: parseInt(i[3]),
+                        col: parseInt(i[4])
+                    }
+                });
+            } else if (t === SERVER_ACTIONS.ROTATE_LEFT) {
+                actions.push({
+                    type: SERVER_ACTIONS.ROTATE_LEFT,
+                    data: {
+                        id: parseInt(i[2]),
+                        row: parseInt(i[3]),
+                        col: parseInt(i[4])
+                    }
+                });
+            } else if (t === SERVER_ACTIONS.RETREAT) {
+                actions.push({
+                    type: SERVER_ACTIONS.RETREAT,
+                    data: {
+                        id: parseInt(i[2]),
+                        row: parseInt(i[3]),
+                        col: parseInt(i[4])
                     }
                 });
             } else if (t === SERVER_ACTIONS.BIND) {
                 actions.push({
                     type: SERVER_ACTIONS.BIND,
                     data: {
-                        robot_id: parseInt(i[2]),
-                        robot_row: parseInt(i[3]),
-                        robot_col: parseInt(i[4])
+                        id: parseInt(i[2]),
+                        row: parseInt(i[3]),
+                        col: parseInt(i[4])
                     }
                 });
             } else if (t === SERVER_ACTIONS.UNBIND) {
                 actions.push({
                     type: SERVER_ACTIONS.UNBIND,
                     data: {
-                        robot_id: parseInt(i[2]),
-                        robot_row: parseInt(i[3]),
-                        robot_col: parseInt(i[4])
+                        id: parseInt(i[2]),
+                        row: parseInt(i[3]),
+                        col: parseInt(i[4])
                     }
                 });
             } else if (t === SERVER_ACTIONS.LOAD) {
                 actions.push({
                     type: SERVER_ACTIONS.LOAD,
                     data: {
-                        robot_id: parseInt(i[2]),
-                        robot_row: parseInt(i[3]),
-                        robot_col: parseInt(i[4])
+                        id: parseInt(i[2]),
+                        row: parseInt(i[3]),
+                        col: parseInt(i[4])
                     }
                 });
             } else if (t === SERVER_ACTIONS.OFFLOAD) {
                 actions.push({
                     type: SERVER_ACTIONS.OFFLOAD,
                     data: {
-                        robot_id: parseInt(i[2]),
-                        robot_row: parseInt(i[3]),
-                        robot_col: parseInt(i[4])
+                        id: parseInt(i[2]),
+                        row: parseInt(i[3]),
+                        col: parseInt(i[4])
                     }
                 });
             }

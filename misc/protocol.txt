@@ -188,6 +188,19 @@ UPDATE: {
     ]
 }
 
+DEACTIVATE: { # The row/col that the robot is supposed to be there after finishing last action.
+              # If this will affect other robots, you will receive a BLOCKED msg from them
+    id:
+    row:
+    col:
+}
+
+ACTIVATE: { # The row/col that the robot is supposed to be there after finishing last action.
+    id:
+    row:
+    col:
+}
+
 MSG: {
     type: [INFO|ERROR]
     text: msg
@@ -299,7 +312,7 @@ OBJECT_FAILURE: { # Stop, Send ACK, Flash red
     col:                                        # supposed to be at after finishing the current move)
 }
 
-OBJECT_STOP: { # Stop, Send ACK
+OBJECT_STOP: { # Force stop, Send ACK
     id:
     row:                                        # The new row/col (the one that this robot was
     col:                                        # supposed to be at after finishing the current move)
