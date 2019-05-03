@@ -52,6 +52,20 @@ wsServer.on('request', function (request) {
                         }
                     }
                 }));
+
+                console.log(JSON.stringify({
+                    type: MSG_FROM_SERVER.ACK_ORDER,
+                    data: {
+                        status: ACK_ORDER_STATUS.OK,
+                        order: {
+                            id: msg.data.id,
+                            gate_id: msg.data.gate_id,
+                            items: msg.data.items,
+                            start_time: msg.data.start_time,
+                            mode: msg.data.mode
+                        }
+                    }
+                }));
             } else {
                 con.sendUTF(JSON.stringify({
                     type: MSG_FROM_SERVER.ACK_ORDER,

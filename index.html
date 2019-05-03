@@ -374,7 +374,7 @@
                         <div class="form-group">
                             <label>Gate ID</label>
                             <input type="number" class="form-control bg-dark text-light"
-                                   placeholder="Gate ID (Blank for automatic)"
+                                   placeholder="Gate ID"
                                    data-bind="textInput: leftPanelVM.orderVM.gateID">
                         </div>
                         <div class="form-group">
@@ -726,133 +726,122 @@
 
     <div class="col-md-2 rpanel">
 
-        <!--==============================================================-->
-        <!--=========================== DESIGN ===========================-->
-        <!--==============================================================-->
-
-        <!--========================= TOP TAB =========================-->
-        <div class="items" data-bind="css: {hidden: runningMode() !== RUNNING_MODE.DESIGN}">
-            <div>
-                <div class="tab">
-                    <div class="inner-container">
-                        <div class="toggle">
-                            <p>ITEMS</p>
-                        </div>
+        <!--========================= TABS =========================-->
+        <div class="tab">
+            <div class="container">
+                <div class="inner-container">
+                    <div class="toggle" data-bind="click: function(){rightPanelVM.toggleActiveList(RIGHT_PANEL.LOGS)}">
+                        <p data-bind="css: {inactive: runningMode() === RUNNING_MODE.DESIGN}">Logs</p>
+                    </div>
+                    <div class="toggle" data-bind="click: function(){rightPanelVM.toggleActiveList(RIGHT_PANEL.STATS)}">
+                        <p data-bind="css: {inactive: runningMode() === RUNNING_MODE.DESIGN}">Stats</p>
+                    </div>
+                    <div class="toggle" data-bind="click: function(){rightPanelVM.toggleActiveList(RIGHT_PANEL.ITEMS)}">
+                        <p>Items</p>
                     </div>
                 </div>
-            </div>
-
-            <!--========================= SEARCH =========================-->
-            <div class="form-group search">
-                <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
-                       data-bind="textInput: rightPanelVM.itemsVM.searchValue">
-            </div>
-
-            <!--========================= ITEMS LIST =========================-->
-            <hr class="items-separator" data-bind="css: {hidden: rightPanelVM.itemsVM.items().length === 0}">
-            <div class="items-container" data-bind="css: {hidden: rightPanelVM.itemsVM.items().length === 0}">
-                <div class="form-group">
-                    <span data-bind="foreach: rightPanelVM.itemsVM.filteredItems">
-                        <div class="row item-container">
-                            <div class="col-md-10 item-container-fields">
-                            <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                                   data-bind="textInput: id" readonly>
-                            <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
-                                   data-bind="textInput: weight" readonly>
-                           </div>
-                           <div class="col-md-2 item-container-icon">
-                                <i class="fas fa-minus"
-                                   data-bind="click: $parent.rightPanelVM.itemsVM.remove"></i>
-                           </div>
-                        </div>
-                    </span>
-                </div>
-            </div>
-
-            <!--========================= ADD ITEM =========================-->
-            <hr class="items-separator">
-            <div class="form-group">
-                <label>Add Item</label>
-                <div class="row item-container">
-                    <div class="col-md-10 item-container-fields">
-                        <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                               data-bind="textInput: rightPanelVM.itemsVM.itemID, enabled: runningMode() === RUNNING_MODE.DESIGN">
-                        <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
-                               data-bind="textInput: rightPanelVM.itemsVM.itemWeight, enabled: runningMode() === RUNNING_MODE.DESIGN">
+                <div class="inner-container"
+                     data-bind="style: {'clip-path': rightPanelVM.tabsClipPath}">
+                    <div class="toggle" data-bind="click: function(){rightPanelVM.toggleActiveList(RIGHT_PANEL.LOGS)}">
+                        <p data-bind="css: {inactive: runningMode() === RUNNING_MODE.DESIGN}">Logs</p>
                     </div>
-                    <div class="col-md-2 item-container-icon">
-                        <i class="fas fa-plus" data-bind="click: rightPanelVM.itemsVM.add"></i>
+                    <div class="toggle" data-bind="click: function(){rightPanelVM.toggleActiveList(RIGHT_PANEL.STATS)}">
+                        <p data-bind="css: {inactive: runningMode() === RUNNING_MODE.DESIGN}">Stats</p>
+                    </div>
+                    <div class="toggle" data-bind="click: function(){rightPanelVM.toggleActiveList(RIGHT_PANEL.ITEMS)}">
+                        <p>Items</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--==============================================================-->
-        <!--========================= SIMULATION =========================-->
-        <!--==============================================================-->
+        <div>
 
-        <div class="sim" data-bind="css: {hidden: runningMode() === RUNNING_MODE.DESIGN}">
-
-            <!--========================= TABS =========================-->
-            <div class="tab" data-bind="click: rightPanelVM.toggleActiveList">
-                <div class="container">
-                    <div class="inner-container">
-                        <div class="toggle">
-                            <p>Logs</p>
+            <!--========================= LOGS =========================-->
+            <div class="logs" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.LOGS}">
+                <span data-bind="foreach: rightPanelVM.logs">
+                    <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
+                        <div class="row item">
+                            <div class="col-md-3 icon">
+                                <i class="fas large"
+                                   data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
+                                <i class="fas small"
+                                   data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style {color: color}"></i>
+                            </div>
+                            <div class="col-md-9 text">
+                                <span data-bind="html: msg"></span>
+                            </div>
                         </div>
-                        <div class="toggle">
-                            <p>Stats</p>
+                    </span>
+                    <span data-bind="if: object === LOG_OBJECT_SIMULATION">
+                        <div class="row sep">
+                           <hr>
+                           <span data-bind="text: msg"></span>
+                           <hr>
                         </div>
-                    </div>
-                    <div class="inner-container"
-                         data-bind="style: {'clip-path': rightPanelVM.activePanel() === RIGHT_PANEL.LOGS ? 'inset(0 50% 0 0)' : 'inset(0 0 0 50%)' }">
-                        <div class="toggle">
-                            <p>Logs</p>
-                        </div>
-                        <div class="toggle">
-                            <p>Stats</p>
-                        </div>
-                    </div>
-                </div>
+                    </span>
+                 </span>
             </div>
 
-            <div>
+            <!--========================= STATS =========================-->
+            <div class="stats" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.STATS}">
+                <span data-bind="foreach: rightPanelVM.stats">
+                    <p class="row">
+                        <span class="text-sm-left key" data-bind="text: key + ': '"></span>
+                        <span class="text-sm-right value" data-bind="text: value"></span>
+                    </p>
+                    <div class="clear"></div>
+                </span>
+            </div>
 
-                <!--========================= LOGS =========================-->
-                <div class="logs" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.LOGS}">
-                    <span data-bind="foreach: rightPanelVM.logs">
-                        <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
-                            <div class="row item">
-                                <div class="col-md-3 icon">
-                                    <i class="fas large"
-                                       data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
-                                    <i class="fas small"
-                                       data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style {color: color}"></i>
-                                </div>
-                                <div class="col-md-9 text">
-                                    <span data-bind="html: msg"></span>
-                                </div>
-                            </div>
-                        </span>
-                        <span data-bind="if: object === LOG_OBJECT_SIMULATION">
-                            <div class="row sep">
-                               <hr>
-                               <span data-bind="text: msg"></span>
-                               <hr>
-                            </div>
-                        </span>
-                     </span>
+            <!--========================= ITEMS =========================-->
+            <div class="items" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.ITEMS}">
+
+                <!--========================= SEARCH =========================-->
+                <div class="form-group search">
+                    <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
+                           data-bind="textInput: rightPanelVM.itemsVM.searchValue">
                 </div>
 
-                <!--========================= STATS =========================-->
-                <div class="stats" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.STATS}">
-                    <span data-bind="foreach: rightPanelVM.stats">
-                        <p class="row">
-                            <span class="text-sm-left key" data-bind="text: key + ': '"></span>
-                            <span class="text-sm-right value" data-bind="text: value"></span>
-                        </p>
-                        <div class="clear"></div>
-                    </span>
+                <!--========================= ITEMS LIST =========================-->
+                <p class="empty text-light text-muted text-center"
+                   data-bind="css: {hidden: rightPanelVM.itemsVM.items().length !== 0}">No Items!</p>
+
+                <hr class="items-separator" data-bind="css: {hidden: rightPanelVM.itemsVM.items().length === 0}">
+                <div class="items-container" data-bind="css: {hidden: rightPanelVM.itemsVM.items().length === 0}">
+                    <div class="form-group">
+                <span data-bind="foreach: rightPanelVM.itemsVM.filteredItems">
+                    <div class="row item-container">
+                        <div class="col-md-10 item-container-fields">
+                        <input type="number" class="form-control bg-dark text-light" placeholder="ID"
+                               data-bind="textInput: id" readonly>
+                        <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
+                               data-bind="textInput: weight" readonly>
+                       </div>
+                       <div class="col-md-2 item-container-icon">
+                            <i class="fas fa-minus"
+                               data-bind="click: $parent.rightPanelVM.itemsVM.remove"></i>
+                       </div>
+                    </div>
+                </span>
+                    </div>
+                </div>
+
+                <!--========================= ADD ITEM =========================-->
+                <hr class="items-separator">
+                <div class="form-group">
+                    <label>Add Item</label>
+                    <div class="row item-container">
+                        <div class="col-md-10 item-container-fields">
+                            <input type="number" class="form-control bg-dark text-light" placeholder="ID"
+                                   data-bind="textInput: rightPanelVM.itemsVM.itemID, enabled: runningMode() === RUNNING_MODE.DESIGN">
+                            <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
+                                   data-bind="textInput: rightPanelVM.itemsVM.itemWeight, enabled: runningMode() === RUNNING_MODE.DESIGN">
+                        </div>
+                        <div class="col-md-2 item-container-icon">
+                            <i class="fas fa-plus" data-bind="click: rightPanelVM.itemsVM.add"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -149,6 +149,18 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         value: ko.observable(12)
     });
 
+    self.tabsClipPath = ko.computed(function () {
+        console.log(self.activePanel());
+
+        if (self.activePanel() === RIGHT_PANEL.LOGS) {
+            return 'polygon(0% 0%, 33.33% 0%, 33.33% 100%, 0% 100%)';
+        } else if (self.activePanel() === RIGHT_PANEL.STATS) {
+            return 'polygon(33.33% 0%, 66.66% 0%, 66.66% 100%, 33.33% 100%)';
+        } else if (self.activePanel() === RIGHT_PANEL.ITEMS) {
+            return 'polygon(66.66% 0%, 100% 0%, 100% 100%, 66.66% 100%)';
+        }
+    });
+
     self.addLog = function (log) {
         self.logs.push(log);
     };
@@ -170,13 +182,11 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     };
 
-    self.toggleActiveList = function () {
-        if (self.activePanel() === RIGHT_PANEL.LOGS) {
-            self.activePanel(RIGHT_PANEL.STATS);
-        }
-        else if (self.activePanel() === RIGHT_PANEL.STATS) {
-            self.activePanel(RIGHT_PANEL.LOGS)
-        }
+    self.toggleActiveList = function (panel) {
+        if (runningMode() === RUNNING_MODE.DESIGN && panel !== RIGHT_PANEL.ITEMS)
+            return;
+
+        self.activePanel(panel);
     };
 
     // Listen for mode change

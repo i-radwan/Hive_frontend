@@ -679,8 +679,8 @@ input[type=number]::-webkit-outer-spin-button {
 /*========================= STATS PANEL =========================*/
 /*===============================================================*/
 
-.rpanel .sim {
-    padding: 15px 0;
+.rpanel {
+    padding: 15px;
 }
 
 .rpanel .stats {
@@ -717,56 +717,15 @@ input[type=number]::-webkit-outer-spin-button {
 /*====================== RIGHT ITEMS PANEL ======================*/
 /*===============================================================*/
 
-.rpanel .items {
-    padding: 15px 0;
-}
-
-.rpanel .items .search {
-    margin-top: 20px;
-}
-
-.rpanel .items .tab {
-    font-family: 'Asap', sans-serif;
-    width: 100%;
-    height: 36px;
-    margin: auto;
-    position: relative;
-    overflow: hidden;
-    user-select: none;
-}
-
-.rpanel .items .tab .inner-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: inherit;
-    height: inherit;
-    text-transform: uppercase;
-    font-size: .7em;
-    letter-spacing: .2em;
-    background: transparent;
-    color: #e09500;
-    border-bottom: 1px #e09500 solid;
-    font-weight: bolder;
-}
-
-.rpanel .items .tab .toggle {
-    width: 100%;
-    position: absolute;
-    height: inherit;
-    display: flex;
-    box-sizing: border-box;
-}
-
-.rpanel .items .tab .toggle p {
-    margin: auto;
+.rpanel .tab .inactive {
+    color: #4b4b4b;
 }
 
 /*===============================================================*/
 /*======================= RIGHT SIM PANEL =======================*/
 /*===============================================================*/
 
-.rpanel .sim .tab .container {
+.rpanel .tab .container {
     font-family: 'Asap', sans-serif;
     width: 100%;
     height: 36px;
@@ -777,7 +736,7 @@ input[type=number]::-webkit-outer-spin-button {
     cursor: pointer;
 }
 
-.rpanel .sim .tab .inner-container {
+.rpanel .tab .inner-container {
     position: absolute;
     left: 0;
     top: 0;
@@ -788,35 +747,39 @@ input[type=number]::-webkit-outer-spin-button {
     letter-spacing: .2em;
 }
 
-.rpanel .sim .tab .inner-container:first-child {
+.rpanel .tab .inner-container:first-child {
     background: transparent;
     border-bottom: 1px #bababa solid;
     color: #bababa;
 }
 
-.rpanel .sim .tab .inner-container:nth-child(2) {
+.rpanel .tab .inner-container:nth-child(2) {
     background: transparent;
     color: #e09500;
     border-bottom: 1px #e09500 solid;
     font-weight: bolder;
     transition: .3s cubic-bezier(0, 0, 0, 1);
-    clip-path: inset(0 50% 0 0);
+    clip-path: polygon(0% 0%, 33.33% 0%, 33.33% 100%, 0% 100%);
 }
 
-.rpanel .sim .tab .toggle {
-    width: 50%;
+.rpanel .tab .toggle {
+    width: 33.33%;
     position: absolute;
     height: inherit;
     display: flex;
     box-sizing: border-box;
 }
 
-.rpanel .sim .tab .toggle p {
+.rpanel .tab .toggle p {
     margin: auto;
 }
 
-.rpanel .sim .tab .toggle:nth-child(2) {
-    right: 0;
+.rpanel .tab .toggle:nth-child(2) {
+    left: 33.33%;
+}
+
+.rpanel .tab .toggle:nth-child(3) {
+    left: 66.66%;
 }
 
 /*==============================================================*/

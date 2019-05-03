@@ -18,12 +18,24 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     });
 
     self.remove = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         self.items.remove(this);
 
         state.items = ko.mapping.toJS(self.items());
     };
 
     self.add = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+
+            return false;
+        }
+
         if (!check())
             return;
 
