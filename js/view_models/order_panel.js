@@ -157,34 +157,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         updateOrderSatisfiability(id, true, self.upcomingOrders);
     };
 
-    let updateOrderSatisfiability = function (id, satisfiable, list) {
-        for (let i = 0; i < list().length; ++i) {
-            if (list()[i].id === id) {
-                list()[i].satisfiable(satisfiable);
-
-                if (!satisfiable){
-                    logger({
-                        level: LOG_LEVEL_ERROR,
-                        object: LOG_OBJECT_ORDER,
-                        color: "#bababa",
-                        msg: "Order <b>(#" + id + ")</b> is delayed."
-                    });
-                } else {
-                    logger({
-                        level: LOG_LEVEL_INFO,
-                        object: LOG_OBJECT_ORDER,
-                        color: "#bababa",
-                        msg: "Order <b>(#" + id + ")</b> has been resumed."
-                    });
-                }
-
-                return true;
-            }
-        }
-
-        return false;
-    };
-
     self.updateOrderDeliveredItems = function (order_id, item_id, item_quantity) {
         self.ongoingOrders().forEach(function (o) {
             if (o.id !== order_id)
@@ -256,6 +228,34 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             shouter.notifySubscribers(false, SHOUT_LOADING);
         }
+    };
+
+    let updateOrderSatisfiability = function (id, satisfiable, list) {
+        for (let i = 0; i < list().length; ++i) {
+            if (list()[i].id === id) {
+                list()[i].satisfiable(satisfiable);
+
+                if (!satisfiable){
+                    logger({
+                        level: LOG_LEVEL_ERROR,
+                        object: LOG_OBJECT_ORDER,
+                        color: "#bababa",
+                        msg: "Order <b>(#" + id + ")</b> is delayed."
+                    });
+                } else {
+                    logger({
+                        level: LOG_LEVEL_INFO,
+                        object: LOG_OBJECT_ORDER,
+                        color: "#bababa",
+                        msg: "Order <b>(#" + id + ")</b> has been resumed."
+                    });
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     };
 
     let sendOrderToServer = function (order) {

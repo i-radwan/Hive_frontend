@@ -171,9 +171,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         }, MSG_TIMEOUT);
     }, self, SHOUT_MSG);
 
-    runningMode.subscribe(function (newRunningMode) {
-    });
-
     let sendStateToServer = function (mode) {
         if (!comm.connected) {
             shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);

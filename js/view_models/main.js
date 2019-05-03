@@ -107,15 +107,15 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     } else if (l.type === SERVER_LOGS.ORDER_ISSUED) {
                         let id = data.id;
 
-                        self.leftPanelVM.orderVM.finishOngoingOrder(id, order_fulfilled_time);
+                        self.leftPanelVM.orderVM.issueOrder(id);
                     } else if (l.type === SERVER_LOGS.ORDER_DELAYED) {
                         let id = data.id;
 
-                        self.leftPanelVM.orderVM.finishOngoingOrder(id, order_fulfilled_time);
+                        self.leftPanelVM.orderVM.delayOrder(id);
                     } else if (l.type === SERVER_LOGS.ORDER_RESUMED) {
                         let id = data.id;
 
-                        self.leftPanelVM.orderVM.finishOngoingOrder(id, order_fulfilled_time);
+                        self.leftPanelVM.orderVM.resumeOrder(id);
                     } else if (l.type === SERVER_LOGS.RACK_ADJUSTED) {
                         let rack_id = data.rack_id;
                         let rack_row = data.rack_row;

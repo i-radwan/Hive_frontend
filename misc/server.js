@@ -209,8 +209,29 @@ wsServer.on('request', function (request) {
                 logs.push({
                     type: SERVER_LOGS.ORDER_FULFILLED,
                     data: {
-                        order_id: parseInt(i[2]),
+                        id: parseInt(i[2]),
                         fulfilled_time: i[3] + " " + i[4]
+                    }
+                });
+            } else if (t === SERVER_LOGS.ORDER_ISSUED) {
+                logs.push({
+                    type: SERVER_LOGS.ORDER_ISSUED,
+                    data: {
+                        id: parseInt(i[2])
+                    }
+                });
+            } else if (t === SERVER_LOGS.ORDER_DELAYED) {
+                logs.push({
+                    type: SERVER_LOGS.ORDER_DELAYED,
+                    data: {
+                        id: parseInt(i[2])
+                    }
+                });
+            } else if (t === SERVER_LOGS.ORDER_RESUMED) {
+                logs.push({
+                    type: SERVER_LOGS.ORDER_RESUMED,
+                    data: {
+                        id: parseInt(i[2])
                     }
                 });
             } else if (t === SERVER_LOGS.RACK_ADJUSTED) {
