@@ -41,6 +41,20 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return self.finishedSearchValue().length === 0 || parseInt(order.id) === parseInt(self.finishedSearchValue());
         });
     });
+    
+    self.ordersLists = [{
+        panel: ORDER_PANEL.ONGOING,
+        searchValue: self.ongoingSearchValue,
+        list: self.filteredOngoingOrders
+    }, {
+        panel: ORDER_PANEL.UPCOMING,
+        searchValue: self.upcomingSearchValue,
+        list: self.filteredUpcomingOrders
+    }, {
+        panel: ORDER_PANEL.FINISHED,
+        searchValue: self.finishedSearchValue,
+        list: self.filteredFinishedOrders
+    }];
 
     self.tabsClipPath = ko.computed(function () {
         if (self.activePanel() === ORDER_PANEL.ADD) {
@@ -125,6 +139,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                                 msg: "Order <b>(#" + or.id + ")</b> cannot be issued (gate is not available)."
                             });
 
+                            or.satisfiable(false);
+
                             return;
                         }
                     }
@@ -140,6 +156,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             });
 
             if (!satisfiable) {
+                or.satisfiable(false);
+
                 logger({
                     level: LOG_LEVEL_ERROR,
                     object: LOG_OBJECT_ORDER,
@@ -147,6 +165,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                     msg: "Order <b>(#" + or.id + ")</b> cannot be issued (stocks isn't sufficient)."
                 });
             } else {
+                or.satisfiable(true);
+
                 logger({
                     level: LOG_LEVEL_INFO,
                     object: LOG_OBJECT_ORDER,

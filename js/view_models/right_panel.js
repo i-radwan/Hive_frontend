@@ -1,4 +1,5 @@
 require('../utils/constants');
+let $ = require('jquery');
 let ko = require('knockout');
 
 let itemsPanelViewModel = require('./items_panel');

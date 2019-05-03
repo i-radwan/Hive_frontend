@@ -424,230 +424,85 @@
                         </div>
                     </div>
 
-                    <!--========================= ONGOING ORDERS =========================-->
-                    <div class="ongoing"
-                         data-bind="css: {hidden: leftPanelVM.orderVM.activePanel() !== ORDER_PANEL.ONGOING}">
 
-                        <!--========================= SEARCH =========================-->
-                        <div class="form-group search">
-                            <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
-                                   data-bind="textInput: leftPanelVM.orderVM.ongoingSearchValue">
-                        </div>
+                    <!--========================== ORDERS LISTS ==========================-->
+                    <span data-bind="foreach: leftPanelVM.orderVM.ordersLists">
+                        <div data-bind="css: {hidden: $parent.leftPanelVM.orderVM.activePanel() !== panel}">
 
-                        <!--====================== ORDERS LIST =======================-->
-                        <p class="empty text-light text-muted text-center"
-                           data-bind="css: {hidden: leftPanelVM.orderVM.filteredOngoingOrders().length !== 0}">No
-                            Orders!</p>
+                            <!--========================= SEARCH =========================-->
+                            <div class="form-group search">
+                                <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
+                                       data-bind="textInput: searchValue">
+                            </div>
 
-                        <div class="form-group orders-list"
-                             data-bind="css: {hidden: leftPanelVM.orderVM.filteredOngoingOrders().length === 0}">
-                            <span data-bind="foreach: leftPanelVM.orderVM.filteredOngoingOrders">
-                                <div class="cont bordered">
-                                    <div class="row main-row">
-                                        <div class="col-md-3 icon">
-                                            <span class="fas fa-box" data-toggle="tooltip"
-                                                  data-bind="attr: {title: function() {return progress() + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + progress() + '%, #404548 ' + progress() + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
-                                        </div>
-                                        <div class="row col-md-9 order-details">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    <div class="row">
-                                                        <div class="col-md-5">Order:</div>
-                                                        <div class="col-md-7"><b data-bind="text: id"></b></div>
+                            <!--====================== ORDERS LIST =======================-->
+                            <p class="empty text-light text-muted text-center"
+                               data-bind="css: {hidden: list().length !== 0}">No
+                                Orders!</p>
+
+                            <div class="form-group orders-list"
+                                 data-bind="css: {hidden: list().length === 0}">
+                                <span data-bind="foreach: list">
+                                    <div class="cont bordered">
+                                        <div class="row main-row">
+                                            <div class="col-md-3 icon">
+                                                <span class="fas fa-box" data-toggle="tooltip"
+                                                      data-bind="attr: {title: function() {return progress() + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + progress() + '%, #404548 ' + progress() + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
+                                                <i class="fas fa-exclamation-circle" data-toggle="tooltip"
+                                                   title="Order has to wait (resources or gate may be blocked)"
+                                                   data-bind="css: {hidden: satisfiable}"></i>
+                                            </div>
+                                            <div class="row col-md-9 order-details">
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <div class="row">
+                                                            <div class="col-md-5">Order:</div>
+                                                            <div class="col-md-7"><b data-bind="text: id"></b></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-5">Gate:</div>
+                                                            <div class="col-md-7"><b data-bind="text: gate_id"></b></div>
+                                                        </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-5">Gate:</div>
-                                                        <div class="col-md-7"><b data-bind="text: gate_id"></b></div>
-                                                    </div>
-                                                </div>
 
-                                                <div class="col-md-2 more">
-                                                    <i class="fas fa-ellipsis-h"
-                                                       data-bind="click: function(){more(!more())}, css: {'cwise-rotated-90': more}"></i>
-                                                </div>
-                                            </div>
-                                            <div class="row" data-bind="css: {hidden: !more()}">
-                                                <div class="col-md-4">Start:</div>
-                                                <div class="col-md-8"><small data-bind="text: start_time_formatted"></small></div>
-                                            </div>
-                                            <div class="row" data-bind="css: {hidden: !more()}">
-                                                <div class="col-md-4">Ful.:</div>
-                                                <div class="col-md-8"><small data-bind="text: fulfilled_time_formatted"></small></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row sep" data-bind="css: {'hidden': items().length === 0 || !more()}">
-                                       <hr>
-                                       <span>Items</span>
-                                       <hr>
-                                    </div>
-
-                                    <div data-bind="css: {'hidden': items().length === 0 || !more()}">
-                                        <span data-bind="foreach: items" class="items">
-                                            <div class="row items-row">
-                                                <div class="col-md-3 id">Item#&nbsp;&nbsp;<b
-                                                        data-bind="text: id"></b></div>
-                                                <div class="col-md-9 state"><b data-bind="text: delivered"></b>/<span
-                                                        data-bind="text: quantity"></span>
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!--========================= UPCOMING ORDERS =========================-->
-                    <div class="upcoming"
-                         data-bind="css: {hidden: leftPanelVM.orderVM.activePanel() !== ORDER_PANEL.UPCOMING}">
-
-                        <!--========================= SEARCH =========================-->
-                        <div class="form-group search">
-                            <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
-                                   data-bind="textInput: leftPanelVM.orderVM.upcomingSearchValue">
-                        </div>
-
-                        <!--====================== ORDERS LIST =======================-->
-                        <p class="empty text-light text-muted text-center"
-                           data-bind="css: {hidden: leftPanelVM.orderVM.filteredUpcomingOrders().length !== 0}">No
-                            Orders!</p>
-
-                        <div class="form-group orders-list"
-                             data-bind="css: {hidden: leftPanelVM.orderVM.filteredUpcomingOrders().length === 0}">
-                            <span data-bind="foreach: leftPanelVM.orderVM.filteredUpcomingOrders">
-                                <div class="cont bordered">
-                                    <div class="row main-row">
-                                        <div class="col-md-3 icon">
-                                            <span class="fas fa-box" data-toggle="tooltip"
-                                                  data-bind="attr: {title: function() {return progress() + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + progress() + '%, #404548 ' + progress() + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
-                                        </div>
-                                        <div class="row col-md-9 order-details">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    <div class="row">
-                                                        <div class="col-md-5">Order:</div>
-                                                        <div class="col-md-7"><b data-bind="text: id"></b></div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-5">Gate:</div>
-                                                        <div class="col-md-7"><b data-bind="text: gate_id"></b></div>
+                                                    <div class="col-md-2 more">
+                                                        <i class="fas fa-ellipsis-h"
+                                                           data-bind="click: function(){more(!more())}, css: {'cwise-rotated-90': more}"></i>
                                                     </div>
                                                 </div>
-
-                                                <div class="col-md-2 more">
-                                                    <i class="fas fa-ellipsis-h"
-                                                       data-bind="click: function(){more(!more())}, css: {'cwise-rotated-90': more}"></i>
+                                                <div class="row" data-bind="css: {hidden: !more()}">
+                                                    <div class="col-md-4">Start:</div>
+                                                    <div class="col-md-8"><small data-bind="text: start_time_formatted"></small></div>
+                                                </div>
+                                                <div class="row" data-bind="css: {hidden: !more()}">
+                                                    <div class="col-md-4">Ful.:</div>
+                                                    <div class="col-md-8"><small data-bind="text: fulfilled_time_formatted"></small></div>
                                                 </div>
                                             </div>
-                                            <div class="row" data-bind="css: {hidden: !more()}">
-                                                <div class="col-md-4">Start:</div>
-                                                <div class="col-md-8"><small data-bind="text: start_time_formatted"></small></div>
-                                            </div>
-                                            <div class="row" data-bind="css: {hidden: !more()}">
-                                                <div class="col-md-4">Ful.:</div>
-                                                <div class="col-md-8"><small data-bind="text: fulfilled_time_formatted"></small></div>
-                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row sep" data-bind="css: {'hidden': items().length === 0 || !more()}">
-                                       <hr>
-                                       <span>Items</span>
-                                       <hr>
-                                    </div>
-
-                                    <div data-bind="css: {'hidden': items().length === 0 || !more()}">
-                                        <span data-bind="foreach: items" class="items">
-                                            <div class="row items-row">
-                                                <div class="col-md-3 id">Item#&nbsp;&nbsp;<b
-                                                        data-bind="text: id"></b></div>
-                                                <div class="col-md-9 state"><b data-bind="text: delivered"></b>/<span
-                                                        data-bind="text: quantity"></span>
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!--========================= FINISHED ORDERS =========================-->
-                    <div class="finished"
-                         data-bind="css: {hidden: leftPanelVM.orderVM.activePanel() !== ORDER_PANEL.FINISHED}">
-
-                        <!--========================= SEARCH =========================-->
-                        <div class="form-group search">
-                            <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
-                                   data-bind="textInput: leftPanelVM.orderVM.finishedSearchValue">
-                        </div>
-
-                        <!--====================== ORDERS LIST =======================-->
-                        <p class="empty text-light text-muted text-center"
-                           data-bind="css: {hidden: leftPanelVM.orderVM.filteredFinishedOrders().length !== 0}">No
-                            Orders!</p>
-
-                        <div class="form-group orders-list"
-                             data-bind="css: {hidden: leftPanelVM.orderVM.filteredFinishedOrders().length === 0}">
-                            <span data-bind="foreach: leftPanelVM.orderVM.filteredFinishedOrders">
-                                <div class="cont bordered">
-                                    <div class="row main-row">
-                                        <div class="col-md-3 icon">
-                                            <span class="fas fa-box" data-toggle="tooltip"
-                                                  data-bind="attr: {title: function() {return progress() + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + progress() + '%, #404548 ' + progress() + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
+                                        <div class="row sep" data-bind="css: {'hidden': items().length === 0 || !more()}">
+                                           <hr>
+                                           <span>Items</span>
+                                           <hr>
                                         </div>
-                                        <div class="row col-md-9 order-details">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    <div class="row">
-                                                        <div class="col-md-5">Order:</div>
-                                                        <div class="col-md-7"><b data-bind="text: id"></b></div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-5">Gate:</div>
-                                                        <div class="col-md-7"><b data-bind="text: gate_id"></b></div>
+
+                                        <div data-bind="css: {'hidden': items().length === 0 || !more()}">
+                                            <span data-bind="foreach: items" class="items">
+                                                <div class="row items-row">
+                                                    <div class="col-md-3 id">Item#&nbsp;&nbsp;<b
+                                                            data-bind="text: id"></b></div>
+                                                    <div class="col-md-9 state"><b data-bind="text: delivered"></b>/<span
+                                                            data-bind="text: quantity"></span>
                                                     </div>
                                                 </div>
-
-                                                <div class="col-md-2 more">
-                                                    <i class="fas fa-ellipsis-h"
-                                                       data-bind="click: function(){more(!more())}, css: {'cwise-rotated-90': more}"></i>
-                                                </div>
-                                            </div>
-                                            <div class="row" data-bind="css: {hidden: !more()}">
-                                                <div class="col-md-4">Start:</div>
-                                                <div class="col-md-8"><small data-bind="text: start_time_formatted"></small></div>
-                                            </div>
-                                            <div class="row" data-bind="css: {hidden: !more()}">
-                                                <div class="col-md-4">Ful.:</div>
-                                                <div class="col-md-8"><small data-bind="text: fulfilled_time_formatted"></small></div>
-                                            </div>
+                                            </span>
                                         </div>
                                     </div>
-
-                                    <div class="row sep" data-bind="css: {'hidden': items().length === 0 || !more()}">
-                                       <hr>
-                                       <span>Items</span>
-                                       <hr>
-                                    </div>
-
-                                    <div data-bind="css: {'hidden': items().length === 0 || !more()}">
-                                        <span data-bind="foreach: items" class="items">
-                                            <div class="row items-row">
-                                                <div class="col-md-3 id">Item#&nbsp;&nbsp;<b
-                                                        data-bind="text: id"></b></div>
-                                                <div class="col-md-9 state"><b data-bind="text: delivered"></b>/<span
-                                                        data-bind="text: quantity"></span>
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                            </span>
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </span>
                 </div>
             </div>
         </div>
