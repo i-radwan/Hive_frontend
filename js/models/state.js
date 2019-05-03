@@ -7,7 +7,6 @@ let State = function () {
 
     self.map = new Map();
     self.items = [];
-    self.stock = {};
     self.nextIDs = { // Holds next IDs in the auto increment fashion
         gate: 1,
         robot: 1,
@@ -26,16 +25,8 @@ let State = function () {
         return undefined;
     };
 
-    self.adjustItemQuantity = function (id, quantity) {
-        if (self.stock[id] + quantity < 0)
-            throw "Error: stock quantity cannot be -ve";
-
-        self.stock[id] += quantity;
-    };
-
     self.load = function (newState) {
         self.items = Object.assign([], newState.items);
-        self.stock = Object.assign({}, newState.stock);
         self.nextIDs = Object.assign({}, newState.nextIDs);
         self.map.setMap(newState.map.grid);
     };

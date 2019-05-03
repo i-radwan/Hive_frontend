@@ -474,21 +474,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let cell = state.map.grid[row][col];
         let robot = state.map.grid[row][col].robot;
 
-        if (robot.loaded) { // Remove loaded rack items from the stock
-            for (let i = 0; i < state.map.height; ++i) {
-                for (let j = 0; j < state.map.width; ++j) {
-                    let f = state.map.grid[i][j].facility;
-
-                    if (f === undefined || f.type !== MAP_CELL.RACK || f.id !== parseInt(robot.loaded_rack_id))
-                        continue;
-
-                    for (let k = 0; k < f.items.length; ++k) {
-                        state.adjustItemQuantity(f.items[k].id, -f.items[k].quantity);
-                    }
-                }
-            }
-        }
-
         if (robot.moving) { // Two cells has to be marked as na (not available)
             let previousRow = row - ROW_DELTA[robot.direction];
             let previousCol = col - COL_DELTA[robot.direction];
@@ -548,22 +533,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         // ToDo: GFX should send me the new robot row and col
         let cell = state.map.grid[row][col];
         let robot = state.map.grid[row][col].robot;
-
-        if (robot.loaded) { // Remove loaded rack items from the stock, ToDo: this is not correct,
-            // ToDo: levitate the whole orders checks to the server...
-            for (let i = 0; i < state.map.height; ++i) {
-                for (let j = 0; j < state.map.width; ++j) {
-                    let f = state.map.grid[i][j].facility;
-
-                    if (f === undefined || f.type !== MAP_CELL.RACK || f.id !== parseInt(robot.loaded_rack_id))
-                        continue;
-
-                    for (let k = 0; k < f.items.length; ++k) {
-                        state.adjustItemQuantity(f.items[k].id, f.items[k].quantity);
-                    }
-                }
-            }
-        }
 
         if (robot.moving) { // Two cells has to be marked as na (not available)
             let previousRow = row - ROW_DELTA[robot.direction];

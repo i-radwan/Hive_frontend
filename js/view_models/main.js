@@ -100,10 +100,22 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
                         self.leftPanelVM.orderVM.updateOrderDeliveredItems(order_id, item_id, item_quantity);
                     } else if (l.type === SERVER_LOGS.ORDER_FULFILLED) {
-                        let order_id = data.order_id;
+                        let id = data.id;
                         let order_fulfilled_time = data.fulfilled_time;
 
-                        self.leftPanelVM.orderVM.finishOngoingOrder(order_id, order_fulfilled_time);
+                        self.leftPanelVM.orderVM.finishOngoingOrder(id, order_fulfilled_time);
+                    } else if (l.type === SERVER_LOGS.ORDER_ISSUED) {
+                        let id = data.id;
+
+                        self.leftPanelVM.orderVM.finishOngoingOrder(id, order_fulfilled_time);
+                    } else if (l.type === SERVER_LOGS.ORDER_DELAYED) {
+                        let id = data.id;
+
+                        self.leftPanelVM.orderVM.finishOngoingOrder(id, order_fulfilled_time);
+                    } else if (l.type === SERVER_LOGS.ORDER_RESUMED) {
+                        let id = data.id;
+
+                        self.leftPanelVM.orderVM.finishOngoingOrder(id, order_fulfilled_time);
                     } else if (l.type === SERVER_LOGS.RACK_ADJUSTED) {
                         let rack_id = data.rack_id;
                         let rack_row = data.rack_row;

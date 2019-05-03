@@ -75,8 +75,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     };
 
     self.deploy = function () {
-        if (!prepare())
-            return false;
+        self.preSimState = Object.assign({}, state);
 
         for (let i = 0; i < state.map.height; ++i) {
             for (let j = 0; j < state.map.width; ++j) {
@@ -103,7 +102,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         let data = msg.data;
 
         if (data.status === ACK_CONFIG_STATUS.OK) {
-            prepare();
+            self.preSimState = Object.assign({}, state);
 
             if (data.mode === CONFIG_MODE.SIMULATE) {
                 runningMode(RUNNING_MODE.SIMULATE);
@@ -174,29 +173,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     runningMode.subscribe(function (newRunningMode) {
     });
-
-    let prepare = function () {
-        // Fill the stock before simulation
-        for (let i = 0; i < state.map.height; ++i) {
-            for (let j = 0; j < state.map.width; ++j) {
-                let c = state.map.grid[i][j].facility;
-
-                if (c !== undefined && c.type === MAP_CELL.RACK) {
-                    for (let k = 0; k < c.items.length; ++k) {
-                        let it = c.items[k];
-
-                        if (state.stock[it.id] === undefined) {
-                            state.stock[it.id] = it.quantity;
-                        } else {
-                            state.stock[it.id] += it.quantity;
-                        }
-                    }
-                }
-            }
-        }
-
-        self.preSimState = Object.assign({}, state);
-    };
 
     let sendStateToServer = function (mode) {
         if (!comm.connected) {

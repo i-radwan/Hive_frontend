@@ -28,6 +28,4 @@ $(document).ready(() => {
     };
 
     comm.rcv = rcv;
-
-    // Simulation logic
 });

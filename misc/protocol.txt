@@ -162,8 +162,23 @@ UPDATE: {
         }, {
             type: ORDER_FULFILLED
             data: {
-                order_id:
+                id:
                 fulfilled_time: Y-m-d H:i
+            }
+        }, {
+            type: ORDER_ISSUED                      # Move order from upcoming to ongoing
+            data: {
+                id:
+            }
+        }, {
+            type: ORDER_DELAYED                     # Delay upcoming/ongoing order
+            data: {
+                id:
+            }
+        }, {
+            type: ORDER_RESUMED                     # Resume delayed order
+            data: {
+                id
             }
         }, {
             type: RACK_ADJUSTED

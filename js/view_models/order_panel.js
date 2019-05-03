@@ -109,76 +109,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.activePanel(m);
     };
 
-    self.consumeUpcomingOrders = function () {
-        let now = new Date();
-
-        let o = self.upcomingOrders.remove(function (or) {
-            return flatpickr.parseDate(or.start_time, "Y-m-d H:i") <= now;
-        });
-
-        console.log(o);
-
-        o.forEach(function (or) {
-            // Check if the order is still satisfiable (blocked racks may affect the available stock,
-            // or gate has become na)
-            let f = false;
-
-            for (let i = 0; i < state.map.height && !f; ++i) {
-                for (let j = 0; j < state.map.width && !f; ++j) {
-                    let c = state.map.grid[i][j].facility;
-
-                    if (c !== undefined && c.type === MAP_CELL.GATE && c.id === parseInt(or.gate_id)) {
-
-                        f = true;
-
-                        if (state.map.grid[i][j].na === true) {
-                            logger({
-                                level: LOG_LEVEL_ERROR,
-                                object: LOG_OBJECT_ORDER,
-                                color: "#bababa",
-                                msg: "Order <b>(#" + or.id + ")</b> cannot be issued (gate is not available)."
-                            });
-
-                            or.satisfiable(false);
-
-                            return;
-                        }
-                    }
-                }
-            }
-
-            let satisfiable = true;
-
-            or.items().forEach(function (i) {
-                if (state.stock[i.id] < i.quantity) {
-                    satisfiable = false;
-                }
-            });
-
-            if (!satisfiable) {
-                or.satisfiable(false);
-
-                logger({
-                    level: LOG_LEVEL_ERROR,
-                    object: LOG_OBJECT_ORDER,
-                    color: "#bababa",
-                    msg: "Order <b>(#" + or.id + ")</b> cannot be issued (stocks isn't sufficient)."
-                });
-            } else {
-                or.satisfiable(true);
-
-                logger({
-                    level: LOG_LEVEL_INFO,
-                    object: LOG_OBJECT_ORDER,
-                    color: "#bababa",
-                    msg: "Order <b>(#" + or.id + ")</b> has been issued."
-                });
-
-                self.ongoingOrders.push(or);
-            }
-        });
-    };
-
     self.finishOngoingOrder = function (id, order_fulfilled_time) {
         let o = self.ongoingOrders.remove(function (or) {
             return or.id === id;
@@ -198,14 +128,61 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.updateOngoingOrder = function (id, update) {
-        for (let i = 0; i < self.ongoingOrders().length(); ++i) {
-            if (self.ongoingOrders()[i].id === id) {
-                self.ongoingOrders()[i].gate_id(update.gate_id);
+    self.issueOrder = function (id) {
+        let o = self.upcomingOrders.remove(function (or) {
+            return or.id === id;
+        });
 
-                break;
+        console.log(o);
+
+        o.forEach(function (or) {
+            logger({
+                level: LOG_LEVEL_INFO,
+                object: LOG_OBJECT_ORDER,
+                color: "#bababa",
+                msg: "Order <b>(#" + or.id + ")</b> has been issued."
+            });
+
+            self.ongoingOrders.push(or);
+        });
+    };
+
+    self.delayOrder = function (id) {
+        updateOrderSatisfiability(id, false, self.ongoingOrders) ||
+        updateOrderSatisfiability(id, false, self.upcomingOrders);
+    };
+
+    self.resumeOrder = function (id) {
+        updateOrderSatisfiability(id, true, self.ongoingOrders) ||
+        updateOrderSatisfiability(id, true, self.upcomingOrders);
+    };
+
+    let updateOrderSatisfiability = function (id, satisfiable, list) {
+        for (let i = 0; i < list().length; ++i) {
+            if (list()[i].id === id) {
+                list()[i].satisfiable(satisfiable);
+
+                if (!satisfiable){
+                    logger({
+                        level: LOG_LEVEL_ERROR,
+                        object: LOG_OBJECT_ORDER,
+                        color: "#bababa",
+                        msg: "Order <b>(#" + id + ")</b> is delayed."
+                    });
+                } else {
+                    logger({
+                        level: LOG_LEVEL_INFO,
+                        object: LOG_OBJECT_ORDER,
+                        color: "#bababa",
+                        msg: "Order <b>(#" + id + ")</b> has been resumed."
+                    });
+                }
+
+                return true;
             }
         }
+
+        return false;
     };
 
     self.updateOrderDeliveredItems = function (order_id, item_id, item_quantity) {
@@ -266,10 +243,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             } else {
                 self.ongoingOrders.push(order);
             }
-
-            items().forEach(function (i) {
-                state.stock[i.id] -= i.quantity;
-            });
 
             self.id(parseInt(self.id()) + 1);
 
@@ -375,27 +348,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return false;
         }
 
-        // Does stock cover
-        let e = true;
-        let itemsIDs = "";
-
-        self.items().forEach(function (i) {
-            if (state.stock[i.id] === undefined || state.stock[i.id] < i.quantity) {
-                itemsIDs += i.id + " ";
-
-                e = false;
-            }
-        });
-
-        if (!e) {
-            shouter.notifySubscribers({
-                text: "Stock isn't enough for the items: " + itemsIDs + "!",
-                type: MSG_ERROR
-            }, SHOUT_MSG);
-
-            return false;
-        }
-
         return true;
     };
 
@@ -437,15 +389,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         return true;
     };
-
-    // Listen for mode change to start/stop upcoming orders consumption
-    runningMode.subscribe(function (newRunningMode) {
-        if (newRunningMode === RUNNING_MODE.SIMULATE || newRunningMode === RUNNING_MODE.DEPLOY) {
-            self.consumeUpcomingOrdersInterval = setInterval(self.consumeUpcomingOrders, UPCOMING_ORDERS_CONSUMPTION_INTERVAL);
-        } else {
-            clearInterval(self.consumeUpcomingOrdersInterval);
-        }
-    });
 
     // Configure date time picker
     let picker = flatpickr("#order_datetime", {
