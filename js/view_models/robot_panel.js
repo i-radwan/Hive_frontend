@@ -549,7 +549,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let cell = state.map.grid[row][col];
         let robot = state.map.grid[row][col].robot;
 
-        if (robot.loaded) { // Remove loaded rack items from the stock
+        if (robot.loaded) { // Remove loaded rack items from the stock, ToDo: this is not correct,
+            // ToDo: levitate the whole orders checks to the server...
             for (let i = 0; i < state.map.height; ++i) {
                 for (let j = 0; j < state.map.width; ++j) {
                     let f = state.map.grid[i][j].facility;
