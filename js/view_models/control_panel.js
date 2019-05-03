@@ -13,9 +13,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.preSimState = null;
 
     self.play = function () {
-        runningMode(RUNNING_MODE.SIMULATE); // ToDo: remove
-        self.playing(true);
-
         if (!comm.connected) {
             shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);
 
