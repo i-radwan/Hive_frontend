@@ -5,7 +5,6 @@ let ko = require('knockout');
 let GFX = require('./gfx/gfx');
 let communicator = require('./comm/comm');
 let serverMiddleWare = require('./comm/server_middleware');
-let GFX = require('./gfx/gfx');
 
 // ViewModels
 let mainViewModel = require("./view_models/main");
