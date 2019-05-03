@@ -163,6 +163,10 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.addLog = function (log) {
         self.logs.push(log);
+
+        // Scroll view to bottom, ToDo: allow for free scrolling
+        let container = $(".rpanel #logs");
+        container.animate({scrollTop: container[0].scrollHeight}, 250);
     };
 
     self.updateStats = function (key, value) {

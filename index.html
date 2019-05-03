@@ -91,8 +91,7 @@
                 <!--========================= EMPTY PANEL ========================-->
                 <!--==============================================================-->
 
-                <div class="empty"
-                     data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.EMPTY}">
+                <div class="empty" data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.EMPTY}">
                     <p class="text-light text-muted text-center">No info!</p>
                 </div>
 
@@ -100,8 +99,7 @@
                 <!--========================= TEMPS PANEL ========================-->
                 <!--==============================================================-->
 
-                <div class="temps"
-                     data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.TEMPS}">
+                <div class="temps" data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.TEMPS}">
                     <span data-bind="foreach: leftPanelVM.tempVM.temps">
                         <img data-bind="attr: {src: img}, click: $parent.leftPanelVM.tempVM.tempClicked.bind($data, $index)">
                     </span>
@@ -137,8 +135,7 @@
                 <!--========================== GATE PANEL ========================-->
                 <!--==============================================================-->
 
-                <div class="gate"
-                     data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.GATE}">
+                <div class="gate" data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.GATE}">
                     <div class="form-group">
                         <label>Gate ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Gate ID"
@@ -157,8 +154,7 @@
                 <!--========================= ROBOT PANEL ========================-->
                 <!--==============================================================-->
 
-                <div class="robot"
-                     data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.ROBOT}">
+                <div class="robot" data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.ROBOT}">
                     <div class="form-group">
                         <label>Robot ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Robot ID"
@@ -210,8 +206,7 @@
                 <!--========================== RACK PANEL ========================-->
                 <!--==============================================================-->
 
-                <div class="rack"
-                     data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.RACK}">
+                <div class="rack" data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.RACK}">
                     <div class="form-group">
                         <label>Rack ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Rack ID"
@@ -278,8 +273,7 @@
                 <!--======================== STATION PANEL =======================-->
                 <!--==============================================================-->
 
-                <div class="stations"
-                     data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.STATION}">
+                <div class="stations" data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.STATION}">
                     <div class="form-group">
                         <label>Station ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Station ID"
@@ -298,8 +292,7 @@
                 <!--======================= OBSTACLE PANEL =======================-->
                 <!--==============================================================-->
 
-                <div class="obstacle"
-                     data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.OBSTACLE}">
+                <div class="obstacle" data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.OBSTACLE}">
                     <div class="form-group">
                         <label>Obstacle ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Obstacle ID"
@@ -318,8 +311,7 @@
                 <!--========================= ORDER PANEL ========================-->
                 <!--==============================================================-->
 
-                <div class="order"
-                     data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.ORDER}">
+                <div class="order" data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.ORDER}">
 
                     <!--========================= TABS =========================-->
                     <div class="tab">
@@ -387,25 +379,24 @@
                         <!--====================== ITEMS LIST ======================-->
                         <hr class="items-separator" data-bind="css: {hidden: leftPanelVM.orderVM.items().length === 0}">
 
-                        <div class="items-container"
-                             data-bind="css: {hidden: leftPanelVM.orderVM.items().length === 0}">
+                        <div class="items-container" data-bind="css: {hidden: leftPanelVM.orderVM.items().length === 0}">
                             <div class="form-group">
-                            <span data-bind="foreach: leftPanelVM.orderVM.items">
-                                <div class="row item-container">
-                                    <div class="col-md-10 item-container-fields">
-                                        <input type="number" class="form-control bg-dark text-light"
-                                               placeholder="Number"
-                                               data-bind="textInput: id" readonly>
-                                        <input type="number" class="form-control bg-dark text-light"
-                                               placeholder="Quantity"
-                                               data-bind="textInput: quantity" readonly>
+                                <span data-bind="foreach: leftPanelVM.orderVM.items">
+                                    <div class="row item-container">
+                                        <div class="col-md-10 item-container-fields">
+                                            <input type="number" class="form-control bg-dark text-light"
+                                                   placeholder="Number"
+                                                   data-bind="textInput: id" readonly>
+                                            <input type="number" class="form-control bg-dark text-light"
+                                                   placeholder="Quantity"
+                                                   data-bind="textInput: quantity" readonly>
+                                        </div>
+                                        <div class="col-md-2 item-container-icon">
+                                            <i class="fas fa-minus"
+                                               data-bind="click: $parent.leftPanelVM.orderVM.removeItem"></i>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2 item-container-icon">
-                                        <i class="fas fa-minus"
-                                           data-bind="click: $parent.leftPanelVM.orderVM.removeItem"></i>
-                                    </div>
-                                </div>
-                           </span>
+                                </span>
                             </div>
                         </div>
 
@@ -762,7 +753,7 @@
         <div>
 
             <!--========================= LOGS ==========================-->
-            <div class="logs" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.LOGS}">
+            <div class="logs" id="logs" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.LOGS}">
                 <span data-bind="foreach: rightPanelVM.logs">
                     <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
                         <div class="row item">
