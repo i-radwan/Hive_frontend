@@ -783,10 +783,10 @@ let gfx = function (logicEventHandler) {
                 init(event.data.width, event.data.height);
                 break;
             case EVENT_TO_GFX.OBJECT_HOVER:
-                handleHover(event.data.object);
+                handleHover(event.data.type);
                 break;
             case EVENT_TO_GFX.OBJECT_ADD:
-                addObject(event.data.row, event.data.col, event.data.object);
+                addObject(event.data.row, event.data.col, event.data.type);
                 break;
             case EVENT_TO_GFX.OBJECT_DELETE:
                 deleteObject(event.data.row, event.data.col);
