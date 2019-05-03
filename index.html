@@ -195,7 +195,7 @@
                     </div>
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: runningMode() === RUNNING_MODE.DESIGN}">
-                        <button data-bind="click: leftPanelVM.robotVM.toggleActivation,
+                        <button data-bind="click: toggleActivation,
                                            css: {'btn-danger': !leftPanelVM.robotVM.deactivated(),
                                                  'btn-success': leftPanelVM.robotVM.deactivated()},
                                            text: leftPanelVM.robotVM.deactivated() ? 'Activate' : 'Deactivate'"></button>

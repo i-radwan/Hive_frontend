@@ -123,7 +123,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
             case MSG_FROM_SERVER.DEACTIVATE:
                 self.leftPanelVM.robotVM.deactivateRobot(msg.data.row, msg.data.col);
 
-                self.pendingActions++;
+                self.pendingActions--;
                 break;
 
             case MSG_FROM_SERVER.ACTIVATE:
@@ -160,6 +160,16 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 handleEsc();
                 break;
         }
+    };
+
+    self.toggleActivation = function () {
+        if (!self.leftPanelVM.robotVM.deactivated()) { // Deactivate the robot
+            self.pendingActions--;
+        } else {
+            self.pendingActions++;
+        }
+
+        self.leftPanelVM.robotVM.toggleActivation();
     };
 
     let handleCellClick = function (row, col) {

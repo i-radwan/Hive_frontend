@@ -41,7 +41,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return self.finishedSearchValue().length === 0 || parseInt(order.id) === parseInt(self.finishedSearchValue());
         });
     });
-    
+
     self.ordersLists = [{
         panel: ORDER_PANEL.ONGOING,
         searchValue: self.ongoingSearchValue,

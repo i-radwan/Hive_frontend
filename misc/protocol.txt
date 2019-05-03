@@ -312,13 +312,13 @@ OBJECT_FAILURE: { # Stop, Send ACK, Flash red
     col:                                        # supposed to be at after finishing the current move)
 }
 
-OBJECT_STOP: { # Force stop, Send ACK
+OBJECT_STOP: { # Force stop, don't send ACK of the previous move
     id:
     row:                                        # The new row/col (the one that this robot was
     col:                                        # supposed to be at after finishing the current move)
 }
 
-OBJECT_FIXED: { # Resume last move, Send ACK
+OBJECT_FIXED: { # Resume last move, Send ACK after finishing the original move
     id:
     row:                                        # The new row/col (the one that this robot was
     col:                                        # supposed to be at after finishing the current move)
