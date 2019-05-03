@@ -524,7 +524,7 @@ let gfx = function (logicEventHandler) {
                 let cell = getMouseCell(e.clientX, e.clientY);
 
                 self.logicEventHandler({
-                    type: LOGIC_EVENT_TYPE.CELL_CLICK,
+                    type: EVENT_FROM_GFX.CELL_CLICK,
                     row: cell.row,
                     col: cell.col
                 });
@@ -552,7 +552,7 @@ let gfx = function (logicEventHandler) {
     let handleDeleteEvent = function () {
         if (selectedObject != -1) {
             self.logicEventHandler({
-                type: LOGIC_EVENT_TYPE.CELL_DELETE,
+                type: EVENT_FROM_GFX.CELL_DELETE,
                 row: selectedObject.row,
                 col: selectedObject.col
             });
@@ -694,7 +694,7 @@ let gfx = function (logicEventHandler) {
         if (draggingObject) {
             if (draggedObject.row != currentCell.row || draggedObject.col != currentCell.col) {
                 self.logicEventHandler({
-                    type: LOGIC_EVENT_TYPE.CELL_DRAG,
+                    type: EVENT_FROM_GFX.CELL_DRAG,
                     src_row: draggedObject.row,
                     src_col: draggedObject.col,
                     dst_row: currentCell.row,
@@ -748,7 +748,7 @@ let gfx = function (logicEventHandler) {
                 break;
             case KEY_CODE.ESC:
                 self.logicEventHandler({
-                    type: LOGIC_EVENT_TYPE.ESC,
+                    type: EVENT_FROM_GFX.ESC,
                 });
                 break;
         }
@@ -779,42 +779,63 @@ let gfx = function (logicEventHandler) {
     // The handler that handles all the events coming from the mainVM
     self.eventHandler = function (event) {
         switch (event.type) {
-            case GFX_EVENT_TYPE.INIT:
-                init(event.width, event.height);
+            case EVENT_TO_GFX.INIT:
+                init(event.data.width, event.data.height);
                 break;
-            case GFX_EVENT_TYPE.OBJECT_HOVER:
-                handleHover(event.object);
+            case EVENT_TO_GFX.OBJECT_HOVER:
+                handleHover(event.data.object);
                 break;
-            case GFX_EVENT_TYPE.OBJECT_ADD:
-                addObject(event.row, event.col, event.object);
+            case EVENT_TO_GFX.OBJECT_ADD:
+                addObject(event.data.row, event.data.col, event.data.object);
                 break;
-            case GFX_EVENT_TYPE.OBJECT_DELETE:
-                deleteObject(event.row, event.col);
+            case EVENT_TO_GFX.OBJECT_DELETE:
+                deleteObject(event.data.row, event.data.col);
                 break;
-            case GFX_EVENT_TYPE.OBJECT_DRAG:
-                dragObject(event.src_row, event.src_col, event.dst_row, event.dst_col);
+            case EVENT_TO_GFX.OBJECT_DRAG:
+                dragObject(event.data.src_row, event.data.src_col, event.data.dst_row, event.data.dst_col);
                 break;
-            case GFX_EVENT_TYPE.OBJECT_HIGHLIGHT:
-                highlightObject(event.row, event.col);
+            case EVENT_TO_GFX.OBJECT_MOVE:
+                // TODO
                 break;
-            case GFX_EVENT_TYPE.ESC:
-                handleEscape();
+            case EVENT_TO_GFX.OBJECT_HIGHLIGHT:
+                highlightObject(event.data.row, event.data.col);
                 break;
-            case GFX_EVENT_TYPE.SIMULATION_START:
+            case EVENT_TO_GFX.OBJECT_COLORIZE:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_DISCOLORIZE:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_BIND:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_UNBIND:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_LOAD:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_OFFLOAD:
+                // TODO
+                break;
+            case EVENT_TO_GFX.SIMULATION_START:
                 handleSimulationStart();
                 break;
-            case GFX_EVENT_TYPE.SIMULATION_PAUSE:
+            case EVENT_TO_GFX.SIMULATION_PAUSE:
                 handleSimulationPause();
                 break;
-            case GFX_EVENT_TYPE.SIMULATION_RESUME:
+            case EVENT_TO_GFX.SIMULATION_RESUME:
                 handleSimulationResume();
                 break;
-            case GFX_EVENT_TYPE.SIMULATION_END:
+            case EVENT_TO_GFX.SIMULATION_STOP:
                 handleSimulationEnd();
                 break;
-            case GFX_EVENT_TYPE.ANIMATE_OBJECT:
-                animateObject(event.src_row, event.src_col, event.dst_row, event.dst_col, event.animation_speed);
+            case EVENT_TO_GFX.ESC:
+                handleEscape();
                 break;
+            //case EVENT_TO_GFX.ANIMATE_OBJECT:
+            //    animateObject(event.src_row, event.src_col, event.dst_row, event.dst_col, event.animation_speed);
+            //    break;
         }
     };
 
