@@ -182,8 +182,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                 let c = state.map.grid[i][j].facility;
 
                 if (c !== undefined && c.type === MAP_CELL.RACK) {
-                    for (let i = 0; i < c.items.length; ++i) {
-                        let it = c.items[i];
+                    for (let k = 0; k < c.items.length; ++k) {
+                        let it = c.items[k];
 
                         if (state.stock[it.id] === undefined) {
                             state.stock[it.id] = it.quantity;

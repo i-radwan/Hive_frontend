@@ -27,16 +27,16 @@ let State = function () {
     };
 
     self.adjustItemQuantity = function (id, quantity) {
-        if (self.stock[id].quantity + quantity < 0)
+        if (self.stock[id] + quantity < 0)
             throw "Error: stock quantity cannot be -ve";
 
-        self.stock[id].quantity += quantity;
+        self.stock[id] += quantity;
     };
 
     self.load = function (newState) {
         self.items = Object.assign([], newState.items);
         self.stock = Object.assign({}, newState.stock);
-        self.nextID = Object.assign({}, newState.nextID);
+        self.nextIDs = Object.assign({}, newState.nextIDs);
         self.map.setMap(newState.map.grid);
     };
 };

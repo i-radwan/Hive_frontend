@@ -108,6 +108,9 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
         if (facility === undefined || facility.type !== MAP_CELL.STATION)
             return;
 
+        self.activeStationRow = row;
+        self.activeStationCol = col;
+
         self.id(facility.id);
 
         gfxEventHandler({

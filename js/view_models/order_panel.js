@@ -131,7 +131,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
                         f = true;
 
-                        if (c.na === true) {
+                        if (state.map.grid[i][j].na === true) {
                             logger({
                                 level: LOG_LEVEL_ERROR,
                                 object: LOG_OBJECT_ORDER,
@@ -242,6 +242,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 gate_id: o.gate_id,
                 items: items,
                 more: ko.observable(false),
+                satisfiable: ko.observable(true),
                 start_time: o.start_time,
                 start_time_formatted: flatpickr.formatDate(flatpickr.parseDate(o.start_time, "Y-m-d H:i"), "H:i M j, y"),
                 fulfilled_time_formatted: ko.observable("TBD"),
@@ -359,7 +360,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 if (c !== undefined && c.type === MAP_CELL.GATE && c.id === parseInt(self.gateID())) {
                     f = true;
 
-                    if (c.na === true) {
+                    if (state.map.grid[i][j].na === true) {
                         shouter.notifySubscribers({text: "This gate is blocked!", type: MSG_ERROR}, SHOUT_MSG);
 
                         return false;

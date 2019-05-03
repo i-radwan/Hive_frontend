@@ -119,6 +119,9 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (facility === undefined || facility.type !== MAP_CELL.RACK)
             return;
 
+        self.activeRackRow = row;
+        self.activeRackCol = col;
+
         self.id(facility.id);
         self.capacity(facility.capacity);
 

@@ -108,6 +108,9 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         if (facility === undefined || facility.type !== MAP_CELL.OBSTACLE)
             return;
 
+        self.activeObstacleRow = row;
+        self.activeObstacleCol = col;
+
         self.id(facility.id);
 
         gfxEventHandler({

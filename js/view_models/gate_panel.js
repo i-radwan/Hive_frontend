@@ -109,6 +109,9 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (facility === undefined || facility.type !== MAP_CELL.GATE)
             return;
 
+        self.activeGateRow = row;
+        self.activeGateCol = col;
+
         self.id(facility.id);
 
         gfxEventHandler({

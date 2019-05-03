@@ -122,6 +122,9 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (robot === undefined)
             return;
 
+        self.activeRobotRow = row;
+        self.activeRobotCol = col;
+
         self.id(robot.id);
         self.color(robot.color);
         self.loadCap(robot.load_cap);
@@ -476,7 +479,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 for (let j = 0; j < state.map.width; ++j) {
                     let f = state.map.grid[i][j].facility;
 
-                    if (f === undefined || f.id !== parseInt(robot.loaded_rack_id))
+                    if (f === undefined || f.type !== MAP_CELL.RACK || f.id !== parseInt(robot.loaded_rack_id))
                         continue;
 
                     for (let k = 0; k < f.items.length; ++k) {
@@ -551,7 +554,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 for (let j = 0; j < state.map.width; ++j) {
                     let f = state.map.grid[i][j].facility;
 
-                    if (f === undefined || f.id !== parseInt(robot.loaded_rack_id))
+                    if (f === undefined || f.type !== MAP_CELL.RACK || f.id !== parseInt(robot.loaded_rack_id))
                         continue;
 
                     for (let k = 0; k < f.items.length; ++k) {
@@ -582,7 +585,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         logger({
-            level: LOG_LEVEL_ERROR,
+            level: LOG_LEVEL_INFO,
             object: LOG_OBJECT_ROBOT,
             color: cell.robot.color,
             msg: "Robot <b>(#" + parseInt(self.id()) + ")</b> is back</b>."

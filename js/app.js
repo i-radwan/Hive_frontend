@@ -19,7 +19,7 @@ $(document).ready(() => {
 
     let mainVM = new mainViewModel(gfxEventHandler, comm);
 
-    ko.applyBindings(mainVM, $("#main")[0]);
+    ko.applyBindings(mainVM, $("body")[0]);
 
     // TESTING CODE
     let map = $(".map-row");
