@@ -24,7 +24,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             self.id(parseInt(self.id()) + 1);
             state.nextIDs.gate = Math.max(state.nextIDs.gate, parseInt(self.id()));
 
-            shouter.notifySubscribers({text: "Gate placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Gate placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
@@ -36,7 +36,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 }
             });
         } else if (state.map.grid[row][col].facility !== undefined && self.activeGateRow === -1 && self.activeGateCol === -1) {
-            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
         } else if (state.map.grid[row][col].facility === undefined && self.activeGateRow !== -1 && self.activeGateCol !== -1) {
             gfxEventHandler({
                 type: EVENT_TO_GFX.ESC
@@ -65,8 +65,8 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         } else {
             shouter.notifySubscribers({
                 text: "(" + dstRow + ", " + dstCol + ") is occupied!",
-                type: MSG_ERROR
-            }, SHOUT_MSG);
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
@@ -142,7 +142,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.update = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -157,7 +157,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         state.nextIDs.gate = Math.max(state.nextIDs.gate, parseInt(self.id()) + 1);
 
-        shouter.notifySubscribers({text: "Gate updated successfully!", type: MSG_INFO}, SHOUT_MSG);
+        shouter.notifySubscribers({text: "Gate updated successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 
         unselect();
         clear();
@@ -174,14 +174,14 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     let check = function () {
         if (self.id().length === 0) {
-            shouter.notifySubscribers({text: "Gate ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Gate ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.id()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -193,7 +193,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
                 if (c !== undefined && c.type === MAP_CELL.GATE && c.id === parseInt(self.id()) &&
                     !(i === self.activeGateRow && j === self.activeGateCol)) {
-                    shouter.notifySubscribers({text: "Gate ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+                    shouter.notifySubscribers({text: "Gate ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
                     return false;
                 }
@@ -216,7 +216,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     shouter.subscribe(function () {
         unselect();
         clear();
-    }, self, SHOUT_STATE_UPDATED);
+    }, self, SHOUT.STATE_UPDATED);
 };
 
 module.exports = gatePanelViewModel;

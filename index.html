@@ -566,7 +566,7 @@
                 <i class="fas fa-cog settings-icon" id="settings-icon" data-bind="click: centerPanelVM.toggleSettings"></i>
             </div>
             <div class="text-sm-center msg"
-                 data-bind="text: centerPanelVM.controlConsoleVM.msg, css: {'error-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_ERROR, 'info-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_INFO}"></div>
+                 data-bind="text: centerPanelVM.controlConsoleVM.msg, css: {'error-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_TYPE.ERROR, 'info-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_TYPE.INFO}"></div>
         </div>
     </div>
 
@@ -610,20 +610,20 @@
             <!--========================= LOGS ==========================-->
             <div class="logs" id="logs" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.LOGS}">
                 <span data-bind="foreach: rightPanelVM.logs">
-                    <span data-bind="if: object !== LOG_OBJECT_SIMULATION">
+                    <span data-bind="if: object !== LOG_TYPE.TEXT">
                         <div class="row item">
                             <div class="col-md-3 icon">
                                 <i class="fas large"
-                                   data-bind="css: {'fa-info-circle': level !== LOG_LEVEL_ERROR, 'info': level === LOG_LEVEL_INFO, 'fa-times-circle error': level === LOG_LEVEL_ERROR, 'warning': level === LOG_LEVEL_WARNING}"></i>
+                                   data-bind="css: {'fa-info-circle': level !== LOG_LEVEL.ERROR, 'info': level === LOG_LEVEL.INFO, 'fa-times-circle error': level === LOG_LEVEL.ERROR, 'warning': level === LOG_LEVEL.WARNING}"></i>
                                 <i class="fas small"
-                                   data-bind="css: {'fa-truck-loading': object === LOG_OBJECT_ROBOT, 'fa-boxes': object === LOG_OBJECT_RACK, 'fa-box': object === LOG_OBJECT_ORDER}, style {color: color}"></i>
+                                   data-bind="css: {'fa-truck-loading': object === LOG_TYPE.ROBOT, 'fa-boxes': object === LOG_TYPE.RACK, 'fa-box': object === LOG_TYPE.ORDER}, style {color: color}"></i>
                             </div>
                             <div class="col-md-9 text">
                                 <span data-bind="html: msg"></span>
                             </div>
                         </div>
                     </span>
-                    <span data-bind="if: object === LOG_OBJECT_SIMULATION">
+                    <span data-bind="if: object === LOG_TYPE.TEXT">
                         <div class="row sep">
                            <hr>
                            <span data-bind="text: msg"></span>

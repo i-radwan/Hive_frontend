@@ -99,13 +99,13 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
 
     self.tempClicked = function (idx) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         if (idx < 0 || idx >= self.temps.length) {
-            shouter.notifySubscribers({text: "Invalid template!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Invalid template!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -115,7 +115,7 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
         state.items = self.temps[idx()].temp.items;
         state.map.setMap(self.temps[idx()].temp.map);
 
-        shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
+        shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
     };
 };
 

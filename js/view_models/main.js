@@ -1,8 +1,8 @@
-require('../utils/constants');
-let ko = require('knockout');
+require("../utils/constants");
+let ko = require("knockout");
 
 // Models
-let State = require('../models/state');
+let State = require("../models/state");
 
 // ViewModels
 let leftPanelViewModel = require("./left_panel");
@@ -26,7 +26,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     self.logger = self.rightPanelVM.addLog;
 
-    self.pendingActions = 0; // # of actions sent to graphics and waiting for their ACKs
+    self.pendingActions = 0; // No. of actions sent to graphics and waiting for their ACKs
 
     self.loadingVisible = ko.observable(false);
 
@@ -145,7 +145,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 break;
 
             case MSG_FROM_SERVER.MSG:
-                self.shouter.notifySubscribers({text: msg.data.text, type: msg.data.type}, SHOUT_MSG);
+                self.shouter.notifySubscribers({text: msg.data.text, type: msg.data.type}, SHOUT.MSG);
                 break;
         }
     };
@@ -174,6 +174,11 @@ let mainViewModel = function (gfxEventHandler, comm) {
         }
     };
 
+    /**
+     * Listens for robot activate/deactivate button click.
+     *
+     * {@link robotPanelViewModel#toggleActivation}
+     */
     self.toggleActivation = function () {
         if (!self.leftPanelVM.robotVM.deactivated()) { // Deactivate the robot
             self.pendingActions--;
@@ -231,7 +236,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
     // Events
     self.shouter.subscribe(function (on) {
         self.loadingVisible(on);
-    }, self, SHOUT_LOADING);
+    }, self, SHOUT.LOADING);
 };
 
 module.exports = mainViewModel;

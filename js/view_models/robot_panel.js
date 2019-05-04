@@ -1,6 +1,16 @@
 require('../utils/constants');
 let ko = require('knockout');
 
+/**
+ * Robot view model.
+ *
+ * @param runningMode
+ * @param shouter
+ * @param state
+ * @param gfxEventHandler
+ * @param sendToServer
+ * @param logger
+ */
 let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
@@ -35,7 +45,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             self.id(parseInt(self.id()) + 1);
             state.nextIDs.robot = Math.max(state.nextIDs.robot, parseInt(self.id()));
 
-            shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
@@ -52,7 +62,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 }
             });
         } else if (state.map.grid[row][col].robot !== undefined && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
-            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
         } else if (state.map.grid[row][col].robot === undefined && self.activeRobotRow !== -1 && self.activeRobotCol !== -1) {
             gfxEventHandler({
                 type: EVENT_TO_GFX.ESC
@@ -78,8 +88,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         } else {
             shouter.notifySubscribers({
                 text: "(" + dstRow + ", " + dstCol + ") is occupied!",
-                type: MSG_ERROR
-            }, SHOUT_MSG);
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
@@ -162,8 +172,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_ERROR
-            }, SHOUT_MSG);
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -183,7 +193,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         state.nextIDs.robot = Math.max(state.nextIDs.robot, parseInt(self.id()) + 1);
 
-        shouter.notifySubscribers({text: "Robot updated successfully!", type: MSG_INFO}, SHOUT_MSG);
+        shouter.notifySubscribers({text: "Robot updated successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 
         unselect();
         clear();
@@ -297,15 +307,15 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         if (cell.facility.type === MAP_CELL.GATE) {
             logger({
-                level: LOG_LEVEL_INFO,
-                object: LOG_OBJECT_ROBOT,
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.ROBOT,
                 color: cell.robot.color,
                 msg: "Robot <b>(#" + cell.robot.id + ")</b> is bound to the Gate#<b>(" + cell.facility.id + ")</b>."
             });
         } else if (cell.facility.type === MAP_CELL.STATION) {
             logger({
-                level: LOG_LEVEL_INFO,
-                object: LOG_OBJECT_ROBOT,
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.ROBOT,
                 color: cell.robot.color,
                 msg: "Robot <b>(#" + cell.robot.id + ")</b> is charging at Station#<b>(" + cell.facility.id + ")</b>."
             });
@@ -348,15 +358,15 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         if (cell.facility.type === MAP_CELL.GATE) {
             logger({
-                level: LOG_LEVEL_INFO,
-                object: LOG_OBJECT_ROBOT,
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.ROBOT,
                 color: cell.robot.color,
                 msg: "Robot <b>(#" + cell.robot.id + ")</b> is released from the Gate#<b>(" + cell.facility.id + ")</b>."
             });
         } else if (cell.facility.type === MAP_CELL.STATION) {
             logger({
-                level: LOG_LEVEL_INFO,
-                object: LOG_OBJECT_ROBOT,
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.ROBOT,
                 color: cell.robot.color,
                 msg: "Robot <b>(#" + cell.robot.id + ")</b> is leaving Station#<b>(" + cell.facility.id + ")</b>."
             });
@@ -386,8 +396,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         logger({
-            level: LOG_LEVEL_INFO,
-            object: LOG_OBJECT_ROBOT,
+            level: LOG_LEVEL.INFO,
+            object: LOG_TYPE.ROBOT,
             color: cell.robot.color,
             msg: "Robot <b>(#" + cell.robot.id + ")</b> loaded Rack#<b>(" + cell.facility.id + ")</b>."
         });
@@ -416,8 +426,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         logger({
-            level: LOG_LEVEL_INFO,
-            object: LOG_OBJECT_ROBOT,
+            level: LOG_LEVEL.INFO,
+            object: LOG_TYPE.ROBOT,
             color: cell.robot.color,
             msg: "Robot <b>(#" + cell.robot.id + ")</b> offloaded Rack#<b>(" + cell.facility.id + ")</b>."
         });
@@ -437,13 +447,17 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         logger({
-            level: LOG_LEVEL_INFO,
-            object: LOG_OBJECT_ROBOT,
+            level: LOG_LEVEL.INFO,
+            object: LOG_TYPE.ROBOT,
             color: cell.robot.color,
             msg: "Robot <b>(#" + robot_id + ")</b> is assigned to Rack#<b>(" + rack_id + ")</b>."
         });
     };
 
+    /**
+     * Listens for robot activate/deactivate button click.
+     * Called from the main view model.
+     */
     self.toggleActivation = function () {
         if (!self.deactivated()) { // Deactivate the robot
             sendToServer({
@@ -501,8 +515,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 });
 
                 logger({
-                    level: LOG_LEVEL_ERROR,
-                    object: LOG_OBJECT_ROBOT,
+                    level: LOG_LEVEL.ERROR,
+                    object: LOG_TYPE.ROBOT,
                     color: cell.robot.color,
                     msg: "Robot <b>(#" + parseInt(previousCell.robot.id) + ")</b> cannot move</b>."
                 });
@@ -521,8 +535,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         logger({
-            level: LOG_LEVEL_ERROR,
-            object: LOG_OBJECT_ROBOT,
+            level: LOG_LEVEL.ERROR,
+            object: LOG_TYPE.ROBOT,
             color: cell.robot.color,
             msg: "Robot <b>(#" + parseInt(self.id()) + ")</b> has failed</b>."
         });
@@ -555,8 +569,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         logger({
-            level: LOG_LEVEL_INFO,
-            object: LOG_OBJECT_ROBOT,
+            level: LOG_LEVEL.INFO,
+            object: LOG_TYPE.ROBOT,
             color: cell.robot.color,
             msg: "Robot <b>(#" + parseInt(self.id()) + ")</b> is back</b>."
         });
@@ -575,32 +589,32 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     let check = function () {
         if (self.id().length === 0) {
-            shouter.notifySubscribers({text: "Robot ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Robot ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         if (self.color().length === 0) {
-            shouter.notifySubscribers({text: "Robot color is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Robot color is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         if (self.loadCap().length === 0) {
-            shouter.notifySubscribers({text: "Robot load capacity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Robot load capacity is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         if (self.batteryCap().length === 0) {
-            shouter.notifySubscribers({text: "Robot battery capacity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Robot battery capacity is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.id()) < 0 || parseInt(self.batteryCap()) < 0 || parseInt(self.loadCap()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -612,7 +626,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
                 if (c !== undefined && c.id === parseInt(self.id()) &&
                     !(i === self.activeRobotRow && j === self.activeRobotCol)) {
-                    shouter.notifySubscribers({text: "Robot ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+                    shouter.notifySubscribers({text: "Robot ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
                     return false;
                 }
@@ -621,19 +635,19 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         // HTML color
         if (!self.color().match(REG_HTML_COLOR)) {
-            shouter.notifySubscribers({text: "Invalid color code!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Invalid color code!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         if (self.ip().length > 0 && !self.ip().match(REG_IP)) {
-            shouter.notifySubscribers({text: "Invalid IP address!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Invalid IP address!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         if (self.port().length > 0 && isNaN(self.port())) {
-            shouter.notifySubscribers({text: "Invalid Port!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Invalid Port!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -659,7 +673,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     shouter.subscribe(function () {
         unselect();
         clear();
-    }, self, SHOUT_STATE_UPDATED);
+    }, self, SHOUT.STATE_UPDATED);
 };
 
 module.exports = robotPanelViewModel;

@@ -33,7 +33,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             self.id(parseInt(self.id()) + 1);
             state.nextIDs.rack = Math.max(state.nextIDs.rack, parseInt(self.id()));
 
-            shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
@@ -46,7 +46,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 }
             });
         } else if (state.map.grid[row][col].facility !== undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
-            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
         } else if (state.map.grid[row][col].facility === undefined && self.activeRackRow !== -1 && self.activeRackCol !== -1) {
             gfxEventHandler({
                 type: EVENT_TO_GFX.ESC
@@ -75,8 +75,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         } else {
             shouter.notifySubscribers({
                 text: "(" + dstRow + ", " + dstCol + ") is occupied!",
-                type: MSG_ERROR
-            }, SHOUT_MSG);
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
@@ -158,7 +158,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.update = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -175,7 +175,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         state.nextIDs.rack = Math.max(state.nextIDs.rack, parseInt(self.id()) + 1);
 
-        shouter.notifySubscribers({text: "Rack updated successfully!", type: MSG_INFO}, SHOUT_MSG);
+        shouter.notifySubscribers({text: "Rack updated successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 
         unselect();
         clear();
@@ -187,7 +187,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.addItem = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -209,7 +209,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.removeItem = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return;
         }
@@ -236,8 +236,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         }
 
         logger({
-            level: LOG_LEVEL_INFO,
-            object: LOG_OBJECT_RACK,
+            level: LOG_LEVEL.INFO,
+            object: LOG_TYPE.RACK,
             color: "#bababa",
             msg: "Rack <b>(#" + rack_id + ")</b> has been " + (item_quantity > 0 ? "filled" : "discharged") + " by <b>(" + item_quantity + ")</b> from Item#<b>(" + item_id + ")</b>."
         });
@@ -256,20 +256,20 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     let check = function () {
         if (self.id().length === 0) {
-            shouter.notifySubscribers({text: "Rack ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Rack ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         if (self.items().length === 0) {
-            shouter.notifySubscribers({text: "Rack must contain items!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Rack must contain items!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.id()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -281,7 +281,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
                 if (c !== undefined && c.type === MAP_CELL.RACK && c.id === parseInt(self.id()) &&
                     !(i === self.activeRackRow && j === self.activeRackCol)) {
-                    shouter.notifySubscribers({text: "Rack ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+                    shouter.notifySubscribers({text: "Rack ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
                     return false;
                 }
@@ -300,8 +300,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (load > parseInt(self.capacity())) {
             shouter.notifySubscribers({
                 text: "Rack load is " + load + " which exceeds the capacity!",
-                type: MSG_ERROR
-            }, SHOUT_MSG);
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -311,20 +311,20 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     let checkItem = function () {
         if (self.itemID().length === 0) {
-            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         if (self.itemQuantity().length === 0) {
-            shouter.notifySubscribers({text: "Quantity is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Quantity is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.itemID()) < 0 || parseInt(self.itemQuantity()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -332,7 +332,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
             if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
-                shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+                shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
                 return false;
             }
@@ -340,7 +340,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         // Check if item exists
         if (state.getItem(parseInt(self.itemID())) === undefined) {
-            shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -365,7 +365,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     shouter.subscribe(function () {
         unselect();
         clear();
-    }, self, SHOUT_STATE_UPDATED);
+    }, self, SHOUT.STATE_UPDATED);
 };
 
 module.exports = rackPanelViewModel;

@@ -19,7 +19,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.remove = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -31,7 +31,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.add = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -58,20 +58,20 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     let check = function () {
         if (self.itemID().length === 0) {
-            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         if (self.itemWeight().length === 0) {
-            shouter.notifySubscribers({text: "Item weight is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Item weight is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.itemID()) < 0 || parseInt(self.itemWeight()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -79,7 +79,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
             if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
-                shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+                shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
                 return false;
             }
@@ -104,7 +104,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     // Events
     shouter.subscribe(function () {
         clear();
-    }, self, SHOUT_STATE_UPDATED);
+    }, self, SHOUT.STATE_UPDATED);
 };
 
 module.exports = itemsPanelViewModel;

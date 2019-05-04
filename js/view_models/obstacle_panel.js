@@ -24,7 +24,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
             self.id(parseInt(self.id()) + 1);
             state.nextIDs.obstacle = Math.max(state.nextIDs.obstacle, parseInt(self.id()));
 
-            shouter.notifySubscribers({text: "Obstacle placed successfully!", type: MSG_INFO}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Obstacle placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
@@ -35,7 +35,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 }
             });
         } else if (state.map.grid[row][col].facility !== undefined && self.activeObstacleRow === -1 && self.activeObstacleCol === -1) {
-            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
         } else if (state.map.grid[row][col].facility === undefined && self.activeObstacleRow !== -1 && self.activeObstacleCol !== -1) {
             gfxEventHandler({
                 type: EVENT_TO_GFX.ESC
@@ -64,8 +64,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         } else {
             shouter.notifySubscribers({
                 text: "(" + dstRow + ", " + dstCol + ") is occupied!",
-                type: MSG_ERROR
-            }, SHOUT_MSG);
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
@@ -141,7 +141,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
     self.update = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -156,7 +156,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
         state.nextIDs.obstacle = Math.max(state.nextIDs.obstacle, parseInt(self.id()) + 1);
 
-        shouter.notifySubscribers({text: "Obstacle updated successfully!", type: MSG_INFO}, SHOUT_MSG);
+        shouter.notifySubscribers({text: "Obstacle updated successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 
         unselect();
         clear();
@@ -173,14 +173,14 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
     let check = function () {
         if (self.id().length === 0) {
-            shouter.notifySubscribers({text: "Obstacle ID is mandatory!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Obstacle ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.id()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }
@@ -192,7 +192,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
                 if (c !== undefined && c.type === MAP_CELL.OBSTACLE && c.id === parseInt(self.id()) &&
                     !(i === self.activeObstacleRow && j === self.activeObstacleCol)) {
-                    shouter.notifySubscribers({text: "Obstacle ID must be unique!", type: MSG_ERROR}, SHOUT_MSG);
+                    shouter.notifySubscribers({text: "Obstacle ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
                     return false;
                 }
@@ -215,7 +215,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     shouter.subscribe(function () {
         unselect();
         clear();
-    }, self, SHOUT_STATE_UPDATED);
+    }, self, SHOUT.STATE_UPDATED);
 };
 
 module.exports = obstaclePanelViewModel;

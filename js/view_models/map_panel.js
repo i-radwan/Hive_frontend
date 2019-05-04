@@ -31,7 +31,7 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
 
         state.load(newState);
 
-        shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
+        shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
     };
 
     self.applyMapSize = function () {
@@ -40,7 +40,7 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
 
             state.map.changeMapSize(self.mapHeight(), self.mapWidth(), true);
 
-            shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
+            shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
         }
     };
 
@@ -132,7 +132,7 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
         self.mapWidth(state.map.width);
 
         informGFX();
-    }, self, SHOUT_STATE_UPDATED);
+    }, self, SHOUT.STATE_UPDATED);
 };
 
 module.exports = mapPanelViewModel;

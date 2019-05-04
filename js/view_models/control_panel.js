@@ -7,14 +7,14 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     self.playing = ko.observable(false);
     self.msg = ko.observable("");
-    self.msgType = ko.observable(MSG_INFO);
+    self.msgType = ko.observable(MSG_TYPE.INFO);
     self.timer = null;
 
     self.preSimState = null;
 
     self.play = function () {
         if (!comm.connected) {
-            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return;
         }
@@ -28,8 +28,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             });
 
             logger({
-                level: LOG_LEVEL_INFO,
-                object: LOG_OBJECT_SIMULATION,
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.TEXT,
                 msg: "Simulation Paused"
             });
 
@@ -42,13 +42,13 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         } else {
             sendStateToServer(CONFIG_MODE.SIMULATE);
 
-            shouter.notifySubscribers(true, SHOUT_LOADING);
+            shouter.notifySubscribers(true, SHOUT.LOADING);
         }
     };
 
     self.stop = function () {
         if (!comm.connected) {
-            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return;
         }
@@ -58,8 +58,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         });
 
         logger({
-            level: LOG_LEVEL_INFO,
-            object: LOG_OBJECT_SIMULATION,
+            level: LOG_LEVEL.INFO,
+            object: LOG_TYPE.TEXT,
             msg: "Simulation Stopped"
         });
 
@@ -71,7 +71,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         self.playing(false);
 
         state.load(self.preSimState);
-        shouter.notifySubscribers({}, SHOUT_STATE_UPDATED);
+        shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
     };
 
     self.deploy = function () {
@@ -84,8 +84,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                 if (c.robot !== undefined && !c.robot.ip.match(REG_IP)) {
                     shouter.notifySubscribers({
                         text: "Robot at (" + (i + 1) + ", " + (j + 1) + ") doesn't have an IP!",
-                        type: MSG_ERROR
-                    }, SHOUT_MSG);
+                        type: MSG_TYPE.ERROR
+                    }, SHOUT.MSG);
 
                     return false;
                 }
@@ -113,8 +113,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             self.playing(true);
 
             logger({
-                level: LOG_LEVEL_INFO,
-                object: LOG_OBJECT_SIMULATION,
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.TEXT,
                 msg: "Simulation Started"
             });
 
@@ -122,11 +122,11 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                 type: EVENT_TO_GFX.SIMULATION_START
             });
 
-            shouter.notifySubscribers(false, SHOUT_LOADING);
+            shouter.notifySubscribers(false, SHOUT.LOADING);
         } else if (data.status === ACK_CONFIG_STATUS.ERROR) {
-            shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: data.msg, type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
-            shouter.notifySubscribers(false, SHOUT_LOADING);
+            shouter.notifySubscribers(false, SHOUT.LOADING);
         }
     };
 
@@ -143,8 +143,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             self.playing(true);
 
             logger({
-                level: LOG_LEVEL_INFO,
-                object: LOG_OBJECT_SIMULATION,
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.TEXT,
                 msg: "Simulation Resumed"
             });
 
@@ -152,11 +152,11 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                 type: EVENT_TO_GFX.SIMULATION_RESUME
             });
 
-            shouter.notifySubscribers(false, SHOUT_LOADING);
+            shouter.notifySubscribers(false, SHOUT.LOADING);
         } else if (data.status === ACK_RESUME_STATUS.ERROR) {
-            shouter.notifySubscribers({text: data.msg, type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: data.msg, type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
-            shouter.notifySubscribers(false, SHOUT_LOADING);
+            shouter.notifySubscribers(false, SHOUT.LOADING);
         }
     };
 
@@ -169,11 +169,11 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         self.timer = setTimeout(() => {
             self.msg("")
         }, MSG_TIMEOUT);
-    }, self, SHOUT_MSG);
+    }, self, SHOUT.MSG);
 
     let sendStateToServer = function (mode) {
         if (!comm.connected) {
-            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_ERROR}, SHOUT_MSG);
+            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return;
         }

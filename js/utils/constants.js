@@ -4,9 +4,11 @@ SERVER_PORT = 1337;
 //
 // Shouting codes
 //
-SHOUT_STATE_UPDATED = 0;
-SHOUT_MSG = 1;
-SHOUT_LOADING = 2;
+SHOUT = {
+    STATE_UPDATED: 0,
+    MSG: 1,
+    LOADING: 2
+};
 
 //
 // Running modes
@@ -60,25 +62,24 @@ MAP_CELL = {
 MSG_TIMEOUT = 1500; // ms
 
 // Msgs types
-MSG_ERROR = 0;
-MSG_INFO = 1;
-
-SHOUT_RUNNING_MODE = 0;
-SHOUT_MAP_SIZE_CHANGED = 1;
-SHOUT_MAP_TEMP_APPLIED = 2;
-SHOUT_ERROR = 3;
-SHOUT_GRID_CLICK = 3;
-SHOUT_GRID_DRAG = 4;
+MSG_TYPE = {
+    INFO: 0,
+    ERROR: 1
+};
 
 // Logs levels
-LOG_LEVEL_INFO = 0;
-LOG_LEVEL_WARNING = 1;
-LOG_LEVEL_ERROR = 2;
+LOG_LEVEL = {
+    INFO: 0,
+    WARNING: 1,
+    ERROR: 2
+};
 
-LOG_OBJECT_ROBOT = 0;
-LOG_OBJECT_RACK = 1;
-LOG_OBJECT_ORDER = 2;
-LOG_OBJECT_SIMULATION = 3;
+LOG_TYPE = {
+    ROBOT: 0,
+    RACK: 1,
+    ORDER: 2,
+    TEXT: 3
+};
 
 // Regex
 REG_HTML_COLOR = "^#([A-Fa-f0-9]{6})$";

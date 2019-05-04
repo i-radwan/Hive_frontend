@@ -1,10 +1,17 @@
-require('../utils/constants');
+require("../utils/constants");
 
 let comm = function (serverMW) {
     let self = this;
 
     self.connected = false;
 
+    /**
+     * Connects to a remote server.
+     *
+     * @param ip
+     * @param port
+     * @param callback
+     */
     self.connect = function (ip, port, callback) {
         if (self.rcv === undefined) {
             throw "Error, no rcv function defined!";
