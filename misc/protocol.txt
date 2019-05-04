@@ -80,7 +80,7 @@ UPDATE: {
         {
             type: [MOVE|ROTATE_RIGHT|ROTATE_LEFT|RETREAT|LOAD|OFFLOAD|BIND|UNBIND],
             data: {...}
-        }, {
+        }, {  # Default ROBOT direction = ROBOT_DIR.RIGHT
             type: MOVE,
             data: {
                 id
