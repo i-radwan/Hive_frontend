@@ -207,6 +207,11 @@
                                data-bind="textInput: leftPanelVM.rackVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="form-group">
+                        <label>Weight</label>
+                        <input type="number" class="form-control bg-dark text-light" placeholder="Weight (Kg)"
+                               data-bind="textInput: leftPanelVM.rackVM.weight, enable: runningMode() === RUNNING_MODE.DESIGN">
+                    </div>
+                    <div class="form-group">
                         <label>Capacity</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Capacity (Kg)"
                                data-bind="textInput: leftPanelVM.rackVM.capacity, enable: runningMode() === RUNNING_MODE.DESIGN">

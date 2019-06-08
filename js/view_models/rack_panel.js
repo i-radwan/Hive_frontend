@@ -7,6 +7,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     let self = this;
 
     self.capacity = ko.observable(RACK_CAP);
+    self.weight = ko.observable(RACK_WEIGHT);
 
     self.id = ko.observable(1);
     self.items = ko.observableArray();
@@ -27,6 +28,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 id: parseInt(self.id()),
                 type: MAP_CELL.RACK,
                 capacity: parseInt(self.capacity()),
+                weight: parseInt(self.weight()),
                 items: ko.mapping.toJS(self.items())
             };
 
@@ -42,6 +44,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                     row: row,
                     col: col,
                     capacity: parseInt(self.capacity()),
+                    weight: parseInt(self.weight()),
                     items: ko.mapping.toJS(self.items())
                 }
             });
@@ -127,6 +130,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         self.id(facility.id);
         self.capacity(facility.capacity);
+        self.weight(facility.weight);
 
         self.items.removeAll();
         for (let i = 0; i < facility.items.length; ++i) {
@@ -176,6 +180,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             type: MAP_CELL.RACK,
             id: parseInt(self.id()),
             capacity: parseInt(self.capacity()),
+            weight: parseInt(self.weight()),
             items: ko.mapping.toJS(self.items())
         };
 
@@ -283,7 +288,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         }
 
         // -ve values
-        if (parseInt(self.id()) < 0) {
+        if (parseInt(self.id()) < 0 || parseInt(self.capacity()) < 0 || parseInt(self.weight()) < 0) {
             shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
@@ -371,6 +376,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     let clear = function () {
         self.id(state.nextIDs.rack);
         self.capacity(RACK_CAP);
+        self.weight(RACK_WEIGHT);
         self.items.removeAll();
         self.itemID("");
         self.itemQuantity("");
