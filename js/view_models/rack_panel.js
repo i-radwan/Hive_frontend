@@ -46,7 +46,10 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 }
             });
         } else if (state.map.grid[row][col].facility !== undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
-            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "(" + row + ", " + col + ") is occupied!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
         } else if (state.map.grid[row][col].facility === undefined && self.activeRackRow !== -1 && self.activeRackCol !== -1) {
             gfxEventHandler({
                 type: EVENT_TO_GFX.ESC
@@ -158,12 +161,15 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.update = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
-        if(!check())
+        if (!check())
             return false;
 
         state.map.grid[self.activeRackRow][self.activeRackCol].facility = {
@@ -187,7 +193,10 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.addItem = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -209,7 +218,10 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.removeItem = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return;
         }
@@ -217,30 +229,30 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         self.items.remove(this);
     };
 
-    self.adjustRack = function (rack_id, rack_row, rack_col, item_id, item_quantity) {
+    self.adjustRack = function (rack_id, rack_row, rack_col, items) {
         let cell = state.map.grid[rack_row][rack_col];
 
         if (cell.facility === undefined || cell.facility.type !== MAP_CELL.RACK) {
             throw "Error: there should be a rack here!";
         }
 
-        let items = cell.facility.items;
+        let rackItems = cell.facility.items;
 
-        for (let j = 0; j < items.length; ++j) {
-            if (items[j].id === item_id) {
-                items[j].quantity += item_quantity;
-
-                // Inform the state
-                state.adjustItemQuantity(item_id, item_quantity);
+        for (let i = 0; i < items.length; ++i) {
+            for (let j = 0; j < rackItems.length; ++j) {
+                if (rackItems[j].id === items[i].id) {
+                    rackItems[j].quantity += items[i].quantity;
+                }
             }
-        }
 
-        logger({
-            level: LOG_LEVEL.INFO,
-            object: LOG_TYPE.RACK,
-            color: "#bababa",
-            msg: "Rack <b>(#" + rack_id + ")</b> has been " + (item_quantity > 0 ? "filled" : "discharged") + " by <b>(" + item_quantity + ")</b> from Item#<b>(" + item_id + ")</b>."
-        });
+            logger({
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.RACK,
+                color: "#bababa",
+                msg: "Rack <b>(#" + rack_id + ")</b> has been " + (items[i].quantity > 0 ? "filled" : "discharged") +
+                    " by <b>(" + items[i].quantity + ")</b> from Item#<b>(" + items[i].id + ")</b>."
+            });
+        }
 
         self.items.removeAll();
         for (let i = 0; i < cell.facility.items.length; ++i) {

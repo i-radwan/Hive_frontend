@@ -188,8 +188,15 @@ UPDATE: {
                 rack_id:
                 rack_row:
                 rack_col:
-                item_id:
-                item_quantity: [+ve|-ve]
+                items: [
+                    {
+                        id:
+                        quantity: [+ve|-ve]
+                    }, {
+                        id:
+                        quantity: [+ve|-ve]
+                    }
+                ]
             }
         }, {
             type: BATTERY_UPDATED

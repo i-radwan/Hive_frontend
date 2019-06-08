@@ -120,10 +120,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let rack_id = data.rack_id;
                         let rack_row = data.rack_row;
                         let rack_col = data.rack_col;
-                        let item_id = data.item_id;
-                        let item_quantity = data.item_quantity;
+                        let items = data.items;
 
-                        self.leftPanelVM.rackVM.adjustRack(rack_id, rack_row, rack_col, item_id, item_quantity);
+                        self.leftPanelVM.rackVM.adjustRack(rack_id, rack_row, rack_col, items);
                     } else if (l.type === SERVER_LOGS.BATTERY_UPDATED) {
                         let id = data.id;
                         let row = data.row;
