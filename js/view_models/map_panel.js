@@ -69,7 +69,6 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
                             direction: ROBOT_DIR.RIGHT,
                             id: c.robot.id,
                             load_cap: c.robot.loadCap,
-                            battery_cap: c.robot.batteryCap,
                             color: c.robot.color,
                             ip: c.robot.ip
                         }

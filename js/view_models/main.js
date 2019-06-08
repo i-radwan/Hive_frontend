@@ -124,6 +124,13 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let item_quantity = data.item_quantity;
 
                         self.leftPanelVM.rackVM.adjustRack(rack_id, rack_row, rack_col, item_id, item_quantity);
+                    } else if (l.type === SERVER_LOGS.BATTERY_UPDATED) {
+                        let id = data.id;
+                        let row = data.row;
+                        let col = data.col;
+                        let battery = data.battery;
+
+                        self.leftPanelVM.robotVM.updateBattery(id, row, col, battery);
                     }
                 }
 

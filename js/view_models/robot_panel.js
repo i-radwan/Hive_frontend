@@ -17,7 +17,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.id = ko.observable(1);
     self.color = ko.observable("#FF0000");
     self.loadCap = ko.observable(100);
-    self.batteryCap = ko.observable(10000);
     self.ip = ko.observable("");
     self.port = ko.observable("");
     self.deactivated = ko.observable(false);
@@ -37,7 +36,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 color: self.color(),
                 direction: ROBOT_DIR.RIGHT,
                 load_cap: parseInt(self.loadCap()),
-                battery_cap: parseInt(self.batteryCap()),
                 ip: self.ip(),
                 port: self.port()
             };
@@ -55,7 +53,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                     col: col,
                     id: parseInt(self.id()),
                     load_cap: parseInt(self.loadCap()),
-                    battery_cap: parseInt(self.batteryCap()),
                     color: self.color(),
                     ip: self.ip(),
                     port: self.port()
@@ -138,7 +135,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.id(robot.id);
         self.color(robot.color);
         self.loadCap(robot.load_cap);
-        self.batteryCap(robot.battery_cap);
         self.ip(robot.ip);
         self.port(robot.port);
 
@@ -186,7 +182,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             id: parseInt(self.id()),
             color: self.color(),
             load_cap: parseInt(self.loadCap()),
-            battery_cap: parseInt(self.batteryCap()),
             ip: self.ip(),
             port: self.port()
         };
@@ -582,6 +577,18 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         cell.robot.moving = false;
     };
 
+    self.updateBattery = function(id, row, col, battery) {
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_UPDATE,
+            data: {
+                id: id,
+                row: row,
+                col: col,
+                battery: battery
+            }
+        });
+    };
+
     self.handleEsc = function () {
         unselect();
         clear();
@@ -606,14 +613,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return false;
         }
 
-        if (self.batteryCap().length === 0) {
-            shouter.notifySubscribers({text: "Robot battery capacity is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
-
-            return false;
-        }
-
         // -ve values
-        if (parseInt(self.id()) < 0 || parseInt(self.batteryCap()) < 0 || parseInt(self.loadCap()) < 0) {
+        if (parseInt(self.id()) < 0 || parseInt(self.loadCap()) < 0) {
             shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
@@ -664,7 +665,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.id(state.nextIDs.robot);
         self.color("#FF0000");
         self.loadCap(100);
-        self.batteryCap(10000);
         self.ip("");
         self.port("");
     };

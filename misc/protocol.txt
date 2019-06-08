@@ -140,7 +140,7 @@ UPDATE: {
     ],
     logs: [
         {
-            type: [TASK_ASSIGNED|ITEM_DELIVERED|ORDER_FULFILLED|RACK_ADJUSTED]
+            type: [TASK_ASSIGNED|ITEM_DELIVERED|ORDER_FULFILLED|RACK_ADJUSTED|...]
             data: {...}
         }, {
             type: TASK_ASSIGNED
@@ -189,7 +189,15 @@ UPDATE: {
                 item_id:
                 item_quantity: [+ve|-ve]
             }
-        }
+        }, {
+            type: BATTERY_UPDATED
+            data: {
+                id:
+                row:
+                col:
+                battery:                           # Percentage
+            }
+         }
     ],
     statistics: [                                   # All statistics at once
         {
@@ -339,6 +347,13 @@ OBJECT_FIXED: { # Resume last move, Send ACK after finishing the original move
     col:                                        # supposed to be at after finishing the current move)
 }
 
+OBJECT_UPDATE: { # New status for the object (e.g. robot), such as the battery level
+    type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    row:                                        # The new row/col (the one that this robot was
+    col:                                        # supposed to be at after finishing the current move)
+    battery:                                    # Percentage
+}
+
 SIMULATION_START: {}
 
 SIMULATION_PAUSE: {}
@@ -474,7 +489,6 @@ ESC: {
                                   "color":"#FF0000",
                                   "direction":0,
                                   "load_cap":100,
-                                  "battery_cap":10000,
                                   "ip":"",
                                   "port":""
                               }
@@ -515,7 +529,6 @@ ESC: {
                                   "color":"#FF0000",
                                   "direction":0,
                                   "load_cap":100,
-                                  "battery_cap":10000,
                                   "ip":"",
                                   "port":""
                               }
@@ -768,7 +781,6 @@ ESC: {
                                   "color":"#FF0000",
                                   "direction":0,
                                   "load_cap":100,
-                                  "battery_cap":10000,
                                   "ip":"",
                                   "port":""
                               }
@@ -888,7 +900,6 @@ ESC: {
                                   "color":"#FF0000",
                                   "direction":0,
                                   "load_cap":100,
-                                  "battery_cap":10000,
                                   "ip":"",
                                   "port":""
                               }

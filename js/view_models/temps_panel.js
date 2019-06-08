@@ -45,7 +45,6 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
                                     type: MAP_CELL.ROBOT,
                                     color: "#FF0000",
                                     load_cap: 10,
-                                    battery_cap: 1000,
                                     ip: ""
                                 },
                                 facility: undefined
