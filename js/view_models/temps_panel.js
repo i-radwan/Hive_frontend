@@ -59,7 +59,7 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
                                         id: 1,
                                         quantity: 10
                                     }],
-                                    capacity: RACK_CAP
+                                    capacity: RACK_INIT_CAP
                                 }
                             };
                             break;

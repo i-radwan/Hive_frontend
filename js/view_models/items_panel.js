@@ -24,9 +24,30 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return false;
         }
 
-        self.items.remove(this);
+        let racks = ""; // The racks who use this item
 
-        state.items = ko.mapping.toJS(self.items());
+        for (let i = 0; i < state.map.height; ++i) {
+            for (let j = 0; j < state.map.width; ++j) {
+                let c = state.map.grid[i][j].facility;
+
+                if (c !== undefined && c.type === MAP_CELL.RACK) {
+                    for (let k = 0; k < c.items.length; ++k) {
+                        if (c.items[k].id === this.id) {
+                            racks += c.id + ", ";
+                        }
+                    }
+                }
+            }
+        }
+
+        if (racks.length === 0) {
+            self.items.remove(this);
+
+            state.items = ko.mapping.toJS(self.items());
+        } else {
+            shouter.notifySubscribers({text: "Racks (" + racks.slice(0, racks.length - 2) +
+                    ") use this item!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+        }
     };
 
     self.add = function () {

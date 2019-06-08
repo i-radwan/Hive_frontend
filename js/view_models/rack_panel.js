@@ -6,8 +6,8 @@ let ko = require('knockout');
 let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
-    self.capacity = ko.observable(RACK_CAP);
-    self.weight = ko.observable(RACK_WEIGHT);
+    self.capacity = ko.observable(RACK_INIT_CAP);
+    self.weight = ko.observable(RACK_INIT_TARE_WEIGHT);
 
     self.id = ko.observable(1);
     self.items = ko.observableArray();
@@ -375,8 +375,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     let clear = function () {
         self.id(state.nextIDs.rack);
-        self.capacity(RACK_CAP);
-        self.weight(RACK_WEIGHT);
+        self.capacity(RACK_INIT_CAP);
+        self.weight(RACK_INIT_TARE_WEIGHT);
         self.items.removeAll();
         self.itemID("");
         self.itemQuantity("");

@@ -85,8 +85,8 @@ LOG_TYPE = {
 REG_HTML_COLOR = "^#([A-Fa-f0-9]{6})$";
 REG_IP = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
 
-RACK_CAP = 250;
-RACK_WEIGHT = 50;
+RACK_INIT_CAP = 250;
+RACK_INIT_TARE_WEIGHT = 50;
 
 ORDER_TYPE = {
     COLLECT: 0,
