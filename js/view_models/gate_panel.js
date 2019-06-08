@@ -163,7 +163,10 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         clear();
 
         gfxEventHandler({
-            type: EVENT_TO_GFX.ESC
+            type: EVENT_TO_GFX.OBJECT_HOVER,
+            data: {
+                type: MAP_CELL.GATE
+            }
         });
     };
 

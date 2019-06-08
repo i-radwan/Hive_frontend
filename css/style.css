@@ -75,14 +75,6 @@ body {
     clear: both;
 }
 
-.mirror {
-    -moz-transform: scale(-1, 1) !important;
-    -webkit-transform: scale(-1, 1) !important;;
-    -o-transform: scale(-1, 1) !important;;
-    -ms-transform: scale(-1, 1) !important;;
-    transform: scale(-1, 1) !important;;
-}
-
 .hidden {
     display: none;
 }

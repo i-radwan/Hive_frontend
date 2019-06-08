@@ -162,7 +162,10 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
         clear();
 
         gfxEventHandler({
-            type: EVENT_TO_GFX.ESC
+            type: EVENT_TO_GFX.OBJECT_HOVER,
+            data: {
+                type: MAP_CELL.STATION
+            }
         });
     };
 

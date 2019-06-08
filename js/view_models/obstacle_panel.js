@@ -162,7 +162,10 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         clear();
 
         gfxEventHandler({
-            type: EVENT_TO_GFX.ESC
+            type: EVENT_TO_GFX.OBJECT_HOVER,
+            data: {
+                type: MAP_CELL.OBSTACLE
+            }
         });
     };
 
