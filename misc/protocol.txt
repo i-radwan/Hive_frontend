@@ -149,15 +149,15 @@ UPDATE: {
                 robot_row:
                 robot_col:
                 rack_id:
-                rack_row:                           # Original rack row
-                racK_col:                           # Original rack col
+                rack_row:                       # Original rack row
+                racK_col:                       # Original rack col
             }
         }, {
             type: ITEM_DELIVERED
             data: {
                 order_id:
                 item_id:
-                item_quantity:                      # Total for this order_id
+                item_quantity:                  # Total for this order_id
             }
         }, {
             type: ORDER_FULFILLED
@@ -166,17 +166,17 @@ UPDATE: {
                 fulfilled_time: Y-m-d H:i
             }
         }, {
-            type: ORDER_ISSUED                      # Move order from upcoming to ongoing
+            type: ORDER_ISSUED                  # Move order from upcoming to ongoing
             data: {
                 id:
             }
         }, {
-            type: ORDER_DELAYED                     # Delay upcoming/ongoing order
+            type: ORDER_DELAYED                 # Delay upcoming/ongoing order
             data: {
                 id:
             }
         }, {
-            type: ORDER_RESUMED                     # Resume delayed order
+            type: ORDER_RESUMED                 # Resume delayed order
             data: {
                 id
             }
@@ -195,11 +195,11 @@ UPDATE: {
                 id:
                 row:
                 col:
-                battery:                           # Percentage
+                battery:                        # Percentage
             }
          }
     ],
-    statistics: [                                   # All statistics at once
+    statistics: [                               # All statistics at once
         {
             key:
             value:
