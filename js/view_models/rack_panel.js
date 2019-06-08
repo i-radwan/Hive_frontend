@@ -7,7 +7,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     let self = this;
 
     self.capacity = ko.observable(RACK_INIT_CAP);
-    self.weight = ko.observable(RACK_INIT_TARE_WEIGHT);
+    self.weight = ko.observable(RACK_INIT_WEIGHT);
 
     self.id = ko.observable(1);
     self.items = ko.observableArray();
@@ -314,7 +314,13 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         for (let i = 0; i < self.items().length; ++i) {
             let item = self.items()[i];
 
-            load += parseInt(item.quantity) * state.getItem(parseInt(item.id)).weight;
+            try {
+                load += parseInt(item.quantity) * state.getItem(parseInt(item.id)).weight;
+            } catch (e) {
+                shouter.notifySubscribers({text: "Item ID #" + item.id + " doesn't exist!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+
+                return false;
+            }
         }
 
         if (load > parseInt(self.capacity())) {
@@ -376,7 +382,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     let clear = function () {
         self.id(state.nextIDs.rack);
         self.capacity(RACK_INIT_CAP);
-        self.weight(RACK_INIT_TARE_WEIGHT);
+        self.weight(RACK_INIT_WEIGHT);
         self.items.removeAll();
         self.itemID("");
         self.itemQuantity("");
