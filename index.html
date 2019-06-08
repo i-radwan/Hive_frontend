@@ -376,8 +376,12 @@
                                    data-bind="textInput: leftPanelVM.orderVM.startDateTime">
                         </div>
                         <div class="form-group">
-                            <input type="checkbox" id="type" class="checkbox" data-bind="checked: leftPanelVM.orderVM.refill">
-                            <label class="form-check-label checkbox-label" for="type">Refill</label>
+                            <span class="refill"
+                                  data-bind="click: function() {leftPanelVM.orderVM.refill(!leftPanelVM.orderVM.refill())},
+                                             css: {'active': leftPanelVM.orderVM.refill()}">
+                                <i class="far fa-arrow-alt-circle-down"></i>
+                                <span>Refill</span>
+                            </span>
                         </div>
 
                         <!--====================== ITEMS LIST ======================-->
