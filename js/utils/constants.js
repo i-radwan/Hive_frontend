@@ -87,7 +87,11 @@ REG_IP = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0
 
 RACK_CAP = 250;
 
-// Order status
+ORDER_TYPE = {
+    COLLECT: 0,
+    REFILL: 1
+};
+
 ORDER_STATUS = {
     ONGOING: 0,
     UPCOMING: 1,

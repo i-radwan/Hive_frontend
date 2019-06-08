@@ -10,7 +10,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.activePanel = ko.observable(ORDER_PANEL.ADD);
 
     self.id = ko.observable(1);
+    self.refill = ko.observable(false);
     self.gateID = ko.observable("");
+    self.rackID = ko.observable("");
     self.startDateTime = ko.observable(flatpickr.formatDate(new Date(), "Y-m-d H:i"));
     self.items = ko.observableArray();
     self.itemID = ko.observable();
@@ -74,7 +76,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let order = {
             id: parseInt(self.id()),
+            type: (self.refill() ? ORDER_TYPE.REFILL : ORDER_TYPE.COLLECT),
             gate_id: parseInt(self.gateID()),
+            rack_id: parseInt(self.rackID()),
             items: ko.mapping.toJS(self.items()),
             start_time: self.startDateTime()
         };
@@ -97,7 +101,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.itemQuantity("");
 
         // Scroll view to bottom
-        let container = $(".lpanel .order .items-container");
+        let container = $(".lpanel .order .add");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
     };
 
@@ -266,7 +270,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     let clear = function () {
+        self.refill(false);
         self.gateID("");
+        self.rackID("");
         self.items.removeAll();
         self.itemID("");
         self.itemQuantity("");
@@ -323,15 +329,20 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             }
         }
 
-        // Gate exists
-        let f = false;
+        // Gate and Rack exists
+        let f1 = false;
+        let f2 = false;
 
-        for (let i = 0; i < state.map.height && !f; ++i) {
-            for (let j = 0; j < state.map.width && !f; ++j) {
+        for (let i = 0; i < state.map.height && (!f1 || !f2); ++i) {
+            for (let j = 0; j < state.map.width && (!f1 || !f2); ++j) {
                 let c = state.map.grid[i][j].facility;
 
-                if (c !== undefined && c.type === MAP_CELL.GATE && c.id === parseInt(self.gateID())) {
-                    f = true;
+                if (c === undefined) {
+                    continue;
+                }
+
+                if (c.type === MAP_CELL.GATE && c.id === parseInt(self.gateID())) {
+                    f1 = true;
 
                     if (state.map.grid[i][j].na === true) {
                         shouter.notifySubscribers({text: "This gate is blocked!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
@@ -339,11 +350,21 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                         return false;
                     }
                 }
+
+                if (c.type === MAP_CELL.RACK && c.id === parseInt(self.rackID())) {
+                    f2 = true;
+                }
             }
         }
 
-        if (!f) {
+        if (!f1) {
             shouter.notifySubscribers({text: "No gate with this ID!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+
+            return false;
+        }
+
+        if (!f2) {
+            shouter.notifySubscribers({text: "No rack with this ID!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
         }

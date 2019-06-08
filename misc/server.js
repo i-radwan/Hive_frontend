@@ -59,7 +59,9 @@ wsServer.on('request', function (request) {
                         status: ACK_ORDER_STATUS.OK,
                         order: {
                             id: msg.data.id,
+                            type: msg.data.type,
                             gate_id: msg.data.gate_id,
+                            rack_id: msg.data.rack_id,
                             items: msg.data.items,
                             start_time: msg.data.start_time,
                             mode: msg.data.mode

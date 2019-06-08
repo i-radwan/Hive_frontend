@@ -18,8 +18,10 @@ PAUSE: {
 STOP: {}
 
 ORDER: {
-    id: 
+    id:
+    type: [REFILL|COLLECT]
     gate_id:
+    rack_id:
     items: [
         {
             id:

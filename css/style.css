@@ -87,6 +87,14 @@ body {
     display: none;
 }
 
+.checkbox {
+    cursor: pointer;
+}
+
+.checkbox_label {
+    cursor: pointer;
+}
+
 .cwise-rotated-90 {
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
@@ -464,6 +472,11 @@ input[type=number]::-webkit-outer-spin-button {
 .lpanel .order .empty {
     text-align: center;
     margin-top: 25px;
+}
+
+.order .add {
+    max-height: 500px;
+    overflow-y: scroll;
 }
 
 .orders-list {
