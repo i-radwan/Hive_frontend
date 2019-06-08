@@ -21,8 +21,8 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 type: MAP_CELL.GATE
             };
 
-            self.id(parseInt(self.id()) + 1);
-            state.nextIDs.gate = Math.max(state.nextIDs.gate, parseInt(self.id()));
+            self.id(Math.max(state.nextIDs.gate, parseInt(self.id()) + 1));
+            state.nextIDs.gate = parseInt(self.id());
 
             shouter.notifySubscribers({text: "Gate placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 

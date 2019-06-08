@@ -21,8 +21,8 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
                 type: MAP_CELL.STATION
             };
 
-            self.id(parseInt(self.id()) + 1);
-            state.nextIDs.station = Math.max(state.nextIDs.station, parseInt(self.id()));
+            self.id(Math.max(state.nextIDs.station, parseInt(self.id()) + 1));
+            state.nextIDs.station = parseInt(self.id());
 
             shouter.notifySubscribers({text: "Station placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 

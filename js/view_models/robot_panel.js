@@ -40,8 +40,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 port: self.port()
             };
 
-            self.id(parseInt(self.id()) + 1);
-            state.nextIDs.robot = Math.max(state.nextIDs.robot, parseInt(self.id()));
+            self.id(Math.max(state.nextIDs.robot, parseInt(self.id()) + 1));
+            state.nextIDs.robot = parseInt(self.id());
 
             shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 

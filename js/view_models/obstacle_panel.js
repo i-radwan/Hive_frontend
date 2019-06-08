@@ -21,8 +21,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 type: MAP_CELL.OBSTACLE
             };
 
-            self.id(parseInt(self.id()) + 1);
-            state.nextIDs.obstacle = Math.max(state.nextIDs.obstacle, parseInt(self.id()));
+            self.id(Math.max(state.nextIDs.obstacle, parseInt(self.id()) + 1));
+            state.nextIDs.obstacle = parseInt(self.id());
 
             shouter.notifySubscribers({text: "Obstacle placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
 
