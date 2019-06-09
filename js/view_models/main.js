@@ -117,12 +117,12 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
                         self.leftPanelVM.orderVM.resumeOrder(id);
                     } else if (l.type === SERVER_LOGS.RACK_ADJUSTED) {
-                        let rack_id = data.rack_id;
-                        let rack_row = data.rack_row;
-                        let rack_col = data.rack_col;
+                        let id = data.rack_id;
+                        let row = data.rack_row;
+                        let col = data.rack_col;
                         let items = data.items;
 
-                        self.leftPanelVM.rackVM.adjustRack(rack_id, rack_row, rack_col, items);
+                        self.leftPanelVM.rackVM.adjustRack(id, row, col, items);
                     } else if (l.type === SERVER_LOGS.BATTERY_UPDATED) {
                         let id = data.id;
                         let row = data.row;

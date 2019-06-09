@@ -238,11 +238,15 @@ wsServer.on('request', function (request) {
                 logs.push({
                     type: SERVER_LOGS.RACK_ADJUSTED,
                     data: {
-                        rack_id: parseInt(i[2]),
-                        rack_row: parseInt(i[3]),
-                        rack_col: parseInt(i[4]),
-                        item_id: parseInt(i[5]),
-                        item_quantity: parseInt(i[6])
+                        id: parseInt(i[2]),
+                        row: parseInt(i[3]),
+                        col: parseInt(i[4]),
+                        items: [
+                            {
+                                id: parseInt(i[5]),
+                                quantity: parseInt(i[6])
+                            }
+                        ]
                     }
                 });
             }

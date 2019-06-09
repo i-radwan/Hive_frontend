@@ -169,9 +169,9 @@ UPDATE: {
         }, {
             type: RACK_ADJUSTED
             data: {
-                rack_id:
-                rack_row:
-                rack_col:
+                id:
+                row:
+                col:
                 items: [
                     {
                         id:
