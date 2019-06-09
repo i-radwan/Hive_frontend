@@ -6,6 +6,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     let self = this;
 
     self.playing = ko.observable(false);
+    self.coordinates = ko.observable("");
     self.msg = ko.observable("");
     self.msgType = ko.observable(MSG_TYPE.INFO);
     self.timer = null;
@@ -158,6 +159,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
         }
+    };
+
+    self.handleCellHover = function(row, col) {
+        self.coordinates("(" + row + ", " + col + ")");
     };
 
     shouter.subscribe(function (msg) {

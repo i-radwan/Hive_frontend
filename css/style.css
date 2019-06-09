@@ -950,6 +950,16 @@ input[type=number]::-webkit-outer-spin-button {
     color: #78c631;
 }
 
+.coordinates {
+    color: #bababa;
+    position: absolute;
+    right: 0;
+    top: 75px;
+    font-size: 11px;
+    width: 50px;
+    text-align: center;
+}
+
 .settings {
     z-index: -1;
     display: none;

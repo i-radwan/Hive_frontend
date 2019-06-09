@@ -162,16 +162,20 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 handleCellClick(event.row, event.col);
                 break;
 
-            case EVENT_FROM_GFX.ACK_ACTION:
-                handleActionAck();
-                break;
-
             case EVENT_FROM_GFX.CELL_DRAG:
                 handleCellDrag(event.src_row, event.src_col, event.dst_row, event.dst_col);
                 break;
 
             case EVENT_FROM_GFX.CELL_DELETE:
                 handleCellDeleteClick(event.row, event.col);
+                break;
+
+            case EVENT_FROM_GFX.CELL_HOVER:
+                handleCellHover(event.row, event.col);
+                break;
+
+            case EVENT_FROM_GFX.ACK_ACTION:
+                handleActionAck();
                 break;
 
             case EVENT_FROM_GFX.ESC:
@@ -205,6 +209,10 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     let handleCellDeleteClick = function (row, col) {
         self.leftPanelVM.handleCellDeleteClick(row, col);
+    };
+
+    let handleCellHover = function (row, col) {
+        self.centerPanelVM.controlConsoleVM.handleCellHover(row, col);
     };
 
     let handleActionAck = function (ack) {

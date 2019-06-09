@@ -576,6 +576,7 @@
                 <div class="deploy-switch" data-bind="click: centerPanelVM.controlConsoleVM.deploy">Deploy</div>
 
                 <i class="fas fa-cog settings-icon" id="settings-icon" data-bind="click: centerPanelVM.toggleSettings"></i>
+                <span class="coordinates" data-bind="text: centerPanelVM.controlConsoleVM.coordinates">(11, 17)</span>
             </div>
             <div class="text-sm-center msg"
                  data-bind="text: centerPanelVM.controlConsoleVM.msg, css: {'error-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_TYPE.ERROR, 'info-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_TYPE.INFO}"></div>

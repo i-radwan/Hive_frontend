@@ -262,6 +262,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let ocell = state.map.grid[or][oc];
 
+        // ToDo Mark cells.na = false
+
         robot.direction = (robot.direction + 2) % ROBOT_DIR_CNT;
 
         ocell.robot = Object.assign({}, robot);
@@ -497,7 +499,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             // Check if there's another robot was going to the previous cell
             if (previousCell.robot) {
                 sendToServer({
-                    type: MSG_TO_SERVER.BLOCKED,
+                    type: MSG_TO_SERVER.BLOCKED, // ToDo: recursive call
                     data: {
                         id: parseInt(previousCell.robot.id)
                     }
