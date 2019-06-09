@@ -48,8 +48,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
         if (state.map.grid[dstRow][dstCol].robot === undefined && state.map.grid[dstRow][dstCol].facility === undefined) {
-            state.map.grid[dstRow][dstCol] = Object.assign({}, state.map.grid[srcRow][srcCol]);
-            state.map.grid[srcRow][srcCol] = undefined;
+            state.map.grid[dstRow][dstCol].facility = Object.assign({}, state.map.grid[srcRow][srcCol].facility);
+            state.map.grid[srcRow][srcCol].facility = undefined;
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
