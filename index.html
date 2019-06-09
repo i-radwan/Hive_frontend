@@ -374,10 +374,9 @@
                                    data-bind="textInput: leftPanelVM.orderVM.gateID">
                         </div>
                         <div class="form-group">
-                            <label>Start At</label>
-                            <input type="datetime" class="form-control bg-dark text-light"
-                                   placeholder="Now" id="order_datetime"
-                                   data-bind="textInput: leftPanelVM.orderVM.startDateTime">
+                            <label>Start Timestep</label>
+                            <input type="number" class="form-control bg-dark text-light"
+                                   placeholder="0 = Now" data-bind="textInput: leftPanelVM.orderVM.startTimestep">
                         </div>
                         <div class="form-group">
                             <span class="refill"
@@ -484,11 +483,11 @@
                                                 </div>
                                                 <div class="row" data-bind="css: {hidden: !more()}">
                                                     <div class="col-md-4">Start:</div>
-                                                    <div class="col-md-8"><small data-bind="text: start_time_formatted"></small></div>
+                                                    <div class="col-md-8"><small data-bind="text: start_timestep"></small></div>
                                                 </div>
                                                 <div class="row" data-bind="css: {hidden: !more()}">
                                                     <div class="col-md-4">Ful.:</div>
-                                                    <div class="col-md-8"><small data-bind="text: fulfilled_time_formatted"></small></div>
+                                                    <div class="col-md-8"><small data-bind="text: fulfilled_time"></small></div>
                                                 </div>
                                             </div>
                                         </div>

@@ -31,8 +31,7 @@ wsServer.on('request', function (request) {
             con.sendUTF(JSON.stringify({
                 type: MSG_FROM_SERVER.ACK_START,
                 data: {
-                    status: ACK_START_STATUS.OK,
-                    mode: msg.data.mode
+                    status: ACK_START_STATUS.OK
                 }
             }));
         } else if (msg.type === MSG_TO_SERVER.ORDER) {
@@ -56,7 +55,7 @@ wsServer.on('request', function (request) {
                             gate_id: msg.data.gate_id,
                             rack_id: msg.data.rack_id,
                             items: msg.data.items,
-                            start_time: msg.data.start_time,
+                            start_timestep: msg.data.start_timestep,
                             mode: msg.data.mode
                         }
                     }
@@ -95,7 +94,7 @@ wsServer.on('request', function (request) {
 
     console.log("0: Timestep, 1: Action, 2: Log, 3: Statistics, 4: Send, 5: Clear, 6: Msg");
 
-    let ts = undefined;
+    let ts = 0;
     let actions = [];
     let logs = [];
     let stats = [];
@@ -211,8 +210,7 @@ wsServer.on('request', function (request) {
                 logs.push({
                     type: SERVER_LOGS.ORDER_FULFILLED,
                     data: {
-                        id: parseInt(i[2]),
-                        fulfilled_time: i[3] + " " + i[4]
+                        id: parseInt(i[2])
                     }
                 });
             } else if (t === SERVER_LOGS.ORDER_ISSUED) {

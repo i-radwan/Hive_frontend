@@ -1,6 +1,5 @@
 require('../utils/constants');
 require('knockout-mapping');
-require('flatpickr');
 let $ = require('jquery');
 let ko = require('knockout');
 
@@ -13,7 +12,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.refill = ko.observable(false);
     self.gateID = ko.observable("");
     self.rackID = ko.observable("");
-    self.startDateTime = ko.observable(flatpickr.formatDate(new Date(), "Y-m-d H:i"));
+    self.startTimestep = ko.observable(0);
     self.items = ko.observableArray();
     self.itemID = ko.observable();
     self.itemQuantity = ko.observable();
@@ -82,7 +81,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             gate_id: parseInt(self.gateID()),
             rack_id: parseInt(self.rackID()),
             items: ko.mapping.toJS(self.items()),
-            start_time: self.startDateTime()
+            start_timestep: self.startTimestep() !== 0 ? self.startTimestep() : state.timestep
         };
 
         self.lastOrder = order;
@@ -117,13 +116,13 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.activePanel(m);
     };
 
-    self.finishOngoingOrder = function (id, order_fulfilled_time) {
+    self.finishOngoingOrder = function (id, timestep) {
         let o = self.ongoingOrders.remove(function (or) {
             return or.id === id;
         });
 
         o.forEach(function (or) {
-            or.fulfilled_time_formatted(flatpickr.formatDate(flatpickr.parseDate(order_fulfilled_time, "Y-m-d H:i"), "H:i M j, y"));
+            or.fulfilled_time(timestep);
 
             self.finishedOrders.push(or);
         });
@@ -200,9 +199,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 items: items,
                 more: ko.observable(false),
                 satisfiable: ko.observable(true),
-                start_time: o.start_time,
-                start_time_formatted: flatpickr.formatDate(flatpickr.parseDate(o.start_time, "Y-m-d H:i"), "H:i M j, y"),
-                fulfilled_time_formatted: ko.observable("TBD"),
+                start_timestep: o.start_timestep,
+                fulfilled_time: ko.observable("TBD"),
                 progress: ko.computed(function () {
                     let del = 0;
                     let tot = 0;
@@ -218,7 +216,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 })
             };
 
-            if (flatpickr.parseDate(o.start_time, "Y-m-d H:i") > new Date()) {
+            if (o.start_timestep > state.timestep) {
                 self.upcomingOrders.push(order);
             } else {
                 self.ongoingOrders.push(order);
@@ -303,6 +301,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             return false;
         }
+
+        // Past start timestep
+        // ToDo
 
         // Duplicate ID checks
         if (!checkDuplicateOrderID(self.ongoingOrders()) ||
@@ -406,17 +407,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         return true;
     };
-
-    // Configure date time picker
-    let picker = flatpickr("#order_datetime", {
-        enableTime: true,
-        altInput: true,
-        dateFormat: "Y-m-d H:i",
-        altFormat: "H:i M j, y",
-        defaultDate: new Date(),
-        minDate: new Date(),
-        minuteIncrement: 1
-    });
 };
 
 module.exports = orderPanelViewModel;

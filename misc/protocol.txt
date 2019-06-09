@@ -26,7 +26,7 @@ ORDER: {
             quantity:
         }
     ]
-    start_time: Y-m-d H:i                       # To support orders scheduling
+    start_timestep:                             # To support orders scheduling
 }
 
 ACK: {}
@@ -150,7 +150,6 @@ UPDATE: {
             type: ORDER_FULFILLED
             data: {
                 id:
-                fulfilled_time: Y-m-d H:i
             }
         }, {
             type: ORDER_ISSUED                  # Move order from upcoming to ongoing

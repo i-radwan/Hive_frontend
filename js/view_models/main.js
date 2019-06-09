@@ -50,6 +50,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
             case MSG_FROM_SERVER.UPDATE:
                 self.timestep = msg.data.timestep; // ToDo: display on the center console
+                self.state.timestep = self.timestep;
 
                 let actions = msg.data.actions;
                 let logs = msg.data.logs;
@@ -101,9 +102,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         self.leftPanelVM.orderVM.updateOrderDeliveredItems(order_id, item_id, item_quantity);
                     } else if (l.type === SERVER_LOGS.ORDER_FULFILLED) {
                         let id = data.id;
-                        let order_fulfilled_time = data.fulfilled_time;
 
-                        self.leftPanelVM.orderVM.finishOngoingOrder(id, order_fulfilled_time);
+                        self.leftPanelVM.orderVM.finishOngoingOrder(id, self.timestep);
                     } else if (l.type === SERVER_LOGS.ORDER_ISSUED) {
                         let id = data.id;
 
@@ -136,6 +136,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 for (let i = 0; i < statistics.length; ++i) {
                     self.rightPanelVM.updateStats(statistics[i].key, statistics[i].value);
                 }
+
+                // self.centerPanelVM.controlConsoleVM.updateTimestep(self.timestep);
                 break;
 
             case MSG_FROM_SERVER.DEACTIVATE:
