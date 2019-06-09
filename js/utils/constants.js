@@ -139,7 +139,7 @@ KEY_CODE = {
 
 // Server Msgs
 MSG_TO_SERVER = {
-    CONFIG: 0,
+    START: 0,
     ORDER: 1,
     PAUSE: 2,
     STOP: 3,
@@ -151,7 +151,7 @@ MSG_TO_SERVER = {
 };
 
 MSG_FROM_SERVER = {
-    ACK_CONFIG: 0,
+    ACK_START: 0,
     ACK_RESUME: 1,
     ACK_ORDER: 2,
     UPDATE: 3,
@@ -160,12 +160,12 @@ MSG_FROM_SERVER = {
     MSG: 6
 };
 
-CONFIG_MODE = {
+START_MODE = {
     SIMULATE: 0,
     DEPLOY: 1
 };
 
-ACK_CONFIG_STATUS = {
+ACK_START_STATUS = {
     OK: 0,
     ERROR: 1
 };

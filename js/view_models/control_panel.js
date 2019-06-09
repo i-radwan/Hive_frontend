@@ -12,6 +12,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.timer = null;
 
     self.preSimState = null;
+    self.lastStartMode = null;
 
     self.play = function () {
         if (!comm.connected) {
@@ -22,10 +23,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         if (self.playing()) {
             comm.send({
-                type: MSG_TO_SERVER.PAUSE,
-                data: {
-                    mode: runningMode() === RUNNING_MODE.SIMULATE ? CONFIG_MODE.SIMULATE : CONFIG_MODE.DEPLOY
-                }
+                type: MSG_TO_SERVER.PAUSE
             });
 
             logger({
@@ -41,7 +39,9 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             runningMode(RUNNING_MODE.PAUSE);
             self.playing(false);
         } else {
-            sendStateToServer(CONFIG_MODE.SIMULATE);
+            self.lastStartMode = self.lastStartMode ? self.lastStartMode : START_MODE.SIMULATE;
+
+            sendStateToServer(self.lastStartMode);
 
             shouter.notifySubscribers(true, SHOUT.LOADING);
         }
@@ -70,12 +70,16 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         runningMode(RUNNING_MODE.DESIGN);
         self.playing(false);
+        self.lastStartMode = null;
 
         state.load(self.preSimState);
         shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
     };
 
     self.deploy = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN)
+            return;
+
         self.preSimState = Object.assign({}, state);
 
         for (let i = 0; i < state.map.height; ++i) {
@@ -93,23 +97,22 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             }
         }
 
-        sendStateToServer(CONFIG_MODE.DEPLOY);
+        self.lastStartMode = START_MODE.DEPLOY;
+
+        sendStateToServer(self.lastStartMode);
     };
 
     self.handleEsc = function () {
     };
 
-    self.handleAckConfig = function (msg) {
+    self.handleAckStart = function (msg) {
         let data = msg.data;
 
-        if (data.status === ACK_CONFIG_STATUS.OK) {
+        if (data.status === ACK_START_STATUS.OK) {
             self.preSimState = Object.assign({}, state);
 
-            if (data.mode === CONFIG_MODE.SIMULATE) {
-                runningMode(RUNNING_MODE.SIMULATE);
-            } else if (data.mode === CONFIG_MODE.DEPLOY) {
-                runningMode(RUNNING_MODE.DEPLOY);
-            }
+            runningMode(self.lastStartMode === START_MODE.SIMULATE ? RUNNING_MODE.SIMULATE : RUNNING_MODE.DEPLOY);
+            console.log(runningMode());
 
             self.playing(true);
 
@@ -124,7 +127,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             });
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
-        } else if (data.status === ACK_CONFIG_STATUS.ERROR) {
+        } else if (data.status === ACK_START_STATUS.ERROR) {
             shouter.notifySubscribers({text: data.msg, type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
@@ -135,12 +138,9 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         let data = msg.data;
 
         if (data.status === ACK_RESUME_STATUS.OK) {
-            if (data.mode === CONFIG_MODE.SIMULATE) {
-                runningMode(RUNNING_MODE.SIMULATE);
-            } else if (data.mode === CONFIG_MODE.DEPLOY) {
-                runningMode(RUNNING_MODE.DEPLOY);
-            }
+            runningMode(self.lastStartMode === START_MODE.SIMULATE ? RUNNING_MODE.SIMULATE : RUNNING_MODE.DEPLOY);
 
+            console.log(runningMode());
             self.playing(true);
 
             logger({
@@ -185,7 +185,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         if (runningMode() === RUNNING_MODE.DESIGN) {
             comm.send({
-                type: MSG_TO_SERVER.CONFIG,
+                type: MSG_TO_SERVER.START,
                 data: {
                     mode: mode,
                     state: JSON.stringify(state, null, 2)

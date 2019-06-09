@@ -25,13 +25,13 @@ wsServer.on('request', function (request) {
     con.on('message', function (message) {
         let msg = JSON.parse(message.utf8Data);
 
-        if (msg.type === MSG_TO_SERVER.CONFIG) {
+        if (msg.type === MSG_TO_SERVER.START) {
             state = msg.data.state;
 
             con.sendUTF(JSON.stringify({
-                type: MSG_FROM_SERVER.ACK_CONFIG,
+                type: MSG_FROM_SERVER.ACK_START,
                 data: {
-                    status: ACK_CONFIG_STATUS.OK,
+                    status: ACK_START_STATUS.OK,
                     mode: msg.data.mode
                 }
             }));
@@ -78,6 +78,13 @@ wsServer.on('request', function (request) {
                 }));
             }
         } else if (msg.type === MSG_TO_SERVER.RESUME) {
+            con.sendUTF(JSON.stringify({
+                type: MSG_FROM_SERVER.ACK_RESUME,
+                data: {
+                    status: ACK_RESUME_STATUS.OK,
+                    msg: "Nah!"
+                }
+            }));
             console.log("RESUME received");
         } else if (msg.type === MSG_TO_SERVER.PAUSE) {
             console.log("PAUSE received");

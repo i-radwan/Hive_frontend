@@ -36,8 +36,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     self.handleServerMsg = function (msg) {
         switch (msg.type) {
-            case MSG_FROM_SERVER.ACK_CONFIG:
-                self.centerPanelVM.controlConsoleVM.handleAckConfig(msg);
+            case MSG_FROM_SERVER.ACK_START:
+                self.centerPanelVM.controlConsoleVM.handleAckStart(msg);
                 break;
 
             case MSG_FROM_SERVER.ACK_RESUME:

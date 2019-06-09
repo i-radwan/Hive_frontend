@@ -4,16 +4,14 @@ type: data
 TO SERVER:
 ----------------
 
-CONFIG: {
+START: {
     mode: [SIMULATE|DEPLOY]
     state: state*
 }
 
 RESUME: {}
 
-PAUSE: {
-    mode: [SIMULATE|DEPLOY]
-}
+PAUSE: {}
 
 STOP: {}
 
@@ -48,7 +46,7 @@ BLOCKED: {
 ----------------
 FROM SERVER:
 ----------------
-ACK_CONFIG: {
+ACK_START: {
     status: [OK|ERROR]
     mode: [SIMULATE|DEPLOY]
     msg: msg                                    # In the ERROR case
