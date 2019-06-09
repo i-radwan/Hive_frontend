@@ -18,6 +18,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.itemID = ko.observable();
     self.itemQuantity = ko.observable();
 
+    self.lastOrder = null;
+
     self.ongoingOrders = ko.observableArray();
     self.upcomingOrders = ko.observableArray();
     self.finishedOrders = ko.observableArray();
@@ -82,6 +84,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             items: ko.mapping.toJS(self.items()),
             start_time: self.startDateTime()
         };
+
+        self.lastOrder = order;
 
         sendOrderToServer(order);
 
@@ -181,7 +185,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let data = msg.data;
 
         if (data.status === ACK_ORDER_STATUS.OK) {
-            let o = data.order;
+            let o = self.lastOrder;
 
             let items = ko.observableArray();
 
@@ -227,6 +231,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             clear();
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
+
+            self.lastOrder = null;
         } else if (data.status === ACK_ORDER_STATUS.ERROR) {
             shouter.notifySubscribers({text: data.msg, type: MSG_TYPE.ERROR}, SHOUT.MSG);
 

@@ -48,29 +48,16 @@ FROM SERVER:
 ----------------
 ACK_START: {
     status: [OK|ERROR]
-    mode: [SIMULATE|DEPLOY]
     msg: msg                                    # In the ERROR case
 }
 
 ACK_RESUME: {
     status: [OK|ERROR]
-    mode: [SIMULATE|DEPLOY]
     msg: msg                                    # In the ERROR case
 }
 
 ACK_ORDER: {
     status: [OK|ERROR]
-    order: {
-        id:
-        gate_id:
-        items: [
-            {
-                id:
-                quantity:
-            }
-        ]
-        start_time: Y-m-d H:i                   # To support orders scheduling
-    }
     msg: msg                                    # In the ERROR case
 }
 
