@@ -298,35 +298,11 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return false;
         }
 
-        // Duplicate ID check
-        for (let i = 0; i < self.ongoingOrders().length; ++i) {
-            let o = self.ongoingOrders()[i];
-
-            if (o.id === parseInt(self.id())) {
-                shouter.notifySubscribers({text: "Order ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
-
-                return false;
-            }
-        }
-
-        for (let i = 0; i < self.upcomingOrders().length; ++i) {
-            let o = self.upcomingOrders()[i];
-
-            if (o.id === parseInt(self.id())) {
-                shouter.notifySubscribers({text: "Order ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
-
-                return false;
-            }
-        }
-
-        for (let i = 0; i < self.finishedOrders().length; ++i) {
-            let o = self.finishedOrders()[i];
-
-            if (o.id === parseInt(self.id())) {
-                shouter.notifySubscribers({text: "Order ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
-
-                return false;
-            }
+        // Duplicate ID checks
+        if (!checkDuplicateOrderID(self.ongoingOrders()) ||
+            !checkDuplicateOrderID(self.finishedOrders()) ||
+            !checkDuplicateOrderID(self.upcomingOrders())) {
+            return false;
         }
 
         // Gate and Rack exists
@@ -363,7 +339,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return false;
         }
 
-        if (!f2) {
+        if (!f2 && self.rackID().length > 0) {
             shouter.notifySubscribers({text: "No rack with this ID!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
@@ -406,6 +382,20 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
 
             return false;
+        }
+
+        return true;
+    };
+
+    let checkDuplicateOrderID = function (array) {
+        for (let i = 0; i < array.length; ++i) {
+            let o = array[i];
+
+            if (o.id === parseInt(self.id())) {
+                shouter.notifySubscribers({text: "Order ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+
+                return false;
+            }
         }
 
         return true;

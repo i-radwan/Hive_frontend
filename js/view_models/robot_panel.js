@@ -346,7 +346,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_DISCOLORIZE,
+            type: EVENT_TO_GFX.OBJECT_DECOLORIZE,
             data: {
                 type: cell.facility.type,
                 row: r,

@@ -803,7 +803,7 @@ let gfx = function (logicEventHandler) {
             case EVENT_TO_GFX.OBJECT_COLORIZE:
                 // TODO
                 break;
-            case EVENT_TO_GFX.OBJECT_DISCOLORIZE:
+            case EVENT_TO_GFX.OBJECT_DECOLORIZE:
                 // TODO
                 break;
             case EVENT_TO_GFX.OBJECT_BIND:

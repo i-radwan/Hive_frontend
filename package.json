@@ -1,5 +1,5 @@
 {
-  "name": "Hive_frontend",
+  "name": "Hive",
   "version": "1.0.0",
   "description": "A frontend for the Hive system",
   "main": "main.js",
@@ -15,6 +15,7 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.9.0",
     "electron": "^4.0.4"
   },
   "dependencies": {

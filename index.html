@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <title>Hive</title>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="vendor/css/font-awesome.css">
+    <link rel="stylesheet" href="vendor/css/bootstrap-toggle.min.css">
+    <link rel="stylesheet" href="vendor/css/dark.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="main">
@@ -385,7 +384,7 @@
                                   data-bind="click: function() {leftPanelVM.orderVM.refill(!leftPanelVM.orderVM.refill())},
                                              css: {'active': leftPanelVM.orderVM.refill()}">
                                 <i class="far fa-arrow-alt-circle-down"></i>
-                                <span>Refill</span>
+                                <span><span data-bind="visible: !leftPanelVM.orderVM.refill()">No </span>Refill</span>
                             </span>
                         </div>
 
