@@ -56,6 +56,16 @@ let gfx = function (logicEventHandler) {
         self.logicEventHandler = logicEventHandler;
     };
 
+    let cursorCross = "move";
+    let cursorDefault = "default";
+    let cursorPointer = "pointer";
+    let cursorCanGrab = "grab";
+    let cursorGrabbing = "grabbing";
+    // Sets the cursor style to the given style
+    let setCursorStyle = function (style) {
+      document.body.style.cursor = style;
+    };
+
     // Translate the scene with the given direction (Handles ZUI transformation matrix)
     let translateScene = function (dx, dy) {
         zui.translateSurface(dx ,dy);
@@ -209,7 +219,7 @@ let gfx = function (logicEventHandler) {
 
     // Translates a two_object given its current position and destination
     let translateObject = function (object, srcRow, srcCol, dstRow, dstCol) {
-        if (srcRow == dstRow && srcCol == dstCol) return;
+        if (srcRow === dstRow && srcCol === dstCol) return;
         console.log('Moving from (', srcRow, ', ', srcCol, ') to (', dstRow, ', ',dstCol,')');
 
         getRendererObject(srcRow, srcCol).remove(object.two_object);
@@ -238,7 +248,7 @@ let gfx = function (logicEventHandler) {
     let addObject = function (row, col, type) {
         let object = createObject(row, col, type);
 
-        if (type == MAP_CELL.ROBOT)
+        if (type === MAP_CELL.ROBOT)
             mapObjects[row][col].robot = object;
         else
             mapObjects[row][col].facility = object;
@@ -249,7 +259,7 @@ let gfx = function (logicEventHandler) {
     let dragObject = function (srcRow, srcCol, dstRow, dstCol) {
         translateObject(draggedObject, draggedObject.draggingRow, draggedObject.draggingCol, dstRow, dstCol);
 
-        if (dstRow == srcRow && dstCol == srcCol)
+        if (dstRow === srcRow && dstCol === srcCol)
             return;
 
         mapObjects[dstRow][dstCol] = {
@@ -286,10 +296,10 @@ let gfx = function (logicEventHandler) {
 
     // Deletes an object from the scene and removes it from mapObjects array.
     let deleteObject = function (row, col) {
-        if (mapObjects[row][col].robot !== MAP_CELL.EMPTY)
+        if (mapObjects[row][col].robot.type !== MAP_CELL.EMPTY)
             getRendererObject(row, col).remove(mapObjects[row][col].robot.two_object);
 
-        if (mapObjects[row][col].facility !== MAP_CELL.EMPTY)
+        if (mapObjects[row][col].facility.type !== MAP_CELL.EMPTY)
             getRendererObject(row, col).remove(mapObjects[row][col].facility.two_object);
 
         mapObjects[row][col] = {
@@ -346,12 +356,12 @@ let gfx = function (logicEventHandler) {
     };
 
     let handleObjectsAnimation = function (timeDelta) {
-        if (runningMode != RUNNING_MODE.SIMULATE)
+        if (runningMode !== RUNNING_MODE.SIMULATE)
             return;
 
         for (let r = 0; r < mapObjects.length; r++) {
             for (let c = 0; c < mapObjects[r].length; c++) {
-                if (mapObjects[r][c].facility.type == MAP_CELL.EMPTY && mapObjects[r][c].robot.type == MAP_CELL.EMPTY)
+                if (mapObjects[r][c].facility.type === MAP_CELL.EMPTY && mapObjects[r][c].robot.type === MAP_CELL.EMPTY)
                     continue;
                 if(!mapObjects[r][c].facility.animating && !mapObjects[r][c].robot.animating)
                     continue;
@@ -359,12 +369,12 @@ let gfx = function (logicEventHandler) {
                 // Can't animate multiple would default to the robot
                 let animatedObject;
 
-                if (mapObjects[r][c].robot.animating && mapObjects[r][c].robot !== MAP_CELL.EMPTY)
+                if (mapObjects[r][c].robot.animating && mapObjects[r][c].robot.type !== MAP_CELL.EMPTY)
                     animatedObject = mapObjects[r][c].robot;
                 else
                     animatedObject = mapObjects[r][c].facility;
 
-                if (animatedObject.nxt_angle == animatedObject.cur_angle)
+                if (animatedObject.nxt_angle === animatedObject.cur_angle)
                     animatedObject.rotating = false;
 
                 if (animatedObject.translating) {
@@ -380,7 +390,7 @@ let gfx = function (logicEventHandler) {
                     dir2.multiplyScalar(animatedObject.translate_speed * timeDelta);
 
                     // End of animation
-                    if(!dir.equals(dir2) || (animatedObject.cur_x == animatedObject.nxt_x && animatedObject.cur_y == animatedObject.nxt_y)) {
+                    if(!dir.equals(dir2) || (animatedObject.cur_x === animatedObject.nxt_x && animatedObject.cur_y === animatedObject.nxt_y)) {
                         let v = new Two.Vector(animatedObject.cur_x - dir.x, animatedObject.cur_y - dir.y);
                         let v2 = new Two.Vector(animatedObject.nxt_x, animatedObject.nxt_y);
                         dir.setLength(v.distanceTo(v2));
@@ -399,7 +409,7 @@ let gfx = function (logicEventHandler) {
                     dir2 *= animatedObject.rotate_speed * timeDelta;
 
                     // End of animation
-                    if (dir !== dir2 || animatedObject.cur_angle == animatedObject.nxt_angle) {
+                    if (dir !== dir2 || animatedObject.cur_angle === animatedObject.nxt_angle) {
                         dir = animatedObject.nxt_angle - animatedObject.cur_angle + dir;
                         animatedObject.cur_angle = animatedObject.nxt_angle;
                         animatedObject.rotating = false;
@@ -425,7 +435,7 @@ let gfx = function (logicEventHandler) {
                     let dst = getCell(animatedObject.nxt_x, animatedObject.nxt_y);
 
                     if (dst.row !== r || dst.col !== c) {
-                        if (animatedObject.type == MAP_CELL.ROBOT) {
+                        if (animatedObject.type === MAP_CELL.ROBOT) {
                             mapObjects[dst.row][dst.col].robot = {
                                 type: animatedObject.type,
                                 two_object: animatedObject.two_object,
@@ -472,6 +482,7 @@ let gfx = function (logicEventHandler) {
     };
 
     let handleSimulationStart = function () {
+        removeHoveringObject();
         runningMode = RUNNING_MODE.SIMULATE;
         simulationPaused = false;
     };
@@ -516,19 +527,6 @@ let gfx = function (logicEventHandler) {
         zui.zoomBy(-Math.pow(mapWidth * mapHeight, 0.5) / 30, two.width / 2 + canvas.offset().left,  two.height / 2 + canvas.offset().top);
 
         two.update();
-        $(gridMap._renderer.elem)
-            .css({
-                cursor: 'pointer'
-            })
-            .bind('click', function (e) {
-                let cell = getMouseCell(e.clientX, e.clientY);
-
-                self.logicEventHandler({
-                    type: EVENT_FROM_GFX.CELL_CLICK,
-                    row: cell.row,
-                    col: cell.col
-                });
-            });
     };
 
     // Translates the scene a tiny amount according to the pressed keys (should only be called in update function)
@@ -550,7 +548,7 @@ let gfx = function (logicEventHandler) {
 
     // Sends to the mainVM event to delete the selected object
     let handleDeleteEvent = function () {
-        if (selectedObject != -1) {
+        if (selectedObject !== -1) {
             self.logicEventHandler({
                 type: EVENT_FROM_GFX.CELL_DELETE,
                 row: selectedObject.row,
@@ -564,6 +562,7 @@ let gfx = function (logicEventHandler) {
         startDragX = e.clientX - canvas.offset().left;
         startDragY = e.clientY - canvas.offset().top;
         let cell = getMouseCell(e.clientX, e.clientY);
+        setCursorStyle(cursorCross);
 
         if(cell.inBounds && !hovering) {
             let obj, cellType;
@@ -577,7 +576,8 @@ let gfx = function (logicEventHandler) {
                 cellType = mapObjects[cell.row][cell.col].robot.type;
             }
 
-            if (cellType != MAP_CELL.EMPTY) {
+            if (cellType !== MAP_CELL.EMPTY) {
+                setCursorStyle(cursorGrabbing);
                 draggingObject = true;
                 draggedObject = obj;
                 draggedObject.draggingRow = cell.row;
@@ -588,6 +588,9 @@ let gfx = function (logicEventHandler) {
                 draggingObject = false;
                 draggedObject = -1;
             }
+        }
+        else if (hovering) {
+            setCursorStyle(cursorGrabbing);
         }
     };
 
@@ -613,7 +616,9 @@ let gfx = function (logicEventHandler) {
 
     // Handles initial Dragging click
     canvas.bind('mousedown', function (e) {
-        if (runningMode == RUNNING_MODE.DESIGN)
+        if (e.which !== 1)
+            return;
+        if (runningMode === RUNNING_MODE.DESIGN)
             handleDesignModeMouseDownEvent(e);
         else
             handleSimulationModeMouseDownEvent(e);
@@ -626,6 +631,7 @@ let gfx = function (logicEventHandler) {
         let currentCell = getMouseCell(mouseX, mouseY);
 
         if(hovering) {
+            setCursorStyle(cursorCanGrab);
             if(currentCell.inBounds && !hoveredObjectIsDrawn) {
                 // I think they could be removed TODO
                 hoveredObject.row = currentCell.row;
@@ -645,7 +651,17 @@ let gfx = function (logicEventHandler) {
             hoveredObject.col = currentCell.col;
         }
 
-        if(!dragging) return;
+        if(!dragging) {
+            if (currentCell.inBounds) {
+                if (mapObjects[currentCell.row][currentCell.col].facility.type !== MAP_CELL.EMPTY || mapObjects[currentCell.row][currentCell.col].robot.type !== MAP_CELL.EMPTY) {
+                    setCursorStyle(cursorCanGrab);
+                    return;
+                }
+            }
+            if (!hovering)
+                setCursorStyle(cursorDefault);
+            return;
+        }
         if (draggingObject) {
             translateObject(draggedObject, draggedObject.draggingRow, draggedObject.draggingCol, currentCell.row, currentCell.col);
             draggedObject.draggingRow = currentCell.row;
@@ -665,40 +681,51 @@ let gfx = function (logicEventHandler) {
     let x = 0;
 
     canvas.bind('contextmenu', function () {
-        if (x%9 == 0) {
-            handleSimulationStart();
-            animateObject(0, 0, 0, 0, 90, 0.1, 0.5);
-        } else if (x%9 == 1) {
-            animateObject(0, 0, 0, 5, 0, 0.1, 0.1);
-        } else if (x%9 == 2) {
-            animateObject(0, 5, 0, 5, -90, 0.1, 0.5);
-        } else if (x%9 == 3) {
-            animateObject(0, 5, 5, 5, 0, 0.1, 0.1);
-        } else if (x%9 == 4) {
-            animateObject(5, 5, 5, 5, -90, 0.1, 0.5);
-        } else if (x%9 == 5) {
-            animateObject(5, 5, 5, 0, 0, 0.1, 0.1);
-        } else if (x%9 == 6) {
-            animateObject(5, 0, 5, 0, -90, 0.1, 0.5);
-        } else if (x%9 == 7) {
-            animateObject(5, 0, 0, 0, 0, 0.1, 0.1);
-        } else if (x%9 == 8) {
-            animateObject(0, 0, 0, 0, -180, 0.1, 0.5);
-        }
-       x++;
+       //  if (x%9 === 0) {
+       //      handleSimulationStart();
+       //      animateObject(0, 0, 0, 0, 90, 0.1, 0.5);
+       //  } else if (x%9 === 1) {
+       //      animateObject(0, 0, 0, 5, 0, 0.1, 0.1);
+       //  } else if (x%9 === 2) {
+       //      animateObject(0, 5, 0, 5, -90, 0.1, 0.5);
+       //  } else if (x%9 === 3) {
+       //      animateObject(0, 5, 5, 5, 0, 0.1, 0.1);
+       //  } else if (x%9 === 4) {
+       //      animateObject(5, 5, 5, 5, -90, 0.1, 0.5);
+       //  } else if (x%9 === 5) {
+       //      animateObject(5, 5, 5, 0, 0, 0.1, 0.1);
+       //  } else if (x%9 === 6) {
+       //      animateObject(5, 0, 5, 0, -90, 0.1, 0.5);
+       //  } else if (x%9 === 7) {
+       //      animateObject(5, 0, 0, 0, 0, 0.1, 0.1);
+       //  } else if (x%9 === 8) {
+       //      animateObject(0, 0, 0, 0, -180, 0.1, 0.5);
+       //  }
+       // x++;
     });
 
     // Handles final dragging move and mouse clicks
     canvas.bind('mouseup', function (e) {
+        if (e.which !== 1)
+            return;
+
         let currentCell = getMouseCell(e.clientX, e.clientY);
-        if (draggingObject) {
-            if (draggedObject.row != currentCell.row || draggedObject.col != currentCell.col) {
+        setCursorStyle(cursorDefault);
+        if (draggingObject && (draggedObject.row !== currentCell.row || draggedObject.col !== currentCell.col)) {
+            self.logicEventHandler({
+                type: EVENT_FROM_GFX.CELL_DRAG,
+                src_row: draggedObject.row,
+                src_col: draggedObject.col,
+                dst_row: currentCell.row,
+                dst_col: currentCell.col
+            });
+        }
+        else {
+            if(currentCell.inBounds) {
                 self.logicEventHandler({
-                    type: EVENT_FROM_GFX.CELL_DRAG,
-                    src_row: draggedObject.row,
-                    src_col: draggedObject.col,
-                    dst_row: currentCell.row,
-                    dst_col: currentCell.col
+                    type: EVENT_FROM_GFX.CELL_CLICK,
+                    row: currentCell.row,
+                    col: currentCell.col
                 });
             }
         }
