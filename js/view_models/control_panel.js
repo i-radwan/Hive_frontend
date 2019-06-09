@@ -6,7 +6,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     let self = this;
 
     self.playing = ko.observable(false);
-    self.coordinates = ko.observable("");
+    self.timestep = ko.observable(0);
+    self.coordinates = ko.observable("(10, 16)");
     self.msg = ko.observable("");
     self.msgType = ko.observable(MSG_TYPE.INFO);
     self.timer = null;
@@ -163,6 +164,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     self.handleCellHover = function(row, col) {
         self.coordinates("(" + row + ", " + col + ")");
+    };
+
+    self.updateTimestep = function(timestep) {
+        self.timestep(timestep);
     };
 
     shouter.subscribe(function (msg) {

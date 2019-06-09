@@ -137,7 +137,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     self.rightPanelVM.updateStats(statistics[i].key, statistics[i].value);
                 }
 
-                // self.centerPanelVM.controlConsoleVM.updateTimestep(self.timestep);
+                self.centerPanelVM.controlConsoleVM.updateTimestep(self.timestep);
                 break;
 
             case MSG_FROM_SERVER.DEACTIVATE:
