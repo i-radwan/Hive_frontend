@@ -207,8 +207,9 @@ EVENT_FROM_GFX = {
     CELL_CLICK: 0,
     CELL_DRAG: 1,
     CELL_DELETE: 2,
-    ACK_ACTION: 3,
-    ESC: 4
+    CELL_HOVER: 3,
+    ACK_ACTION: 4,
+    ESC: 5
 };
 
 EVENT_TO_GFX = {

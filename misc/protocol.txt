@@ -381,18 +381,6 @@ CELL_CLICK: {
     col:
 }
 
-ACK_ACTION: {
-    type:                                       # Echo event type
-    data:                                       # Echo event data
-}
-
-CELL_DRAG: {
-    src_row:
-    src_col:
-    dst_row:
-    dst_col:
-}
-
 CELL_DRAG: {
     src_row:
     src_col:
@@ -403,6 +391,16 @@ CELL_DRAG: {
 CELL_DELETE: {
     row:
     col:
+}
+
+CELL_HOVER: {
+    row:
+    col:
+}
+
+ACK_ACTION: {
+    type:                                       # Echo event type
+    data:                                       # Echo event data
 }
 
 ESC: {
