@@ -154,16 +154,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.delayOrder = function (id) {
-        updateOrderSatisfiability(id, false, self.ongoingOrders) ||
-        updateOrderSatisfiability(id, false, self.upcomingOrders);
-    };
-
-    self.resumeOrder = function (id) {
-        updateOrderSatisfiability(id, true, self.ongoingOrders) ||
-        updateOrderSatisfiability(id, true, self.upcomingOrders);
-    };
-
     self.updateOrderDeliveredItems = function (order_id, item_id, item_quantity) {
         self.ongoingOrders().forEach(function (o) {
             if (o.id !== order_id)
@@ -236,34 +226,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
         }
-    };
-
-    let updateOrderSatisfiability = function (id, satisfiable, list) {
-        for (let i = 0; i < list().length; ++i) {
-            if (list()[i].id === id) {
-                list()[i].satisfiable(satisfiable);
-
-                if (!satisfiable){
-                    logger({
-                        level: LOG_LEVEL.ERROR,
-                        object: LOG_TYPE.ORDER,
-                        color: "#bababa",
-                        msg: "Order <b>(#" + id + ")</b> is delayed."
-                    });
-                } else {
-                    logger({
-                        level: LOG_LEVEL.INFO,
-                        object: LOG_TYPE.ORDER,
-                        color: "#bababa",
-                        msg: "Order <b>(#" + id + ")</b> has been resumed."
-                    });
-                }
-
-                return true;
-            }
-        }
-
-        return false;
     };
 
     let sendOrderToServer = function (order) {

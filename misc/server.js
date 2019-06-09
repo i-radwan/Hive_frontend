@@ -220,20 +220,6 @@ wsServer.on('request', function (request) {
                         id: parseInt(i[2])
                     }
                 });
-            } else if (t === SERVER_LOGS.ORDER_DELAYED) {
-                logs.push({
-                    type: SERVER_LOGS.ORDER_DELAYED,
-                    data: {
-                        id: parseInt(i[2])
-                    }
-                });
-            } else if (t === SERVER_LOGS.ORDER_RESUMED) {
-                logs.push({
-                    type: SERVER_LOGS.ORDER_RESUMED,
-                    data: {
-                        id: parseInt(i[2])
-                    }
-                });
             } else if (t === SERVER_LOGS.RACK_ADJUSTED) {
                 logs.push({
                     type: SERVER_LOGS.RACK_ADJUSTED,

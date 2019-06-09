@@ -108,14 +108,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let id = data.id;
 
                         self.leftPanelVM.orderVM.issueOrder(id);
-                    } else if (l.type === SERVER_LOGS.ORDER_DELAYED) {
-                        let id = data.id;
-
-                        self.leftPanelVM.orderVM.delayOrder(id);
-                    } else if (l.type === SERVER_LOGS.ORDER_RESUMED) {
-                        let id = data.id;
-
-                        self.leftPanelVM.orderVM.resumeOrder(id);
                     } else if (l.type === SERVER_LOGS.RACK_ADJUSTED) {
                         let id = data.rack_id;
                         let row = data.rack_row;

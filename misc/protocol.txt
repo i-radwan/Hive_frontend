@@ -157,16 +157,6 @@ UPDATE: {
                 id:
             }
         }, {
-            type: ORDER_DELAYED                 # Delay upcoming/ongoing order
-            data: {
-                id:
-            }
-        }, {
-            type: ORDER_RESUMED                 # Resume delayed order
-            data: {
-                id
-            }
-        }, {
             type: RACK_ADJUSTED
             data: {
                 id:
