@@ -58,6 +58,8 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
         let objs = state.map.getObjects();
 
         for (let k = 0; k < objs.length; k++) {
+            console.log(objs[k]);
+
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
                 data: objs[k]

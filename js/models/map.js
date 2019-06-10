@@ -53,6 +53,12 @@ let Map = function () {
         }
     };
 
+    self.setObjects = function (newObjects) {
+        console.log("Setting the objects!");
+
+        self.objects = Object.assign({}, newObjects);
+    };
+
     self.isFree = function(r, c) {
         return self.grid[r][c].objects.length === 0;
     };
@@ -134,14 +140,16 @@ let Map = function () {
     };
 
     self.getInvalidIPRobot = function() {
-        for (const [key, value] of Object.entries(self.objects)) {
-            if (key[1] !== MAP_CELL.ROBOT)
+        for (const [k, v] of Object.entries(self.objects)) {
+            let key = k.split(",");
+
+            if (parseInt(key[1]) !== MAP_CELL.ROBOT)
                 continue;
 
-            let rob = self.getRobot(value[0], value[1]);
+            let rob = self.getRobot(v[0], v[1]);
 
             if (!rob.ip.match(REG_IP)) {
-                return [value[0], value[1]];
+                return [v[0], v[1]];
             }
         }
 
@@ -181,11 +189,13 @@ let Map = function () {
     self.getItemRacks = function(id) {
         let racks = "";
 
-        for (const [key, value] of Object.entries(self.objects)) {
-            if (key[1] !== MAP_CELL.RACK)
+        for (const [k, v] of Object.entries(self.objects)) {
+            let key = k.split(",");
+
+            if (parseInt(key[1]) !== MAP_CELL.RACK)
                 continue;
 
-            let rack = self.getSpecificFacility(value[0], value[1], key[1]);
+            let rack = self.getSpecificFacility(v[0], v[1], parseInt(key[1]));
 
             for (let k = 0; k < rack.items.length; ++k) {
                 if (rack.items[k].id === id) {
@@ -228,11 +238,13 @@ let Map = function () {
     self.getMovingRobots = function() {
         let robots = [];
 
-        for (const [key, value] of Object.entries(self.objects)) {
-            if (key[1] !== MAP_CELL.ROBOT)
+        for (const [k, v] of Object.entries(self.objects)) {
+            let key = k.split(",");
+
+            if (parseInt(key[1]) !== MAP_CELL.ROBOT)
                 continue;
 
-            let rob = self.getRobot(value[0], value[1]);
+            let rob = self.getRobot(v[0], v[1]);
 
             if (rob.moving)
                 robots.push(rob);
@@ -245,18 +257,20 @@ let Map = function () {
         let objs = [];
         let cells = {};
 
-        for (const [key, value] of Object.entries(self.objects)) {
-            cells[[value[0], value[1]]] = true;
+        for (const [k, v] of Object.entries(self.objects)) {
+            cells[[v[0], v[1]]] = true;
         }
 
-        for (const [key, value] of Object.entries(cells)) {
+        for (const [k, v] of Object.entries(cells)) {
+            let key = k.split(",");
+
             let c = self.grid[key[0]][key[1]];
 
             for (let k = 0; k < c.objects.length; k++) {
                 let obj = Object.assign({}, c.objects[k]);
 
-                obj.row = key[0];
-                obj.col = key[1];
+                obj.row = parseInt(key[0]);
+                obj.col = parseInt(key[1]);
 
                 objs.push(obj);
             }
