@@ -208,8 +208,8 @@ ACTIVATE: { # The row/col that the robot is supposed to be there after finishing
 }
 
 MSG: {
-    type: [INFO|ERROR]
-    text: msg
+    status: [INFO|ERROR]
+    msg: msg
 }
 
 ----------------
