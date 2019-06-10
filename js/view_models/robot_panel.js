@@ -201,7 +201,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.move = function (r, c) {
+    self.move = function (r, c) { // ToDo: this will cause error
         let cell = state.map.grid[r][c];
         let robot = cell.robot;
 

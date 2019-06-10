@@ -38,7 +38,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         } else if (state.map.grid[row][col].facility !== undefined && self.activeGateRow === -1 && self.activeGateCol === -1) {
             shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
         } else if (state.map.grid[row][col].facility === undefined && self.activeGateRow !== -1 && self.activeGateCol !== -1) {
-            gfxEventHandler({
+            gfxEventHandler({ // ToDo call controllers handle escape functions
                 type: EVENT_TO_GFX.ESC
             });
         }
