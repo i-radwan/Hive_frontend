@@ -21,29 +21,45 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.port = ko.observable("");
     self.deactivated = ko.observable(false);
 
-    self.applyVisible = ko.observable(false);
+    self.editing = ko.observable(false);
     self.activeRobotRow = -1;
     self.activeRobotCol = -1;
 
     self.add = function (row, col) {
-        if (state.map.grid[row][col].robot === undefined && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
+        let isRobotFree = state.map.isRobotFree(row, col);
+
+        if (self.editing()) {
+            if (isRobotFree) {
+                gfxEventHandler({ // ToDo call controllers handle escape functions
+                    type: EVENT_TO_GFX.ESC
+                });
+            }
+
+            return;
+        }
+
+        if (isRobotFree) {
             if (!check()) {
                 return;
             }
 
-            state.map.grid[row][col].robot = {
+            state.map.addObject(row, col, {
+                type: MAP_CELL.ROBOT,
                 id: parseInt(self.id()),
                 color: self.color(),
                 direction: ROBOT_DIR.RIGHT,
                 load_cap: parseInt(self.loadCap()),
                 ip: self.ip(),
                 port: self.port()
-            };
+            });
 
             self.id(Math.max(state.nextIDs.robot, parseInt(self.id()) + 1));
             state.nextIDs.robot = parseInt(self.id());
 
-            shouter.notifySubscribers({text: "Robot placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Robot placed successfully!",
+                type: MSG_TYPE.INFO
+            }, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
@@ -58,19 +74,19 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                     port: self.port()
                 }
             });
-        } else if (state.map.grid[row][col].robot !== undefined && self.activeRobotRow === -1 && self.activeRobotCol === -1) {
-            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
-        } else if (state.map.grid[row][col].robot === undefined && self.activeRobotRow !== -1 && self.activeRobotCol !== -1) {
-            gfxEventHandler({
-                type: EVENT_TO_GFX.ESC
-            });
+        } else {
+            shouter.notifySubscribers({
+                text: "(" + row + ", " + col + ") is occupied!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
         }
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[dstRow][dstCol].robot === undefined && state.map.grid[dstRow][dstCol].facility === undefined) {
-            state.map.grid[dstRow][dstCol].robot = Object.assign({}, state.map.grid[srcRow][srcCol].robot);
-            state.map.grid[srcRow][srcCol].robot = undefined;
+        if (state.map.isFree(dstRow, dstCol)) {
+            let rob = state.map.getRobot(srcRow, srcCol);
+
+            state.map.moveObject(srcRow, srcCol, dstRow, dstCol, rob);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
@@ -102,41 +118,31 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.delete = function (row, col) {
-        if (state.map.grid[row][col].robot !== undefined) {
-            state.map.grid[row][col].robot = undefined;
+        let rob = state.map.getRobot(row, col);
 
-            gfxEventHandler({
-                type: EVENT_TO_GFX.OBJECT_DELETE,
-                data: {
-                    type: MAP_CELL.ROBOT,
-                    row: row,
-                    col: col
-                }
-            });
+        state.map.deleteObject(row, col, rob);
 
-            unselect();
-            clear();
+        unselect();
+        clear();
 
-            return true;
-        }
-
-        return false;
+        return true;
     };
 
     self.fill = function (row, col) {
-        let robot = state.map.grid[row][col].robot;
+        let rob = state.map.getRobot(row, col);
 
-        if (robot === undefined)
+        if (rob === null)
             return;
+
 
         self.activeRobotRow = row;
         self.activeRobotCol = col;
 
-        self.id(robot.id);
-        self.color(robot.color);
-        self.loadCap(robot.load_cap);
-        self.ip(robot.ip);
-        self.port(robot.port);
+        self.id(rob.id);
+        self.color(rob.color);
+        self.loadCap(rob.load_cap);
+        self.ip(rob.ip);
+        self.port(rob.port);
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
@@ -150,7 +156,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.edit = function (row, col) {
         self.fill(row, col);
-        self.applyVisible(true);
+        self.editing(true);
         self.activeRobotRow = row;
         self.activeRobotCol = col;
 
@@ -177,18 +183,23 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (!check())
             return false;
 
-        state.map.grid[self.activeRobotRow][self.activeRobotCol].robot = {
+        let rob = state.map.getRobot(self.activeRobotRow, self.activeRobotCol);
+
+        state.map.updateObject(self.activeRobotRow, self.activeRobotCol, {
             type: MAP_CELL.ROBOT,
             id: parseInt(self.id()),
             color: self.color(),
             load_cap: parseInt(self.loadCap()),
             ip: self.ip(),
             port: self.port()
-        };
+        }, rob.id);
 
         state.nextIDs.robot = Math.max(state.nextIDs.robot, parseInt(self.id()) + 1);
 
-        shouter.notifySubscribers({text: "Robot updated successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
+        shouter.notifySubscribers({
+            text: "Robot updated successfully!",
+            type: MSG_TYPE.INFO
+        }, SHOUT.MSG);
 
         unselect();
         clear();
@@ -201,19 +212,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.move = function (r, c) { // ToDo: this will cause error
-        let cell = state.map.grid[r][c];
-        let robot = cell.robot;
-
-        let nr = r + ROW_DELTA[robot.direction];
-        let nc = c + COL_DELTA[robot.direction];
-        let ncell = state.map.grid[nr][nc];
-
-        ncell.robot = Object.assign({}, robot);
-        cell.robot = undefined;
-
-        ncell.robot.moving = true;
-
+    self.move = function (r, c) {
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_MOVE,
             data: {
@@ -224,10 +223,9 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.rotateRight = function (r, c) {
-        let cell = state.map.grid[r][c];
-        let robot = cell.robot;
+        let rob = state.map.getRobot(r, c);
 
-        robot.direction = (robot.direction - 1 + ROBOT_DIR_CNT) % ROBOT_DIR_CNT;
+        rob.direction = (rob.direction - 1 + ROBOT_DIR_CNT) % ROBOT_DIR_CNT;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_ROTATE_RIGHT,
@@ -239,10 +237,10 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.rotateLeft = function (r, c) {
-        let cell = state.map.grid[r][c];
-        let robot = cell.robot;
+        let rob = state.map.getRobot(r, c);
 
-        robot.direction = (robot.direction + 1) % ROBOT_DIR_CNT;
+        rob.moving = true;
+        rob.direction = (rob.direction + 1) % ROBOT_DIR_CNT;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_ROTATE_LEFT,
@@ -254,22 +252,10 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.retreat = function (r, c) {
-        let cell = state.map.grid[r][c];
-        let robot = cell.robot;
+        let rob = state.map.getRobot(r, c);
 
-        let or = r - ROW_DELTA[robot.direction];
-        let oc = c - COL_DELTA[robot.direction];
-
-        let ocell = state.map.grid[or][oc];
-
-        // ToDo Mark cells.na = false
-
-        robot.direction = (robot.direction + 2) % ROBOT_DIR_CNT;
-
-        ocell.robot = Object.assign({}, robot);
-        cell.robot = undefined;
-
-        ocell.robot.moving = true;
+        rob.moving = true;
+        rob.direction = (rob.direction + 2) % ROBOT_DIR_CNT;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_RETREAT,
@@ -281,18 +267,19 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.bind = function (id, r, c) {
-        let cell = state.map.grid[r][c];
+        let fac = state.map.getBindableFacility(r, c);
+        let rob = state.map.getRobot(r, c);
 
-        if (cell.facility === undefined) {
+        if (fac === undefined) {
             throw "Error: there should be facility here!";
         }
 
-        cell.facility.bound = true;
-        cell.facility.bound_to_id = id;
+        fac.bound = true;
+        fac.bound_to_id = id;
 
-        cell.robot.bound = true;
-        cell.robot.bound_to = cell.facility.id;
-        cell.robot.bound_to_type = cell.facility.type;
+        rob.bound = true;
+        rob.bound_to = fac.id;
+        rob.bound_to_type = fac.type;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_BIND,
@@ -300,41 +287,42 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 id: id,
                 row: r,
                 col: c,
-                object_id: cell.facility.id,
-                object_type: cell.facility.type
+                object_id: fac.id,
+                object_type: fac.type
             }
         });
 
-        if (cell.facility.type === MAP_CELL.GATE) {
+        if (fac.type === MAP_CELL.GATE) {
             logger({
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
-                color: cell.robot.color,
-                msg: "Robot <b>(#" + cell.robot.id + ")</b> is bound to the Gate#<b>(" + cell.facility.id + ")</b>."
+                color: rob.color,
+                msg: "Robot <b>(#" + rob.id + ")</b> is bound to the Gate#<b>(" + fac.id + ")</b>."
             });
-        } else if (cell.facility.type === MAP_CELL.STATION) {
+        } else if (fac.type === MAP_CELL.STATION) {
             logger({
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
-                color: cell.robot.color,
-                msg: "Robot <b>(#" + cell.robot.id + ")</b> is charging at Station#<b>(" + cell.facility.id + ")</b>."
+                color: rob.color,
+                msg: "Robot <b>(#" + rob.id + ")</b> is charging at Station#<b>(" + fac.id + ")</b>."
             });
         }
     };
 
     self.unbind = function (id, r, c) {
-        let cell = state.map.grid[r][c];
+        let fac = state.map.getBoundFacility(r, c);
+        let rob = state.map.getRobot(r, c);
 
-        if (cell.facility === undefined) {
+        if (fac === undefined) {
             throw "Error: there should be facility here!";
         }
 
-        cell.facility.bound = false;
-        cell.facility.bound_to_id = undefined;
+        fac.bound = false;
+        fac.bound_to_id = undefined;
 
-        cell.robot.bound = false;
-        cell.robot.bound_to = undefined;
-        cell.robot.bound_to_type = undefined;
+        rob.bound = false;
+        rob.bound_to = undefined;
+        rob.bound_to_type = undefined;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_UNBIND,
@@ -342,54 +330,55 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 id: id,
                 row: r,
                 col: c,
-                object_id: cell.facility.id,
-                object_type: cell.facility.type
+                object_id: fac.id,
+                object_type: fac.type
             }
         });
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_DECOLORIZE,
             data: {
-                type: cell.facility.type,
+                type: fac.type,
                 row: r,
                 col: c
             }
         });
 
-        if (cell.facility.type === MAP_CELL.GATE) {
+        if (fac.type === MAP_CELL.GATE) {
             logger({
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
-                color: cell.robot.color,
-                msg: "Robot <b>(#" + cell.robot.id + ")</b> is released from the Gate#<b>(" + cell.facility.id + ")</b>."
+                color: rob.color,
+                msg: "Robot <b>(#" + rob.id + ")</b> is released from the Gate#<b>(" + fac.id + ")</b>."
             });
-        } else if (cell.facility.type === MAP_CELL.STATION) {
+        } else if (fac.type === MAP_CELL.STATION) {
             logger({
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
-                color: cell.robot.color,
-                msg: "Robot <b>(#" + cell.robot.id + ")</b> is leaving Station#<b>(" + cell.facility.id + ")</b>."
+                color: rob.color,
+                msg: "Robot <b>(#" + rob.id + ")</b> is leaving Station#<b>(" + fac.id + ")</b>."
             });
         }
     };
 
     self.load = function (id, r, c) {
-        let cell = state.map.grid[r][c];
+        let fac = state.map.getSpecificFacility(r, c, MAP_CELL.RACK);
+        let rob = state.map.getRobot(r, c);
 
-        if (cell.facility === undefined || cell.facility.type !== MAP_CELL.RACK) {
-            throw "Error: there should be a rack here!";
+        if (fac === undefined) {
+            throw "Error: there should be facility here!";
         }
 
-        cell.facility.loaded = true;
-        cell.facility.robot_id = id;
+        fac.loaded = true;
+        fac.robot_id = id;
 
-        cell.robot.loaded = true;
-        cell.robot.loaded_rack_id = cell.facility.id;
+        rob.loaded = true;
+        rob.loaded_rack_id = fac.id;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_LOAD,
             data: {
-                id: cell.facility.id,
+                id: fac.id,
                 row: r,
                 col: c
             }
@@ -398,43 +387,44 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         logger({
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.ROBOT,
-            color: cell.robot.color,
-            msg: "Robot <b>(#" + cell.robot.id + ")</b> loaded Rack#<b>(" + cell.facility.id + ")</b>."
+            color: rob.color,
+            msg: "Robot <b>(#" + rob.id + ")</b> loaded Rack#<b>(" + fac.id + ")</b>."
         });
     };
 
     self.offload = function (id, r, c) {
-        let cell = state.map.grid[r][c];
+        let fac = state.map.getSpecificFacility(r, c, MAP_CELL.RACK);
+        let rob = state.map.getRobot(r, c);
 
-        if (cell.facility === undefined || cell.facility.type !== MAP_CELL.RACK) {
-            throw "Error: there should be a rack here!";
+        if (fac === undefined) {
+            throw "Error: there should be facility here!";
         }
 
-        cell.facility.loaded = false;
-        cell.facility.robot_id = undefined;
+        fac.loaded = false;
+        fac.robot_id = undefined;
 
-        cell.robot.loaded = false;
-        cell.robot.loaded_rack_id = undefined;
+        rob.loaded = false;
+        rob.loaded_rack_id = undefined;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_OFFLOAD,
             data: {
                 row: r,
                 col: c,
-                id: cell.facility.id
+                id: fac.id
             }
         });
 
         logger({
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.ROBOT,
-            color: cell.robot.color,
-            msg: "Robot <b>(#" + cell.robot.id + ")</b> offloaded Rack#<b>(" + cell.facility.id + ")</b>."
+            color: rob.color,
+            msg: "Robot <b>(#" + rob.id + ")</b> offloaded Rack#<b>(" + fac.id + ")</b>."
         });
     };
 
     self.assignTask = function (robot_id, robot_row, robot_col, rack_id, rack_row, rack_col) {
-        let cell = state.map.grid[robot_row][robot_col];
+        let rob = state.map.getRobot(robot_row, robot_col);
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_COLORIZE,
@@ -442,14 +432,14 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: MAP_CELL.RACK,
                 row: rack_row,
                 col: rack_col,
-                color: cell.robot.color
+                color: rob.color
             }
         });
 
         logger({
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.ROBOT,
-            color: cell.robot.color,
+            color: rob.color,
             msg: "Robot <b>(#" + robot_id + ")</b> is assigned to Rack#<b>(" + rack_id + ")</b>."
         });
     };
@@ -483,50 +473,14 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.deactivateRobot = function (row, col) {
-        // ToDo: active robot row,col aren't yet visually clear that the user should click there
-        // ToDo: GFX should send me the new robot row and col
-        let cell = state.map.grid[row][col];
-        let robot = state.map.grid[row][col].robot;
+        let rob = state.map.getRobot(row, col);
 
-        if (robot.moving) { // Two cells has to be marked as na (not available)
-            let previousRow = row - ROW_DELTA[robot.direction];
-            let previousCol = col - COL_DELTA[robot.direction];
-            let previousCell = state.map.grid[previousRow][previousCol];
-
-            cell.na = true;
-            previousCell.na = true;
-
-            // Check if there's another robot was going to the previous cell
-            if (previousCell.robot) {
-                sendToServer({
-                    type: MSG_TO_SERVER.BLOCKED, // ToDo: recursive call
-                    data: {
-                        id: parseInt(previousCell.robot.id)
-                    }
-                });
-
-                gfxEventHandler({
-                    type: EVENT_TO_GFX.OBJECT_FAILURE,
-                    data: {
-                        id: parseInt(previousCell.robot.id),
-                        row: previousRow,
-                        col: previousCol
-                    }
-                });
-
-                logger({
-                    level: LOG_LEVEL.ERROR,
-                    object: LOG_TYPE.ROBOT,
-                    color: cell.robot.color,
-                    msg: "Robot <b>(#" + parseInt(previousCell.robot.id) + ")</b> cannot move</b>."
-                });
-            }
-        } else {
-            cell.na = true; // Not available
+        if (rob.moving) {
+            aggregateBlocking(row, col);
         }
 
         gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_STOP,
+            type: EVENT_TO_GFX.OBJECT_FAILURE, // ToDo: STOP or FAILURE (depends on ACK)
             data: {
                 id: parseInt(self.id()),
                 row: row,
@@ -537,27 +491,13 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         logger({
             level: LOG_LEVEL.ERROR,
             object: LOG_TYPE.ROBOT,
-            color: cell.robot.color,
-            msg: "Robot <b>(#" + parseInt(self.id()) + ")</b> has failed</b>."
+            color: rob.color,
+            msg: "Robot <b>(#" + rob.id + ")</b> has failed</b>."
         });
     };
 
     self.activateRobot = function (row, col) {
-        // ToDo: active robot row,col aren't yet visually clear that the user should click there
-        // ToDo: GFX should send me the new robot row and col
-        let cell = state.map.grid[row][col];
-        let robot = state.map.grid[row][col].robot;
-
-        if (robot.moving) { // Two cells has to be marked as na (not available)
-            let previousRow = row - ROW_DELTA[robot.direction];
-            let previousCol = col - COL_DELTA[robot.direction];
-            let previousCell = state.map.grid[previousRow][previousCol];
-
-            cell.na = false;
-            previousCell.na = false;
-        } else {
-            cell.na = false; // Available
-        }
+        let rob = state.map.getRobot(row, col);
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_FIXED,
@@ -571,18 +511,33 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         logger({
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.ROBOT,
-            color: cell.robot.color,
-            msg: "Robot <b>(#" + parseInt(self.id()) + ")</b> is back</b>."
+            color: rob.color,
+            msg: "Robot <b>(#" + rob.id + ")</b> is back</b>."
         });
     };
 
-    self.updateRobotMovingState = function (id, row, col) {
-        let cell = state.map.grid[row][col];
+    self.doneMoving = function (id, row, col) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+        let r = pos[0];
+        let c = pos[1];
 
-        cell.robot.moving = false;
+        let rob = state.map.getRobot(r, c);
+
+        let nr = r + ROW_DELTA[rob.direction];
+        let nc = c + COL_DELTA[rob.direction];
+
+        rob.moving = false;
+
+        state.map.moveObject(r, c, nr, nc, rob);
+
+        if (rob.loaded) {
+            let fac = state.map.getSpecificFacility(r, c, MAP_CELL.RACK);
+
+            state.map.moveObject(r, c, nr, nc, fac);
+        }
     };
 
-    self.updateBattery = function(id, row, col, battery) {
+    self.updateBattery = function (id, row, col, battery) {
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_UPDATE,
             data: {
@@ -599,61 +554,125 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         clear();
     };
 
+    let aggregateBlocking = function (row, col) {
+        let movingRobots = state.map.getMovingRobots();
+
+        for (let i = 0; i < movingRobots.length; ++i) {
+            let rob = movingRobots[0];
+
+            let pos = state.map.getObjectPos(rob.id, MAP_CELL.ROBOT);
+
+            let r = pos[0];
+            let c = pos[1];
+
+            let nr = r + ROW_DELTA[rob.direction];
+            let nc = c + COL_DELTA[rob.direction];
+
+            if (nr === row && nc === col) { // Moving toward blocked cell
+                // rob.moving = false; // ToDo: consider this optimization, it will cause an error
+
+                sendToServer({
+                    type: MSG_TO_SERVER.BLOCKED,
+                    data: {
+                        id: parseInt(rob.id)
+                    }
+                });
+
+                gfxEventHandler({
+                    type: EVENT_TO_GFX.OBJECT_FAILURE,
+                    data: {
+                        id: parseInt(rob.id),
+                        row: r,
+                        col: c
+                    }
+                });
+
+                logger({
+                    level: LOG_LEVEL.ERROR,
+                    object: LOG_TYPE.ROBOT,
+                    color: rob.color,
+                    msg: "Robot <b>(#" + parseInt(rob.id) + ")</b> cannot move</b>."
+                });
+
+                aggregateBlocking(r, c);
+            }
+        }
+    };
+
     let check = function () {
         if (self.id().length === 0) {
-            shouter.notifySubscribers({text: "Robot ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Robot ID is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (self.color().length === 0) {
-            shouter.notifySubscribers({text: "Robot color is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Robot color is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (self.loadCap().length === 0) {
-            shouter.notifySubscribers({text: "Robot load capacity is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Robot load capacity is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.id()) < 0 || parseInt(self.loadCap()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Use only +ve values!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // Duplicate ID check
-        for (let i = 0; i < state.map.height; ++i) {
-            for (let j = 0; j < state.map.width; ++j) {
-                let c = state.map.grid[i][j].robot;
+        let pos = state.map.getObjectPos(parseInt(self.id()), MAP_CELL.ROBOT);
 
-                if (c !== undefined && c.id === parseInt(self.id()) &&
-                    !(i === self.activeRobotRow && j === self.activeRobotCol)) {
-                    shouter.notifySubscribers({text: "Robot ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+        if (pos !== undefined && (pos[0] !== self.activeRobotRow || pos[1] !== self.activeRobotCol)) {
+            shouter.notifySubscribers({
+                text: "Robot ID must be unique!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
-                    return false;
-                }
-            }
+            return false;
         }
 
         // HTML color
         if (!self.color().match(REG_HTML_COLOR)) {
-            shouter.notifySubscribers({text: "Invalid color code!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Invalid color code!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (self.ip().length > 0 && !self.ip().match(REG_IP)) {
-            shouter.notifySubscribers({text: "Invalid IP address!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Invalid IP address!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (self.port().length > 0 && isNaN(self.port())) {
-            shouter.notifySubscribers({text: "Invalid Port!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Invalid Port!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -663,7 +682,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     let unselect = function () {
         self.activeRobotRow = self.activeRobotCol = -1;
-        self.applyVisible(false);
+        self.editing(false);
     };
 
     let clear = function () {

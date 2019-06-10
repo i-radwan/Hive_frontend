@@ -14,28 +14,43 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.itemID = ko.observable("");
     self.itemQuantity = ko.observable("");
 
-    self.applyVisible = ko.observable(false);
+    self.editing = ko.observable(false);
     self.activeRackRow = -1;
     self.activeRackCol = -1;
 
     self.add = function (row, col) {
-        if (state.map.grid[row][col].facility === undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
+        let isFacilityFree = state.map.isFacilityFree(row, col);
+
+        if (self.editing()) {
+            if (isFacilityFree) {
+                gfxEventHandler({ // ToDo call controllers handle escape functions
+                    type: EVENT_TO_GFX.ESC
+                });
+            }
+
+            return;
+        }
+
+        if (isFacilityFree) {
             if (!check()) {
                 return;
             }
 
-            state.map.grid[row][col].facility = {
-                id: parseInt(self.id()),
+            state.map.addObject(row, col, {
                 type: MAP_CELL.RACK,
+                id: parseInt(self.id()),
                 capacity: parseInt(self.capacity()),
                 weight: parseInt(self.weight()),
                 items: ko.mapping.toJS(self.items())
-            };
+            });
 
             self.id(Math.max(state.nextIDs.rack, parseInt(self.id()) + 1));
             state.nextIDs.rack = parseInt(self.id());
 
-            shouter.notifySubscribers({text: "Rack placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Rack placed successfully!",
+                type: MSG_TYPE.INFO
+            }, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
@@ -48,15 +63,11 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                     items: ko.mapping.toJS(self.items())
                 }
             });
-        } else if (state.map.grid[row][col].facility !== undefined && self.activeRackRow === -1 && self.activeRackCol === -1) {
+        } else {
             shouter.notifySubscribers({
                 text: "(" + row + ", " + col + ") is occupied!",
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
-        } else if (state.map.grid[row][col].facility === undefined && self.activeRackRow !== -1 && self.activeRackCol !== -1) {
-            gfxEventHandler({
-                type: EVENT_TO_GFX.ESC
-            });
         }
     };
 
@@ -64,9 +75,10 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[dstRow][dstCol].robot === undefined && state.map.grid[dstRow][dstCol].facility === undefined) {
-            state.map.grid[dstRow][dstCol].facility = Object.assign({}, state.map.grid[srcRow][srcCol].facility);
-            state.map.grid[srcRow][srcCol].facility = undefined;
+        if (state.map.isFree(dstRow, dstCol)) {
+            let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.RACK);
+
+            state.map.moveObject(srcRow, srcCol, dstRow, dstCol, fac);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
@@ -98,43 +110,32 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.delete = function (row, col) {
-        if (state.map.grid[row][col].facility.type === MAP_CELL.RACK) {
-            state.map.grid[row][col].facility = undefined;
+        let fac = state.map.getSpecificFacility(row, col, MAP_CELL.RACK);
 
-            gfxEventHandler({
-                type: EVENT_TO_GFX.OBJECT_DELETE,
-                data: {
-                    type: MAP_CELL.RACK,
-                    row: row,
-                    col: col
-                }
-            });
+        state.map.deleteObject(row, col, fac);
 
-            unselect();
-            clear();
+        unselect();
+        clear();
 
-            return true;
-        }
-
-        return false;
+        return true;
     };
 
     self.fill = function (row, col) {
-        let facility = state.map.grid[row][col].facility;
+        let fac = state.map.getSpecificFacility(row, col, MAP_CELL.RACK);
 
-        if (facility === undefined || facility.type !== MAP_CELL.RACK)
+        if (fac === null)
             return;
 
         self.activeRackRow = row;
         self.activeRackCol = col;
 
-        self.id(facility.id);
-        self.capacity(facility.capacity);
-        self.weight(facility.weight);
+        self.id(fac.id);
+        self.capacity(fac.capacity);
+        self.weight(fac.weight);
 
         self.items.removeAll();
-        for (let i = 0; i < facility.items.length; ++i) {
-            self.items.push(facility.items[i]);
+        for (let i = 0; i < fac.items.length; ++i) {
+            self.items.push(fac.items[i]);
         }
 
         gfxEventHandler({
@@ -149,7 +150,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.edit = function (row, col) {
         self.fill(row, col);
-        self.applyVisible(true);
+        self.editing(true);
         self.activeRackRow = row;
         self.activeRackCol = col;
 
@@ -176,17 +177,22 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (!check())
             return false;
 
-        state.map.grid[self.activeRackRow][self.activeRackCol].facility = {
+        let fac = state.map.getSpecificFacility(self.activeRackRow, self.activeRackCol, MAP_CELL.RACK);
+
+        state.map.updateObject(self.activeRackRow, self.activeRackCol, {
             type: MAP_CELL.RACK,
             id: parseInt(self.id()),
             capacity: parseInt(self.capacity()),
             weight: parseInt(self.weight()),
             items: ko.mapping.toJS(self.items())
-        };
+        }, fac.id);
 
         state.nextIDs.rack = Math.max(state.nextIDs.rack, parseInt(self.id()) + 1);
 
-        shouter.notifySubscribers({text: "Rack updated successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
+        shouter.notifySubscribers({
+            text: "Rack updated successfully!",
+            type: MSG_TYPE.INFO
+        }, SHOUT.MSG);
 
         unselect();
         clear();
@@ -237,14 +243,13 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         self.items.remove(this);
     };
 
-    self.adjustRack = function (rack_id, rack_row, rack_col, items) {
-        let cell = state.map.grid[rack_row][rack_col];
+    self.adjustRack = function (id, row, col, items) {
+        let fac = state.map.getSpecificFacility(row, col, MAP_CELL.RACK);
 
-        if (cell.facility === undefined || cell.facility.type !== MAP_CELL.RACK) {
-            throw "Error: there should be a rack here!";
-        }
+        if (fac === null)
+            return;
 
-        let rackItems = cell.facility.items;
+        let rackItems = fac.items;
 
         for (let i = 0; i < items.length; ++i) {
             for (let j = 0; j < rackItems.length; ++j) {
@@ -257,14 +262,14 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.RACK,
                 color: "#bababa",
-                msg: "Rack <b>(#" + rack_id + ")</b> has been " + (items[i].quantity > 0 ? "filled" : "discharged") +
+                msg: "Rack <b>(#" + id + ")</b> has been " + (items[i].quantity > 0 ? "filled" : "discharged") +
                     " by <b>(" + items[i].quantity + ")</b> from Item#<b>(" + items[i].id + ")</b>."
             });
         }
 
         self.items.removeAll();
-        for (let i = 0; i < cell.facility.items.length; ++i) {
-            self.items.push(cell.facility.items[i]);
+        for (let i = 0; i < rackItems.length; ++i) {
+            self.items.push(rackItems[i]);
         }
         self.items.valueHasMutated();
     };
@@ -276,36 +281,43 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     let check = function () {
         if (self.id().length === 0) {
-            shouter.notifySubscribers({text: "Rack ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Rack ID is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (self.items().length === 0) {
-            shouter.notifySubscribers({text: "Rack must contain items!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Rack must contain items!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.id()) < 0 || parseInt(self.capacity()) < 0 || parseInt(self.weight()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Use only +ve values!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // Duplicate ID check
-        for (let i = 0; i < state.map.height; ++i) {
-            for (let j = 0; j < state.map.width; ++j) {
-                let c = state.map.grid[i][j].facility;
+        let pos = state.map.getObjectPos(parseInt(self.id()), MAP_CELL.RACK);
 
-                if (c !== undefined && c.type === MAP_CELL.RACK && c.id === parseInt(self.id()) &&
-                    !(i === self.activeRackRow && j === self.activeRackCol)) {
-                    shouter.notifySubscribers({text: "Rack ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+        if (pos !== undefined && (pos[0] !== self.activeRackRow || pos[1] !== self.activeRackCol)) {
+            shouter.notifySubscribers({
+                text: "Rack ID must be unique!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
-                    return false;
-                }
-            }
+            return false;
         }
 
         // Rack load
@@ -317,7 +329,10 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             try {
                 load += parseInt(item.quantity) * state.getItem(parseInt(item.id)).weight;
             } catch (e) {
-                shouter.notifySubscribers({text: "Item ID #" + item.id + " doesn't exist!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+                shouter.notifySubscribers({
+                    text: "Item ID #" + item.id + " doesn't exist!",
+                    type: MSG_TYPE.ERROR
+                }, SHOUT.MSG);
 
                 return false;
             }
@@ -337,20 +352,29 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     let checkItem = function () {
         if (self.itemID().length === 0) {
-            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Item ID is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (self.itemQuantity().length === 0) {
-            shouter.notifySubscribers({text: "Quantity is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Quantity is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.itemID()) < 0 || parseInt(self.itemQuantity()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Use only +ve values!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -358,7 +382,10 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
             if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
-                shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+                shouter.notifySubscribers({
+                    text: "Item ID must be unique!",
+                    type: MSG_TYPE.ERROR
+                }, SHOUT.MSG);
 
                 return false;
             }
@@ -366,7 +393,10 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         // Check if item exists
         if (state.getItem(parseInt(self.itemID())) === undefined) {
-            shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Item ID doesn't exist!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -376,7 +406,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     let unselect = function () {
         self.activeRackRow = self.activeRackCol = -1;
-        self.applyVisible(false);
+        self.editing(false);
     };
 
     let clear = function () {

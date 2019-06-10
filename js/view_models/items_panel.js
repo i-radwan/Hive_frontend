@@ -19,40 +19,34 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.remove = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
-        let racks = ""; // The racks who use this item
-
-        for (let i = 0; i < state.map.height; ++i) {
-            for (let j = 0; j < state.map.width; ++j) {
-                let c = state.map.grid[i][j].facility;
-
-                if (c !== undefined && c.type === MAP_CELL.RACK) {
-                    for (let k = 0; k < c.items.length; ++k) {
-                        if (c.items[k].id === this.id) {
-                            racks += c.id + ", ";
-                        }
-                    }
-                }
-            }
-        }
+        let racks = state.getItemRacks(this.id); // The racks who use this item
 
         if (racks.length === 0) {
             self.items.remove(this);
 
             state.items = ko.mapping.toJS(self.items());
         } else {
-            shouter.notifySubscribers({text: "Racks (" + racks.slice(0, racks.length - 2) +
-                    ") use this item!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Racks (" + racks.slice(0, racks.length - 2) + ") use this item!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
         }
     };
 
     self.add = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -79,20 +73,29 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     let check = function () {
         if (self.itemID().length === 0) {
-            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Item ID is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (self.itemWeight().length === 0) {
-            shouter.notifySubscribers({text: "Item weight is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Item weight is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.itemID()) < 0 || parseInt(self.itemWeight()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Use only +ve values!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -100,7 +103,10 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
             if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
-                shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+                shouter.notifySubscribers({
+                    text: "Item ID must be unique!",
+                    type: MSG_TYPE.ERROR
+                }, SHOUT.MSG);
 
                 return false;
             }

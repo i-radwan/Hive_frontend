@@ -44,7 +44,7 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
         }
     };
 
-    let informGFX = function() {
+    let informGFX = function () {
         // Inform GFX that the map size changed
         gfxEventHandler({
             type: EVENT_TO_GFX.INIT,
@@ -55,71 +55,13 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
         });
 
         // Add objects GFX events
-        for (let i = 0; i < state.map.height; i++) {
-            for (let j = 0; j < state.map.width; j++) {
-                let c = state.map.grid[i][j];
+        let objs = state.map.getObjects();
 
-                if (c.robot !== undefined) {
-                    gfxEventHandler({
-                        type: EVENT_TO_GFX.OBJECT_ADD,
-                        data: {
-                            type: MAP_CELL.ROBOT,
-                            row: i,
-                            col: j,
-                            direction: ROBOT_DIR.RIGHT,
-                            id: c.robot.id,
-                            load_cap: c.robot.loadCap,
-                            color: c.robot.color,
-                            ip: c.robot.ip
-                        }
-                    });
-                } else if (c.facility !== undefined) {
-                    switch (c.facility.type) {
-                        case MAP_CELL.GATE:
-                            gfxEventHandler({
-                                type: EVENT_TO_GFX.OBJECT_ADD,
-                                data: {
-                                    type: MAP_CELL.GATE,
-                                    row: i,
-                                    col: j
-                                }
-                            });
-                            break;
-                        case MAP_CELL.RACK:
-                            gfxEventHandler({
-                                type: EVENT_TO_GFX.OBJECT_ADD,
-                                data: {
-                                    type: MAP_CELL.RACK,
-                                    row: i,
-                                    col: j,
-                                    capacity: c.facility.capacity,
-                                    items: c.facility.items
-                                }
-                            });
-                            break;
-                        case MAP_CELL.STATION:
-                            gfxEventHandler({
-                                type: EVENT_TO_GFX.OBJECT_ADD,
-                                data: {
-                                    type: MAP_CELL.STATION,
-                                    row: i,
-                                    col: j
-                                }
-                            });
-                            break;
-                        case MAP_CELL.OBSTACLE:
-                            gfxEventHandler({
-                                type: EVENT_TO_GFX.OBJECT_ADD,
-                                data: {
-                                    type: MAP_CELL.OBSTACLE,
-                                    row: i,
-                                    col: j
-                                }
-                            });
-                            break;
-                    }
-                }
-            }
+        for (let k = 0; k < objs.length; k++) {
+            gfxEventHandler({
+                type: EVENT_TO_GFX.OBJECT_ADD,
+                data: objs[k]
+            });
         }
     };
 

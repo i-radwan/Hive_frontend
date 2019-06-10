@@ -6,25 +6,40 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.id = ko.observable(1);
 
-    self.applyVisible = ko.observable(false);
+    self.editing = ko.observable(false);
     self.activeGateRow = -1;
     self.activeGateCol = -1;
 
     self.add = function (row, col) {
-        if (state.map.grid[row][col].facility === undefined && self.activeGateRow === -1 && self.activeGateCol === -1) {
+        let isFacilityFree = state.map.isFacilityFree(row, col);
+
+        if (self.editing()) {
+            if (isFacilityFree) {
+                gfxEventHandler({ // ToDo call controllers handle escape functions
+                    type: EVENT_TO_GFX.ESC
+                });
+            }
+
+            return;
+        }
+
+        if (isFacilityFree) {
             if (!check()) {
                 return;
             }
 
-            state.map.grid[row][col].facility = {
-                id: parseInt(self.id()),
-                type: MAP_CELL.GATE
-            };
+            state.map.addObject(row, col, {
+                type: MAP_CELL.GATE,
+                id: parseInt(self.id())
+            });
 
             self.id(Math.max(state.nextIDs.gate, parseInt(self.id()) + 1));
             state.nextIDs.gate = parseInt(self.id());
 
-            shouter.notifySubscribers({text: "Gate placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Gate placed successfully!",
+                type: MSG_TYPE.INFO
+            }, SHOUT.MSG);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_ADD,
@@ -35,12 +50,11 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                     id: parseInt(self.id())
                 }
             });
-        } else if (state.map.grid[row][col].facility !== undefined && self.activeGateRow === -1 && self.activeGateCol === -1) {
-            shouter.notifySubscribers({text: "(" + row + ", " + col + ") is occupied!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
-        } else if (state.map.grid[row][col].facility === undefined && self.activeGateRow !== -1 && self.activeGateCol !== -1) {
-            gfxEventHandler({ // ToDo call controllers handle escape functions
-                type: EVENT_TO_GFX.ESC
-            });
+        } else {
+            shouter.notifySubscribers({
+                text: "(" + row + ", " + col + ") is occupied!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
         }
     };
 
@@ -48,9 +62,10 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[dstRow][dstCol].robot === undefined && state.map.grid[dstRow][dstCol].facility === undefined) {
-            state.map.grid[dstRow][dstCol].facility = Object.assign({}, state.map.grid[srcRow][srcCol].facility);
-            state.map.grid[srcRow][srcCol].facility = undefined;
+        if (state.map.isFree(dstRow, dstCol)) {
+            let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.GATE);
+
+            state.map.moveObject(srcRow, srcCol, dstRow, dstCol, fac);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
@@ -82,37 +97,26 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.delete = function (row, col) {
-        if (state.map.grid[row][col].facility.type === MAP_CELL.GATE) {
-            state.map.grid[row][col].facility = undefined;
+        let fac = state.map.getSpecificFacility(row, col, MAP_CELL.GATE);
 
-            gfxEventHandler({
-                type: EVENT_TO_GFX.OBJECT_DELETE,
-                data: {
-                    type: MAP_CELL.GATE,
-                    row: row,
-                    col: col
-                }
-            });
+        state.map.deleteObject(row, col, fac);
 
-            unselect();
-            clear();
+        unselect();
+        clear();
 
-            return true;
-        }
-
-        return false;
+        return true;
     };
 
     self.fill = function (row, col) {
-        let facility = state.map.grid[row][col].facility;
+        let fac = state.map.getSpecificFacility(row, col, MAP_CELL.GATE);
 
-        if (facility === undefined || facility.type !== MAP_CELL.GATE)
+        if (fac === null)
             return;
 
         self.activeGateRow = row;
         self.activeGateCol = col;
 
-        self.id(facility.id);
+        self.id(fac.id);
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
@@ -126,7 +130,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.edit = function (row, col) {
         self.fill(row, col);
-        self.applyVisible(true);
+        self.editing(true);
         self.activeGateRow = row;
         self.activeGateCol = col;
 
@@ -142,7 +146,10 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.update = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
-            shouter.notifySubscribers({text: "This action is allowed in design mode only!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -150,14 +157,19 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (!check())
             return false;
 
-        state.map.grid[self.activeGateRow][self.activeGateCol].facility = {
+        let fac = state.map.getSpecificFacility(self.activeGateRow, self.activeGateCol, MAP_CELL.GATE);
+
+        state.map.updateObject(self.activeGateRow, self.activeGateCol, {
             type: MAP_CELL.GATE,
             id: parseInt(self.id())
-        };
+        }, fac.id);
 
         state.nextIDs.gate = Math.max(state.nextIDs.gate, parseInt(self.id()) + 1);
 
-        shouter.notifySubscribers({text: "Gate updated successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
+        shouter.notifySubscribers({
+            text: "Gate updated successfully!",
+            type: MSG_TYPE.INFO
+        }, SHOUT.MSG);
 
         unselect();
         clear();
@@ -177,30 +189,34 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     let check = function () {
         if (self.id().length === 0) {
-            shouter.notifySubscribers({text: "Gate ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Gate ID is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.id()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Use only +ve values!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // Duplicate ID check
-        for (let i = 0; i < state.map.height; ++i) {
-            for (let j = 0; j < state.map.width; ++j) {
-                let c = state.map.grid[i][j].facility;
+        let pos = state.map.getObjectPos(parseInt(self.id()), MAP_CELL.GATE);
 
-                if (c !== undefined && c.type === MAP_CELL.GATE && c.id === parseInt(self.id()) &&
-                    !(i === self.activeGateRow && j === self.activeGateCol)) {
-                    shouter.notifySubscribers({text: "Gate ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+        if (pos !== undefined && (pos[0] !== self.activeGateRow || pos[1] !== self.activeGateCol)) {
+            shouter.notifySubscribers({
+                text: "Gate ID must be unique!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
-                    return false;
-                }
-            }
+            return false;
         }
 
         return true;
@@ -208,7 +224,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     let unselect = function () {
         self.activeGateRow = self.activeGateCol = -1;
-        self.applyVisible(false);
+        self.editing(false);
     };
 
     let clear = function () {

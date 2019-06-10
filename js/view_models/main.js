@@ -49,7 +49,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 break;
 
             case MSG_FROM_SERVER.UPDATE:
-                self.timestep = msg.data.timestep; // ToDo: display on the center console
+                self.timestep = msg.data.timestep;
                 self.state.timestep = self.timestep;
 
                 let actions = msg.data.actions;
@@ -145,7 +145,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 break;
 
             case MSG_FROM_SERVER.MSG:
-                self.shouter.notifySubscribers({text: msg.data.msg, type: msg.data.status}, SHOUT.MSG);
+                self.shouter.notifySubscribers({
+                    text: msg.data.msg, type: msg.data.status
+                }, SHOUT.MSG);
                 break;
         }
     };
@@ -213,7 +215,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
         let data = ack.data;
 
         if (data.type === EVENT_TO_GFX.OBJECT_MOVE || data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
-            self.leftPanelVM.robotVM.updateRobotMovingState(id, data.data.row, data.data.col);
+            self.leftPanelVM.robotVM.doneMoving(id, data.data.row, data.data.col);
         }
 
         if (--self.pendingActions === 0) { // All actions are done

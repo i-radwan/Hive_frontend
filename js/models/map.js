@@ -75,13 +75,15 @@ let Map = function () {
         self.objects[[obj.id, obj.type]] = [r, c];
     };
 
-    self.updateObject = function(r, c, obj) {
+    self.updateObject = function(r, c, obj, old_id) {
         let objs = self.grid[r][c].objects;
         let objsLen = objs.length;
 
         for (let i = 0; i < objsLen; ++i) {
-            if (objs[i].type === obj.type && objs[i].id === obj.id) {
+            if (objs[i].type === obj.type && objs[i].id === old_id) {
                 objs[i] = obj;
+
+                return;
             }
         }
 
@@ -97,6 +99,8 @@ let Map = function () {
                 objs.splice(i, 1);
 
                 delete self.objects[[obj.id, obj.type]];
+
+                return;
             }
         }
 
@@ -191,6 +195,74 @@ let Map = function () {
         }
 
         return racks;
+    };
+
+    self.getBindableFacility = function(r, c) {
+        let objs = self.grid[r][c].objects;
+        let objsLen = objs.length;
+
+        for (let i = 0; i < objsLen; ++i) {
+            if (objs[i].type === MAP_CELL.STATION || objs[i].type === MAP_CELL.GATE) {
+                if (objs[i].bound === false)
+                    return objs[i];
+            }
+        }
+
+        return null;
+    };
+
+    self.getBoundFacility = function(r, c) {
+        let objs = self.grid[r][c].objects;
+        let objsLen = objs.length;
+
+        for (let i = 0; i < objsLen; ++i) {
+            if (objs[i].type === MAP_CELL.STATION || objs[i].type === MAP_CELL.GATE) {
+                if (objs[i].bound === true)
+                    return objs[i];
+            }
+        }
+
+        return null;
+    };
+
+    self.getMovingRobots = function() {
+        let robots = [];
+
+        for (const [key, value] of Object.entries(self.objects)) {
+            if (key[1] !== MAP_CELL.ROBOT)
+                continue;
+
+            let rob = self.getRobot(value[0], value[1]);
+
+            if (rob.moving)
+                robots.push(rob);
+        }
+
+        return robots;
+    };
+
+    self.getObjects = function() {
+        let objs = [];
+        let cells = {};
+
+        for (const [key, value] of Object.entries(self.objects)) {
+            cells[[value[0], value[1]]] = true;
+        }
+
+        for (const [key, value] of Object.entries(cells)) {
+            let c = self.grid[key[0]][key[1]];
+
+            for (let k = 0; k < c.objects.length; k++) {
+                let obj = Object.assign({}, c.objects[k]);
+
+                obj.row = key[0];
+                obj.col = key[1];
+
+                objs.push(obj);
+            }
+        }
+
+        return objs;
     };
 
     self.changeMapSize(self.height, self.width, false);

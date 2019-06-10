@@ -143,7 +143,7 @@
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lpanel-details-bottom-actions"
-                         data-bind="css: {hidden: !leftPanelVM.gateVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
+                         data-bind="css: {hidden: !leftPanelVM.gateVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.gateVM.update"></i>
                     </div>
@@ -182,7 +182,7 @@
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lpanel-details-bottom-actions"
-                         data-bind="css: {hidden: !leftPanelVM.robotVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
+                         data-bind="css: {hidden: !leftPanelVM.robotVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.robotVM.update"></i>
                     </div>
@@ -261,7 +261,7 @@
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lpanel-details-bottom-actions"
-                         data-bind="css: {hidden: !leftPanelVM.rackVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
+                         data-bind="css: {hidden: !leftPanelVM.rackVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.rackVM.update"></i>
                     </div>
@@ -280,7 +280,7 @@
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lpanel-details-bottom-actions"
-                         data-bind="css: {hidden: !leftPanelVM.stationVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
+                         data-bind="css: {hidden: !leftPanelVM.stationVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.stationVM.update"></i>
                     </div>
@@ -299,7 +299,7 @@
 
                     <!--======================== BOTTOM ACTIONS ========================-->
                     <div class="lpanel-details-bottom-actions"
-                         data-bind="css: {hidden: !leftPanelVM.obstacleVM.applyVisible() || runningMode() !== RUNNING_MODE.DESIGN}">
+                         data-bind="css: {hidden: !leftPanelVM.obstacleVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.obstacleVM.update"></i>
                     </div>

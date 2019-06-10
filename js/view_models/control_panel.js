@@ -17,7 +17,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     self.play = function () {
         if (!comm.connected) {
-            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Connect to a server first!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return;
         }
@@ -50,7 +53,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     self.stop = function () {
         if (!comm.connected) {
-            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Connect to a server first!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return;
         }
@@ -83,19 +89,15 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         self.preSimState = Object.assign({}, state);
 
-        for (let i = 0; i < state.map.height; ++i) {
-            for (let j = 0; j < state.map.width; ++j) {
-                let c = state.map.grid[i][j];
+        let pos = state.map.getInvalidIPRobot();
 
-                if (c.robot !== undefined && !c.robot.ip.match(REG_IP)) {
-                    shouter.notifySubscribers({
-                        text: "Robot at (" + (i + 1) + ", " + (j + 1) + ") doesn't have an IP!",
-                        type: MSG_TYPE.ERROR
-                    }, SHOUT.MSG);
+        if (pos !== null) {
+            shouter.notifySubscribers({
+                text: "Robot at (" + (pos[0] + 1) + ", " + (pos[1] + 1) + ") doesn't have an IP!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
-                    return false;
-                }
-            }
+            return false;
         }
 
         self.lastStartMode = START_MODE.DEPLOY;
@@ -129,7 +131,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
         } else if (data.status === ACK_START_STATUS.ERROR) {
-            shouter.notifySubscribers({text: data.msg, type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: data.msg,
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
         }
@@ -156,17 +161,20 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
         } else if (data.status === ACK_RESUME_STATUS.ERROR) {
-            shouter.notifySubscribers({text: data.msg, type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: data.msg,
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
         }
     };
 
-    self.handleCellHover = function(row, col) {
-        self.coordinates("(" + row + ", " + col + ")");
+    self.handleCellHover = function (row, col) {
+        self.coordinates("(" + (row + 1) + ", " + (col + 1) + ")");
     };
 
-    self.updateTimestep = function(timestep) {
+    self.updateTimestep = function (timestep) {
         self.timestep(timestep);
     };
 
@@ -183,7 +191,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     let sendStateToServer = function (mode) {
         if (!comm.connected) {
-            shouter.notifySubscribers({text: "Connect to a server first!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Connect to a server first!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return;
         }

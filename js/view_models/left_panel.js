@@ -125,7 +125,7 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
     self.handleCellClick = function (row, col) {
         if (runningMode() === RUNNING_MODE.DESIGN) {
-            if (state.map.grid[row][col].facility === undefined && state.map.grid[row][col].robot === undefined) {
+            if (state.map.isFree(row, col)) {
                 switch (self.activePanel()) {
                     case LEFT_PANEL.GATE:
                         self.gateVM.add(row, col);
@@ -144,11 +144,11 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                         break;
                 }
             } else {
-                if (state.map.grid[row][col].robot !== undefined) {
+                if (!state.map.isRobotFree(row, col)) {
                     self.activePanel(LEFT_PANEL.ROBOT);
                     self.robotVM.edit(row, col);
-                } else if (state.map.grid[row][col].facility !== undefined) {
-                    switch (state.map.grid[row][col].facility.type) {
+                } else if (!state.map.isFacilityFree(row, col)) {
+                    switch (state.map.getFacility(row, col).type) {
                         case MAP_CELL.GATE:
                             self.activePanel(LEFT_PANEL.GATE);
                             self.gateVM.edit(row, col);
@@ -169,16 +169,16 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 }
             }
         } else {
-            if (state.map.grid[row][col].robot !== undefined) {
+            if (!state.map.isRobotFree(row, col)) {
                 self.activePanel(LEFT_PANEL.ROBOT);
                 self.robotVM.fill(row, col);
-            } else if (state.map.grid[row][col].facility !== undefined) {
-                let f = state.map.grid[row][col].facility;
+            } else if (!state.map.isFacilityFree(row, col)) {
+                let fac = state.map.getFacility(row, col);
 
-                if (f.type === MAP_CELL.RACK && f.loaded)
+                if (fac.type === MAP_CELL.RACK && fac.loaded)
                     return;
 
-                switch (state.map.grid[row][col].facility.type) {
+                switch (fac.type) {
                     case MAP_CELL.GATE:
                         self.activePanel(LEFT_PANEL.GATE);
                         self.gateVM.fill(row, col);
@@ -203,10 +203,10 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.handleCellDeleteClick = function (row, col) {
         let status = false;
 
-        if (state.map.grid[row][col].robot !== undefined) {
+        if (!state.map.isRobotFree(row, col)) {
             status = self.robotVM.delete(row, col);
-        } else if (state.map.grid[row][col].facility !== undefined) {
-            switch (state.map.grid[row][col].facility.type) {
+        } else if (!state.map.isFacilityFree(row, col)) {
+            switch (state.map.getFacility(row, col).type) {
                 case MAP_CELL.GATE:
                     status = self.gateVM.delete(row, col);
                     break;
@@ -228,10 +228,10 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.handleCellDrag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.grid[srcRow][srcCol].robot !== undefined) {
+        if (!state.map.isRobotFree(srcRow, srcCol)) {
             self.robotVM.drag(srcRow, srcCol, dstRow, dstCol);
-        } else if (state.map.grid[srcRow][srcCol].facility !== undefined) {
-            switch (state.map.grid[srcRow][srcCol].facility.type) {
+        } else if (!state.map.isFacilityFree(srcRow, srcCol)) {
+            switch (state.map.getFacility(srcRow, srcCol).type) {
                 case MAP_CELL.GATE:
                     self.gateVM.drag(srcRow, srcCol, dstRow, dstCol);
                     break;

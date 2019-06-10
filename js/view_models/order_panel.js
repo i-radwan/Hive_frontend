@@ -214,7 +214,10 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             self.id(parseInt(self.id()) + 1);
 
-            shouter.notifySubscribers({text: "Order placed successfully!", type: MSG_TYPE.INFO}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Order placed successfully!",
+                type: MSG_TYPE.INFO
+            }, SHOUT.MSG);
 
             clear();
 
@@ -222,7 +225,10 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             self.lastOrder = null;
         } else if (data.status === ACK_ORDER_STATUS.ERROR) {
-            shouter.notifySubscribers({text: data.msg, type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: data.msg,
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
         }
@@ -246,26 +252,40 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     let check = function () {
         if (self.id().length === 0) {
-            shouter.notifySubscribers({text: "Order ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Order ID is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (self.items().length === 0) {
-            shouter.notifySubscribers({text: "Order must contain items!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Order must contain items!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.id()) < 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Use only +ve values!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
-        // Past start timestep
-        // ToDo
+        // Check start timestep
+        if (parseInt(self.startTimestep()) !== 0 && parseInt(self.startTimestep()) < state.timestep) {
+            shouter.notifySubscribers({
+                text: "Start timestep has to be in the future or zero (fro now)!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+        }
 
         // Duplicate ID checks
         if (!checkDuplicateOrderID(self.ongoingOrders()) ||
@@ -275,41 +295,23 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
 
         // Gate and Rack exists
-        let f1 = false;
-        let f2 = false;
-
-        for (let i = 0; i < state.map.height && (!f1 || !f2); ++i) {
-            for (let j = 0; j < state.map.width && (!f1 || !f2); ++j) {
-                let c = state.map.grid[i][j].facility;
-
-                if (c === undefined) {
-                    continue;
-                }
-
-                if (c.type === MAP_CELL.GATE && c.id === parseInt(self.gateID())) {
-                    f1 = true;
-
-                    if (state.map.grid[i][j].na === true) {
-                        shouter.notifySubscribers({text: "This gate is blocked!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
-
-                        return false;
-                    }
-                }
-
-                if (c.type === MAP_CELL.RACK && c.id === parseInt(self.rackID())) {
-                    f2 = true;
-                }
-            }
-        }
+        let f1 = state.map.getObjectPos(self.gateID(), MAP_CELL.GATE) !== undefined;
+        let f2 = self.rackID().length > 0 && state.map.getObjectPos(self.rackID(), MAP_CELL.RACK) !== undefined;
 
         if (!f1) {
-            shouter.notifySubscribers({text: "No gate with this ID!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "No gate with this ID!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (!f2 && self.rackID().length > 0) {
-            shouter.notifySubscribers({text: "No rack with this ID!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "No rack with this ID!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -319,20 +321,29 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     let checkItem = function () {
         if (self.itemID().length === 0) {
-            shouter.notifySubscribers({text: "Item ID is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Item ID is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         if (self.itemQuantity().length === 0) {
-            shouter.notifySubscribers({text: "Quantity is mandatory!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Quantity is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
 
         // -ve values
         if (parseInt(self.itemID()) < 0 || parseInt(self.itemQuantity()) <= 0) {
-            shouter.notifySubscribers({text: "Use only +ve values!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Use only +ve values!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -340,7 +351,10 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         // Duplicate id check
         for (let i = 0; i < self.items().length; ++i) {
             if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
-                shouter.notifySubscribers({text: "Item ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+                shouter.notifySubscribers({
+                    text: "Item ID must be unique!",
+                    type: MSG_TYPE.ERROR
+                }, SHOUT.MSG);
 
                 return false;
             }
@@ -348,7 +362,10 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         // Check if item exists
         if (state.getItem(parseInt(self.itemID())) === undefined) {
-            shouter.notifySubscribers({text: "Item ID doesn't exist!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+            shouter.notifySubscribers({
+                text: "Item ID doesn't exist!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
 
             return false;
         }
@@ -361,7 +378,10 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             let o = array[i];
 
             if (o.id === parseInt(self.id())) {
-                shouter.notifySubscribers({text: "Order ID must be unique!", type: MSG_TYPE.ERROR}, SHOUT.MSG);
+                shouter.notifySubscribers({
+                    text: "Order ID must be unique!",
+                    type: MSG_TYPE.ERROR
+                }, SHOUT.MSG);
 
                 return false;
             }
