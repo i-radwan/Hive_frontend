@@ -421,7 +421,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             data: {
                 row: r,
                 col: c,
-                rack_id: cell.facility.id
+                id: cell.facility.id
             }
         });
 
