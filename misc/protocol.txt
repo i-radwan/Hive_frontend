@@ -176,8 +176,8 @@ UPDATE: {
             type: BATTERY_UPDATED
             data: {
                 id:
-                row:
-                col:
+                row:                            # The row/col that the robot is supposed to be there
+                col:                            # after finishing last action.
                 battery:                        # Percentage
             }
          }
@@ -378,8 +378,6 @@ ACK_ACTION: {
 }
 
 ESC: {
-    row:
-    col:
 }
 
 ----------------
