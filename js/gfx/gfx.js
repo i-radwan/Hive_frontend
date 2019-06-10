@@ -629,6 +629,11 @@ let gfx = function (logicEventHandler) {
         mouseX = e.clientX;
         mouseY = e.clientY;
         let currentCell = getMouseCell(mouseX, mouseY);
+        self.logicEventHandler({
+            type: EVENT_FROM_GFX.CELL_HOVER,
+            row: currentCell.row,
+            col: currentCell.col
+        });
 
         if(hovering) {
             setCursorStyle(cursorCanGrab);
@@ -824,6 +829,15 @@ let gfx = function (logicEventHandler) {
             case EVENT_TO_GFX.OBJECT_MOVE:
                 // TODO
                 break;
+            case EVENT_TO_GFX.OBJECT_ROTATE_RIGHT:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_ROTATE_LEFT:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_RETREAT:
+                // TODO
+                break;
             case EVENT_TO_GFX.OBJECT_HIGHLIGHT:
                 highlightObject(event.data.row, event.data.col);
                 break;
@@ -843,6 +857,18 @@ let gfx = function (logicEventHandler) {
                 // TODO
                 break;
             case EVENT_TO_GFX.OBJECT_OFFLOAD:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_FAILURE:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_STOP:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_FIXED:
+                // TODO
+                break;
+            case EVENT_TO_GFX.OBJECT_UPDATE:
                 // TODO
                 break;
             case EVENT_TO_GFX.SIMULATION_START:
