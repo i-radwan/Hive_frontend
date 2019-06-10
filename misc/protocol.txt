@@ -224,19 +224,25 @@ OBJECT_HOVER: {
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
 }
 
+**
 OBJECT_ADD: { # Default ROBOT direction = ROBOT_DIR.RIGHT
+    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     row:
     col:
 }
 
+**
 OBJECT_DELETE: {
+    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     row:
     col:
 }
 
+**
 OBJECT_DRAG: {
+    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     src_row:
     src_col:
@@ -244,96 +250,130 @@ OBJECT_DRAG: {
     dst_col:
 }
 
+**
 OBJECT_MOVE: { # Move the specified robot and the bound rack (if any). Then send ACK when done
                # Move one step forward by the current direction
+    id:        # not necessarily needed but to be more general
     row:
     col:
 }
 
+**
 OBJECT_ROTATE_RIGHT: { # Move the specified robot and the bound rack (if any). Then send ACK when done
+    id:        # not necessarily needed but to be more general
     row:
     col:
 }
 
+**
 OBJECT_ROTATE_LEFT: { # Move the specified robot and the bound rack (if any). Then send ACK when done
+    id:        # not necessarily needed but to be more general
     row:
     col:
 }
 
+**
 OBJECT_RETREAT: { # Rotate the robot 180 degree, the move back to the previous position. Then send ACK when done
+    id:        # not necessarily needed but to be more general
     row:
     col:
 }
 
+**
 OBJECT_HIGHLIGHT: {
+    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     row:
     col:
 }
 
+**
 OBJECT_COLORIZE: {
+    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     row:
     col:
     color:                                      # HTML
 }
 
+**
 OBJECT_DECOLORIZE: {
+    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     row:
     col:
 }
 
+**
 OBJECT_BIND: { # Flash the bound object, send ACK
     id:                                         # Robot ID
+    type:                                       # not necessarily needed
     row:                                        # Robot row
     col:
     object_id:                                  # Bound object ID
     object_type: [MAP_CELL.GATE|MAP_CELL.STATION]
 }
 
+**
 OBJECT_UNBIND: { # Send ACK
     id:                                         # Robot ID
+    type:                                       # not necessarily needed
     row:                                        # Robot row
     col:
     object_id:                                  # Bound object ID
     object_type: [MAP_CELL.GATE|MAP_CELL.STATION]
 }
 
+**
 OBJECT_LOAD: { # Draw rack on top of the robot, send ACK
-    id:                                         # Rack ID
+    id:                                         # Robot ID
+    type:                                       # not necessarily needed
+    object_id:                                  # Rack ID
+    object_type:                                # not necessarily needed
     row:                                        # Rack row
     col:
 }
 
+**
 OBJECT_OFFLOAD: { # Send ACK
-    id:                                         # Rack ID
+    id:                                         # Robot ID
+    type:                                       # not necessarily needed
+    object_id:                                  # Rack ID
+    object_type:                                # not necessarily needed
     row:                                        # Rack row
     col:
 }
 
+**
 OBJECT_FAILURE: { # Stop, Send ACK, Flash red
     id:
-    row:                                        # The new row/col (the one that this robot was
-    col:                                        # supposed to be at after finishing the current move)
+    type:                                       # not necessarily needed
+    row:                                        # The old row/col (the one that this robot was
+    col:                                        # supposed to be at before finishing the current move)
 }
 
+**
 OBJECT_STOP: { # Force stop, don't send ACK of the previous move
     id:
-    row:                                        # The new row/col (the one that this robot was
-    col:                                        # supposed to be at after finishing the current move)
+    type:                                       # not necessarily needed
+    row:                                        # The old row/col (the one that this robot was
+    col:                                        # supposed to be at before finishing the current move)
 }
 
+**
 OBJECT_FIXED: { # Resume last move, Send ACK after finishing the original move
     id:
-    row:                                        # The new row/col (the one that this robot was
-    col:                                        # supposed to be at after finishing the current move)
+    type:                                       # not necessarily needed
+    row:                                        # The old row/col (the one that this robot was
+    col:                                        # supposed to be at before finishing the current move)
 }
 
+**
 OBJECT_UPDATE: { # New status for the object (e.g. robot), such as the battery level
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
-    row:                                        # The new row/col (the one that this robot was
-    col:                                        # supposed to be at after finishing the current move)
+    id:
+    row:                                        # The old row/col (the one that this robot was
+    col:                                        # supposed to be at before finishing the current move)
     battery:                                    # Percentage
 }
 
@@ -350,19 +390,28 @@ SIMULATION_ESC: {}
 ----------------
 FROM GFX:
 ----------------
+**
 CELL_CLICK: {
     row:
     col:
+    id:
+    type:
 }
 
+**
 CELL_DRAG: {
+    id:
+    type:
     src_row:
     src_col:
     dst_row:
     dst_col:
 }
 
+**
 CELL_DELETE: {
+    id:
+    type:
     row:
     col:
 }
