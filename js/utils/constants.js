@@ -7,7 +7,8 @@ SERVER_PORT = 1337;
 SHOUT = {
     STATE_UPDATED: 0,
     MSG: 1,
-    LOADING: 2
+    LOADING: 2,
+    ESC: 3
 };
 
 //

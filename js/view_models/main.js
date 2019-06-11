@@ -61,21 +61,21 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     let data = actions[i].data;
 
                     if (a.type === SERVER_ACTIONS.MOVE) {
-                        self.leftPanelVM.robotVM.move(data.id, data.row, data.col);
+                        self.leftPanelVM.robotVM.move(data.id);
                     } else if (a.type === SERVER_ACTIONS.ROTATE_RIGHT) {
-                        self.leftPanelVM.robotVM.rotateRight(data.id, data.row, data.col);
+                        self.leftPanelVM.robotVM.rotateRight(data.id);
                     } else if (a.type === SERVER_ACTIONS.ROTATE_LEFT) {
-                        self.leftPanelVM.robotVM.rotateLeft(data.id, data.row, data.col);
+                        self.leftPanelVM.robotVM.rotateLeft(data.id);
                     } else if (a.type === SERVER_ACTIONS.RETREAT) {
-                        self.leftPanelVM.robotVM.retreat(data.id, data.row, data.col);
+                        self.leftPanelVM.robotVM.retreat(data.id);
                     } else if (a.type === SERVER_ACTIONS.BIND) {
-                        self.leftPanelVM.robotVM.bind(data.id, data.row, data.col);
+                        self.leftPanelVM.robotVM.bind(data.id);
                     } else if (a.type === SERVER_ACTIONS.UNBIND) {
-                        self.leftPanelVM.robotVM.unbind(data.id, data.row, data.col);
+                        self.leftPanelVM.robotVM.unbind(data.id);
                     } else if (a.type === SERVER_ACTIONS.LOAD) {
-                        self.leftPanelVM.robotVM.load(data.id, data.row, data.col);
+                        self.leftPanelVM.robotVM.load(data.id);
                     } else if (a.type === SERVER_ACTIONS.OFFLOAD) {
-                        self.leftPanelVM.robotVM.offload(data.id, data.row, data.col);
+                        self.leftPanelVM.robotVM.offload(data.id);
                     }
 
                     self.pendingActions++;
