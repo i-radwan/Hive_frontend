@@ -161,7 +161,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 break;
 
             case EVENT_FROM_GFX.ACK_ACTION:
-                handleActionAck();
+                handleActionAck(event.data);
                 break;
 
             case EVENT_FROM_GFX.ESC:
@@ -201,9 +201,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
         self.centerPanelVM.controlConsoleVM.handleCellHover(row, col);
     };
 
-    let handleActionAck = function (ack) {
-        let data = ack.data;
-
+    let handleActionAck = function (data) {
         if (data.type === EVENT_TO_GFX.OBJECT_MOVE || data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
             self.leftPanelVM.robotVM.doneMoving(data.data.id);
         }
