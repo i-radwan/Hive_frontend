@@ -329,6 +329,17 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             }
         });
 
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_COLORIZE,
+            data: {
+                type: MAP_CELL.RACK,
+                id: fac.id,
+                row: r,
+                col: c,
+                color: rob.color
+            }
+        });
+
         if (fac.type === MAP_CELL.GATE) {
             logger({
                 level: LOG_LEVEL.INFO,
