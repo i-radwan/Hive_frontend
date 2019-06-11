@@ -171,6 +171,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     };
 
     self.handleCellHover = function (row, col) {
+        // To free the coordinates after the user leaves the grid
         if (row === "" || col === "") {
             self.coordinates("");
 
