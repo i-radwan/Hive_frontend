@@ -481,8 +481,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.assignTask = function (robot_id, rack_id) {
-        let pos = state.map.getObjectPos(robot_id, MAP_CELL.ROBOT);
+    self.assignTask = function (robotID, rackID) {
+        let pos = state.map.getObjectPos(robotID, MAP_CELL.ROBOT);
 
         let r = pos[0];
         let c = pos[1];
@@ -493,7 +493,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             type: EVENT_TO_GFX.OBJECT_COLORIZE,
             data: {
                 type: MAP_CELL.RACK,
-                id: rack_id,
+                id: rackID,
                 row: r,
                 col: c,
                 color: rob.color
@@ -504,7 +504,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.ROBOT,
             color: rob.color,
-            msg: "Robot <b>(#" + robot_id + ")</b> is assigned to Rack#<b>(" + rack_id + ")</b>."
+            msg: "Robot <b>(#" + robotID + ")</b> is assigned to Rack#<b>(" + rackID + ")</b>."
         });
     };
 

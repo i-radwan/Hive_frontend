@@ -86,17 +86,17 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     let data = logs[i].data;
 
                     if (l.type === SERVER_LOGS.TASK_ASSIGNED) {
-                        let robot_id = data.robot_id;
-                        let rack_id = data.rack_id;
+                        let robotID = data.robot_id;
+                        let rackID = data.rack_id;
 
-                        self.leftPanelVM.robotVM.assignTask(robot_id, rack_id);
+                        self.leftPanelVM.robotVM.assignTask(robotID, rackID);
                     } else if (l.type === SERVER_LOGS.TASK_COMPLETED) {
-                        let order_id = data.order_id;
-                        let rack_id = data.rack;
+                        let orderID = data.order_id;
+                        let rackID = data.rack;
                         let items = data.items;
 
-                        self.leftPanelVM.rackVM.adjustRack(rack_id, items);
-                        self.leftPanelVM.orderVM.updateOrderDeliveredItems(order_id, items);
+                        self.leftPanelVM.rackVM.adjustRack(rackID, items);
+                        self.leftPanelVM.orderVM.updateOrderDeliveredItems(orderID, items);
                     } else if (l.type === SERVER_LOGS.ORDER_FULFILLED) {
                         let id = data.id;
 
