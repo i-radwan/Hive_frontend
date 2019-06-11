@@ -413,7 +413,7 @@ let gfxEngine = function () {
                 dstAngle = dirToAngle(renderObject.direction) + 90*(animationType === ANIMATION_TYPE.ROTATE_LEFT) - 90*(animationType === ANIMATION_TYPE.ROTATE_RIGHT) + 360;
                 dstAngle = normalizeAngle(dstAngle);
 
-                if (Math.abs(dstAngle - renderObject.animation_variables.cur_angle) > 90) {
+                if (Math.abs(dstAngle - renderObject.animation_variables.cur_angle) > 180) {
                     renderObject.animation_variables.cur_angle += 360;
                     renderObject.animation_variables.cur_angle = normalizeAngle(renderObject.animation_variables.cur_angle);
                 }
