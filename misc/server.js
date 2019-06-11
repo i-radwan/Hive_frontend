@@ -197,15 +197,6 @@ wsServer.on('request', function (request) {
                         rack_col: parseInt(i[7])
                     }
                 });
-            } else if (t === SERVER_LOGS.ITEM_DELIVERED) {
-                logs.push({
-                    type: SERVER_LOGS.ITEM_DELIVERED,
-                    data: {
-                        order_id: parseInt(i[2]),
-                        item_id: parseInt(i[3]),
-                        item_quantity: parseInt(i[4])
-                    }
-                });
             } else if (t === SERVER_LOGS.ORDER_FULFILLED) {
                 logs.push({
                     type: SERVER_LOGS.ORDER_FULFILLED,
@@ -220,19 +211,12 @@ wsServer.on('request', function (request) {
                         id: parseInt(i[2])
                     }
                 });
-            } else if (t === SERVER_LOGS.RACK_ADJUSTED) {
+            } else if (t === SERVER_LOGS.BATTERY_UPDATED) {
                 logs.push({
-                    type: SERVER_LOGS.RACK_ADJUSTED,
+                    type: SERVER_LOGS.ORDER_ISSUED,
                     data: {
                         id: parseInt(i[2]),
-                        row: parseInt(i[3]),
-                        col: parseInt(i[4]),
-                        items: [
-                            {
-                                id: parseInt(i[5]),
-                                quantity: parseInt(i[6])
-                            }
-                        ]
+                        battery: parseFloat(i[3])
                     }
                 });
             }
