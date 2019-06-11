@@ -184,6 +184,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         // Timer to auto-hide the message
         clearTimeout(self.timer);
+
+        if (msg.persistent)
+            return;
+        
         self.timer = setTimeout(() => {
             self.msg("")
         }, MSG_TIMEOUT);

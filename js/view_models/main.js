@@ -138,7 +138,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
             case MSG_FROM_SERVER.MSG:
                 self.shouter.notifySubscribers({
-                    text: msg.data.msg, type: msg.data.status
+                    text: msg.data.msg,
+                    type: msg.data.status,
+                    persistent: true
                 }, SHOUT.MSG);
                 break;
         }
