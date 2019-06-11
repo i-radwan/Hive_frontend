@@ -650,7 +650,12 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             let nc = c + COL_DELTA[rob.direction];
 
             if (nr === row && nc === col) { // Moving toward blocked cell
-                // rob.moving = false; // ToDo: consider this optimization, it will cause an error
+                // rob.moving = false;  // ToDo: consider this optimization, it will cause an error
+                                        // ToDo: as you will not know whether this robot was moving or not before
+                                        // ToDo: stopping it, so what is the value of `moving` after activating the
+                                        // ToDo: robot? it's lost if we override it here.
+                                        // ToDo: this optimization prevents the next recursion call from
+                                        // ToDo: considering this robot (it's been considered).
 
                 sendToServer({
                     type: MSG_TO_SERVER.BLOCKED,

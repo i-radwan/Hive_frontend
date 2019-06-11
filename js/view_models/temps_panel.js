@@ -18,6 +18,8 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
                 weight: 10
             }];
 
+            let objects = {};
+
             for (let j = 0; j < 20; j++) {
                 temp[j] = new Array(30);
 
@@ -27,57 +29,66 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
                     switch (rand) {
                         case 0:
                             temp[j][k] = {
-                                robot: undefined,
-                                facility: undefined
+                                objects: []
                             };
                             break;
                         case 1:
                             temp[j][k] = {
-                                robot: undefined,
-                                facility: {
-                                    type: MAP_CELL.GATE
-                                }
+                                objects: [{
+                                    type: MAP_CELL.GATE,
+                                    id: 30 * j + k
+                                }]
                             };
+
+                            objects[[30 * j + k, MAP_CELL.GATE]] = [j, k];
                             break;
                         case 2:
                             temp[j][k] = {
-                                robot: {
+                                objects: [{
                                     type: MAP_CELL.ROBOT,
+                                    id: 30 * j + k,
                                     color: "#FF0000",
                                     load_cap: 10,
                                     ip: ""
-                                },
-                                facility: undefined
+                                }]
                             };
+
+                            objects[[30 * j + k, MAP_CELL.ROBOT]] = [j, k];
                             break;
                         case 3:
                             temp[j][k] = {
-                                robot: undefined,
-                                facility: {
+                                objects: [{
                                     type: MAP_CELL.RACK,
+                                    id: 30 * j + k,
                                     items: [{
                                         id: 1,
                                         quantity: 10
                                     }],
                                     capacity: RACK_INIT_CAP
-                                }
+                                }]
                             };
+
+                            objects[[30 * j + k, MAP_CELL.RACK]] = [j, k];
                             break;
                         case 4:
                             temp[j][k] = {
-                                robot: undefined,
-                                facility: {
-                                    type: MAP_CELL.STATION
-                                }
+                                objects: [{
+                                    type: MAP_CELL.STATION,
+                                    id: 30 * j + k
+                                }]
                             };
+
+                            objects[[30 * j + k, MAP_CELL.STATION]] = [j, k];
                             break;
                         case 5:
                             temp[j][k] = {
-                                robot: undefined,
-                                facility: {
-                                    type: MAP_CELL.OBSTACLE
-                                }
+                                objects: [{
+                                    type: MAP_CELL.OBSTACLE,
+                                    id: 30 * j + k
+                                }]
                             };
+
+                            objects[[30 * j + k, MAP_CELL.OBSTACLE]] = [j, k];
                     }
                 }
             }
@@ -85,7 +96,8 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
             temps.push({
                 temp: {
                     map: temp,
-                    items: items
+                    items: items,
+                    objects: objects
                 },
                 img: "images/temps/hold.png"
             });
@@ -119,6 +131,7 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
 
         state.items = self.temps[idx()].temp.items;
         state.map.setMap(self.temps[idx()].temp.map);
+        state.map.setObjects(self.temps[idx()].temp.objects);
 
         shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
     };
