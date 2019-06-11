@@ -98,6 +98,10 @@ let Map = function () {
             if (objs[i].type === obj.type && objs[i].id === old_id) {
                 objs[i] = obj;
 
+                self.objects[[obj.id, obj.type]] = [r, c];
+
+                delete self.objects[[old_id, obj.type]];
+
                 return;
             }
         }
