@@ -134,6 +134,24 @@ KEY_CODE = {
     ESC: 27
 };
 
+MOVING_SPEED = 0.1;
+ROTATING_SPEED = 0.1;
+
+ANIMATION_TYPE = {
+    MOVE: 0,
+    ROTATE_RIGHT: 1,
+    ROTATE_LEFT: 2,
+    RETREAT: 3
+};
+
+CURSOR_STYLES = {
+    CROSS: "move",
+    DEFAULT: "default",
+    POINTER: "pointer",
+    CAN_GRAB: "grab",
+    GRABBING: "grabbing"
+};
+
 //
 // Events
 //
