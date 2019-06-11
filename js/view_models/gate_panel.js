@@ -28,13 +28,15 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 return;
             }
 
+            let id = parseInt(self.id());
+
             state.map.addObject(row, col, {
                 type: MAP_CELL.GATE,
-                id: parseInt(self.id())
+                id: id
             });
 
-            self.id(Math.max(state.nextIDs.gate, parseInt(self.id()) + 1));
-            state.nextIDs.gate = parseInt(self.id());
+            self.id(Math.max(state.nextIDs.gate, id + 1));
+            state.nextIDs.gate = id;
 
             shouter.notifySubscribers({
                 text: "Gate placed successfully!",
@@ -45,9 +47,9 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 type: EVENT_TO_GFX.OBJECT_ADD,
                 data: {
                     type: MAP_CELL.GATE,
+                    id: id,
                     row: row,
-                    col: col,
-                    id: parseInt(self.id())
+                    col: col
                 }
             });
         } else {
@@ -62,15 +64,16 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.isFree(dstRow, dstCol)) {
-            let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.GATE);
+        let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.GATE);
 
+        if (state.map.isFree(dstRow, dstCol)) {
             state.map.moveObject(srcRow, srcCol, dstRow, dstCol, fac);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.GATE,
+                    id: fac.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: dstRow,
@@ -87,6 +90,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.GATE,
+                    id: fac.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: srcRow,
@@ -103,6 +107,16 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         unselect();
         clear();
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_DELETE,
+            data: {
+                type: MAP_CELL.GATE,
+                id: fac.id,
+                row: row,
+                col: col
+            }
+        });
 
         return true;
     };
@@ -122,6 +136,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             data: {
                 type: MAP_CELL.GATE,
+                id: fac.id,
                 row: row,
                 col: col
             }
@@ -133,15 +148,6 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         self.editing(true);
         self.activeGateRow = row;
         self.activeGateCol = col;
-
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            data: {
-                type: MAP_CELL.GATE,
-                row: row,
-                col: col
-            }
-        });
     };
 
     self.update = function () {
@@ -159,12 +165,14 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         let fac = state.map.getSpecificFacility(self.activeGateRow, self.activeGateCol, MAP_CELL.GATE);
 
+        let id = parseInt(self.id());
+
         state.map.updateObject(self.activeGateRow, self.activeGateCol, {
             type: MAP_CELL.GATE,
-            id: parseInt(self.id())
+            id: id
         }, fac.id);
 
-        state.nextIDs.gate = Math.max(state.nextIDs.gate, parseInt(self.id()) + 1);
+        state.nextIDs.gate = Math.max(state.nextIDs.gate, id + 1);
 
         shouter.notifySubscribers({
             text: "Gate updated successfully!",

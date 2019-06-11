@@ -43,9 +43,11 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 return;
             }
 
+            let id = parseInt(self.id());
+
             state.map.addObject(row, col, {
                 type: MAP_CELL.ROBOT,
-                id: parseInt(self.id()),
+                id: id,
                 color: self.color(),
                 direction: ROBOT_DIR.RIGHT,
                 load_cap: parseInt(self.loadCap()),
@@ -53,8 +55,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 port: self.port()
             });
 
-            self.id(Math.max(state.nextIDs.robot, parseInt(self.id()) + 1));
-            state.nextIDs.robot = parseInt(self.id());
+            self.id(Math.max(state.nextIDs.robot, id + 1));
+            state.nextIDs.robot = id;
 
             shouter.notifySubscribers({
                 text: "Robot placed successfully!",
@@ -65,9 +67,9 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: EVENT_TO_GFX.OBJECT_ADD,
                 data: {
                     type: MAP_CELL.ROBOT,
+                    id: id,
                     row: row,
                     col: col,
-                    id: parseInt(self.id()),
                     load_cap: parseInt(self.loadCap()),
                     color: self.color(),
                     ip: self.ip(),
@@ -83,15 +85,16 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.isFree(dstRow, dstCol)) {
-            let rob = state.map.getRobot(srcRow, srcCol);
+        let rob = state.map.getRobot(srcRow, srcCol);
 
+        if (state.map.isFree(dstRow, dstCol)) {
             state.map.moveObject(srcRow, srcCol, dstRow, dstCol, rob);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.ROBOT,
+                    id: rob.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: dstRow,
@@ -108,6 +111,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.ROBOT,
+                    id: rob.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: srcRow,
@@ -125,6 +129,16 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         unselect();
         clear();
 
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_DELETE,
+            data: {
+                type: MAP_CELL.ROBOT,
+                id: rob.id,
+                row: row,
+                col: col
+            }
+        });
+
         return true;
     };
 
@@ -133,7 +147,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         if (rob === null)
             return;
-
 
         self.activeRobotRow = row;
         self.activeRobotCol = col;
@@ -148,6 +161,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             data: {
                 type: MAP_CELL.ROBOT,
+                id: rob.id,
                 row: row,
                 col: col
             }
@@ -159,15 +173,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.editing(true);
         self.activeRobotRow = row;
         self.activeRobotCol = col;
-
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            data: {
-                type: MAP_CELL.ROBOT,
-                row: row,
-                col: col
-            }
-        });
     };
 
     self.update = function () {
@@ -185,16 +190,18 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let rob = state.map.getRobot(self.activeRobotRow, self.activeRobotCol);
 
+        let id = parseInt(self.id());
+
         state.map.updateObject(self.activeRobotRow, self.activeRobotCol, {
             type: MAP_CELL.ROBOT,
-            id: parseInt(self.id()),
+            id: id,
             color: self.color(),
             load_cap: parseInt(self.loadCap()),
             ip: self.ip(),
             port: self.port()
         }, rob.id);
 
-        state.nextIDs.robot = Math.max(state.nextIDs.robot, parseInt(self.id()) + 1);
+        state.nextIDs.robot = Math.max(state.nextIDs.robot, id + 1);
 
         shouter.notifySubscribers({
             text: "Robot updated successfully!",
@@ -212,17 +219,28 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.move = function (r, c) {
+    self.move = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let r = pos[0];
+        let c = pos[1];
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_MOVE,
             data: {
+                id: id,
                 row: r,
                 col: c
             }
         });
     };
 
-    self.rotateRight = function (r, c) {
+    self.rotateRight = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let r = pos[0];
+        let c = pos[1];
+
         let rob = state.map.getRobot(r, c);
 
         rob.direction = (rob.direction - 1 + ROBOT_DIR_CNT) % ROBOT_DIR_CNT;
@@ -230,13 +248,19 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_ROTATE_RIGHT,
             data: {
+                id: id,
                 row: r,
                 col: c
             }
         });
     };
 
-    self.rotateLeft = function (r, c) {
+    self.rotateLeft = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let r = pos[0];
+        let c = pos[1];
+
         let rob = state.map.getRobot(r, c);
 
         rob.moving = true;
@@ -245,13 +269,19 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_ROTATE_LEFT,
             data: {
+                id: id,
                 row: r,
                 col: c
             }
         });
     };
 
-    self.retreat = function (r, c) {
+    self.retreat = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let r = pos[0];
+        let c = pos[1];
+
         let rob = state.map.getRobot(r, c);
 
         rob.moving = true;
@@ -260,13 +290,19 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_RETREAT,
             data: {
+                id: id,
                 row: r,
                 col: c
             }
         });
     };
 
-    self.bind = function (id, r, c) {
+    self.bind = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let r = pos[0];
+        let c = pos[1];
+
         let fac = state.map.getBindableFacility(r, c);
         let rob = state.map.getRobot(r, c);
 
@@ -284,11 +320,12 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_BIND,
             data: {
+                type: MAP_CELL.ROBOT,
                 id: id,
-                row: r,
-                col: c,
+                object_type: fac.type,
                 object_id: fac.id,
-                object_type: fac.type
+                row: r,
+                col: c
             }
         });
 
@@ -309,7 +346,12 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     };
 
-    self.unbind = function (id, r, c) {
+    self.unbind = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let r = pos[0];
+        let c = pos[1];
+
         let fac = state.map.getBoundFacility(r, c);
         let rob = state.map.getRobot(r, c);
 
@@ -327,11 +369,12 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_UNBIND,
             data: {
+                type: MAP_CELL.ROBOT,
                 id: id,
-                row: r,
-                col: c,
+                object_type: fac.type,
                 object_id: fac.id,
-                object_type: fac.type
+                row: r,
+                col: c
             }
         });
 
@@ -339,6 +382,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             type: EVENT_TO_GFX.OBJECT_DECOLORIZE,
             data: {
                 type: fac.type,
+                id: fac.id,
                 row: r,
                 col: c
             }
@@ -361,7 +405,12 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     };
 
-    self.load = function (id, r, c) {
+    self.load = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let r = pos[0];
+        let c = pos[1];
+
         let fac = state.map.getSpecificFacility(r, c, MAP_CELL.RACK);
         let rob = state.map.getRobot(r, c);
 
@@ -378,7 +427,10 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_LOAD,
             data: {
+                type: MAP_CELL.ROBOT,
                 id: fac.id,
+                object_type: fac.type,
+                object_id: fac.id,
                 row: r,
                 col: c
             }
@@ -392,7 +444,12 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.offload = function (id, r, c) {
+    self.offload = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let r = pos[0];
+        let c = pos[1];
+
         let fac = state.map.getSpecificFacility(r, c, MAP_CELL.RACK);
         let rob = state.map.getRobot(r, c);
 
@@ -409,9 +466,12 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_OFFLOAD,
             data: {
+                type: MAP_CELL.ROBOT,
+                id: rob.id,
+                object_type: fac.type,
+                object_id: fac.id,
                 row: r,
-                col: c,
-                id: fac.id
+                col: c
             }
         });
 
@@ -423,15 +483,21 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.assignTask = function (robot_id, robot_row, robot_col, rack_id, rack_row, rack_col) {
-        let rob = state.map.getRobot(robot_row, robot_col);
+    self.assignTask = function (robot_id, rack_id) {
+        let pos = state.map.getObjectPos(robot_id, MAP_CELL.ROBOT);
+
+        let r = pos[0];
+        let c = pos[1];
+
+        let rob = state.map.getRobot(r, c);
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_COLORIZE,
             data: {
                 type: MAP_CELL.RACK,
-                row: rack_row,
-                col: rack_col,
+                id: rack_id,
+                row: r,
+                col: c,
                 color: rob.color
             }
         });
@@ -457,7 +523,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 }
             });
 
-            self.deactivateRobot(self.activeRobotRow, self.activeRobotCol);
+            self.deactivateRobot(parseInt(self.id()));
         } else {
             sendToServer({
                 type: MSG_TO_SERVER.ACTIVATE,
@@ -466,13 +532,18 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 }
             });
 
-            self.activateRobot(self.activeRobotRow, self.activeRobotCol);
+            self.activateRobot(parseInt(self.id()));
         }
 
         self.deactivated(!self.deactivated());
     };
 
-    self.deactivateRobot = function (row, col) {
+    self.deactivateRobot = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let row = pos[0];
+        let col = pos[1];
+
         let rob = state.map.getRobot(row, col);
 
         if (rob.moving) {
@@ -482,6 +553,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_FAILURE, // ToDo: STOP or FAILURE (depends on ACK)
             data: {
+                type: MAP_CELL.ROBOT,
                 id: parseInt(self.id()),
                 row: row,
                 col: col
@@ -496,12 +568,18 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.activateRobot = function (row, col) {
+    self.activateRobot = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+        let row = pos[0];
+        let col = pos[1];
+
         let rob = state.map.getRobot(row, col);
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_FIXED,
             data: {
+                type: MAP_CELL.ROBOT,
                 id: parseInt(self.id()),
                 row: row,
                 col: col
@@ -516,7 +594,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.doneMoving = function (id, row, col) {
+    self.doneMoving = function (id) {
         let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
         let r = pos[0];
         let c = pos[1];
@@ -537,13 +615,18 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     };
 
-    self.updateBattery = function (id, row, col, battery) {
+    self.updateBattery = function (id, battery) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+        let r = pos[0];
+        let c = pos[1];
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_UPDATE,
             data: {
+                type: MAP_CELL.ROBOT,
                 id: id,
-                row: row,
-                col: col,
+                row: r,
+                col: c,
                 battery: battery
             }
         });
@@ -581,6 +664,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 gfxEventHandler({
                     type: EVENT_TO_GFX.OBJECT_FAILURE,
                     data: {
+                        type: MAP_CELL.ROBOT,
                         id: parseInt(rob.id),
                         row: r,
                         col: c

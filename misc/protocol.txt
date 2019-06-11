@@ -71,57 +71,41 @@ UPDATE: {
             type: MOVE,
             data: {
                 id
-                row:
-                col:
             }
         }, {
             type: ROTATE_RIGHT,
             data: {
                 id:
-                row:
-                col:
             }
         }, {
             type: ROTATE_LEFT,
             data: {
                 id:
-                row:
-                col:
             }
         }, {
             type: RETREAT,
             data: {
                 id:
-                row:                            # The row that the robot was supposed to move to
-                col:                            # The col that the robot was supposed to move to
             }
         }, {
             type: LOAD,
             data: {
                 id:
-                row:
-                col:
             }
         },
             type: OFFLOAD,
             data: {
                 id:
-                row:
-                col:
             }
         }, {
             type: BIND,
             data: {
                 id:
-                row:
-                col:
             }
         }, {
             type: UNBIND,
             data: {
                 id:
-                row:
-                col:
             }
         }
     ],
@@ -133,11 +117,7 @@ UPDATE: {
             type: TASK_ASSIGNED
             data: {
                 robot_id:
-                robot_row:
-                robot_col:
                 rack_id:
-                rack_row:                       # Original rack row
-                racK_col:                       # Original rack col
             }
         }, {
             type: ITEM_DELIVERED
@@ -160,8 +140,6 @@ UPDATE: {
             type: RACK_ADJUSTED
             data: {
                 id:
-                row:
-                col:
                 items: [
                     {
                         id:
@@ -176,8 +154,6 @@ UPDATE: {
             type: BATTERY_UPDATED
             data: {
                 id:
-                row:                            # The row/col that the robot is supposed to be there
-                col:                            # after finishing last action.
                 battery:                        # Percentage
             }
          }
@@ -194,17 +170,12 @@ UPDATE: {
     ]
 }
 
-DEACTIVATE: { # The row/col that the robot is supposed to be there after finishing last action.
-              # If this will affect other robots, you will receive a BLOCKED msg from them
+DEACTIVATE: { # If this will affect other robots, you will receive a BLOCKED msg from them
     id:
-    row:
-    col:
 }
 
-ACTIVATE: { # The row/col that the robot is supposed to be there after finishing last action.
+ACTIVATE: {
     id:
-    row:
-    col:
 }
 
 MSG: {
@@ -224,33 +195,29 @@ OBJECT_HOVER: {
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
 }
 
-**
 OBJECT_ADD: { # Default ROBOT direction = ROBOT_DIR.RIGHT
-    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    id:
     row:
     col:
 }
 
-**
 OBJECT_DELETE: {
-    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    id:
     row:
     col:
 }
 
-**
 OBJECT_DRAG: {
-    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    id:
     src_row:
     src_col:
     dst_row:
     dst_col:
 }
 
-**
 OBJECT_MOVE: { # Move the specified robot and the bound rack (if any). Then send ACK when done
                # Move one step forward by the current direction
     id:        # not necessarily needed but to be more general
@@ -258,101 +225,89 @@ OBJECT_MOVE: { # Move the specified robot and the bound rack (if any). Then send
     col:
 }
 
-**
 OBJECT_ROTATE_RIGHT: { # Move the specified robot and the bound rack (if any). Then send ACK when done
     id:        # not necessarily needed but to be more general
     row:
     col:
 }
 
-**
 OBJECT_ROTATE_LEFT: { # Move the specified robot and the bound rack (if any). Then send ACK when done
     id:        # not necessarily needed but to be more general
     row:
     col:
 }
 
-**
 OBJECT_RETREAT: { # Rotate the robot 180 degree, the move back to the previous position. Then send ACK when done
     id:        # not necessarily needed but to be more general
     row:
     col:
 }
 
-**
 OBJECT_HIGHLIGHT: {
-    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    id:
     row:
     col:
 }
 
-**
 OBJECT_COLORIZE: {
-    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    id:
     row:
     col:
     color:                                      # HTML
 }
 
-**
 OBJECT_DECOLORIZE: {
-    id:
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    id:
     row:
     col:
 }
 
-**
 OBJECT_BIND: { # Flash the bound object, send ACK
-    id:                                         # Robot ID
     type:                                       # not necessarily needed
+    id:                                         # Robot ID
     row:                                        # Robot row
     col:
     object_id:                                  # Bound object ID
     object_type: [MAP_CELL.GATE|MAP_CELL.STATION]
 }
 
-**
 OBJECT_UNBIND: { # Send ACK
-    id:                                         # Robot ID
     type:                                       # not necessarily needed
+    id:                                         # Robot ID
     row:                                        # Robot row
     col:
     object_id:                                  # Bound object ID
     object_type: [MAP_CELL.GATE|MAP_CELL.STATION]
 }
 
-**
 OBJECT_LOAD: { # Draw rack on top of the robot, send ACK
-    id:                                         # Robot ID
     type:                                       # not necessarily needed
+    id:                                         # Robot ID
     object_id:                                  # Rack ID
     object_type:                                # not necessarily needed
     row:                                        # Rack row
     col:
 }
 
-**
 OBJECT_OFFLOAD: { # Send ACK
-    id:                                         # Robot ID
     type:                                       # not necessarily needed
+    id:                                         # Robot ID
     object_id:                                  # Rack ID
     object_type:                                # not necessarily needed
     row:                                        # Rack row
     col:
 }
 
-**
 OBJECT_FAILURE: { # Stop, Send ACK, Flash red
-    id:
     type:                                       # not necessarily needed
+    id:
     row:                                        # The old row/col (the one that this robot was
     col:                                        # supposed to be at before finishing the current move)
 }
 
-**
 OBJECT_STOP: { # Force stop, don't send ACK of the previous move
     id:
     type:                                       # not necessarily needed
@@ -360,7 +315,6 @@ OBJECT_STOP: { # Force stop, don't send ACK of the previous move
     col:                                        # supposed to be at before finishing the current move)
 }
 
-**
 OBJECT_FIXED: { # Resume last move, Send ACK after finishing the original move
     id:
     type:                                       # not necessarily needed
@@ -368,7 +322,6 @@ OBJECT_FIXED: { # Resume last move, Send ACK after finishing the original move
     col:                                        # supposed to be at before finishing the current move)
 }
 
-**
 OBJECT_UPDATE: { # New status for the object (e.g. robot), such as the battery level
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     id:
@@ -390,15 +343,13 @@ SIMULATION_ESC: {}
 ----------------
 FROM GFX:
 ----------------
-**
 CELL_CLICK: {
+    type:
+    id:
     row:
     col:
-    id:
-    type:
 }
 
-**
 CELL_DRAG: {
     id:
     type:
@@ -408,7 +359,6 @@ CELL_DRAG: {
     dst_col:
 }
 
-**
 CELL_DELETE: {
     id:
     type:

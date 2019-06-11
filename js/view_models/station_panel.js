@@ -28,13 +28,15 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
                 return;
             }
 
+            let id = parseInt(self.id());
+
             state.map.addObject(row, col, {
                 type: MAP_CELL.STATION,
-                id: parseInt(self.id())
+                id: id
             });
 
-            self.id(Math.max(state.nextIDs.station, parseInt(self.id()) + 1));
-            state.nextIDs.station = parseInt(self.id());
+            self.id(Math.max(state.nextIDs.station, id + 1));
+            state.nextIDs.station = id;
 
             shouter.notifySubscribers({
                 text: "Station placed successfully!",
@@ -45,6 +47,7 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
                 type: EVENT_TO_GFX.OBJECT_ADD,
                 data: {
                     type: MAP_CELL.STATION,
+                    id: id,
                     row: row,
                     col: col
                 }
@@ -61,15 +64,16 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.isFree(dstRow, dstCol)) {
-            let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.STATION);
+        let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.STATION);
 
+        if (state.map.isFree(dstRow, dstCol)) {
             state.map.moveObject(srcRow, srcCol, dstRow, dstCol, fac);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.STATION,
+                    id: fac.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: dstRow,
@@ -86,6 +90,7 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.STATION,
+                    id: fac.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: srcRow,
@@ -102,6 +107,16 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
 
         unselect();
         clear();
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_DELETE,
+            data: {
+                type: MAP_CELL.STATION,
+                id: fac.id,
+                row: row,
+                col: col
+            }
+        });
 
         return true;
     };
@@ -121,6 +136,7 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             data: {
                 type: MAP_CELL.STATION,
+                id: fac.id,
                 row: row,
                 col: col
             }
@@ -132,15 +148,6 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
         self.editing(true);
         self.activeStationRow = row;
         self.activeStationCol = col;
-
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            data: {
-                type: MAP_CELL.STATION,
-                row: row,
-                col: col
-            }
-        });
     };
 
     self.update = function () {
@@ -158,12 +165,14 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
 
         let fac = state.map.getSpecificFacility(self.activeStationRow, self.activeStationCol, MAP_CELL.STATION);
 
+        let id = parseInt(self.id());
+
         state.map.updateObject(self.activeStationRow, self.activeStationCol, {
             type: MAP_CELL.STATION,
-            id: parseInt(self.id())
+            id: id
         }, fac.id);
 
-        state.nextIDs.station = Math.max(state.nextIDs.station, parseInt(self.id()) + 1);
+        state.nextIDs.station = Math.max(state.nextIDs.station, id + 1);
 
         shouter.notifySubscribers({
             text: "Station updated successfully!",

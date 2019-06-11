@@ -37,6 +37,7 @@ let Map = function () {
     };
 
     self.setMap = function (newMap) {
+        // Note: loading the file as is could lead to inconsistency.
         console.log("Setting the map!");
 
         self.height = newMap.length;

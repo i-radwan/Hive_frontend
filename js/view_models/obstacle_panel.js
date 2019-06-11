@@ -28,13 +28,15 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 return;
             }
 
+            let id = parseInt(self.id());
+
             state.map.addObject(row, col, {
                 type: MAP_CELL.OBSTACLE,
-                id: parseInt(self.id())
+                id: id
             });
 
-            self.id(Math.max(state.nextIDs.obstacle, parseInt(self.id()) + 1));
-            state.nextIDs.obstacle = parseInt(self.id());
+            self.id(Math.max(state.nextIDs.obstacle, id + 1));
+            state.nextIDs.obstacle = id;
 
             shouter.notifySubscribers({
                 text: "Obstacle placed successfully!",
@@ -45,6 +47,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 type: EVENT_TO_GFX.OBJECT_ADD,
                 data: {
                     type: MAP_CELL.OBSTACLE,
+                    id: id,
                     row: row,
                     col: col
                 }
@@ -61,16 +64,16 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
+        let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.OBSTACLE);
+
         if (state.map.isFree(dstRow, dstCol)) {
-            let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.OBSTACLE);
-
             state.map.moveObject(srcRow, srcCol, dstRow, dstCol, fac);
-
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.OBSTACLE,
+                    id: fac.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: dstRow,
@@ -87,6 +90,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.OBSTACLE,
+                    id: fac.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: srcRow,
@@ -103,6 +107,16 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
         unselect();
         clear();
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_DELETE,
+            data: {
+                type: MAP_CELL.OBSTACLE,
+                id: fac.id,
+                row: row,
+                col: col
+            }
+        });
 
         return true;
     };
@@ -122,6 +136,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             data: {
                 type: MAP_CELL.OBSTACLE,
+                id: fac.id,
                 row: row,
                 col: col
             }
@@ -133,15 +148,6 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         self.editing(true);
         self.activeObstacleRow = row;
         self.activeObstacleCol = col;
-
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            data: {
-                type: MAP_CELL.OBSTACLE,
-                row: row,
-                col: col
-            }
-        });
     };
 
     self.update = function () {
@@ -159,12 +165,14 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
         let fac = state.map.getSpecificFacility(self.activeObstacleRow, self.activeObstacleCol, MAP_CELL.OBSTACLE);
 
+        let id = parseInt(self.id());
+
         state.map.updateObject(self.activeObstacleRow, self.activeObstacleCol, {
             type: MAP_CELL.OBSTACLE,
-            id: parseInt(self.id())
+            id: id
         }, fac.id);
 
-        state.nextIDs.obstacle = Math.max(state.nextIDs.obstacle, parseInt(self.id()) + 1);
+        state.nextIDs.obstacle = Math.max(state.nextIDs.obstacle, id + 1);
 
         shouter.notifySubscribers({
             text: "Obstacle updated successfully!",

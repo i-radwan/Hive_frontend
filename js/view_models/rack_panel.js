@@ -36,16 +36,18 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 return;
             }
 
+            let id = parseInt(self.id());
+
             state.map.addObject(row, col, {
                 type: MAP_CELL.RACK,
-                id: parseInt(self.id()),
+                id: id,
                 capacity: parseInt(self.capacity()),
                 weight: parseInt(self.weight()),
                 items: ko.mapping.toJS(self.items())
             });
 
-            self.id(Math.max(state.nextIDs.rack, parseInt(self.id()) + 1));
-            state.nextIDs.rack = parseInt(self.id());
+            self.id(Math.max(state.nextIDs.rack, id + 1));
+            state.nextIDs.rack = id;
 
             shouter.notifySubscribers({
                 text: "Rack placed successfully!",
@@ -56,6 +58,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 type: EVENT_TO_GFX.OBJECT_ADD,
                 data: {
                     type: MAP_CELL.RACK,
+                    id: id,
                     row: row,
                     col: col,
                     capacity: parseInt(self.capacity()),
@@ -75,15 +78,16 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
-        if (state.map.isFree(dstRow, dstCol)) {
-            let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.RACK);
+        let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.RACK);
 
+        if (state.map.isFree(dstRow, dstCol)) {
             state.map.moveObject(srcRow, srcCol, dstRow, dstCol, fac);
 
             gfxEventHandler({
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.RACK,
+                    id: fac.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: dstRow,
@@ -100,6 +104,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 type: EVENT_TO_GFX.OBJECT_DRAG,
                 data: {
                     type: MAP_CELL.RACK,
+                    id: fac.id,
                     src_row: srcRow,
                     src_col: srcCol,
                     dst_row: srcRow,
@@ -116,6 +121,16 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         unselect();
         clear();
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_DELETE,
+            data: {
+                type: MAP_CELL.RACK,
+                id: fac.id,
+                row: row,
+                col: col
+            }
+        });
 
         return true;
     };
@@ -142,6 +157,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             data: {
                 type: MAP_CELL.RACK,
+                id: fac.id,
                 row: row,
                 col: col
             }
@@ -153,15 +169,6 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         self.editing(true);
         self.activeRackRow = row;
         self.activeRackCol = col;
-
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
-            data: {
-                type: MAP_CELL.RACK,
-                row: row,
-                col: col
-            }
-        });
     };
 
     self.update = function () {
@@ -179,15 +186,17 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         let fac = state.map.getSpecificFacility(self.activeRackRow, self.activeRackCol, MAP_CELL.RACK);
 
+        let id = parseInt(self.id());
+
         state.map.updateObject(self.activeRackRow, self.activeRackCol, {
             type: MAP_CELL.RACK,
-            id: parseInt(self.id()),
+            id: id,
             capacity: parseInt(self.capacity()),
             weight: parseInt(self.weight()),
             items: ko.mapping.toJS(self.items())
         }, fac.id);
 
-        state.nextIDs.rack = Math.max(state.nextIDs.rack, parseInt(self.id()) + 1);
+        state.nextIDs.rack = Math.max(state.nextIDs.rack, id + 1);
 
         shouter.notifySubscribers({
             text: "Rack updated successfully!",
@@ -243,7 +252,12 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         self.items.remove(this);
     };
 
-    self.adjustRack = function (id, row, col, items) {
+    self.adjustRack = function (id, items) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.RACK);
+
+        let row = pos[0];
+        let col = pos[1];
+
         let fac = state.map.getSpecificFacility(row, col, MAP_CELL.RACK);
 
         if (fac === null)

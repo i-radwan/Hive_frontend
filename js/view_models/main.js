@@ -61,13 +61,13 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     let data = actions[i].data;
 
                     if (a.type === SERVER_ACTIONS.MOVE) {
-                        self.leftPanelVM.robotVM.move(data.row, data.col);
+                        self.leftPanelVM.robotVM.move(data.id, data.row, data.col);
                     } else if (a.type === SERVER_ACTIONS.ROTATE_RIGHT) {
-                        self.leftPanelVM.robotVM.rotateRight(data.row, data.col);
+                        self.leftPanelVM.robotVM.rotateRight(data.id, data.row, data.col);
                     } else if (a.type === SERVER_ACTIONS.ROTATE_LEFT) {
-                        self.leftPanelVM.robotVM.rotateLeft(data.row, data.col);
+                        self.leftPanelVM.robotVM.rotateLeft(data.id, data.row, data.col);
                     } else if (a.type === SERVER_ACTIONS.RETREAT) {
-                        self.leftPanelVM.robotVM.retreat(data.row, data.col);
+                        self.leftPanelVM.robotVM.retreat(data.id, data.row, data.col);
                     } else if (a.type === SERVER_ACTIONS.BIND) {
                         self.leftPanelVM.robotVM.bind(data.id, data.row, data.col);
                     } else if (a.type === SERVER_ACTIONS.UNBIND) {
@@ -87,13 +87,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
                     if (l.type === SERVER_LOGS.TASK_ASSIGNED) {
                         let robot_id = data.robot_id;
-                        let robot_row = data.robot_row;
-                        let robot_col = data.robot_col;
                         let rack_id = data.rack_id;
-                        let rack_row = data.rack_row;
-                        let rack_col = data.rack_col;
 
-                        self.leftPanelVM.robotVM.assignTask(robot_id, robot_row, robot_col, rack_id, rack_row, rack_col);
+                        self.leftPanelVM.robotVM.assignTask(robot_id, rack_id);
                     } else if (l.type === SERVER_LOGS.ITEM_DELIVERED) {
                         let order_id = data.order_id;
                         let item_id = data.item_id;
@@ -110,18 +106,14 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         self.leftPanelVM.orderVM.issueOrder(id);
                     } else if (l.type === SERVER_LOGS.RACK_ADJUSTED) {
                         let id = data.rack_id;
-                        let row = data.rack_row;
-                        let col = data.rack_col;
                         let items = data.items;
 
-                        self.leftPanelVM.rackVM.adjustRack(id, row, col, items);
+                        self.leftPanelVM.rackVM.adjustRack(id, items);
                     } else if (l.type === SERVER_LOGS.BATTERY_UPDATED) {
                         let id = data.id;
-                        let row = data.row;
-                        let col = data.col;
                         let battery = data.battery;
 
-                        self.leftPanelVM.robotVM.updateBattery(id, row, col, battery);
+                        self.leftPanelVM.robotVM.updateBattery(id, battery);
                     }
                 }
 
@@ -133,13 +125,13 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 break;
 
             case MSG_FROM_SERVER.DEACTIVATE:
-                self.leftPanelVM.robotVM.deactivateRobot(msg.data.row, msg.data.col);
+                self.leftPanelVM.robotVM.deactivateRobot(msg.data.id);
 
                 self.pendingActions--;
                 break;
 
             case MSG_FROM_SERVER.ACTIVATE:
-                self.leftPanelVM.robotVM.activateRobot(msg.data.row, msg.data.col);
+                self.leftPanelVM.robotVM.activateRobot(msg.data.id);
 
                 self.pendingActions++;
                 break;
@@ -215,7 +207,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
         let data = ack.data;
 
         if (data.type === EVENT_TO_GFX.OBJECT_MOVE || data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
-            self.leftPanelVM.robotVM.doneMoving(id, data.data.row, data.data.col);
+            self.leftPanelVM.robotVM.doneMoving(data.data.id);
         }
 
         if (--self.pendingActions === 0) { // All actions are done
