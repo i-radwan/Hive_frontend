@@ -66,7 +66,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             });
         } else {
             shouter.notifySubscribers({
-                text: "(" + row + ", " + col + ") is occupied!",
+                text: "(" + (row + 1) + ", " + (col + 1) + ") is occupied!",
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
         }
@@ -94,7 +94,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             });
         } else {
             shouter.notifySubscribers({
-                text: "(" + dstRow + ", " + dstCol + ") is occupied!",
+                text: "(" + (dstRow + 1) + ", " + (dstCol + 1) + ") is occupied!",
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 

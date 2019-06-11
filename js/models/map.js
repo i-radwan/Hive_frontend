@@ -23,10 +23,18 @@ let Map = function () {
             }
         }
 
+        self.objects = {};
+
         if (copyOld === true) {
             for (let i = 0; i < Math.min(height, self.grid.length); i++) {
                 for (let j = 0; j < Math.min(width, self.grid[i].length); j++) {
                     newGrid[i][j] = Object.assign({}, self.grid[i][j]);
+
+                    let objs = self.grid[i][j].objects;
+
+                    for (let k = 0; k < objs.length; k++) {
+                        self.objects[[objs[k].id, objs[k].type]] = [i, j];
+                    }
                 }
             }
         }
