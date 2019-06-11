@@ -122,7 +122,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         o.forEach(function (or) {
-            or.fulfilled_time(timestep);
+            or.fulfilled_timestep(timestep);
 
             self.finishedOrders.push(or);
         });
@@ -195,7 +195,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 more: ko.observable(false),
                 satisfiable: ko.observable(true),
                 start_timestep: o.start_timestep,
-                fulfilled_time: ko.observable("TBD"),
+                fulfilled_timestep: ko.observable("TBD"),
                 progress: ko.computed(function () {
                     let del = 0;
                     let tot = 0;
