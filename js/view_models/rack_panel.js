@@ -44,8 +44,10 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 items: ko.mapping.toJS(self.items())
             });
 
-            self.id(Math.max(state.nextIDs.rack, id + 1));
-            state.nextIDs.rack = id;
+            let nextID = Math.max(state.nextIDs.rack, id + 1);
+
+            self.id(nextID);
+            state.nextIDs.rack = nextID;
 
             shouter.notifySubscribers({
                 text: "Rack placed successfully!",

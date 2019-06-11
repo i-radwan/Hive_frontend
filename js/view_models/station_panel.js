@@ -33,8 +33,10 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
                 id: id
             });
 
-            self.id(Math.max(state.nextIDs.station, id + 1));
-            state.nextIDs.station = id;
+            let nextID = Math.max(state.nextIDs.station, id + 1);
+
+            self.id(nextID);
+            state.nextIDs.station = nextID;
 
             shouter.notifySubscribers({
                 text: "Station placed successfully!",

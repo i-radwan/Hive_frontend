@@ -33,8 +33,10 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 id: id
             });
 
-            self.id(Math.max(state.nextIDs.gate, id + 1));
-            state.nextIDs.gate = id;
+            let nextID = Math.max(state.nextIDs.gate, id + 1);
+
+            self.id(nextID);
+            state.nextIDs.gate = nextID;
 
             shouter.notifySubscribers({
                 text: "Gate placed successfully!",

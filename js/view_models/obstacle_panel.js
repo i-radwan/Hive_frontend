@@ -33,8 +33,10 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 id: id
             });
 
-            self.id(Math.max(state.nextIDs.obstacle, id + 1));
-            state.nextIDs.obstacle = id;
+            let nextID = Math.max(state.nextIDs.obstacle, id + 1);
+
+            self.id(nextID);
+            state.nextIDs.obstacle = nextID;
 
             shouter.notifySubscribers({
                 text: "Obstacle placed successfully!",
