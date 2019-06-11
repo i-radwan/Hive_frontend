@@ -90,12 +90,13 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let rack_id = data.rack_id;
 
                         self.leftPanelVM.robotVM.assignTask(robot_id, rack_id);
-                    } else if (l.type === SERVER_LOGS.ITEM_DELIVERED) {
+                    } else if (l.type === SERVER_LOGS.TASK_COMPLETED) {
                         let order_id = data.order_id;
-                        let item_id = data.item_id;
-                        let item_quantity = data.item_quantity;
+                        let rack_id = data.rack;
+                        let items = data.items;
 
-                        self.leftPanelVM.orderVM.updateOrderDeliveredItems(order_id, item_id, item_quantity);
+                        self.leftPanelVM.rackVM.adjustRack(rack_id, items);
+                        self.leftPanelVM.orderVM.updateOrderDeliveredItems(order_id, items);
                     } else if (l.type === SERVER_LOGS.ORDER_FULFILLED) {
                         let id = data.id;
 
@@ -104,11 +105,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         let id = data.id;
 
                         self.leftPanelVM.orderVM.issueOrder(id);
-                    } else if (l.type === SERVER_LOGS.RACK_ADJUSTED) {
-                        let id = data.rack_id;
-                        let items = data.items;
-
-                        self.leftPanelVM.rackVM.adjustRack(id, items);
                     } else if (l.type === SERVER_LOGS.BATTERY_UPDATED) {
                         let id = data.id;
                         let battery = data.battery;

@@ -120,11 +120,19 @@ UPDATE: {
                 rack_id:
             }
         }, {
-            type: ITEM_DELIVERED
+            type: TASK_COMPLETED
             data: {
                 order_id:
-                item_id:
-                item_quantity:                  # Total for this order_id
+                rack_id:
+                items: [
+                    {
+                        id:
+                        quantity: [+ve|-ve]
+                    }, {
+                        id:
+                        quantity: [+ve|-ve]
+                    }
+                ]
             }
         }, {
             type: ORDER_FULFILLED
@@ -135,20 +143,6 @@ UPDATE: {
             type: ORDER_ISSUED                  # Move order from upcoming to ongoing
             data: {
                 id:
-            }
-        }, {
-            type: RACK_ADJUSTED
-            data: {
-                id:
-                items: [
-                    {
-                        id:
-                        quantity: [+ve|-ve]
-                    }, {
-                        id:
-                        quantity: [+ve|-ve]
-                    }
-                ]
             }
         }, {
             type: BATTERY_UPDATED

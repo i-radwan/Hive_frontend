@@ -154,19 +154,24 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.updateOrderDeliveredItems = function (order_id, item_id, item_quantity) {
+    self.updateOrderDeliveredItems = function (orderID, items) {
         self.ongoingOrders().forEach(function (o) {
-            if (o.id !== order_id)
+            if (o.id !== orderID)
                 return;
 
-            console.log(o);
+            for (let i = 0; i < items.length; ++i) {
+                let itemID = items[i].id;
+                let itemQuantity = items[i].quantity;
 
-            o.items().forEach(function (i) {
-                if (i.id !== item_id)
-                    return;
+                console.log(o);
 
-                i.delivered(item_quantity);
-            });
+                o.items().forEach(function (i) {
+                    if (i.id !== itemID)
+                        return;
+
+                    i.delivered(i.delivered() + parseInt(itemQuantity));
+                });
+            }
         });
     };
 
