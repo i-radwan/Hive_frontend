@@ -171,7 +171,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     };
 
     self.handleCellHover = function (row, col) {
-        if (row === undefined || col === undefined) {
+        if (row === "" || col === "") {
             self.coordinates("");
 
             return;
