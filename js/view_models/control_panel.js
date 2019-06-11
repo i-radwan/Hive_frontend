@@ -171,6 +171,12 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     };
 
     self.handleCellHover = function (row, col) {
+        if (row === undefined || col === undefined) {
+            self.coordinates("");
+
+            return;
+        }
+
         self.coordinates("(" + (row + 1) + ", " + (col + 1) + ")");
     };
 
@@ -187,7 +193,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         if (msg.persistent)
             return;
-        
+
         self.timer = setTimeout(() => {
             self.msg("")
         }, MSG_TIMEOUT);
