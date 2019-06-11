@@ -61,15 +61,11 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     let toggleTemps = function () {
-        gfxEventHandler({
-            type: EVENT_TO_GFX.ESC
-        });
+        shouter.notifySubscribers({}, SHOUT.ESC);
     };
 
     let toggleMap = function () {
-        gfxEventHandler({
-            type: EVENT_TO_GFX.ESC
-        });
+        shouter.notifySubscribers({}, SHOUT.ESC);
     };
 
     let toggleGate = function () {
@@ -118,9 +114,7 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     let toggleOrder = function () {
-        gfxEventHandler({
-            type: EVENT_TO_GFX.ESC
-        });
+        shouter.notifySubscribers({}, SHOUT.ESC);
     };
 
     self.handleCellClick = function (row, col) {

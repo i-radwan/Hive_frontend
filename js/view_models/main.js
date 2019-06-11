@@ -241,6 +241,10 @@ let mainViewModel = function (gfxEventHandler, comm) {
     self.shouter.subscribe(function (on) {
         self.loadingVisible(on);
     }, self, SHOUT.LOADING);
+
+    self.shouter.subscribe(function () {
+        handleEsc();
+    }, self, SHOUT.ESC);
 };
 
 module.exports = mainViewModel;

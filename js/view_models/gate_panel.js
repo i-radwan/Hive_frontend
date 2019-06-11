@@ -15,9 +15,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         if (self.editing()) {
             if (isFacilityFree) {
-                gfxEventHandler({ // ToDo call controllers handle escape functions
-                    type: EVENT_TO_GFX.ESC
-                });
+                shouter.notifySubscribers({}, SHOUT.ESC);
             }
 
             return;

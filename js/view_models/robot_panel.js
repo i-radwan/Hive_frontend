@@ -30,9 +30,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         if (self.editing()) {
             if (isRobotFree) {
-                gfxEventHandler({ // ToDo call controllers handle escape functions
-                    type: EVENT_TO_GFX.ESC
-                });
+                shouter.notifySubscribers({}, SHOUT.ESC);
             }
 
             return;
