@@ -64,6 +64,9 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
+        if (srcRow === dstRow && srcCol === dstCol)
+            return;
+
         let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.STATION);
 
         if (state.map.isFree(dstRow, dstCol)) {

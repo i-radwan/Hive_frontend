@@ -64,6 +64,9 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
+        if (srcRow === dstRow && srcCol === dstCol)
+            return;
+
         let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.OBSTACLE);
 
         if (state.map.isFree(dstRow, dstCol)) {

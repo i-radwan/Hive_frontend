@@ -85,6 +85,9 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
+        if (srcRow === dstRow && srcCol === dstCol)
+            return;
+
         let rob = state.map.getRobot(srcRow, srcCol);
 
         if (state.map.isFree(dstRow, dstCol)) {

@@ -64,6 +64,9 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.drag = function (srcRow, srcCol, dstRow, dstCol) {
+        if (srcRow === dstRow && srcCol === dstCol)
+            return;
+
         let fac = state.map.getSpecificFacility(srcRow, srcCol, MAP_CELL.GATE);
 
         if (state.map.isFree(dstRow, dstCol)) {

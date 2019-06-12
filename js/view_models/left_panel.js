@@ -31,6 +31,9 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
      * @param id   The id of the clicked tile from the LEFT_PANEL enum.
      */
     self.toggle = function (id) {
+        if (id === self.activePanel())
+            return;
+
         if (runningMode() === RUNNING_MODE.DESIGN) {
             if (id === LEFT_PANEL.TEMPS) {
                 toggleTemps();
@@ -138,6 +141,8 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                         break;
                 }
             } else {
+                shouter.notifySubscribers({}, SHOUT.ESC);
+
                 if (!state.map.isRobotFree(row, col)) {
                     self.activePanel(LEFT_PANEL.ROBOT);
                     self.robotVM.edit(row, col);
