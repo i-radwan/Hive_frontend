@@ -462,7 +462,23 @@ let gfxEngine = function () {
 
     // remove color from a given object
     self.deColorizeObject = function(renderObject, type) {
-        // TODO
+        switch (type) {
+            case MAP_CELL.RACK:
+                colorizeRack(renderObject, GFX_SVG_DEFAULT_COLOR.RACK);
+                break;
+            case MAP_CELL.ROBOT:
+                colorizeRobot(renderObject, GFX_SVG_DEFAULT_COLOR.ROBOT);
+                break;
+            case MAP_CELL.STATION:
+                colorizeStation(renderObject, GFX_SVG_DEFAULT_COLOR.STATION);
+                break;
+            case MAP_CELL.OBSTACLE:
+                colorizeObstacle(renderObject, GFX_SVG_DEFAULT_COLOR.OBSTACLE);
+                break;
+            case MAP_CELL.GATE:
+                colorizeGate(renderObject, GFX_SVG_DEFAULT_COLOR.GATE);
+                break;
+        }
     };
 
     // Initialize animation of a given object
