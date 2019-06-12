@@ -465,7 +465,7 @@ let gfxMap = function (logicEventHandler) {
             col: (cell.inBounds ? cell.col : "")
         });
 
-        if (isMouseDown && (!isMouseDownOnObject && !isHovering))
+        if (isMouseDown && !isMouseDownOnObject)
             isDraggingMap = true;
 
         if (isHovering) {
