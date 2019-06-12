@@ -26,6 +26,7 @@ let comm = function (serverMW) {
         };
 
         self.ws.onerror = function (error) {
+            self.connected = false;
         };
 
         self.ws.onmessage = function (e) {
@@ -34,6 +35,10 @@ let comm = function (serverMW) {
             console.log('received:', msg);
 
             self.rcv(serverMW.receive(msg));
+        };
+
+        self.ws.onclose = function () {
+            self.connected = false;
         };
     };
 

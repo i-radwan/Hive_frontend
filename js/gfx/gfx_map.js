@@ -396,8 +396,8 @@ let gfxMap = function (logicEventHandler) {
 
     // Pause all animations
     self.pauseAllAnimations = function() {
-      for (let row = 0; row < height; row++) {
-          for (let col = 0; col < width; col++) {
+      for (let row = 0; row < mapHeight; row++) {
+          for (let col = 0; col < mapWidth; col++) {
               for (let k = 0; k < map[row][col].length; k++) {
                   self.gfxEngine.pauseObjectAnimation(map[row][col][k].render_variables);
               }
@@ -407,8 +407,8 @@ let gfxMap = function (logicEventHandler) {
 
     // Resume all Animations
     self.resumeAllAnimations = function() {
-        for (let row = 0; row < height; row++) {
-            for (let col = 0; col < width; col++) {
+        for (let row = 0; row < mapHeight; row++) {
+            for (let col = 0; col < mapWidth; col++) {
                 for (let k = 0; k < map[row][col].length; k++) {
                     self.gfxEngine.resumeObjectAnimation(map[row][col][k].render_variables);
                 }

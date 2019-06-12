@@ -576,7 +576,9 @@
 
                 <i class="fas fa-stop stop" data-bind="click: centerPanelVM.controlConsoleVM.stop"></i>
                 <i class="fas play-pause"
-                   data-bind="click: centerPanelVM.controlConsoleVM.play, css: {'fa-play play': !centerPanelVM.controlConsoleVM.playing(), 'fa-pause pause': centerPanelVM.controlConsoleVM.playing()}"></i>
+                   data-bind="click: centerPanelVM.controlConsoleVM.play,
+                              css: {'fa-play play': !centerPanelVM.controlConsoleVM.playing(),
+                                    'fa-pause pause': centerPanelVM.controlConsoleVM.playing()}"></i>
                 <div class="deploy-switch" data-bind="click: centerPanelVM.controlConsoleVM.deploy">Deploy</div>
 
                 <i class="fas fa-cog settings-icon" id="settings-icon" data-bind="click: centerPanelVM.toggleSettings"></i>
