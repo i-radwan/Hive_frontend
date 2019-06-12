@@ -165,14 +165,14 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Start object hovering
-    self.objectHover = function(type) {
+    self.objectHover = function(type, color) {
         isHovering = true;
-        self.gfxEngine.addHoverObject(type);
+        self.gfxEngine.addHoverObject(type, color);
     };
 
     // Add an object at the given row, col with a given type and id
-    self.objectAdd = function (id, type, row, col) {
-        map[row][col].push(self.gfxEngine.addObject(id, type, row, col));
+    self.objectAdd = function (id, type, row, col, color) {
+        map[row][col].push(self.gfxEngine.addObject(id, type, row, col, color));
     };
 
     // Delete an object at the given row, col with a given type and id
