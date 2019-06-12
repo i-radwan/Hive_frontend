@@ -127,7 +127,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     self.fill = function (row, col) {
         let fac = state.map.getSpecificFacility(row, col, MAP_CELL.OBSTACLE);
 
-        if (fac === null)
+        if (fac === undefined)
             return;
 
         self.activeObstacleRow = row;

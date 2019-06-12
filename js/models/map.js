@@ -44,7 +44,7 @@ let Map = function () {
         self.height = height;
     };
 
-    self.setMap = function (newMap) {
+    self.setMap = function (newMap, newObjects) {
         // Note: loading the file as is could lead to inconsistency.
         console.log("Setting the map!");
 
@@ -60,10 +60,6 @@ let Map = function () {
                 self.grid[i][j] = Object.assign({}, newMap[i][j]);
             }
         }
-    };
-
-    self.setObjects = function (newObjects) {
-        console.log("Setting the objects!");
 
         self.objects = Object.assign({}, newObjects);
     };
@@ -98,9 +94,9 @@ let Map = function () {
             if (objs[i].type === obj.type && objs[i].id === old_id) {
                 objs[i] = obj;
 
-                self.objects[[obj.id, obj.type]] = [r, c];
-
                 delete self.objects[[old_id, obj.type]];
+
+                self.objects[[obj.id, obj.type]] = [r, c];
 
                 return;
             }
@@ -136,7 +132,7 @@ let Map = function () {
             }
         }
 
-        return null;
+        return undefined;
     };
 
     self.moveObject = function(r, c, nr, nc, obj) {
@@ -166,7 +162,7 @@ let Map = function () {
             }
         }
 
-        return null;
+        return undefined;
     };
 
     self.isFacilityFree = function(r, c) {
@@ -192,7 +188,7 @@ let Map = function () {
                 return objs[i];
         }
 
-        return null;
+        return undefined;
     };
 
     self.getSpecificFacility = function(r, c, type) {
@@ -226,12 +222,14 @@ let Map = function () {
 
         for (let i = 0; i < objsLen; ++i) {
             if (objs[i].type === MAP_CELL.STATION || objs[i].type === MAP_CELL.GATE) {
-                if (objs[i].bound === false)
-                    return objs[i];
+                if (objs[i].bound === true)
+                    continue;
+
+                return objs[i];
             }
         }
 
-        return null;
+        return undefined;
     };
 
     self.getBoundFacility = function(r, c) {
@@ -245,7 +243,7 @@ let Map = function () {
             }
         }
 
-        return null;
+        return undefined;
     };
 
     self.getMovingRobots = function() {

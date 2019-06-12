@@ -148,7 +148,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.fill = function (row, col) {
         let rob = state.map.getRobot(row, col);
 
-        if (rob === null)
+        if (rob === undefined)
             return;
 
         self.activeRobotRow = row;

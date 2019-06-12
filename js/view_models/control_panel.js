@@ -91,7 +91,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         let pos = state.map.getInvalidIPRobot();
 
-        if (pos !== null) {
+        if (pos !== undefined) {
             shouter.notifySubscribers({
                 text: "Robot at (" + (pos[0] + 1) + ", " + (pos[1] + 1) + ") doesn't have an IP!",
                 type: MSG_TYPE.ERROR

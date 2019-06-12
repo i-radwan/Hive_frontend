@@ -29,8 +29,7 @@ let State = function () {
     self.load = function (newState) {
         self.items = Object.assign([], newState.items);
         self.nextIDs = Object.assign({}, newState.nextIDs);
-        self.map.setMap(newState.map.grid);
-        self.map.setObjects(newState.map.objects);
+        self.map.setMap(newState.map.grid, newState.map.objects);
     };
 };
 

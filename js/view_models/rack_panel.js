@@ -141,7 +141,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.fill = function (row, col) {
         let fac = state.map.getSpecificFacility(row, col, MAP_CELL.RACK);
 
-        if (fac === null)
+        if (fac === undefined)
             return;
 
         self.activeRackRow = row;
@@ -263,7 +263,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         let fac = state.map.getSpecificFacility(row, col, MAP_CELL.RACK);
 
-        if (fac === null)
+        if (fac === undefined)
             return;
 
         let rackItems = fac.items;

@@ -127,7 +127,7 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
     self.fill = function (row, col) {
         let fac = state.map.getSpecificFacility(row, col, MAP_CELL.STATION);
 
-        if (fac === null)
+        if (fac === undefined)
             return;
 
         self.activeStationRow = row;

@@ -130,8 +130,7 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
         console.log("Template " + idx() + " applied!");
 
         state.items = self.temps[idx()].temp.items;
-        state.map.setMap(self.temps[idx()].temp.map);
-        state.map.setObjects(self.temps[idx()].temp.objects);
+        state.map.setMap(self.temps[idx()].temp.map, self.temps[idx()].temp.objects);
 
         shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
     };

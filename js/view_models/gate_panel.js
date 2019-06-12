@@ -127,7 +127,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.fill = function (row, col) {
         let fac = state.map.getSpecificFacility(row, col, MAP_CELL.GATE);
 
-        if (fac === null)
+        if (fac === undefined)
             return;
 
         self.activeGateRow = row;

@@ -202,16 +202,16 @@ let gfx = function (logicEventHandler) {
                 gfxMap.objectDecolorize(event.data.id, event.data.type, event.data.row, event.data.col);
                 break;
             case EVENT_TO_GFX.OBJECT_BIND:
-                gfxMap.objectBind(event.data.id, event.data.type, event.data.row, event.data.col, event.id.object_id, event.id.object_type);
+                gfxMap.objectBind(event.data.id, event.data.type, event.data.row, event.data.col, event.data.object_id, event.data.object_type);
                 break;
             case EVENT_TO_GFX.OBJECT_UNBIND:
-                gfxMap.objectUnbind(event.data.id, event.data.type, event.data.row, event.data.col, event.id.object_id, event.id.object_type);
+                gfxMap.objectUnbind(event.data.id, event.data.type, event.data.row, event.data.col, event.data.object_id, event.data.object_type);
                 break;
             case EVENT_TO_GFX.OBJECT_LOAD:
-                gfxMap.objectLoad(event.data.id, event.data.type, event.data.row, event.data.col, event.id.object_id, event.id.object_type);
+                gfxMap.objectLoad(event.data.id, event.data.type, event.data.row, event.data.col, event.data.object_id, event.data.object_type);
                 break;
             case EVENT_TO_GFX.OBJECT_OFFLOAD:
-                gfxMap.objectOffload(event.data.id, event.data.type, event.data.row, event.data.col, event.id.object_id, event.id.object_type);
+                gfxMap.objectOffload(event.data.id, event.data.type, event.data.row, event.data.col, event.data.object_id, event.data.object_type);
                 break;
             case EVENT_TO_GFX.OBJECT_FAILURE:
                 gfxMap.objectFailure(event.data.id, event.data.type, event.data.row, event.data.col);

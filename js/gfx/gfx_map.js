@@ -297,7 +297,7 @@ let gfxMap = function (logicEventHandler) {
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
             data: {
-                type: EVENT_TO_GFX.OBJECT_BIND,
+                type: EVENT_TO_GFX.OBJECT_LOAD,
                 data: {
                     id: id,
                     type: type,
@@ -319,7 +319,7 @@ let gfxMap = function (logicEventHandler) {
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
             data: {
-                type: EVENT_TO_GFX.OBJECT_BIND,
+                type: EVENT_TO_GFX.OBJECT_OFFLOAD,
                 data: {
                     id: id,
                     type: type,
@@ -465,7 +465,7 @@ let gfxMap = function (logicEventHandler) {
             col: (cell.inBounds ? cell.col : "")
         });
 
-        if (isMouseDown && !isMouseDownOnObject)
+        if (isMouseDown && (!isMouseDownOnObject && !isHovering))
             isDraggingMap = true;
 
         if (isHovering) {
