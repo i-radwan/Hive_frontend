@@ -203,6 +203,50 @@ let gfxEngine = function () {
         object.two_object.translation.addSelf(v1.y, v1.x);
     };
 
+    // Colorizes the rack
+    let colorizeRack = function(renderObject, color) {
+        for (let i = 0; i < renderObject.two_object.children.length; i++) {
+            renderObject.two_object.children[i].fill = color;
+            renderObject.two_object.children[i].stroke = color;
+        }
+        renderObject.color = color;
+    };
+
+    // Colorizes the robot
+    let colorizeRobot = function(renderObject, color) {
+        for (let i = 0; i < renderObject.two_object.children.length; i++) {
+            if (renderObject.two_object.children[i].fill === renderObject.color) {
+                renderObject.two_object.children[i].fill = color;
+            }
+        }
+        renderObject.color = color;
+    };
+
+    // Colorizes the station
+    let colorizeStation = function(renderObject, color) {
+        for (let i = 0; i < renderObject.two_object.children.length; i++) {
+            renderObject.two_object.children[i].fill = color;
+        }
+        renderObject.color = color;
+    };
+
+    // Colorizes the obstacle
+    let colorizeObstacle = function(renderObject, color) {
+        for (let i = 0; i < renderObject.two_object.children.length; i++) {
+            renderObject.two_object.children[i].fill = color;
+        }
+        renderObject.color = color;
+    };
+
+    // Colorizes the gate
+    let colorizeGate = function(renderObject, color) {
+        for (let i = 0; i < renderObject.two_object.children.length; i++) {
+            renderObject.two_object.children[i].fill = color;
+            renderObject.two_object.children[i].stroke = color;
+        }
+        renderObject.color = color;
+    };
+
     // Initialize the Graphics engine
     self.init = function () {
         zui = new ZUI(self.two);
@@ -255,37 +299,52 @@ let gfxEngine = function () {
     };
 
     // Adds an object to the scene
-    self.addObject = function(id, type, row, col, zIndexValue = -1) {
+    // TODO remove undefined checks when @IAR send the color
+    self.addObject = function(id, type, row, col, color, zIndexValue = -1) {
         let cellTopLeft = getCellTopLeft(row, col);
+        let defaultColor;
+        let targetColor = color;
 
         let twoObject;
         switch (type) {
             case MAP_CELL.GATE:
                 twoObject = gateSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
+                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.GATE : targetColor;
+                defaultColor = GFX_SVG_DEFAULT_COLOR.GATE;
                 break;
             case MAP_CELL.ROBOT:
                 twoObject = robotSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
+                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.ROBOT : targetColor;
+                defaultColor = GFX_SVG_DEFAULT_COLOR.ROBOT;
                 break;
             case MAP_CELL.RACK:
                 twoObject = rackSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
+                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.RACK : targetColor;
+                defaultColor = GFX_SVG_DEFAULT_COLOR.RACK;
                 break;
             case MAP_CELL.STATION:
                 twoObject = stationSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
+                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.STATION : targetColor;
+                defaultColor = GFX_SVG_DEFAULT_COLOR.STATION;
                 break;
             case MAP_CELL.OBSTACLE:
                 twoObject = obstacleSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
+                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.OBSTACLE : targetColor;
+                defaultColor = GFX_SVG_DEFAULT_COLOR.OBSTACLE;
                 break;
         }
 
         zIndexValue = (zIndexValue === -1 ? getObjectZIndex(type) : zIndexValue);
         zIndexGroups[zIndexValue].add(twoObject);
 
-        return {type: type, id: id, loaded_object_id: -1, loaded_object_type: -1, render_variables: {two_object: twoObject, z_index: zIndexValue, direction: ROBOT_DIR.RIGHT, animation_variables: {cur_x: cellTopLeft.x, cur_y: cellTopLeft.y, cur_angle: 0, rotation_vector: new Two.Vector(-GRID_CELL_LENGTH/2, -GRID_CELL_LENGTH/2)}}};
+        let ret = {type: type, id: id, loaded_object_id: -1, loaded_object_type: -1, render_variables: {two_object: twoObject, z_index: zIndexValue, direction: ROBOT_DIR.RIGHT, color: defaultColor, animation_variables: {cur_x: cellTopLeft.x, cur_y: cellTopLeft.y, cur_angle: 0, rotation_vector: new Two.Vector(-GRID_CELL_LENGTH/2, -GRID_CELL_LENGTH/2)}}};
+        self.colorizeObject(ret.render_variables, ret.type, targetColor);
+        return ret;
     };
 
     // Translates the given object to the given new row and column
@@ -300,9 +359,9 @@ let gfxEngine = function () {
     };
 
     // Creates a hover object of the given type
-    self.addHoverObject = function(type) {
+    self.addHoverObject = function(type, color) {
         self.removeHoveringObject();
-        hoveredObject.item = self.addObject(-1, type, 0, 0, zIndex.hover);
+        hoveredObject.item = self.addObject(-1, type, 0, 0, color, zIndex.hover);
         hoveredObject.row = 0;
         hoveredObject.col = 0;
         self.hideHoveringObject();
@@ -382,12 +441,44 @@ let gfxEngine = function () {
 
     // Change color of a given object
     self.colorizeObject = function(renderObject, type, color) {
-        // TODO
+        switch (type) {
+            case MAP_CELL.RACK:
+                colorizeRack(renderObject, color);
+                break;
+            case MAP_CELL.ROBOT:
+                colorizeRobot(renderObject, color);
+                break;
+            case MAP_CELL.STATION:
+                colorizeStation(renderObject, color);
+                break;
+            case MAP_CELL.OBSTACLE:
+                colorizeObstacle(renderObject, color);
+                break;
+            case MAP_CELL.GATE:
+                colorizeGate(renderObject, color);
+                break;
+        }
     };
 
     // remove color from a given object
     self.deColorizeObject = function(renderObject, type) {
-        // TODO
+        switch (type) {
+            case MAP_CELL.RACK:
+                colorizeRack(renderObject, GFX_SVG_DEFAULT_COLOR.RACK);
+                break;
+            case MAP_CELL.ROBOT:
+                colorizeRobot(renderObject, GFX_SVG_DEFAULT_COLOR.ROBOT);
+                break;
+            case MAP_CELL.STATION:
+                colorizeStation(renderObject, GFX_SVG_DEFAULT_COLOR.STATION);
+                break;
+            case MAP_CELL.OBSTACLE:
+                colorizeObstacle(renderObject, GFX_SVG_DEFAULT_COLOR.OBSTACLE);
+                break;
+            case MAP_CELL.GATE:
+                colorizeGate(renderObject, GFX_SVG_DEFAULT_COLOR.GATE);
+                break;
+        }
     };
 
     // Initialize animation of a given object
