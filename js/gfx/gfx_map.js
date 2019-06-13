@@ -542,7 +542,7 @@ let gfxMap = function (logicEventHandler) {
                 dst_row: cell.row,
                 dst_col: cell.col
             });
-        } else if (!isDraggingMap) {
+        } else if (isMouseInBounds && !isDraggingMap) {
             self.logicEventHandler({
                 type: EVENT_FROM_GFX.CELL_CLICK,
                 row: cell.row,
