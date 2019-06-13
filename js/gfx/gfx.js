@@ -88,8 +88,8 @@ let gfx = function (logicEventHandler) {
                 simulationStartEvent();
                 break;
             case 0:
-                gfxMap.objectColorize(1, MAP_CELL.ROBOT, 0,0,"#ffcc00");
-                //gfxMap.objectMove(1, 0,0);
+                //gfxMap.objectColorize(1, MAP_CELL.ROBOT, 0,0,"#ffcc00");
+                gfxMap.objectMove(1, 0,0);
                 break;
             case 1:
                 gfxMap.objectRotateRight(1,0,1);
@@ -116,10 +116,12 @@ let gfx = function (logicEventHandler) {
                 gfxMap.objectMove(1,2,0);
                 break;
             case 9:
-                gfxMap.objectMove(1,1,0);
+                //gfxMap.objectMove(1,1,0);
+                gfxMap.objectStop(1, MAP_CELL.ROBOT, 2,0);
                 break;
             case 10:
-                gfxMap.objectRetreat(1,0,0);
+                //gfxMap.objectRetreat(1,0,0);
+                gfxMap.objectFixed(1, MAP_CELL.ROBOT, 2, 0);
                 break;
             case 11:
                 gfxMap.objectOffload(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.RACK);

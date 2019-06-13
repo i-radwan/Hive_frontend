@@ -332,9 +332,13 @@ let gfxMap = function (logicEventHandler) {
         });
     };
 
-    // Force fail a given object
+    // Force fail a given object and the loaded object on it
     self.objectFailure = function (id, type, row, col) {
-        self.gfxEngine.pauseObjectAnimation(getObject(id, type, row, col).render_variables);
+        let obj = getObject(id, type, row, col);
+        self.gfxEngine.pauseObjectAnimation(obj.render_variables);
+
+        if (obj.loaded_object_id !== -1)
+            self.gfxEngine.pauseObjectAnimation(getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables);
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -350,14 +354,22 @@ let gfxMap = function (logicEventHandler) {
         });
     };
 
-    // Force stop a given object
+    // Force stop a given object and the loaded object on it
     self.objectStop = function (id, type, row, col) {
-        self.gfxEngine.pauseObjectAnimation(getObject(id, type, row, col).render_variables);
+        let obj = getObject(id, type, row, col);
+        self.gfxEngine.pauseObjectAnimation(obj.render_variables);
+
+        if (obj.loaded_object_id !== -1)
+            self.gfxEngine.pauseObjectAnimation(getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables);
     };
 
     // Resume a given object
     self.objectFixed = function (id, type, row, col) {
-        self.gfxEngine.resumeObjectAnimation(getObject(id, type, row, col).render_variables);
+        let obj = getObject(id, type, row, col);
+        self.gfxEngine.resumeObjectAnimation(obj.render_variables);
+
+        if (obj.loaded_object_id !== -1)
+            self.gfxEngine.resumeObjectAnimation(getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables);
     };
 
     // Update an object battery level
@@ -418,6 +430,7 @@ let gfxMap = function (logicEventHandler) {
 
     // Start simulation mode
     self.simulationStart = function() {
+        isHovering = false;
         self.gfxEngine.removeHoveringObject();
     };
 
