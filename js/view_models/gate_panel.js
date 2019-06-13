@@ -167,10 +167,9 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.edit = function (row, col) {
-        self.fill(row, col);
         self.editing(true);
-        self.activeGateRow = row;
-        self.activeGateCol = col;
+
+        self.fill(row, col);
     };
 
     self.update = function () {

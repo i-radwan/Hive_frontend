@@ -190,10 +190,9 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.edit = function (row, col) {
-        self.fill(row, col);
         self.editing(true);
-        self.activeRobotRow = row;
-        self.activeRobotCol = col;
+
+        self.fill(row, col);
     };
 
     self.update = function () {

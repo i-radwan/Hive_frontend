@@ -167,10 +167,9 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
     };
 
     self.edit = function (row, col) {
-        self.fill(row, col);
         self.editing(true);
-        self.activeStationRow = row;
-        self.activeStationCol = col;
+
+        self.fill(row, col);
     };
 
     self.update = function () {

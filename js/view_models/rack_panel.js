@@ -188,10 +188,9 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.edit = function (row, col) {
-        self.fill(row, col);
         self.editing(true);
-        self.activeRackRow = row;
-        self.activeRackCol = col;
+
+        self.fill(row, col);
     };
 
     self.update = function () {

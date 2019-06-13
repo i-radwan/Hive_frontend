@@ -167,10 +167,9 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     };
 
     self.edit = function (row, col) {
-        self.fill(row, col);
         self.editing(true);
-        self.activeObstacleRow = row;
-        self.activeObstacleCol = col;
+
+        self.fill(row, col);
     };
 
     self.update = function () {
