@@ -11,6 +11,15 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     self.activeObstacleCol = -1;
 
     self.add = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let isFacilityFree = state.map.isFacilityFree(row, col);
 
         if (self.editing()) {
@@ -30,7 +39,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
             state.map.addObject(row, col, {
                 type: MAP_CELL.OBSTACLE,
-                id: id
+                id: id,
+                color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
             });
 
             let nextID = Math.max(state.nextIDs.obstacle, id + 1);
@@ -49,7 +59,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
                     type: MAP_CELL.OBSTACLE,
                     id: id,
                     row: row,
-                    col: col
+                    col: col,
+                    color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
                 }
             });
         } else {
@@ -104,6 +115,15 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     };
 
     self.delete = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let fac = state.map.getSpecificFacility(row, col, MAP_CELL.OBSTACLE);
 
         state.map.deleteObject(row, col, fac);
@@ -188,7 +208,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.OBSTACLE
+                type: MAP_CELL.OBSTACLE,
+                color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
             }
         });
     };

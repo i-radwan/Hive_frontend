@@ -146,6 +146,7 @@
                          data-bind="css: {hidden: !leftPanelVM.gateVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.gateVM.update"></i>
+                        <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
                 </div>
 
@@ -185,6 +186,7 @@
                          data-bind="css: {hidden: !leftPanelVM.robotVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.robotVM.update"></i>
+                        <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: runningMode() === RUNNING_MODE.DESIGN}">
@@ -264,6 +266,7 @@
                          data-bind="css: {hidden: !leftPanelVM.rackVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.rackVM.update"></i>
+                        <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
                 </div>
 
@@ -283,6 +286,7 @@
                          data-bind="css: {hidden: !leftPanelVM.stationVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.stationVM.update"></i>
+                        <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
                 </div>
 
@@ -302,6 +306,7 @@
                          data-bind="css: {hidden: !leftPanelVM.obstacleVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
                            data-bind="click: leftPanelVM.obstacleVM.update"></i>
+                        <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
                 </div>
 

@@ -239,6 +239,12 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     };
 
+    self.clearOrders = function() {
+        self.ongoingOrders.removeAll();
+        self.upcomingOrders.removeAll();
+        self.finishedOrders.removeAll();
+    };
+
     let sendOrderToServer = function (order) {
         sendToServer({
             type: MSG_TO_SERVER.ORDER,

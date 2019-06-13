@@ -11,6 +11,15 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.activeGateCol = -1;
 
     self.add = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let isFacilityFree = state.map.isFacilityFree(row, col);
 
         if (self.editing()) {
@@ -30,7 +39,8 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
             state.map.addObject(row, col, {
                 type: MAP_CELL.GATE,
-                id: id
+                id: id,
+                color: GFX_SVG_DEFAULT_COLOR.GATE
             });
 
             let nextID = Math.max(state.nextIDs.gate, id + 1);
@@ -49,7 +59,8 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                     type: MAP_CELL.GATE,
                     id: id,
                     row: row,
-                    col: col
+                    col: col,
+                    color: GFX_SVG_DEFAULT_COLOR.GATE
                 }
             });
         } else {
@@ -104,6 +115,15 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     self.delete = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let fac = state.map.getSpecificFacility(row, col, MAP_CELL.GATE);
 
         state.map.deleteObject(row, col, fac);
@@ -188,7 +208,8 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.GATE
+                type: MAP_CELL.GATE,
+                color: GFX_SVG_DEFAULT_COLOR.GATE
             }
         });
     };

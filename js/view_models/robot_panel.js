@@ -26,6 +26,15 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.activeRobotCol = -1;
 
     self.add = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let isRobotFree = state.map.isRobotFree(row, col);
 
         if (self.editing()) {
@@ -125,6 +134,15 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.delete = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let rob = state.map.getRobot(row, col);
 
         state.map.deleteObject(row, col, rob);
@@ -217,7 +235,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.ROBOT
+                type: MAP_CELL.ROBOT,
+                color: GFX_SVG_DEFAULT_COLOR.ROBOT
             }
         });
     };
@@ -348,14 +367,14 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
                 color: rob.color,
-                msg: "Robot <b>(#" + rob.id + ")</b> is bound to the Gate#<b>(" + fac.id + ")</b>."
+                msg: "Robot <b>(#" + rob.id + ")</b> is bound to the Gate<b> (#" + fac.id + ")</b>."
             });
         } else if (fac.type === MAP_CELL.STATION) {
             logger({
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
                 color: rob.color,
-                msg: "Robot <b>(#" + rob.id + ")</b> is charging at Station#<b>(" + fac.id + ")</b>."
+                msg: "Robot <b>(#" + rob.id + ")</b> is charging at Station<b> (#" + fac.id + ")</b>."
             });
         }
     };
@@ -407,14 +426,14 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
                 color: rob.color,
-                msg: "Robot <b>(#" + rob.id + ")</b> is released from the Gate#<b>(" + fac.id + ")</b>."
+                msg: "Robot <b>(#" + rob.id + ")</b> is released from the Gate <b>(#" + fac.id + ")</b>."
             });
         } else if (fac.type === MAP_CELL.STATION) {
             logger({
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
                 color: rob.color,
-                msg: "Robot <b>(#" + rob.id + ")</b> is leaving Station#<b>(" + fac.id + ")</b>."
+                msg: "Robot <b>(#" + rob.id + ")</b> is leaving Station <b>(#" + fac.id + ")</b>."
             });
         }
     };
@@ -454,7 +473,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.ROBOT,
             color: rob.color,
-            msg: "Robot <b>(#" + rob.id + ")</b> loaded Rack#<b>(" + fac.id + ")</b>."
+            msg: "Robot <b>(#" + rob.id + ")</b> loaded Rack <b>(#" + fac.id + ")</b>."
         });
     };
 
@@ -493,7 +512,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.ROBOT,
             color: rob.color,
-            msg: "Robot <b>(#" + rob.id + ")</b> offloaded Rack#<b>(" + fac.id + ")</b>."
+            msg: "Robot <b>(#" + rob.id + ")</b> offloaded Rack <b>(#" + fac.id + ")</b>."
         });
     };
 
@@ -520,7 +539,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.ROBOT,
             color: rob.color,
-            msg: "Robot <b>(#" + robotID + ")</b> is assigned to Rack#<b>(" + rackID + ")</b>."
+            msg: "Robot <b>(#" + robotID + ")</b> is assigned to Rack <b>(#" + rackID + ")</b>."
         });
     };
 

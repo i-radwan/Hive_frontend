@@ -75,7 +75,8 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.GATE
+                type: MAP_CELL.GATE,
+                color: GFX_SVG_DEFAULT_COLOR.GATE
             }
         });
     };
@@ -84,7 +85,8 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.ROBOT
+                type: MAP_CELL.ROBOT,
+                color: GFX_SVG_DEFAULT_COLOR.ROBOT
             }
         });
     };
@@ -93,7 +95,8 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.RACK
+                type: MAP_CELL.RACK,
+                color: GFX_SVG_DEFAULT_COLOR.RACK
             }
         });
     };
@@ -102,7 +105,8 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.STATION
+                type: MAP_CELL.STATION,
+                color: GFX_SVG_DEFAULT_COLOR.STATION
             }
         });
     };
@@ -111,7 +115,8 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.OBSTACLE
+                type: MAP_CELL.OBSTACLE,
+                color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
             }
         });
     };
@@ -263,6 +268,9 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             self.activePanel(LEFT_PANEL.ORDER);
         } else {
             self.activePanel(LEFT_PANEL.TEMPS);
+
+            // Clear all orders
+            self.orderVM.clearOrders();
         }
     });
 };
