@@ -1,19 +1,20 @@
 require('two.js');
-let ZUI = require('./zui');
 let $ = require('jquery');
+let ZUI = require('./zui');
 
 // Z-Index enum
-let zIndex = {
-    background: 0,
-    station: 1,
-    gate: 2,
-    robot: 3,
-    rack: 4,
-    obstacle: 5,
-    drag: 6,
-    hover: 6
+let Z_INDEX = {
+    BACKGROUND: 0,
+    STATION: 1,
+    GATE: 2,
+    ROBOT: 3,
+    RACK: 4,
+    OBSTACLE: 5,
+    DRAG: 6,
+    HOVER: 6
 };
-let zIndexGroupsCnt = 7;
+
+const Z_INDEX_GROUPS_CNT = 7;
 
 let gfxEngine = function () {
     let self = this;
@@ -61,38 +62,38 @@ let gfxEngine = function () {
         self.two.clear();
 
         // Initialize z index groups
-        zIndexGroups = new Array(zIndexGroupsCnt);
-        for (let i = 0; i < zIndexGroupsCnt; i++) {
+        zIndexGroups = new Array(Z_INDEX_GROUPS_CNT);
+        for (let i = 0; i < Z_INDEX_GROUPS_CNT; i++) {
             zIndexGroups[i] = self.two.makeGroup();
         }
     };
 
     // Return the Z-Index enum value from the object type
-    let getObjectZIndex = function(objectType) {
+    let getObjectZIndex = function (objectType) {
         switch (objectType) {
             case MAP_CELL.GATE:
-                return zIndex.gate;
+                return Z_INDEX.GATE;
             case MAP_CELL.OBSTACLE:
-                return zIndex.obstacle;
+                return Z_INDEX.OBSTACLE;
             case MAP_CELL.RACK:
-                return zIndex.rack;
+                return Z_INDEX.RACK;
             case MAP_CELL.ROBOT:
-                return zIndex.robot;
+                return Z_INDEX.ROBOT;
             case MAP_CELL.STATION:
-                return zIndex.station;
+                return Z_INDEX.STATION;
         }
     };
 
     // Translate the scene with the given direction (Handles ZUI transformation matrix)
     let translateScene = function (dx, dy) {
-        zui.translateSurface(dx ,dy);
-        self.two.scene.translation.addSelf(dx ,dy);
+        zui.translateSurface(dx, dy);
+        self.two.scene.translation.addSelf(dx, dy);
     };
 
     // Gets the Top left of the cell in coordinate values (x, y) to draw the objects
     let getCellTopLeft = function (row, col) {
-        let cellCenterX = col*GRID_CELL_LENGTH;
-        let cellCenterY = row*GRID_CELL_LENGTH;
+        let cellCenterX = col * GRID_CELL_LENGTH;
+        let cellCenterY = row * GRID_CELL_LENGTH;
 
         return {x: cellCenterX, y: cellCenterY};
     };
@@ -119,13 +120,14 @@ let gfxEngine = function () {
     };
 
     // Updates the object Z-Index
-    let updateZIndex = function(renderObject, targetZIndex) {
-      renderObject.z_index = targetZIndex;
-      zIndexGroups[targetZIndex].add(renderObject.two_object);
+    let updateZIndex = function (renderObject, targetZIndex) {
+        renderObject.z_index = targetZIndex;
+
+        zIndexGroups[targetZIndex].add(renderObject.two_object);
     };
 
     // Converts from DIR enum to scalar angle
-    let dirToAngle = function(direction) {
+    let dirToAngle = function (direction) {
         switch (direction) {
             case ROBOT_DIR.RIGHT:
                 return 0;
@@ -139,7 +141,7 @@ let gfxEngine = function () {
     };
 
     // Returns the default color of the object
-    let objectTypeToDefaultColor = function(type) {
+    let objectTypeToDefaultColor = function (type) {
         switch (type) {
             case MAP_CELL.ROBOT:
                 return GFX_SVG_DEFAULT_COLOR.ROBOT;
@@ -155,7 +157,7 @@ let gfxEngine = function () {
     };
 
     // Returns the color of the bound object
-    let objectTypeToBindColor = function(type) {
+    let objectTypeToBindColor = function (type) {
         switch (type) {
             case MAP_CELL.GATE:
                 return GFX_COLORS.GATE_BIND_COLOR;
@@ -167,7 +169,7 @@ let gfxEngine = function () {
     };
 
     // Returns the flash color to make.
-    let getFlashType = function(isBound, isLoaded, isFailed) {
+    let getFlashType = function (isBound, isLoaded, isFailed) {
         if (isFailed)
             return FLASH_TYPE.FAILURE;
         if (isBound)
@@ -179,8 +181,9 @@ let gfxEngine = function () {
     };
 
     // Move object with the given time delta
-    let moveObject = function(object, timeDelta) {
+    let moveObject = function (object, timeDelta) {
         let dir = new Two.Vector(object.animation_variables.nxt_x - object.animation_variables.cur_x, object.animation_variables.nxt_y - object.animation_variables.cur_y);
+
         dir.normalize();
         dir.multiplyScalar(object.animation_variables.moving_speed * timeDelta);
 
@@ -188,34 +191,41 @@ let gfxEngine = function () {
         object.animation_variables.cur_y += dir.y;
 
         let dir2 = new Two.Vector(object.animation_variables.nxt_x - object.animation_variables.cur_x, object.animation_variables.nxt_y - object.animation_variables.cur_y);
+
         dir2.normalize();
         dir2.multiplyScalar(object.animation_variables.moving_speed * timeDelta);
 
         // End of animation
-        if(!dir.equals(dir2) || (object.animation_variables.cur_x === object.animation_variables.nxt_x && object.animation_variables.cur_y === object.animation_variables.nxt_y)) {
+        if (!dir.equals(dir2) || (object.animation_variables.cur_x === object.animation_variables.nxt_x && object.animation_variables.cur_y === object.animation_variables.nxt_y)) {
             let v = new Two.Vector(object.animation_variables.cur_x - dir.x, object.animation_variables.cur_y - dir.y);
             let v2 = new Two.Vector(object.animation_variables.nxt_x, object.animation_variables.nxt_y);
+
             dir.setLength(v.distanceTo(v2));
+
             object.animation_variables.cur_x = object.animation_variables.nxt_x;
             object.animation_variables.cur_y = object.animation_variables.nxt_y;
             object.animation_variables.is_moving = false;
         }
+
         object.two_object.translation.addSelf(dir);
     };
 
     // Normalizes a given angle (positive <= 360)
-    let normalizeAngle = function(angle) {
+    let normalizeAngle = function (angle) {
         while (angle > 360)
             angle -= 360;
+
         while (angle < 0)
             angle += 360;
+
         return angle
     };
 
     // Rotate object with the given time delta
-    let rotateObject = function(object, timeDelta) {
+    let rotateObject = function (object, timeDelta) {
         let dir = (object.animation_variables.nxt_angle - object.animation_variables.cur_angle) / Math.abs(object.animation_variables.nxt_angle - object.animation_variables.cur_angle);
         dir *= object.animation_variables.rotating_speed * timeDelta;
+
         object.animation_variables.cur_angle += dir;
 
         let dir2 = (object.animation_variables.nxt_angle - object.animation_variables.cur_angle) / Math.abs(object.animation_variables.nxt_angle - object.animation_variables.cur_angle);
@@ -228,7 +238,7 @@ let gfxEngine = function () {
             object.animation_variables.is_rotating = false;
         }
 
-        // I hate Two.js
+        // I hate Two.js 😅
         let theta = dir * Math.PI / 180;
         let v2 = object.animation_variables.rotation_vector;
         let v1 = v2.clone();
@@ -244,56 +254,62 @@ let gfxEngine = function () {
     };
 
     // Colorizes the rack
-    let colorizeRack = function(renderObject, color) {
+    let colorizeRack = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
             renderObject.two_object.children[i].fill = color;
             renderObject.two_object.children[i].stroke = color;
         }
+
         renderObject.color = color;
     };
 
     // Colorizes the robot
-    let colorizeRobot = function(renderObject, color) {
+    let colorizeRobot = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
             if (renderObject.two_object.children[i].fill === renderObject.color) {
                 renderObject.two_object.children[i].fill = color;
             }
         }
+
         renderObject.color = color;
     };
 
     // Colorize the robot LED
-    let colorizeRobotLed = function(renderObject, color) {
+    let colorizeRobotLed = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
             if (renderObject.two_object.children[i].fill === renderObject.led_color) {
                 renderObject.two_object.children[i].fill = color;
             }
         }
+
         renderObject.led_color = color;
     };
 
     // Colorizes the station
-    let colorizeStation = function(renderObject, color) {
+    let colorizeStation = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
             renderObject.two_object.children[i].fill = color;
         }
+
         renderObject.color = color;
     };
 
     // Colorizes the obstacle
-    let colorizeObstacle = function(renderObject, color) {
+    let colorizeObstacle = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
             renderObject.two_object.children[i].fill = color;
         }
+
         renderObject.color = color;
     };
 
     // Colorizes the gate
-    let colorizeGate = function(renderObject, color) {
+    let colorizeGate = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
             renderObject.two_object.children[i].fill = color;
             renderObject.two_object.children[i].stroke = color;
         }
+
         renderObject.color = color;
     };
 
@@ -311,14 +327,15 @@ let gfxEngine = function () {
     };
 
     // Draw the grid of the map with the given width and height
-    self.drawMapGrid = function(width, height) {
+    self.drawMapGrid = function (width, height) {
         mapWidth = width;
         mapHeight = height;
+
         resetScene();
 
-        for(let c = 0;c < width; c++) {
-            for(let r = 0; r < height; r++) {
-                zIndexGroups[zIndex.background].add(createCell(r, c));
+        for (let c = 0; c < width; c++) {
+            for (let r = 0; r < height; r++) {
+                zIndexGroups[Z_INDEX.BACKGROUND].add(createCell(r, c));
             }
         }
 
@@ -326,21 +343,22 @@ let gfxEngine = function () {
         translateScene(-(mapWidth * GRID_CELL_LENGTH) / 2, -(mapHeight * GRID_CELL_LENGTH) / 2);
 
         // What a magical equation !
-        zui.zoomBy(-Math.pow(mapWidth * mapHeight, 0.5) / 30, self.two.width / 2 + canvas.offset().left,  self.two.height / 2 + canvas.offset().top);
+        zui.zoomBy(-Math.pow(mapWidth * mapHeight, 0.5) / 30, self.two.width / 2 + canvas.offset().left, self.two.height / 2 + canvas.offset().top);
 
         self.two.update();
     };
 
     // Return the object that is currently selected
-    self.getSelectedObject = function() {
+    self.getSelectedObject = function () {
         return selectedObject;
     };
 
     // Gets from the mouse raw position the row and column of the cell that is being clicked
     self.getMouseCell = function (mouseX, mouseY) {
-        mouseX = mouseX - canvas.offset().left - zIndexGroups[zIndex.background].getBoundingClientRect().left;
-        mouseY = mouseY - canvas.offset().top - zIndexGroups[zIndex.background].getBoundingClientRect().top;
-        let cellWidth = (zIndexGroups[zIndex.background].getBoundingClientRect().width) / mapWidth;
+        mouseX = mouseX - canvas.offset().left - zIndexGroups[Z_INDEX.BACKGROUND].getBoundingClientRect().left;
+        mouseY = mouseY - canvas.offset().top - zIndexGroups[Z_INDEX.BACKGROUND].getBoundingClientRect().top;
+
+        let cellWidth = (zIndexGroups[Z_INDEX.BACKGROUND].getBoundingClientRect().width) / mapWidth;
 
         let cellRow = Math.floor(mouseY / cellWidth);
         let cellCol = Math.floor(mouseX / cellWidth);
@@ -349,13 +367,14 @@ let gfxEngine = function () {
     };
 
     // Adds an object to the scene
-    self.addObject = function(id, type, row, col, color, zIndexValue = -1) {
+    self.addObject = function (id, type, row, col, color, zIndexValue = -1) {
         let cellTopLeft = getCellTopLeft(row, col);
         let defaultColor;
         let targetColor = color;
         let ledColor = undefined;
 
         let twoObject;
+
         switch (type) {
             case MAP_CELL.GATE:
                 twoObject = gateSVG.clone();
@@ -405,56 +424,64 @@ let gfxEngine = function () {
                     cur_x: cellTopLeft.x,
                     cur_y: cellTopLeft.y,
                     cur_angle: 0,
-                    rotation_vector: new Two.Vector(-GRID_CELL_LENGTH/2, -GRID_CELL_LENGTH/2)
+                    rotation_vector: new Two.Vector(-GRID_CELL_LENGTH / 2, -GRID_CELL_LENGTH / 2)
                 }
             }
         };
 
         self.colorizeObject(ret.render_variables, ret.type, targetColor);
+
         return ret;
     };
 
     // Translates the given object to the given new row and column
-    self.translateObject = function(renderObject, dstRow, dstCol) {
+    self.translateObject = function (renderObject, dstRow, dstCol) {
         let cellTopLeft = getCellTopLeft(dstRow, dstCol);
+
         renderObject.two_object.translation.set(cellTopLeft.x, cellTopLeft.y);
     };
 
     // Deletes an object from the scene
-    self.deleteObject = function(renderObject, type) {
+    self.deleteObject = function (renderObject, type) {
         zIndexGroups[getObjectZIndex(type)].remove(renderObject.two_object);
     };
 
     // Creates a hover object of the given type
-    self.addHoverObject = function(type, color) {
+    self.addHoverObject = function (type, color) {
         self.removeHoveringObject();
-        hoveredObject.item = self.addObject(-1, type, 0, 0, color, zIndex.hover);
+
+        hoveredObject.item = self.addObject(-1, type, 0, 0, color, Z_INDEX.HOVER);
         hoveredObject.row = 0;
         hoveredObject.col = 0;
+
         self.hideHoveringObject();
     };
 
     // Shows a hover object if it is hidden
-    self.showHoverObject = function() {
-        if(hoveredObject.is_drawn)
+    self.showHoverObject = function () {
+        if (hoveredObject.is_drawn)
             return;
 
         hoveredObject.is_drawn = true;
+
         let cellTopLeft = getCellTopLeft(hoveredObject.row, hoveredObject.col);
-        zIndexGroups[zIndex.hover].add(hoveredObject.item.render_variables.two_object);
+
+        zIndexGroups[Z_INDEX.HOVER].add(hoveredObject.item.render_variables.two_object);
+
         hoveredObject.item.render_variables.two_object.translation.set(cellTopLeft.x, cellTopLeft.y);
     };
 
     // Hide hovering object from the drawing area
     self.hideHoveringObject = function () {
         hoveredObject.is_drawn = false;
-        zIndexGroups[zIndex.hover].remove(hoveredObject.item.render_variables.two_object);
+        zIndexGroups[Z_INDEX.HOVER].remove(hoveredObject.item.render_variables.two_object);
     };
 
     // Moves the hover object to the given row and column
-    self.moveHoverObject = function(dstRow, dstCol, inBounds) {
+    self.moveHoverObject = function (dstRow, dstCol, inBounds) {
         hoveredObject.row = dstRow;
         hoveredObject.col = dstCol;
+
         self.translateObject(hoveredObject.item.render_variables, dstRow, dstCol);
 
         if (!inBounds)
@@ -466,36 +493,40 @@ let gfxEngine = function () {
     // Delete the hover object
     self.removeHoveringObject = function () {
         if (hoveredObject.is_drawn) {
-            zIndexGroups[zIndex.hover].remove(hoveredObject.item.render_variables.two_object);
+            zIndexGroups[Z_INDEX.HOVER].remove(hoveredObject.item.render_variables.two_object);
         }
+
         hoveredObject = {};
     };
 
     // Initialize dragging of given object
-    self.startDragObject = function(object, row, col) {
+    self.startDragObject = function (object, row, col) {
         draggedObject.item = object;
         draggedObject.src_row = row;
         draggedObject.src_col = col;
-        updateZIndex(draggedObject.item.render_variables, zIndex.drag);
+
+        updateZIndex(draggedObject.item.render_variables, Z_INDEX.DRAG);
         //draggedObject.dst_row = row;
         //draggedObject.dst_col = col;
     };
 
     // Move the drag object to the given row and column
-    self.moveDragObject = function(dstRow, dstCol) {
+    self.moveDragObject = function (dstRow, dstCol) {
         draggedObject.dst_row = dstRow;
         draggedObject.dst_col = dstCol;
+
         self.translateObject(draggedObject.item.render_variables, dstRow, dstCol);
     };
 
     // Finalize dragging the object and return the initial position of the object
-    self.finishDragObject = function() {
+    self.finishDragObject = function () {
         updateZIndex(draggedObject.item.render_variables, getObjectZIndex(draggedObject.item.type));
+
         return {src_row: draggedObject.src_row, src_col: draggedObject.src_col};
     };
 
     // Highlight a given object
-    self.highlightObject = function(object, row, col) {
+    self.highlightObject = function (object, row, col) {
         selectedObject.row = row;
         selectedObject.col = col;
         selectedObject.item = object;
@@ -503,12 +534,12 @@ let gfxEngine = function () {
     };
 
     // UnHighlight a given object
-    self.unhighlightObject = function() {
+    self.unhighlightObject = function () {
         selectedObject = {};
     };
 
     // Change color of a given object
-    self.colorizeObject = function(renderObject, type, color) {
+    self.colorizeObject = function (renderObject, type, color) {
         switch (type) {
             case MAP_CELL.RACK:
                 colorizeRack(renderObject, color);
@@ -529,7 +560,7 @@ let gfxEngine = function () {
     };
 
     // remove color from a given object
-    self.deColorizeObject = function(renderObject, type) {
+    self.deColorizeObject = function (renderObject, type) {
         switch (type) {
             case MAP_CELL.RACK:
                 colorizeRack(renderObject, GFX_SVG_DEFAULT_COLOR.RACK);
@@ -549,7 +580,7 @@ let gfxEngine = function () {
         }
     };
 
-    self.startObjectFlashing = function(renderObject, flashType) {
+    self.startObjectFlashing = function (renderObject, flashType) {
         if (flashType === FLASH_TYPE.NO_FLASH)
             self.stopObjectFlashing(renderObject);
 
@@ -558,11 +589,12 @@ let gfxEngine = function () {
         renderObject.animation_variables.flash_type = flashType;
     };
 
-    self.flashObject = function(renderObject, timeDelta) {
+    self.flashObject = function (renderObject, timeDelta) {
         if (!renderObject.animation_variables.is_flashing)
             return;
 
         renderObject.animation_variables.flash_time += timeDelta;
+
         let sequence = Math.floor(renderObject.animation_variables.flash_time / FLASHING_SPEED) % 2;
 
         if (sequence === 0) {
@@ -577,23 +609,22 @@ let gfxEngine = function () {
                     colorizeRobotLed(renderObject, GFX_COLORS.LED_FAIL_COLOR);
                     break;
             }
-        }
-        else {
+        } else {
             colorizeRobotLed(renderObject, GFX_SVG_DEFAULT_COLOR.ROBOT_LED);
         }
     };
 
-    self.pauseObjectFlashing = function(renderObject) {
+    self.pauseObjectFlashing = function (renderObject) {
         renderObject.animation_variables.is_flashing = false;
     };
 
-    self.stopObjectFlashing = function(renderObject) {
+    self.stopObjectFlashing = function (renderObject) {
         renderObject.animation_variables.is_flashing = false;
         colorizeRobotLed(renderObject, GFX_SVG_DEFAULT_COLOR.ROBOT_LED);
     };
 
     // Initialize animation of a given object
-    self.startObjectAnimation = function(row, col, renderObject, animationType) {
+    self.startObjectAnimation = function (row, col, renderObject, animationType) {
         renderObject.animation_variables.is_animating = true;
         renderObject.animation_variables.animation_type = animationType;
         renderObject.animation_variables.is_moving = false;
@@ -612,7 +643,7 @@ let gfxEngine = function () {
             case ANIMATION_TYPE.ROTATE_RIGHT:
             case ANIMATION_TYPE.ROTATE_LEFT:
                 renderObject.animation_variables.is_rotating = true;
-                dstAngle = dirToAngle(renderObject.direction) + 90*(animationType === ANIMATION_TYPE.ROTATE_LEFT) - 90*(animationType === ANIMATION_TYPE.ROTATE_RIGHT) + 360;
+                dstAngle = dirToAngle(renderObject.direction) + 90 * (animationType === ANIMATION_TYPE.ROTATE_LEFT) - 90 * (animationType === ANIMATION_TYPE.ROTATE_RIGHT) + 360;
                 dstAngle = normalizeAngle(dstAngle);
 
                 if (Math.abs(dstAngle - renderObject.animation_variables.cur_angle) > 180) {
@@ -624,14 +655,15 @@ let gfxEngine = function () {
             case ANIMATION_TYPE.RETREAT:
                 renderObject.animation_variables.is_moving = true;
                 renderObject.animation_variables.is_rotating = true;
-                dstRow = row + ((renderObject.direction + 2)%4 === ROBOT_DIR.DOWN) - ((renderObject.direction + 2)%4 === ROBOT_DIR.UP);
-                dstCol = col + ((renderObject.direction + 2)%4 === ROBOT_DIR.RIGHT) - ((renderObject.direction + 2)%4 === ROBOT_DIR.LEFT);
+                dstRow = row + ((renderObject.direction + 2) % 4 === ROBOT_DIR.DOWN) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.UP);
+                dstCol = col + ((renderObject.direction + 2) % 4 === ROBOT_DIR.RIGHT) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.LEFT);
                 dstAngle = dirToAngle(renderObject.direction) + 180;
                 dstAngle = normalizeAngle(dstAngle);
                 break;
         }
 
         let dstTopLeft = getCellTopLeft(dstRow, dstCol);
+
         renderObject.animation_variables.nxt_x = dstTopLeft.x;
         renderObject.animation_variables.nxt_y = dstTopLeft.y;
         renderObject.animation_variables.nxt_row = dstRow;
@@ -642,7 +674,7 @@ let gfxEngine = function () {
     };
 
     // Animate a given object
-    self.animateObject = function(renderObject, timeDelta) {
+    self.animateObject = function (renderObject, timeDelta) {
         self.flashObject(renderObject, timeDelta);
 
         if (!renderObject.animation_variables.is_animating)
@@ -653,8 +685,7 @@ let gfxEngine = function () {
 
         if (renderObject.animation_variables.is_rotating) {
             rotateObject(renderObject, timeDelta);
-        }
-        else if (renderObject.animation_variables.is_moving) {
+        } else if (renderObject.animation_variables.is_moving) {
             moveObject(renderObject, timeDelta);
         }
 
@@ -665,29 +696,29 @@ let gfxEngine = function () {
     };
 
     // Pause animation for a given object
-    self.pauseObjectAnimation = function(renderObject) {
+    self.pauseObjectAnimation = function (renderObject) {
         renderObject.animation_variables.is_animating = false;
     };
 
     // Resume animation for a given object
-    self.resumeObjectAnimation = function(renderObject) {
+    self.resumeObjectAnimation = function (renderObject) {
         renderObject.animation_variables.is_animating = true;
     };
 
     // Bind 2 given objects together
-    self.bindObject = function(renderObject1, renderObject2, object2Type, isLoaded) {
+    self.bindObject = function (renderObject1, renderObject2, object2Type, isLoaded) {
         self.startObjectFlashing(renderObject1, getFlashType(true, isLoaded, false));
         self.colorizeObject(renderObject2, object2Type, objectTypeToBindColor(object2Type));
     };
 
     // Unbind 2 given objects
-    self.unbindObject = function(renderObject1, renderObject2, object2Type, isLoaded) {
+    self.unbindObject = function (renderObject1, renderObject2, object2Type, isLoaded) {
         self.startObjectFlashing(renderObject1, getFlashType(false, isLoaded, false));
         self.colorizeObject(renderObject2, object2Type, objectTypeToDefaultColor(object2Type));
     };
 
     // Load 2 given objects
-    self.loadObject = function(renderObject1, renderObject2, object2Type, isBound) {
+    self.loadObject = function (renderObject1, renderObject2, object2Type, isBound) {
         renderObject2.animation_variables.cur_angle = renderObject1.animation_variables.cur_angle;
         renderObject2.direction = renderObject1.direction;
 
@@ -696,13 +727,13 @@ let gfxEngine = function () {
     };
 
     // Offload 2 given objects
-    self.offloadObject = function(renderObject1, renderObject2, object2Type, isBound) {
+    self.offloadObject = function (renderObject1, renderObject2, object2Type, isBound) {
         self.startObjectFlashing(renderObject1, getFlashType(isBound, false, false));
         self.colorizeObject(renderObject2, object2Type, objectTypeToDefaultColor(object2Type));
     };
 
     // object is failed
-    self.objectFailure = function(renderObject, type) {
+    self.objectFailure = function (renderObject, type) {
         if (type === MAP_CELL.ROBOT)
             self.startObjectFlashing(renderObject, getFlashType(false, false, true));
 
@@ -710,7 +741,7 @@ let gfxEngine = function () {
     };
 
     // object is stopped
-    self.objectStop = function(renderObject, type) {
+    self.objectStop = function (renderObject, type) {
         if (type === MAP_CELL.ROBOT)
             self.stopObjectFlashing(renderObject);
 
@@ -718,7 +749,7 @@ let gfxEngine = function () {
     };
 
     // object is fixed
-    self.objectFixed = function(renderObject, type, isBound, isLoaded) {
+    self.objectFixed = function (renderObject, type, isBound, isLoaded) {
         if (type === MAP_CELL.ROBOT)
             self.startObjectFlashing(renderObject, getFlashType(isBound, isLoaded, false));
 
@@ -726,12 +757,12 @@ let gfxEngine = function () {
     };
 
     // Update object battery level
-    self.updateObject = function(renderObject, battery) {
+    self.updateObject = function (renderObject, battery) {
         // TODO
     };
 
     // Key press event handler
-    self.keyDownEvent = function(e) {
+    self.keyDownEvent = function (e) {
         switch (e.which) {
             case ARROW.LEFT:
                 goingLeft = true;
@@ -773,14 +804,14 @@ let gfxEngine = function () {
     self.keyboardDragEvent = function (timeDelta) {
         let verticalDir = 0;
         let horizontalDir = 0;
-        if(goingLeft)
+        if (goingLeft)
             horizontalDir = 1;
-        else if(goingRight)
+        else if (goingRight)
             horizontalDir = -1;
 
-        if(goingUp)
+        if (goingUp)
             verticalDir = 1;
-        else if(goingDown)
+        else if (goingDown)
             verticalDir = -1;
 
         translateScene(timeDelta * KEYBOARD_DRAG_SPEED * horizontalDir, timeDelta * KEYBOARD_DRAG_SPEED * verticalDir);
@@ -789,18 +820,20 @@ let gfxEngine = function () {
     // Zoom event handler
     self.zoomEvent = function (e) {
         const delta = e.originalEvent.wheelDelta / 1000;
+
         zui.zoomBy(delta, e.clientX, e.clientY);
     };
 
     // Mouse press event handler
-    self.mouseDownEvent = function(e) {
+    self.mouseDownEvent = function (e) {
         dragVariables.startDragX = e.clientX - canvas.offset().left;
         dragVariables.startDragY = e.clientY - canvas.offset().top;
+
         isMouseDown = true;
     };
 
     // Mouse move event handler
-    self.mouseMoveEvent = function(e) {
+    self.mouseMoveEvent = function (e) {
         if (!isMouseDown) return;
 
         let dirX = e.clientX - canvas.offset().left - dragVariables.startDragX;

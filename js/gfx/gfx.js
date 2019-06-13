@@ -10,32 +10,33 @@ let gfx = function (logicEventHandler) {
     // Gfx map and engine variables
     let gfxMap = new GfxMap(self.logicEventHandler);
     let canvas = $('.map-row');
-    gfxMap.init();
     let gfxEngine = gfxMap.gfxEngine;
+
+    gfxMap.init();
 
     // Running mode
     let runningMode = RUNNING_MODE.DESIGN;
 
     // Start Simulation Event
-    let simulationStartEvent = function() {
+    let simulationStartEvent = function () {
         runningMode = RUNNING_MODE.SIMULATE;
         gfxMap.simulationStart();
     };
 
     // Pause Simulation Event
-    let simulationPauseEvent = function() {
+    let simulationPauseEvent = function () {
         runningMode = RUNNING_MODE.PAUSE;
         gfxMap.pauseAllAnimations();
     };
 
     // Resume Simulation Event
-    let simulationResumeEvent = function() {
+    let simulationResumeEvent = function () {
         runningMode = RUNNING_MODE.SIMULATE;
         gfxMap.resumeAllAnimations();
     };
 
     // Stop Simulation Event
-    let simulationStopEvent = function() {
+    let simulationStopEvent = function () {
         runningMode = RUNNING_MODE.DESIGN;
     };
 
@@ -89,40 +90,40 @@ let gfx = function (logicEventHandler) {
                 break;
             case 0:
                 //gfxMap.objectColorize(1, MAP_CELL.ROBOT, 0,0,"#ffcc00");
-                gfxMap.objectMove(1, 0,0);
+                gfxMap.objectMove(1, 0, 0);
                 break;
             case 1:
-                gfxMap.objectRotateRight(1,0,1);
+                gfxMap.objectRotateRight(1, 0, 1);
                 break;
             case 2:
-                gfxMap.objectMove(1,0,1);
+                gfxMap.objectMove(1, 0, 1);
                 break;
             case 3:
-                gfxMap.objectMove(1,1,1);
+                gfxMap.objectMove(1, 1, 1);
                 break;
             case 4:
-                gfxMap.objectRotateRight(1,2,1);
+                gfxMap.objectRotateRight(1, 2, 1);
                 break;
             case 5:
-                gfxMap.objectMove(1,2,1);
+                gfxMap.objectMove(1, 2, 1);
                 break;
             case 6:
-                gfxMap.objectRotateRight(1,2,0);
+                gfxMap.objectRotateRight(1, 2, 0);
                 break;
             case 7:
                 gfxMap.objectLoad(1, MAP_CELL.ROBOT, 2, 0, 1, MAP_CELL.RACK);
                 break;
             case 8:
-                gfxMap.objectMove(1,2,0);
+                gfxMap.objectMove(1, 2, 0);
                 break;
             case 9:
-                gfxMap.objectFailure(1, MAP_CELL.ROBOT, 2,0);
+                gfxMap.objectFailure(1, MAP_CELL.ROBOT, 2, 0);
                 break;
             case 10:
                 gfxMap.objectFixed(1, MAP_CELL.ROBOT, 2, 0);
                 break;
             case 11:
-                gfxMap.objectMove(1,2,0);
+                gfxMap.objectMove(1, 2, 0);
                 break;
             case 12:
                 gfxMap.objectBind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.STATION);
@@ -134,14 +135,14 @@ let gfx = function (logicEventHandler) {
                 gfxMap.objectUnbind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.STATION);
                 break;
             case 15:
-                gfxMap.objectRotateLeft(1,1,0);
+                gfxMap.objectRotateLeft(1, 1, 0);
                 break;
         }
         x++;
     });
 
     // Key press event handler
-    $(document).on('keydown', function(e) {
+    $(document).on('keydown', function (e) {
         switch (e.which) {
             case ARROW.LEFT:
             case ARROW.RIGHT:
@@ -256,6 +257,7 @@ let gfx = function (logicEventHandler) {
     // Set the event handler that communicates with the mainVM
     self.setLogicEventHandler = function (logicEventHandler) {
         self.logicEventHandler = logicEventHandler;
+
         gfxMap.setLogicEventHandler(self.logicEventHandler);
     };
 };

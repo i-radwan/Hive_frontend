@@ -59,7 +59,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 direction: ROBOT_DIR.RIGHT,
                 load_cap: parseInt(self.loadCap()),
                 ip: self.ip(),
-                port: self.port()
+                port: self.port(),
+                deactivated: false
             });
 
             let nextID = Math.max(state.nextIDs.robot, id + 1);
@@ -177,6 +178,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.loadCap(rob.load_cap);
         self.ip(rob.ip);
         self.port(rob.port);
+        self.deactivated(rob.deactivated);
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
@@ -576,6 +578,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let rob = state.map.getRobot(row, col);
 
+        rob.deactivated = true;
+
         if (rob.moving) {
             aggregateBlocking(row, col);
         }
@@ -605,6 +609,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let col = pos[1];
 
         let rob = state.map.getRobot(row, col);
+
+        rob.deactivated = false;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_FIXED,

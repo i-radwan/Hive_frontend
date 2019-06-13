@@ -271,6 +271,9 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
             // Clear all orders
             self.orderVM.clearOrders();
+
+            // Reset deactivate button
+            self.robotVM.deactivated(false);
         }
     });
 };

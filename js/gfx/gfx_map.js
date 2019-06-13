@@ -2,6 +2,7 @@ let GfxEngine = require('./gfx_engine');
 
 let gfxMap = function (logicEventHandler) {
     let self = this;
+
     // Event Handler that communicates with main VM
     self.logicEventHandler = logicEventHandler;
 
@@ -17,7 +18,6 @@ let gfxMap = function (logicEventHandler) {
         document.body.style.cursor = style;
     };
 
-
     // Mouse States Variables
     let isMouseDownOnObject = false;
     let isDraggingMap = false;
@@ -28,7 +28,7 @@ let gfxMap = function (logicEventHandler) {
     let isMouseOnObject = false;
 
     // Convert given angle to DIR enum
-    let angleToDir = function(angle) {
+    let angleToDir = function (angle) {
         switch (angle) {
             case 0:
             case 360:
@@ -46,33 +46,38 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Return the 3rd dimension index of a given objects id, type, row, col
-    let getObjectIndex = function(id, type, row, col) {
+    let getObjectIndex = function (id, type, row, col) {
         for (let i = 0; i < map[row][col].length; i++) {
             if (map[row][col][i].id === id && map[row][col][i].type === type)
                 return i;
         }
+
         return -1;
     };
 
     // Return the object of a given objects id, type, row, col
-    let getObject = function(id, type, row, col) {
+    let getObject = function (id, type, row, col) {
         let idx = getObjectIndex(id, type, row, col);
+
         return (idx === -1 ? -1 : map[row][col][idx]);
     };
 
     // Swaps position of an object in the map
-    let swapObjectPosition = function(id, type, row, col, newRow, newCol) {
+    let swapObjectPosition = function (id, type, row, col, newRow, newCol) {
         let obj = map[row][col].splice(getObjectIndex(id, type, row, col), 1);
+
         map[newRow][newCol].push(obj[0]);
     };
 
     // Returns the object with the highest Z-Index at a given row, col
-    let getHighestZIndexObject = function(row, col) {
+    let getHighestZIndexObject = function (row, col) {
         let ret = {render_variables: {z_index: -1}};
+
         for (let k = 0; k < map[row][col].length; k++) {
             if (ret.render_variables.z_index < map[row][col][k].render_variables.z_index)
                 ret = map[row][col][k];
         }
+
         return (ret.render_variables.z_index === -1 ? -1 : ret);
     };
 
@@ -91,7 +96,7 @@ let gfxMap = function (logicEventHandler) {
         return ret;
     };
 
-    let updateCursorStyle = function() {
+    let updateCursorStyle = function () {
         setCursorStyle(CURSOR_STYLES.DEFAULT);
 
         if (isDraggingMap) {
@@ -143,7 +148,7 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Initializes the gfx map
-    self.init = function() {
+    self.init = function () {
         self.gfxEngine.init();
     };
 
@@ -156,7 +161,7 @@ let gfxMap = function (logicEventHandler) {
         for (let i = 0; i < height; i++) {
             map[i] = new Array(width);
 
-            for (let j =0; j < width; j++) {
+            for (let j = 0; j < width; j++) {
                 map[i][j] = [];
             }
         }
@@ -165,7 +170,7 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Start object hovering
-    self.objectHover = function(type, color) {
+    self.objectHover = function (type, color) {
         isHovering = true;
         self.gfxEngine.addHoverObject(type, color);
     };
@@ -198,7 +203,7 @@ let gfxMap = function (logicEventHandler) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
         self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.MOVE);
 
-        if(obj.loaded_object_id !== -1) {
+        if (obj.loaded_object_id !== -1) {
             self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.MOVE);
         }
     };
@@ -208,7 +213,7 @@ let gfxMap = function (logicEventHandler) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
         self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.ROTATE_RIGHT);
 
-        if(obj.loaded_object_id !== -1) {
+        if (obj.loaded_object_id !== -1) {
             self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.ROTATE_RIGHT);
         }
     };
@@ -218,7 +223,7 @@ let gfxMap = function (logicEventHandler) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
         self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.ROTATE_LEFT);
 
-        if(obj.loaded_object_id !== -1) {
+        if (obj.loaded_object_id !== -1) {
             self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.ROTATE_LEFT);
         }
     };
@@ -228,7 +233,7 @@ let gfxMap = function (logicEventHandler) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
         self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.RETREAT);
 
-        if(obj.loaded_object_id !== -1) {
+        if (obj.loaded_object_id !== -1) {
             self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.RETREAT);
         }
     };
@@ -252,10 +257,13 @@ let gfxMap = function (logicEventHandler) {
     self.objectBind = function (id, type, row, col, objectId, objectType) {
         getObject(id, type, row, col).bound_object_id = objectId;
         getObject(id, type, row, col).bound_object_type = objectType;
-        self.gfxEngine.bindObject(getObject(id, type, row, col).render_variables,
+
+        self.gfxEngine.bindObject(
+            getObject(id, type, row, col).render_variables,
             getObject(objectId, objectType, row, col).render_variables,
             objectType,
-            (getObject(id, type, row, col).loaded_object_id !== -1));
+            (getObject(id, type, row, col).loaded_object_id !== -1)
+        );
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -277,10 +285,13 @@ let gfxMap = function (logicEventHandler) {
     self.objectUnbind = function (id, type, row, col, objectId, objectType) {
         getObject(id, type, row, col).bound_object_id = -1;
         getObject(id, type, row, col).bound_object_type = -1;
-        self.gfxEngine.unbindObject(getObject(id, type, row, col).render_variables,
+
+        self.gfxEngine.unbindObject(
+            getObject(id, type, row, col).render_variables,
             getObject(objectId, objectType, row, col).render_variables,
             objectType,
-            (getObject(id, type, row, col).loaded_object_id !== -1));
+            (getObject(id, type, row, col).loaded_object_id !== -1)
+        );
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -302,10 +313,13 @@ let gfxMap = function (logicEventHandler) {
     self.objectLoad = function (id, type, row, col, objectId, objectType) {
         getObject(id, type, row, col).loaded_object_id = objectId;
         getObject(id, type, row, col).loaded_object_type = objectType;
-        self.gfxEngine.loadObject(getObject(id, type, row, col).render_variables,
+
+        self.gfxEngine.loadObject(
+            getObject(id, type, row, col).render_variables,
             getObject(objectId, objectType, row, col).render_variables,
             objectType,
-            (getObject(id, type, row, col).bound_object_id !== -1));
+            getObject(id, type, row, col).bound_object_id !== -1
+        );
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -327,10 +341,13 @@ let gfxMap = function (logicEventHandler) {
     self.objectOffload = function (id, type, row, col, objectId, objectType) {
         getObject(id, type, row, col).loaded_object_id = -1;
         getObject(id, type, row, col).loaded_object_type = -1;
-        self.gfxEngine.offloadObject(getObject(id, type, row, col).render_variables,
+
+        self.gfxEngine.offloadObject(
+            getObject(id, type, row, col).render_variables,
             getObject(objectId, objectType, row, col).render_variables,
             objectType,
-            (getObject(id, type, row, col).bound_object_id !== -1));
+            getObject(id, type, row, col).bound_object_id !== -1
+        );
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -351,13 +368,14 @@ let gfxMap = function (logicEventHandler) {
     // Force fail a given object and the loaded object on it
     self.objectFailure = function (id, type, row, col) {
         let obj = getObject(id, type, row, col);
+
         self.gfxEngine.objectFailure(obj.render_variables, type);
 
         if (obj.loaded_object_id !== -1) {
             let loadedObj = getObject(obj.loaded_object_id, obj.loaded_object_type, row, col);
+
             self.gfxEngine.objectFailure(loadedObj.render_variables, loadedObj.type);
         }
-
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -376,10 +394,12 @@ let gfxMap = function (logicEventHandler) {
     // Force stop a given object and the loaded object on it
     self.objectStop = function (id, type, row, col) {
         let obj = getObject(id, type, row, col);
+
         self.gfxEngine.objectStop(obj.render_variables, type);
 
         if (obj.loaded_object_id !== -1) {
             let loadedObj = getObject(obj.loaded_object_id, obj.loaded_object_type, row, col);
+
             self.gfxEngine.objectStop(loadedObj.render_variables, loadedObj.type);
         }
     };
@@ -387,15 +407,22 @@ let gfxMap = function (logicEventHandler) {
     // Resume a given object
     self.objectFixed = function (id, type, row, col) {
         let obj = getObject(id, type, row, col);
-        self.gfxEngine.objectFixed(obj.render_variables, type,
-            (obj.bound_object_id !== -1),
-            (obj.loaded_object_id !== -1));
+
+        self.gfxEngine.objectFixed(
+            obj.render_variables,
+            type,
+            obj.bound_object_id !== -1,
+            obj.loaded_object_id !== -1
+        );
 
         if (obj.loaded_object_id !== -1) {
             let loadedObj = getObject(obj.loaded_object_id, obj.loaded_object_type, row, col);
-            self.gfxEngine.objectFixed(loadedObj.render_variables, loadedObj.type,
-                (obj.bound_object_id !== -1),
-                (obj.loaded_object_id !== -1));
+
+            self.gfxEngine.objectFixed(
+                loadedObj.render_variables,
+                loadedObj.type,
+                obj.bound_object_id !== -1,
+                obj.loaded_object_id !== -1);
         }
     };
 
@@ -405,7 +432,7 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Animate all objects with the given time step
-    self.animateObjects = function(timeDelta) {
+    self.animateObjects = function (timeDelta) {
         for (let row = 0; row < mapHeight; row++) {
             for (let col = 0; col < mapWidth; col++) {
                 for (let k = 0; k < map[row][col].length; k++) {
@@ -434,18 +461,18 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Pause all animations
-    self.pauseAllAnimations = function() {
-      for (let row = 0; row < mapHeight; row++) {
-          for (let col = 0; col < mapWidth; col++) {
-              for (let k = 0; k < map[row][col].length; k++) {
-                  self.gfxEngine.pauseObjectAnimation(map[row][col][k].render_variables);
-              }
-          }
-      }
+    self.pauseAllAnimations = function () {
+        for (let row = 0; row < mapHeight; row++) {
+            for (let col = 0; col < mapWidth; col++) {
+                for (let k = 0; k < map[row][col].length; k++) {
+                    self.gfxEngine.pauseObjectAnimation(map[row][col][k].render_variables);
+                }
+            }
+        }
     };
 
     // Resume all Animations
-    self.resumeAllAnimations = function() {
+    self.resumeAllAnimations = function () {
         for (let row = 0; row < mapHeight; row++) {
             for (let col = 0; col < mapWidth; col++) {
                 for (let k = 0; k < map[row][col].length; k++) {
@@ -456,14 +483,16 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Start simulation mode
-    self.simulationStart = function() {
+    self.simulationStart = function () {
         isHovering = false;
+
         self.gfxEngine.removeHoveringObject();
     };
 
     // Escape key event handler
     self.escapeEvent = function () {
         isHovering = false;
+
         self.gfxEngine.unhighlightObject();
         self.gfxEngine.removeHoveringObject();
 
@@ -473,11 +502,13 @@ let gfxMap = function (logicEventHandler) {
     // Mouse press in design mode event handler
     self.designModeMouseDownEvent = function (e) {
         isMouseDown = true;
+
         let cell = getMouseCell(e.clientX, e.clientY);
         let obj = getHighestZIndexObject(cell.row, cell.col);
 
         if (cell.inBounds && !isHovering && obj !== -1) {
             isMouseDownOnObject = true;
+
             self.gfxEngine.startDragObject(obj, cell.row, cell.col);
         } else {
             self.gfxEngine.mouseDownEvent(e);
@@ -489,13 +520,16 @@ let gfxMap = function (logicEventHandler) {
     // Mouse press in simulation mode event handler
     self.simulationModeMouseDownEvent = function (e) {
         isMouseDown = true;
+
         self.gfxEngine.mouseDownEvent(e);
+
         updateCursorStyle(e);
     };
 
     // Mouse move in design mode event handler
-    self.designModeMouseMoveEvent = function(e) {
+    self.designModeMouseMoveEvent = function (e) {
         let cell = getMouseCell(e.clientX, e.clientY);
+
         isMouseOnObject = (cell.inBounds && getHighestZIndexObject(cell.row, cell.col) !== -1);
         isMouseInBounds = cell.inBounds;
 
@@ -511,11 +545,12 @@ let gfxMap = function (logicEventHandler) {
         if (isHovering) {
             self.gfxEngine.moveHoverObject(cell.row, cell.col, cell.inBounds);
         }
+
         if (isMouseDownOnObject) {
             isDraggingObject = true;
+
             self.gfxEngine.moveDragObject(cell.row, cell.col);
-        }
-        else {
+        } else {
             self.gfxEngine.mouseMoveEvent(e);
         }
 
@@ -523,8 +558,9 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Mouse move in simulation mode event handler
-    self.simulationModeMouseMoveEvent = function(e) {
+    self.simulationModeMouseMoveEvent = function (e) {
         self.designModeMouseMoveEvent(e);
+
         updateCursorStyle(e);
     };
 
@@ -532,8 +568,10 @@ let gfxMap = function (logicEventHandler) {
     self.designModeMouseUpEvent = function (e) {
         let cell = getMouseCell(e.clientX, e.clientY);
         let srcCell = {};
+
         if (isMouseDownOnObject)
             srcCell = self.gfxEngine.finishDragObject();
+
         if (isDraggingObject) {
             self.logicEventHandler({
                 type: EVENT_FROM_GFX.CELL_DRAG,
@@ -551,6 +589,7 @@ let gfxMap = function (logicEventHandler) {
         }
 
         self.gfxEngine.mouseUpEvent();
+
         isDraggingObject = false;
         isMouseDownOnObject = false;
         isMouseDown = false;
@@ -562,7 +601,9 @@ let gfxMap = function (logicEventHandler) {
     // Mouse release in simulation mode event handler
     self.simulationModeMouseUpEvent = function (e) {
         let cell = getMouseCell(e.clientX, e.clientY);
+
         self.gfxEngine.mouseUpEvent(e);
+
         if (cell.inBounds && !isDraggingMap) {
             self.logicEventHandler({
                 type: EVENT_FROM_GFX.CELL_CLICK,
