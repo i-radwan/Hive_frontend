@@ -26,6 +26,15 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.activeRobotCol = -1;
 
     self.add = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let isRobotFree = state.map.isRobotFree(row, col);
 
         if (self.editing()) {
@@ -125,6 +134,15 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.delete = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let rob = state.map.getRobot(row, col);
 
         state.map.deleteObject(row, col, rob);

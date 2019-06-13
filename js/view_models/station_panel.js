@@ -11,6 +11,15 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
     self.activeStationCol = -1;
 
     self.add = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let isFacilityFree = state.map.isFacilityFree(row, col);
 
         if (self.editing()) {
@@ -104,6 +113,15 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
     };
 
     self.delete = function (row, col) {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         let fac = state.map.getSpecificFacility(row, col, MAP_CELL.STATION);
 
         state.map.deleteObject(row, col, fac);
