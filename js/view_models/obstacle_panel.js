@@ -39,7 +39,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
             state.map.addObject(row, col, {
                 type: MAP_CELL.OBSTACLE,
-                id: id
+                id: id,
+                color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
             });
 
             let nextID = Math.max(state.nextIDs.obstacle, id + 1);
@@ -58,7 +59,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
                     type: MAP_CELL.OBSTACLE,
                     id: id,
                     row: row,
-                    col: col
+                    col: col,
+                    color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
                 }
             });
         } else {
@@ -206,7 +208,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.OBSTACLE
+                type: MAP_CELL.OBSTACLE,
+                color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
             }
         });
     };

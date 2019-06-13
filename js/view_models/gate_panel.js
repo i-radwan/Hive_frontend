@@ -39,7 +39,8 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
             state.map.addObject(row, col, {
                 type: MAP_CELL.GATE,
-                id: id
+                id: id,
+                color: GFX_SVG_DEFAULT_COLOR.GATE
             });
 
             let nextID = Math.max(state.nextIDs.gate, id + 1);
@@ -58,7 +59,8 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                     type: MAP_CELL.GATE,
                     id: id,
                     row: row,
-                    col: col
+                    col: col,
+                    color: GFX_SVG_DEFAULT_COLOR.GATE
                 }
             });
         } else {
@@ -206,7 +208,8 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.GATE
+                type: MAP_CELL.GATE,
+                color: GFX_SVG_DEFAULT_COLOR.GATE
             }
         });
     };

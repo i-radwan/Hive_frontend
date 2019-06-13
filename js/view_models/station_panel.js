@@ -39,7 +39,8 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
 
             state.map.addObject(row, col, {
                 type: MAP_CELL.STATION,
-                id: id
+                id: id,
+                color: GFX_SVG_DEFAULT_COLOR.STATION
             });
 
             let nextID = Math.max(state.nextIDs.station, id + 1);
@@ -58,7 +59,8 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
                     type: MAP_CELL.STATION,
                     id: id,
                     row: row,
-                    col: col
+                    col: col,
+                    color: GFX_SVG_DEFAULT_COLOR.STATION
                 }
             });
         } else {
@@ -206,7 +208,8 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.STATION
+                type: MAP_CELL.STATION,
+                color: GFX_SVG_DEFAULT_COLOR.STATION
             }
         });
     };

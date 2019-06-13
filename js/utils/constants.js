@@ -258,7 +258,7 @@ EVENT_TO_GFX = {
     ESC: 24
 };
 
-// GFX Svg models
+// GFX SVG models
 GFX_SVG_MODEL = {
     ROBOT: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><title>robot_80</title><path d="M25,5A20,20,0,1,0,45,25,20,20,0,0,0,25,5Zm0,32.5A12.5,12.5,0,1,1,37.5,25,12.5,12.5,0,0,1,25,37.5Z" fill="#df9626"/><path d="M25,12.5A12.5,12.5,0,1,0,37.5,25,12.5,12.5,0,0,0,25,12.5ZM25,37A12,12,0,1,1,37,25,12,12,0,0,1,25,37Z" fill="#0277bd"/><path d="M25,13V12.5a12.5,12.5,0,0,0-11.89,8.64l0.48,0.16A12,12,0,0,1,25,13Z" fill="#263238"/><path d="M25.2,45c-0.26,0-.69,0-1.22,0s-1.12-.07-1.87-0.17c-0.23-3,1.5-5.22,2.84-5.21,1.56,0,3,2.24,3.22,5.11l-0.22,0c-0.48.08-1.05,0.18-1.67,0.23C26,45,25.72,45,25.2,45Z" fill="#bababa"/><circle cx="25" cy="42" r="0.5" fill="#1d1d1e"/></svg>',
     GATE: '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><title>entry</title><line x1="5.15" y1="22.23" x2="44.85" y2="22.23" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="44.85" y1="22.23" x2="35.31" y2="12.69" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="44.85" y1="27.77" x2="5.15" y2="27.77" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="5.15" y1="27.77" x2="14.69" y2="37.31" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/></svg>',

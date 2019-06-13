@@ -143,9 +143,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
     };
 
     self.eventHandler = function (event) {
-        if (event.type !== EVENT_FROM_GFX.CELL_HOVER)
-            console.log(event);
-
         switch (event.type) {
             case EVENT_FROM_GFX.CELL_CLICK:
                 handleCellClick(event.row, event.col);

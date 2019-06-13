@@ -235,7 +235,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.ROBOT
+                type: MAP_CELL.ROBOT,
+                color: GFX_SVG_DEFAULT_COLOR.ROBOT
             }
         });
     };

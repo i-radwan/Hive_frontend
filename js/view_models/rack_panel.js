@@ -50,7 +50,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 id: id,
                 capacity: parseInt(self.capacity()),
                 weight: parseInt(self.weight()),
-                items: ko.mapping.toJS(self.items())
+                items: ko.mapping.toJS(self.items()),
+                color: GFX_SVG_DEFAULT_COLOR.RACK
             });
 
             let nextID = Math.max(state.nextIDs.rack, id + 1);
@@ -72,7 +73,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                     col: col,
                     capacity: parseInt(self.capacity()),
                     weight: parseInt(self.weight()),
-                    items: ko.mapping.toJS(self.items())
+                    items: ko.mapping.toJS(self.items()),
+                    color: GFX_SVG_DEFAULT_COLOR.RACK
                 }
             });
         } else {
@@ -230,7 +232,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
-                type: MAP_CELL.RACK
+                type: MAP_CELL.RACK,
+                color: GFX_SVG_DEFAULT_COLOR.RACK
             }
         });
     };
