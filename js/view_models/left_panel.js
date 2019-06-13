@@ -263,6 +263,9 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             self.activePanel(LEFT_PANEL.ORDER);
         } else {
             self.activePanel(LEFT_PANEL.TEMPS);
+
+            // Clear all orders
+            self.orderVM.clearOrders();
         }
     });
 };
