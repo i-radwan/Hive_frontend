@@ -250,7 +250,12 @@ let gfxMap = function (logicEventHandler) {
 
     // Bind 2 given objects together
     self.objectBind = function (id, type, row, col, objectId, objectType) {
-        self.gfxEngine.bindObject(getObject(id, type, row, col).render_variables, getObject(objectId, objectType, row, col).render_variables);
+        getObject(id, type, row, col).bound_object_id = objectId;
+        getObject(id, type, row, col).bound_object_type = objectType;
+        self.gfxEngine.bindObject(getObject(id, type, row, col).render_variables,
+            getObject(objectId, objectType, row, col).render_variables,
+            objectType,
+            (getObject(id, type, row, col).loaded_object_id !== -1));
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -270,7 +275,12 @@ let gfxMap = function (logicEventHandler) {
 
     // Unbind 2 given objects
     self.objectUnbind = function (id, type, row, col, objectId, objectType) {
-        self.gfxEngine.unbindObject(getObject(id, type, row, col).render_variables, getObject(objectId, objectType, row, col).render_variables);
+        getObject(id, type, row, col).bound_object_id = -1;
+        getObject(id, type, row, col).bound_object_type = -1;
+        self.gfxEngine.unbindObject(getObject(id, type, row, col).render_variables,
+            getObject(objectId, objectType, row, col).render_variables,
+            objectType,
+            (getObject(id, type, row, col).loaded_object_id !== -1));
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -292,7 +302,10 @@ let gfxMap = function (logicEventHandler) {
     self.objectLoad = function (id, type, row, col, objectId, objectType) {
         getObject(id, type, row, col).loaded_object_id = objectId;
         getObject(id, type, row, col).loaded_object_type = objectType;
-        self.gfxEngine.loadObject(getObject(id, type, row, col).render_variables, getObject(objectId, objectType, row, col).render_variables);
+        self.gfxEngine.loadObject(getObject(id, type, row, col).render_variables,
+            getObject(objectId, objectType, row, col).render_variables,
+            objectType,
+            (getObject(id, type, row, col).bound_object_id !== -1));
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -314,7 +327,10 @@ let gfxMap = function (logicEventHandler) {
     self.objectOffload = function (id, type, row, col, objectId, objectType) {
         getObject(id, type, row, col).loaded_object_id = -1;
         getObject(id, type, row, col).loaded_object_type = -1;
-        self.gfxEngine.offloadObject(getObject(id, type, row, col).render_variables, getObject(objectId, objectType, row, col).render_variables);
+        self.gfxEngine.offloadObject(getObject(id, type, row, col).render_variables,
+            getObject(objectId, objectType, row, col).render_variables,
+            objectType,
+            (getObject(id, type, row, col).bound_object_id !== -1));
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -335,10 +351,13 @@ let gfxMap = function (logicEventHandler) {
     // Force fail a given object and the loaded object on it
     self.objectFailure = function (id, type, row, col) {
         let obj = getObject(id, type, row, col);
-        self.gfxEngine.pauseObjectAnimation(obj.render_variables);
+        self.gfxEngine.objectFailure(obj.render_variables, type);
 
-        if (obj.loaded_object_id !== -1)
-            self.gfxEngine.pauseObjectAnimation(getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables);
+        if (obj.loaded_object_id !== -1) {
+            let loadedObj = getObject(obj.loaded_object_id, obj.loaded_object_type, row, col);
+            self.gfxEngine.objectFailure(loadedObj.render_variables, loadedObj.type);
+        }
+
 
         self.logicEventHandler({
             type: EVENT_FROM_GFX.ACK_ACTION,
@@ -357,19 +376,27 @@ let gfxMap = function (logicEventHandler) {
     // Force stop a given object and the loaded object on it
     self.objectStop = function (id, type, row, col) {
         let obj = getObject(id, type, row, col);
-        self.gfxEngine.pauseObjectAnimation(obj.render_variables);
+        self.gfxEngine.objectStop(obj.render_variables, type);
 
-        if (obj.loaded_object_id !== -1)
-            self.gfxEngine.pauseObjectAnimation(getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables);
+        if (obj.loaded_object_id !== -1) {
+            let loadedObj = getObject(obj.loaded_object_id, obj.loaded_object_type, row, col);
+            self.gfxEngine.objectStop(loadedObj.render_variables, loadedObj.type);
+        }
     };
 
     // Resume a given object
     self.objectFixed = function (id, type, row, col) {
         let obj = getObject(id, type, row, col);
-        self.gfxEngine.resumeObjectAnimation(obj.render_variables);
+        self.gfxEngine.objectFixed(obj.render_variables, type,
+            (obj.bound_object_id !== -1),
+            (obj.loaded_object_id !== -1));
 
-        if (obj.loaded_object_id !== -1)
-            self.gfxEngine.resumeObjectAnimation(getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables);
+        if (obj.loaded_object_id !== -1) {
+            let loadedObj = getObject(obj.loaded_object_id, obj.loaded_object_type, row, col);
+            self.gfxEngine.objectFixed(loadedObj.render_variables, loadedObj.type,
+                (obj.bound_object_id !== -1),
+                (obj.loaded_object_id !== -1));
+        }
     };
 
     // Update an object battery level

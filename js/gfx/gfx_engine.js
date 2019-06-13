@@ -138,6 +138,46 @@ let gfxEngine = function () {
         }
     };
 
+    // Returns the default color of the object
+    let objectTypeToDefaultColor = function(type) {
+        switch (type) {
+            case MAP_CELL.ROBOT:
+                return GFX_SVG_DEFAULT_COLOR.ROBOT;
+            case MAP_CELL.GATE:
+                return GFX_SVG_DEFAULT_COLOR.GATE;
+            case MAP_CELL.RACK:
+                return GFX_SVG_DEFAULT_COLOR.RACK;
+            case MAP_CELL.STATION:
+                return GFX_SVG_DEFAULT_COLOR.STATION;
+            case MAP_CELL.OBSTACLE:
+                return GFX_SVG_DEFAULT_COLOR.OBSTACLE;
+        }
+    };
+
+    // Returns the color of the bound object
+    let objectTypeToBindColor = function(type) {
+        switch (type) {
+            case MAP_CELL.GATE:
+                return GFX_COLORS.GATE_BIND_COLOR;
+            case MAP_CELL.RACK:
+                return GFX_COLORS.RACK_LOAD_COLOR;
+            case MAP_CELL.STATION:
+                return GFX_COLORS.STATION_BIND_COLOR;
+        }
+    };
+
+    // Returns the flash color to make.
+    let getFlashType = function(isBound, isLoaded, isFailed) {
+        if (isFailed)
+            return FLASH_TYPE.FAILURE;
+        if (isBound)
+            return FLASH_TYPE.BIND;
+        if (isLoaded)
+            return FLASH_TYPE.LOAD;
+
+        return FLASH_TYPE.NO_FLASH;
+    };
+
     // Move object with the given time delta
     let moveObject = function(object, timeDelta) {
         let dir = new Two.Vector(object.animation_variables.nxt_x - object.animation_variables.cur_x, object.animation_variables.nxt_y - object.animation_variables.cur_y);
@@ -222,6 +262,16 @@ let gfxEngine = function () {
         renderObject.color = color;
     };
 
+    // Colorize the robot LED
+    let colorizeRobotLed = function(renderObject, color) {
+        for (let i = 0; i < renderObject.two_object.children.length; i++) {
+            if (renderObject.two_object.children[i].fill === renderObject.led_color) {
+                renderObject.two_object.children[i].fill = color;
+            }
+        }
+        renderObject.led_color = color;
+    };
+
     // Colorizes the station
     let colorizeStation = function(renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
@@ -299,42 +349,38 @@ let gfxEngine = function () {
     };
 
     // Adds an object to the scene
-    // TODO remove undefined checks when @IAR send the color
     self.addObject = function(id, type, row, col, color, zIndexValue = -1) {
         let cellTopLeft = getCellTopLeft(row, col);
         let defaultColor;
         let targetColor = color;
+        let ledColor = undefined;
 
         let twoObject;
         switch (type) {
             case MAP_CELL.GATE:
                 twoObject = gateSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.GATE : targetColor;
                 defaultColor = GFX_SVG_DEFAULT_COLOR.GATE;
                 break;
             case MAP_CELL.ROBOT:
                 twoObject = robotSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.ROBOT : targetColor;
                 defaultColor = GFX_SVG_DEFAULT_COLOR.ROBOT;
+                ledColor = GFX_SVG_DEFAULT_COLOR.ROBOT_LED;
                 break;
             case MAP_CELL.RACK:
                 twoObject = rackSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.RACK : targetColor;
                 defaultColor = GFX_SVG_DEFAULT_COLOR.RACK;
                 break;
             case MAP_CELL.STATION:
                 twoObject = stationSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.STATION : targetColor;
                 defaultColor = GFX_SVG_DEFAULT_COLOR.STATION;
                 break;
             case MAP_CELL.OBSTACLE:
                 twoObject = obstacleSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                targetColor = (typeof targetColor === 'undefined') ? GFX_SVG_DEFAULT_COLOR.OBSTACLE : targetColor;
                 defaultColor = GFX_SVG_DEFAULT_COLOR.OBSTACLE;
                 break;
         }
@@ -342,7 +388,28 @@ let gfxEngine = function () {
         zIndexValue = (zIndexValue === -1 ? getObjectZIndex(type) : zIndexValue);
         zIndexGroups[zIndexValue].add(twoObject);
 
-        let ret = {type: type, id: id, loaded_object_id: -1, loaded_object_type: -1, render_variables: {two_object: twoObject, z_index: zIndexValue, direction: ROBOT_DIR.RIGHT, color: defaultColor, animation_variables: {cur_x: cellTopLeft.x, cur_y: cellTopLeft.y, cur_angle: 0, rotation_vector: new Two.Vector(-GRID_CELL_LENGTH/2, -GRID_CELL_LENGTH/2)}}};
+        let ret = {
+            type: type,
+            id: id,
+            loaded_object_id: -1,
+            loaded_object_type: -1,
+            bound_object_id: -1,
+            bound_object_type: -1,
+            render_variables: {
+                two_object: twoObject,
+                z_index: zIndexValue,
+                direction: ROBOT_DIR.RIGHT,
+                color: defaultColor,
+                led_color: ledColor,
+                animation_variables: {
+                    cur_x: cellTopLeft.x,
+                    cur_y: cellTopLeft.y,
+                    cur_angle: 0,
+                    rotation_vector: new Two.Vector(-GRID_CELL_LENGTH/2, -GRID_CELL_LENGTH/2)
+                }
+            }
+        };
+
         self.colorizeObject(ret.render_variables, ret.type, targetColor);
         return ret;
     };
@@ -432,6 +499,7 @@ let gfxEngine = function () {
         selectedObject.row = row;
         selectedObject.col = col;
         selectedObject.item = object;
+        // TODO
     };
 
     // UnHighlight a given object
@@ -479,6 +547,49 @@ let gfxEngine = function () {
                 colorizeGate(renderObject, GFX_SVG_DEFAULT_COLOR.GATE);
                 break;
         }
+    };
+
+    self.startObjectFlashing = function(renderObject, flashType) {
+        if (flashType === FLASH_TYPE.NO_FLASH)
+            self.stopObjectFlashing(renderObject);
+
+        renderObject.animation_variables.is_flashing = true;
+        renderObject.animation_variables.flash_time = 0;
+        renderObject.animation_variables.flash_type = flashType;
+    };
+
+    self.flashObject = function(renderObject, timeDelta) {
+        if (!renderObject.animation_variables.is_flashing)
+            return;
+
+        renderObject.animation_variables.flash_time += timeDelta;
+        let sequence = Math.floor(renderObject.animation_variables.flash_time / FLASHING_SPEED) % 2;
+
+        if (sequence === 0) {
+            switch (renderObject.animation_variables.flash_type) {
+                case FLASH_TYPE.BIND:
+                    colorizeRobotLed(renderObject, GFX_COLORS.LED_BIND_COLOR);
+                    break;
+                case FLASH_TYPE.LOAD:
+                    colorizeRobotLed(renderObject, GFX_COLORS.LED_LOAD_COLOR);
+                    break;
+                case FLASH_TYPE.FAILURE:
+                    colorizeRobotLed(renderObject, GFX_COLORS.LED_FAIL_COLOR);
+                    break;
+            }
+        }
+        else {
+            colorizeRobotLed(renderObject, GFX_SVG_DEFAULT_COLOR.ROBOT_LED);
+        }
+    };
+
+    self.pauseObjectFlashing = function(renderObject) {
+        renderObject.animation_variables.is_flashing = false;
+    };
+
+    self.stopObjectFlashing = function(renderObject) {
+        renderObject.animation_variables.is_flashing = false;
+        colorizeRobotLed(renderObject, GFX_SVG_DEFAULT_COLOR.ROBOT_LED);
     };
 
     // Initialize animation of a given object
@@ -532,6 +643,8 @@ let gfxEngine = function () {
 
     // Animate a given object
     self.animateObject = function(renderObject, timeDelta) {
+        self.flashObject(renderObject, timeDelta);
+
         if (!renderObject.animation_variables.is_animating)
             return false;
 
@@ -562,25 +675,54 @@ let gfxEngine = function () {
     };
 
     // Bind 2 given objects together
-    self.bindObject = function(renderObject1, renderObject2) {
-        // TODO
+    self.bindObject = function(renderObject1, renderObject2, object2Type, isLoaded) {
+        self.startObjectFlashing(renderObject1, getFlashType(true, isLoaded, false));
+        self.colorizeObject(renderObject2, object2Type, objectTypeToBindColor(object2Type));
     };
 
     // Unbind 2 given objects
-    self.unbindObject = function(renderObject1, renderObject2) {
-        // TODO
+    self.unbindObject = function(renderObject1, renderObject2, object2Type, isLoaded) {
+        self.startObjectFlashing(renderObject1, getFlashType(false, isLoaded, false));
+        self.colorizeObject(renderObject2, object2Type, objectTypeToDefaultColor(object2Type));
     };
 
     // Load 2 given objects
-    self.loadObject = function(renderObject1, renderObject2) {
+    self.loadObject = function(renderObject1, renderObject2, object2Type, isBound) {
         renderObject2.animation_variables.cur_angle = renderObject1.animation_variables.cur_angle;
         renderObject2.direction = renderObject1.direction;
-        // TODO
+
+        self.startObjectFlashing(renderObject1, getFlashType(isBound, true, false));
+        self.colorizeObject(renderObject2, object2Type, objectTypeToBindColor(object2Type));
     };
 
     // Offload 2 given objects
-    self.offloadObject = function(renderObject1, renderObject2) {
-        // TODO
+    self.offloadObject = function(renderObject1, renderObject2, object2Type, isBound) {
+        self.startObjectFlashing(renderObject1, getFlashType(isBound, false, false));
+        self.colorizeObject(renderObject2, object2Type, objectTypeToDefaultColor(object2Type));
+    };
+
+    // object is failed
+    self.objectFailure = function(renderObject, type) {
+        if (type === MAP_CELL.ROBOT)
+            self.startObjectFlashing(renderObject, getFlashType(false, false, true));
+
+        self.pauseObjectAnimation(renderObject);
+    };
+
+    // object is stopped
+    self.objectStop = function(renderObject, type) {
+        if (type === MAP_CELL.ROBOT)
+            self.stopObjectFlashing(renderObject);
+
+        self.pauseObjectAnimation(renderObject);
+    };
+
+    // object is fixed
+    self.objectFixed = function(renderObject, type, isBound, isLoaded) {
+        if (type === MAP_CELL.ROBOT)
+            self.startObjectFlashing(renderObject, getFlashType(isBound, isLoaded, false));
+
+        self.resumeObjectAnimation(renderObject);
     };
 
     // Update object battery level
