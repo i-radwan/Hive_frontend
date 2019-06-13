@@ -722,7 +722,7 @@ let gfxEngine = function () {
         if (type === MAP_CELL.ROBOT)
             self.startObjectFlashing(renderObject, getFlashType(isBound, isLoaded, false));
 
-        self.resumeObjectAnimation(renderObject);
+        // self.resumeObjectAnimation(renderObject);
     };
 
     // Update object battery level

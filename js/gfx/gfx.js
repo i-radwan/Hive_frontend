@@ -116,24 +116,24 @@ let gfx = function (logicEventHandler) {
                 gfxMap.objectMove(1,2,0);
                 break;
             case 9:
-                //gfxMap.objectMove(1,1,0);
                 gfxMap.objectFailure(1, MAP_CELL.ROBOT, 2,0);
                 break;
             case 10:
-                //gfxMap.objectRetreat(1,0,0);
                 gfxMap.objectFixed(1, MAP_CELL.ROBOT, 2, 0);
                 break;
             case 11:
-                gfxMap.objectBind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.STATION);
-                //gfxMap.objectOffload(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.RACK);
+                gfxMap.objectMove(1,2,0);
                 break;
             case 12:
-                gfxMap.objectOffload(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.RACK);
+                gfxMap.objectBind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.STATION);
                 break;
             case 13:
-                gfxMap.objectUnbind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.STATION);
+                gfxMap.objectOffload(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.RACK);
                 break;
             case 14:
+                gfxMap.objectUnbind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.STATION);
+                break;
+            case 15:
                 gfxMap.objectRotateLeft(1,1,0);
                 break;
         }
