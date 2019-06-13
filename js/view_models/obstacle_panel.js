@@ -183,35 +183,10 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
             return false;
         }
 
-        if (!check())
-            return false;
-
-        let fac = state.map.getSpecificFacility(self.activeObstacleRow, self.activeObstacleCol, MAP_CELL.OBSTACLE);
-
-        let id = parseInt(self.id());
-
-        state.map.updateObject(self.activeObstacleRow, self.activeObstacleCol, {
-            type: MAP_CELL.OBSTACLE,
-            id: id
-        }, fac.id);
-
-        state.nextIDs.obstacle = Math.max(state.nextIDs.obstacle, id + 1);
-
         shouter.notifySubscribers({
             text: "Obstacle updated successfully!",
             type: MSG_TYPE.INFO
         }, SHOUT.MSG);
-
-        unselect();
-        clear();
-
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HOVER,
-            data: {
-                type: MAP_CELL.OBSTACLE,
-                color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
-            }
-        });
     };
 
     self.handleEsc = function () {

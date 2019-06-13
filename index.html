@@ -138,7 +138,7 @@
                     <div class="form-group">
                         <label>Gate ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Gate ID"
-                               data-bind="textInput: leftPanelVM.gateVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
+                               data-bind="textInput: leftPanelVM.gateVM.id, enable: runningMode() === RUNNING_MODE.DESIGN" readonly>
                     </div>
 
                     <!--======================== BOTTOM ACTIONS ========================-->
@@ -158,7 +158,7 @@
                     <div class="form-group">
                         <label>Robot ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Robot ID"
-                               data-bind="textInput: leftPanelVM.robotVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
+                               data-bind="textInput: leftPanelVM.robotVM.id, enable: runningMode() === RUNNING_MODE.DESIGN" readonly>
                     </div>
                     <div class="form-group">
                         <label>Robot Color</label>
@@ -205,7 +205,7 @@
                     <div class="form-group">
                         <label>Rack ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Rack ID"
-                               data-bind="textInput: leftPanelVM.rackVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
+                               data-bind="textInput: leftPanelVM.rackVM.id, enable: runningMode() === RUNNING_MODE.DESIGN" readonly>
                     </div>
                     <div class="form-group">
                         <label>Weight</label>
@@ -278,7 +278,7 @@
                     <div class="form-group">
                         <label>Station ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Station ID"
-                               data-bind="textInput: leftPanelVM.stationVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
+                               data-bind="textInput: leftPanelVM.stationVM.id, enable: runningMode() === RUNNING_MODE.DESIGN" readonly>
                     </div>
 
                     <!--======================== BOTTOM ACTIONS ========================-->
@@ -298,7 +298,7 @@
                     <div class="form-group">
                         <label>Obstacle ID</label>
                         <input type="number" class="form-control bg-dark text-light" placeholder="Obstacle ID"
-                               data-bind="textInput: leftPanelVM.obstacleVM.id, enable: runningMode() === RUNNING_MODE.DESIGN">
+                               data-bind="textInput: leftPanelVM.obstacleVM.id, enable: runningMode() === RUNNING_MODE.DESIGN" readonly>
                     </div>
 
                     <!--======================== BOTTOM ACTIONS ========================-->
@@ -364,7 +364,7 @@
                         <div class="form-group">
                             <label>Order ID</label>
                             <input type="text" class="form-control bg-dark text-light"
-                                   placeholder="Order ID" data-bind="textInput: leftPanelVM.orderVM.id">
+                                   placeholder="Order ID" data-bind="textInput: leftPanelVM.orderVM.id" readonly>
                         </div>
                         <div class="form-group" data-bind="css: {hidden: !leftPanelVM.orderVM.refill()}">
                             <label>Rack ID</label>
@@ -710,7 +710,7 @@
                     <div class="row item-container">
                         <div class="col-md-10 item-container-fields">
                             <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                                   data-bind="textInput: rightPanelVM.itemsVM.itemID, enabled: runningMode() === RUNNING_MODE.DESIGN">
+                                   data-bind="textInput: rightPanelVM.itemsVM.itemID, enabled: runningMode() === RUNNING_MODE.DESIGN" readonly>
                             <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
                                    data-bind="textInput: rightPanelVM.itemsVM.itemWeight, enabled: runningMode() === RUNNING_MODE.DESIGN">
                         </div>

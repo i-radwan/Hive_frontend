@@ -211,7 +211,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let rob = state.map.getRobot(self.activeRobotRow, self.activeRobotCol);
 
-        let id = parseInt(self.id());
+        let id = rob.id;
 
         state.map.updateObject(self.activeRobotRow, self.activeRobotCol, {
             type: MAP_CELL.ROBOT,
@@ -220,23 +220,21 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             load_cap: parseInt(self.loadCap()),
             ip: self.ip(),
             port: self.port()
-        }, rob.id);
-
-        state.nextIDs.robot = Math.max(state.nextIDs.robot, id + 1);
+        });
 
         shouter.notifySubscribers({
             text: "Robot updated successfully!",
             type: MSG_TYPE.INFO
         }, SHOUT.MSG);
 
-        unselect();
-        clear();
-
         gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HOVER,
+            type: EVENT_TO_GFX.OBJECT_COLORIZE,
             data: {
                 type: MAP_CELL.ROBOT,
-                color: GFX_SVG_DEFAULT_COLOR.ROBOT
+                id: id,
+                row: self.activeRobotRow,
+                col: self.activeRobotCol,
+                color: self.color()
             }
         });
     };

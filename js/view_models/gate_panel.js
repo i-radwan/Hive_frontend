@@ -183,35 +183,10 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             return false;
         }
 
-        if (!check())
-            return false;
-
-        let fac = state.map.getSpecificFacility(self.activeGateRow, self.activeGateCol, MAP_CELL.GATE);
-
-        let id = parseInt(self.id());
-
-        state.map.updateObject(self.activeGateRow, self.activeGateCol, {
-            type: MAP_CELL.GATE,
-            id: id
-        }, fac.id);
-
-        state.nextIDs.gate = Math.max(state.nextIDs.gate, id + 1);
-
         shouter.notifySubscribers({
             text: "Gate updated successfully!",
             type: MSG_TYPE.INFO
         }, SHOUT.MSG);
-
-        unselect();
-        clear();
-
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HOVER,
-            data: {
-                type: MAP_CELL.GATE,
-                color: GFX_SVG_DEFAULT_COLOR.GATE
-            }
-        });
     };
 
     self.handleEsc = function () {

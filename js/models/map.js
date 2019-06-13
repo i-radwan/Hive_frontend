@@ -86,15 +86,13 @@ let Map = function () {
         self.objects[[obj.id, obj.type]] = [r, c];
     };
 
-    self.updateObject = function(r, c, obj, old_id) {
+    self.updateObject = function(r, c, obj) {
         let objs = self.grid[r][c].objects;
         let objsLen = objs.length;
 
         for (let i = 0; i < objsLen; ++i) {
-            if (objs[i].type === obj.type && objs[i].id === old_id) {
+            if (objs[i].type === obj.type && objs[i].id === obj.id) {
                 objs[i] = obj;
-
-                delete self.objects[[old_id, obj.type]];
 
                 self.objects[[obj.id, obj.type]] = [r, c];
 

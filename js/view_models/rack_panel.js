@@ -209,7 +209,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         let fac = state.map.getSpecificFacility(self.activeRackRow, self.activeRackCol, MAP_CELL.RACK);
 
-        let id = parseInt(self.id());
+        let id = fac.id;
 
         state.map.updateObject(self.activeRackRow, self.activeRackCol, {
             type: MAP_CELL.RACK,
@@ -217,25 +217,12 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             capacity: parseInt(self.capacity()),
             weight: parseInt(self.weight()),
             items: ko.mapping.toJS(self.items())
-        }, fac.id);
-
-        state.nextIDs.rack = Math.max(state.nextIDs.rack, id + 1);
+        });
 
         shouter.notifySubscribers({
             text: "Rack updated successfully!",
             type: MSG_TYPE.INFO
         }, SHOUT.MSG);
-
-        unselect();
-        clear();
-
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HOVER,
-            data: {
-                type: MAP_CELL.RACK,
-                color: GFX_SVG_DEFAULT_COLOR.RACK
-            }
-        });
     };
 
     self.addItem = function () {

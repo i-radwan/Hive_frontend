@@ -183,35 +183,10 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
             return false;
         }
 
-        if (!check())
-            return false;
-
-        let fac = state.map.getSpecificFacility(self.activeStationRow, self.activeStationCol, MAP_CELL.STATION);
-
-        let id = parseInt(self.id());
-
-        state.map.updateObject(self.activeStationRow, self.activeStationCol, {
-            type: MAP_CELL.STATION,
-            id: id
-        }, fac.id);
-
-        state.nextIDs.station = Math.max(state.nextIDs.station, id + 1);
-
         shouter.notifySubscribers({
             text: "Station updated successfully!",
             type: MSG_TYPE.INFO
         }, SHOUT.MSG);
-
-        unselect();
-        clear();
-
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_HOVER,
-            data: {
-                type: MAP_CELL.STATION,
-                color: GFX_SVG_DEFAULT_COLOR.STATION
-            }
-        });
     };
 
     self.handleEsc = function () {
