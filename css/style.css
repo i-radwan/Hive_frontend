@@ -457,11 +457,11 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .lpanel-details-bottom-actions .delete-label {
-    font-size: 9px;
+    font-size: 10px;
     position: absolute;
     right: 12px;
-    bottom: 5px;
-    color: #8b0000;
+    bottom: 4px;
+    color: #d10000;
 }
 
 /*===============================================================*/
@@ -822,7 +822,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .rpanel .logs .item i.error {
-    color: #8b0000;
+    color: #d10000;
 }
 
 .rpanel .logs .item i.large {

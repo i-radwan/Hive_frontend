@@ -161,6 +161,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.gateVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
+                           data-toggle="tooltip" title="Update"
                            data-bind="click: leftPanelVM.gateVM.update"></i>
                         <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
@@ -201,6 +202,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.robotVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
+                           data-toggle="tooltip" title="Update"
                            data-bind="click: leftPanelVM.robotVM.update"></i>
                         <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
@@ -246,7 +248,9 @@
                                         <div class="col-md-5 text-right">Quantity</div>
                                     </div>
                                     <div class="col-md-2 item-list-icon text-right">
-                                        <i class="fas fa-minus" data-bind="click: leftPanelVM.rackVM.removeAll"></i>
+                                        <i class="fas fa-minus"
+                                           data-toggle="tooltip" title="Remove all"
+                                           data-bind="click: leftPanelVM.rackVM.removeAll"></i>
                                     </div>
                                 </div>
                                 <div class="items-list-rows">
@@ -260,6 +264,7 @@
                                             </div>
                                             <div class="col-md-2 item-list-icon text-right">
                                                 <i class="fas fa-minus"
+                                                   data-toggle="tooltip" title="Remove"
                                                    data-bind="click: $parent.leftPanelVM.rackVM.removeItem"></i>
                                             </div>
                                         </div>
@@ -282,6 +287,7 @@
                                 </div>
                                 <div class="col-md-2 item-container-icon">
                                     <i class="fas fa-plus"
+                                       data-toggle="tooltip" title="Add"
                                        data-bind="click: leftPanelVM.rackVM.addItem"></i>
                                 </div>
                             </div>
@@ -292,6 +298,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.rackVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
+                           data-toggle="tooltip" title="Update"
                            data-bind="click: leftPanelVM.rackVM.update"></i>
                         <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
@@ -312,6 +319,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.stationVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
+                           data-toggle="tooltip" title="Update"
                            data-bind="click: leftPanelVM.stationVM.update"></i>
                         <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
@@ -332,6 +340,7 @@
                     <div class="lpanel-details-bottom-actions"
                          data-bind="css: {hidden: !leftPanelVM.obstacleVM.editing() || runningMode() !== RUNNING_MODE.DESIGN}">
                         <i class="fas fa-check"
+                           data-toggle="tooltip" title="Update"
                            data-bind="click: leftPanelVM.obstacleVM.update"></i>
                         <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
@@ -349,38 +358,38 @@
                             <div class="inner-container">
                                 <div class="toggle"
                                      data-bind="click: function(){leftPanelVM.orderVM.toggleActiveOrdersPanel(ORDER_PANEL.ADD)}">
-                                    <p><i class="fas fa-plus"></i></p>
+                                    <p><i data-toggle="tooltip" title="Add order" class="fas fa-plus"></i></p>
                                 </div>
                                 <div class="toggle"
                                      data-bind="click: function(){leftPanelVM.orderVM.toggleActiveOrdersPanel(ORDER_PANEL.ONGOING)}">
-                                    <p><i class="fas fa-redo-alt"></i></p>
+                                    <p><i data-toggle="tooltip" title="Ongoing orders" class="fas fa-redo-alt"></i></p>
                                 </div>
                                 <div class="toggle"
                                      data-bind="click: function(){leftPanelVM.orderVM.toggleActiveOrdersPanel(ORDER_PANEL.UPCOMING)}">
-                                    <p><i class="far fa-hourglass"></i></p>
+                                    <p><i data-toggle="tooltip" title="Upcoming orders" class="far fa-hourglass"></i></p>
                                 </div>
                                 <div class="toggle"
                                      data-bind="click: function(){leftPanelVM.orderVM.toggleActiveOrdersPanel(ORDER_PANEL.FINISHED)}">
-                                    <p><i class="fas fa-check"></i></p>
+                                    <p><i data-toggle="tooltip" title="Finished orders" class="fas fa-check"></i></p>
                                 </div>
                             </div>
                             <div class="inner-container"
                                  data-bind="style: {'clip-path': leftPanelVM.orderVM.tabsClipPath}">
                                 <div class="toggle"
                                      data-bind="click: function(){leftPanelVM.orderVM.toggleActiveOrdersPanel(ORDER_PANEL.ADD)}">
-                                    <p><i class="fas fa-plus"></i></p>
+                                    <p><i data-toggle="tooltip" title="Add order" class="fas fa-plus"></i></p>
                                 </div>
                                 <div class="toggle"
                                      data-bind="click: function(){leftPanelVM.orderVM.toggleActiveOrdersPanel(ORDER_PANEL.ONGOING)}">
-                                    <p><i class="fas fa-redo-alt"></i></p>
+                                    <p><i data-toggle="tooltip" title="Ongoing orders" class="fas fa-redo-alt"></i></p>
                                 </div>
                                 <div class="toggle"
                                      data-bind="click: function(){leftPanelVM.orderVM.toggleActiveOrdersPanel(ORDER_PANEL.UPCOMING)}">
-                                    <p><i class="far fa-hourglass"></i></p>
+                                    <p><i data-toggle="tooltip" title="upcoming orders" class="far fa-hourglass"></i></p>
                                 </div>
                                 <div class="toggle"
                                      data-bind="click: function(){leftPanelVM.orderVM.toggleActiveOrdersPanel(ORDER_PANEL.FINISHED)}">
-                                    <p><i class="fas fa-check"></i></p>
+                                    <p><i data-toggle="tooltip" title="Finished orders" class="fas fa-check"></i></p>
                                 </div>
                             </div>
                         </div>
@@ -430,7 +439,9 @@
                                         <div class="col-md-5 text-right">Quantity</div>
                                     </div>
                                     <div class="col-md-2 item-list-icon text-right">
-                                        <i class="fas fa-minus" data-bind="click: leftPanelVM.orderVM.removeAll"></i>
+                                        <i class="fas fa-minus"
+                                           data-toggle="tooltip" title="Remove all"
+                                           data-bind="click: leftPanelVM.orderVM.removeAll"></i>
                                     </div>
                                 </div>
                                 <div class="items-list-rows">
@@ -444,6 +455,7 @@
                                             </div>
                                             <div class="col-md-2 item-list-icon text-right">
                                                 <i class="fas fa-minus"
+                                                   data-toggle="tooltip" title="Remove"
                                                    data-bind="click: $parent.leftPanelVM.orderVM.removeItem"></i>
                                             </div>
                                         </div>
@@ -465,14 +477,18 @@
                                            data-bind="textInput: leftPanelVM.orderVM.itemQuantity">
                                 </div>
                                 <div class="col-md-2 item-container-icon">
-                                    <i class="fas fa-plus" data-bind="click: leftPanelVM.orderVM.addItem"></i>
+                                    <i class="fas fa-plus"
+                                       data-toggle="tooltip" title="Add"
+                                       data-bind="click: leftPanelVM.orderVM.addItem"></i>
                                 </div>
                             </div>
                         </div>
 
                         <!--======================== BOTTOM ACTIONS ========================-->
                         <div class="lpanel-details-bottom-actions">
-                            <i class="fas fa-check" data-bind="click: leftPanelVM.orderVM.add"></i>
+                            <i class="fas fa-check"
+                               data-toggle="tooltip" title="Add"
+                               data-bind="click: leftPanelVM.orderVM.add"></i>
                         </div>
                     </div>
 
@@ -519,6 +535,7 @@
 
                                                     <div class="col-md-2 more">
                                                         <i class="fas fa-ellipsis-h"
+                                                           data-toggle="tooltip" title="More"
                                                            data-bind="click: function(){more(!more())}, css: {'cwise-rotated-90': more}"></i>
                                                     </div>
                                                 </div>
@@ -615,14 +632,19 @@
                     <img src="images/meta/logo_3.png">
                 </div>
 
-                <i class="fas fa-stop stop" data-bind="click: centerPanelVM.controlConsoleVM.stop"></i>
+                <i class="fas fa-stop stop"
+                   data-toggle="tooltip" title="Stop"
+                   data-bind="click: centerPanelVM.controlConsoleVM.stop"></i>
                 <i class="fas play-pause"
+                   data-toggle="tooltip" title="Play/Pause"
                    data-bind="click: centerPanelVM.controlConsoleVM.play,
                               css: {'fa-play play': !centerPanelVM.controlConsoleVM.playing(),
                                     'fa-pause pause': centerPanelVM.controlConsoleVM.playing()}"></i>
                 <div class="deploy-switch" data-bind="click: centerPanelVM.controlConsoleVM.deploy">Deploy</div>
 
-                <i class="fas fa-cog settings-icon" id="settings-icon" data-bind="click: centerPanelVM.toggleSettings"></i>
+                <i class="fas fa-cog settings-icon" id="settings-icon"
+                   data-toggle="tooltip" title="Settings"
+                   data-bind="click: centerPanelVM.toggleSettings"></i>
             </div>
 
             <span class="coordinates" data-bind="text: centerPanelVM.controlConsoleVM.coordinates">(11, 17)</span>
@@ -730,7 +752,9 @@
                                 <div class="col-md-5 text-right">Weight<sub>kg</sub></div>
                             </div>
                             <div class="col-md-2 item-list-icon text-right">
-                                <i class="fas fa-minus" data-bind="click: rightPanelVM.itemsVM.removeAll"></i>
+                                <i class="fas fa-minus"
+                                   data-toggle="tooltip" title="Remove all"
+                                   data-bind="click: rightPanelVM.itemsVM.removeAll"></i>
                             </div>
                         </div>
                         <div class="items-list-rows">
@@ -745,6 +769,7 @@
                                     </div>
                                     <div class="col-md-2 item-list-icon text-right">
                                         <i class="fas fa-minus"
+                                           data-toggle="tooltip" title="Remove"
                                            data-bind="click: $parent.rightPanelVM.itemsVM.remove"></i>
                                     </div>
                                 </div>
@@ -767,7 +792,9 @@
                                    data-bind="textInput: rightPanelVM.itemsVM.itemWeight, enabled: runningMode() === RUNNING_MODE.DESIGN">
                         </div>
                         <div class="col-md-2 item-container-icon">
-                            <i class="fas fa-plus" data-bind="click: rightPanelVM.itemsVM.add"></i>
+                            <i class="fas fa-plus"
+                               data-toggle="tooltip" title="Add"
+                               data-bind="click: rightPanelVM.itemsVM.add"></i>
                         </div>
                     </div>
                 </div>
