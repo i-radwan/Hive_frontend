@@ -146,6 +146,10 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     type: msg.data.status,
                     persistent: true
                 }, SHOUT.MSG);
+
+                if (msg.data.status === MSG_TYPE.ERROR) {
+                    self.centerPanelVM.controlConsoleVM.stop();
+                }
                 break;
         }
     };
