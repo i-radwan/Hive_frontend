@@ -53,9 +53,8 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 }, function () {
                     // Reconnect
                     setTimeout(function () {
-                        console.log("Connecting");
                         self.connect();
-                    }, 150);
+                    }, RECONNECT_INTERVAL);
                 });
         } catch (e) {
         }

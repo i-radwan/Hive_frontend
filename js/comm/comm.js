@@ -5,13 +5,6 @@ let comm = function (serverMW) {
 
     self.connected = false;
 
-    /**
-     * Connects to a remote server.
-     *
-     * @param ip
-     * @param port
-     * @param callback
-     */
     self.connect = function (ip, port, callback, errorCallback) {
         if (self.rcv === undefined) {
             errorCallback();

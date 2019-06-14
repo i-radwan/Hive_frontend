@@ -1,6 +1,8 @@
 SERVER_IP = "127.0.0.1";
 SERVER_PORT = 1337;
 
+RECONNECT_INTERVAL = 150;   // ms
+
 MIN_TIMESTEP = 1000;        // ms
 
 //
