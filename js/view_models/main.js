@@ -118,18 +118,24 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 }
 
                 self.centerPanelVM.controlConsoleVM.updateTimestep(self.timestep);
+
+                if (self.pendingActions === 0) {
+                    comm.send({
+                        type: MSG_TO_SERVER.ACK
+                    });
+                }
                 break;
 
             case MSG_FROM_SERVER.DEACTIVATE:
                 self.leftPanelVM.robotVM.deactivateRobot(msg.data.id);
 
-                self.pendingActions--;
+                // self.pendingActions--;
                 break;
 
             case MSG_FROM_SERVER.ACTIVATE:
                 self.leftPanelVM.robotVM.activateRobot(msg.data.id);
 
-                self.pendingActions++;
+                // self.pendingActions++;
                 break;
 
             case MSG_FROM_SERVER.MSG:
@@ -176,11 +182,11 @@ let mainViewModel = function (gfxEventHandler, comm) {
      * {@link robotPanelViewModel#toggleActivation}
      */
     self.toggleActivation = function () {
-        if (!self.leftPanelVM.robotVM.deactivated()) { // Deactivate the robot
-            self.pendingActions--;
-        } else {
-            self.pendingActions++;
-        }
+        // if (!self.leftPanelVM.robotVM.deactivated()) { // Deactivate the robot
+        //     self.pendingActions--;
+        // } else {
+        //     self.pendingActions++;
+        // }
 
         self.leftPanelVM.robotVM.toggleActivation();
     };
