@@ -26,7 +26,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     self.logger = self.rightPanelVM.addLog;
 
-    self.pendingActions = 0; // No. of actions sent to graphics and waiting for their ACKs
+    self.pendingActions = []; // No. of actions sent to graphics and waiting for their ACKs
 
     self.loadingVisible = ko.observable(false);
 
@@ -51,6 +51,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
             case MSG_FROM_SERVER.UPDATE:
                 self.timestep = msg.data.timestep;
                 self.state.timestep = self.timestep;
+
+                self.pendingActions = [];
 
                 let actions = msg.data.actions;
                 let logs = msg.data.logs;
@@ -78,7 +80,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         self.leftPanelVM.robotVM.offload(data.id);
                     }
 
-                    self.pendingActions++;
+                    self.pendingActions.push(data.id);
                 }
 
                 for (let i = 0; i < logs.length; ++i) {
@@ -119,7 +121,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
                 self.centerPanelVM.controlConsoleVM.updateTimestep(self.timestep);
 
-                if (self.pendingActions === 0) {
+                if (self.pendingActions.length === 0) {
                     setTimeout(function () {
                         comm.send({
                             type: MSG_TO_SERVER.ACK
@@ -131,13 +133,12 @@ let mainViewModel = function (gfxEventHandler, comm) {
             case MSG_FROM_SERVER.DEACTIVATE:
                 self.leftPanelVM.robotVM.deactivateRobot(msg.data.id);
 
-                // self.pendingActions--;
+                // Remove from pendingActions if it exists there
+                removeElement(self.pendingActions, msg.data.id);
                 break;
 
             case MSG_FROM_SERVER.ACTIVATE:
                 self.leftPanelVM.robotVM.activateRobot(msg.data.id);
-
-                // self.pendingActions++;
                 break;
 
             case MSG_FROM_SERVER.MSG:
@@ -188,11 +189,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
      * {@link robotPanelViewModel#toggleActivation}
      */
     self.toggleActivation = function () {
-        // if (!self.leftPanelVM.robotVM.deactivated()) { // Deactivate the robot
-        //     self.pendingActions--;
-        // } else {
-        //     self.pendingActions++;
-        // }
+        if (!self.leftPanelVM.robotVM.deactivated()) { // Deactivate the robot
+            removeElement(self.pendingActions, parseInt(self.leftPanelVM.robotVM.id()));
+        }
 
         self.leftPanelVM.robotVM.toggleActivation();
     };
@@ -218,7 +217,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
             self.leftPanelVM.robotVM.doneMoving(data.data.id);
         }
 
-        if (--self.pendingActions === 0) { // All actions are done
+        removeElement(self.pendingActions, data.data.id);
+
+        if (self.pendingActions.length === 0) { // All actions are done
             comm.send({
                 type: MSG_TO_SERVER.ACK
             });
@@ -233,6 +234,14 @@ let mainViewModel = function (gfxEventHandler, comm) {
         gfxEventHandler({
             type: EVENT_TO_GFX.ESC
         });
+    };
+
+    let removeElement = function (arr, elm) {
+        let index = arr.indexOf(elm);
+
+        if (index > -1) {
+            arr.splice(index, 1);
+        }
     };
 
     gfxEventHandler({
