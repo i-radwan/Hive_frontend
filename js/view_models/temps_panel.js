@@ -36,7 +36,8 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
                             temp[j][k] = {
                                 objects: [{
                                     type: MAP_CELL.GATE,
-                                    id: 30 * j + k
+                                    id: 30 * j + k,
+                                    color: GFX_SVG_DEFAULT_COLOR.GATE
                                 }]
                             };
 
@@ -64,7 +65,8 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
                                         id: 1,
                                         quantity: 10
                                     }],
-                                    capacity: RACK_INIT_CAP
+                                    capacity: RACK_INIT_CAP,
+                                    color: GFX_SVG_DEFAULT_COLOR.RACK
                                 }]
                             };
 
@@ -74,7 +76,8 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
                             temp[j][k] = {
                                 objects: [{
                                     type: MAP_CELL.STATION,
-                                    id: 30 * j + k
+                                    id: 30 * j + k,
+                                    color: GFX_SVG_DEFAULT_COLOR.STATION
                                 }]
                             };
 
@@ -84,7 +87,8 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
                             temp[j][k] = {
                                 objects: [{
                                     type: MAP_CELL.OBSTACLE,
-                                    id: 30 * j + k
+                                    id: 30 * j + k,
+                                    color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
                                 }]
                             };
 
