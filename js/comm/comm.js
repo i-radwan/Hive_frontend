@@ -12,8 +12,10 @@ let comm = function (serverMW) {
      * @param port
      * @param callback
      */
-    self.connect = function (ip, port, callback) {
+    self.connect = function (ip, port, callback, errorCallback) {
         if (self.rcv === undefined) {
+            errorCallback();
+
             throw "Error, no rcv function defined!";
         }
 
@@ -27,6 +29,8 @@ let comm = function (serverMW) {
 
         self.ws.onerror = function (error) {
             self.connected = false;
+
+            errorCallback();
         };
 
         self.ws.onmessage = function (e) {

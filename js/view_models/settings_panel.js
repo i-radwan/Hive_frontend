@@ -43,14 +43,20 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
         try {
             shouter.notifySubscribers(true, SHOUT.LOADING);
 
-            comm.connect(self.ip(), self.port(), function () {
-                shouter.notifySubscribers({
-                    text: "Connected to server!",
-                    type: MSG_TYPE.INFO,
-                    volatile: true
-                }, SHOUT.MSG);
-            });
-
+            comm.connect(self.ip(), self.port(),
+                function () {
+                    shouter.notifySubscribers({
+                        text: "Connected to server!",
+                        type: MSG_TYPE.INFO,
+                        volatile: true
+                    }, SHOUT.MSG);
+                }, function () {
+                    // Reconnect
+                    setTimeout(function () {
+                        console.log("Connecting");
+                        self.connect();
+                    }, 150);
+                });
         } catch (e) {
         }
 
@@ -63,6 +69,8 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
         return false;
     };
+
+    self.connect();
 };
 
 module.exports = settingsPanelViewModel;
