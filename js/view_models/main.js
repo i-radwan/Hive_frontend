@@ -123,7 +123,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
                 if (self.pendingActions.length === 0) {
                     setTimeout(function () {
-                        if (self.runningMode() !== RUNNING_MODE.DESIGN) {
+                        if (self.runningMode() === RUNNING_MODE.SIMULATE || self.runningMode() === RUNNING_MODE.DEPLOY) {
                             comm.send({
                                 type: MSG_TO_SERVER.ACK
                             });
