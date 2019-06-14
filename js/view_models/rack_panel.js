@@ -327,15 +327,6 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             return false;
         }
 
-        if (self.items().length === 0) {
-            shouter.notifySubscribers({
-                text: "Rack must contain items!",
-                type: MSG_TYPE.ERROR
-            }, SHOUT.MSG);
-
-            return false;
-        }
-
         // -ve values
         if (parseInt(self.id()) < 0 || parseInt(self.capacity()) < 0 || parseInt(self.weight()) < 0) {
             shouter.notifySubscribers({
