@@ -27,7 +27,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return false;
         }
 
-        let racks = state.getItemRacks(this.id); // The racks who use this item
+        let racks = state.map.getItemRacks(this.id); // The racks who use this item
 
         if (racks.length === 0) {
             self.items.remove(this);
