@@ -183,11 +183,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
         }
     };
 
-    /**
-     * Listens for robot activate/deactivate button click.
-     *
-     * {@link robotPanelViewModel#toggleActivation}
-     */
     self.toggleActivation = function () {
         if (!self.leftPanelVM.robotVM.deactivated()) { // Deactivate the robot
             removeElement(self.pendingActions, parseInt(self.leftPanelVM.robotVM.id()));

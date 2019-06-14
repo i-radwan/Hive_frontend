@@ -220,7 +220,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             color: self.color(),
             load_cap: parseInt(self.loadCap()),
             ip: self.ip(),
-            port: self.port()
+            port: self.port(),
+            direction: ROBOT_DIR.RIGHT
         });
 
         shouter.notifySubscribers({
