@@ -1,4 +1,5 @@
 // Includes
+const remote = require('electron').remote;
 require("./utils/constants");
 let $ = require('jquery');
 let ko = require('knockout');
@@ -28,4 +29,20 @@ $(document).ready(() => {
     };
 
     comm.rcv = rcv;
+
+    // Configure title bar buttons
+    $('.exit').on('click', e => {
+        remote.getCurrentWindow().close();
+    });
+
+    $('.minimize').on('click', e => {
+        remote.getCurrentWindow().minimize();
+    });
+
+    $('.zoom').on('click', e => {
+        if (remote.getCurrentWindow().isMaximized())
+            remote.getCurrentWindow().unmaximize();
+        else
+            remote.getCurrentWindow().maximize();
+    });
 });

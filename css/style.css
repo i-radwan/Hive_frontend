@@ -8,9 +8,11 @@
 /*==============================================================*/
 
 body {
-    height: 100%;
-    padding: 15px 30px;
+    padding: 30px 30px 15px;
     background-color: #393c3e;
+}
+
+.body-row {
 }
 
 .overlay {
@@ -118,7 +120,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .items-container {
-    max-height: 390px;
+    max-height: calc(100vh - 300px);
     overflow: hidden;
     overflow-y: scroll;
 }
@@ -182,6 +184,126 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*===============================================================*/
+/*========================= TITLE BAR ===========================*/
+/*===============================================================*/
+
+.title-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 25px;
+    font-size: 11pt;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    -webkit-app-region:drag;
+}
+
+.title-bar:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.buttons {
+    height: 25px;
+    width: 60px;
+    line-height: 0;
+    display: inline-block;
+    -webkit-app-region: no-drag;
+}
+
+.buttons:hover a {
+    visibility: visible;
+}
+
+.exit {
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    background: #ff5c5c;
+    font-size: 6pt;
+    text-align: center;
+    width: 11px;
+    height: 11px;
+    border: 1px solid #e33e41;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 1;
+}
+
+.exit:active {
+    background: #c14645;
+    border: 1px solid #b03537;
+}
+
+.exit-button {
+    color: #820005;
+    visibility: hidden;
+}
+
+.minimize {
+    position: absolute;
+    top: 7px;
+    left: 25px;
+    background: #ffbd4c;
+    font-size: 6pt;
+    text-align: center;
+    width: 11px;
+    height: 11px;
+    border: 1px solid #e09e3e;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 1;
+}
+
+.minimize:active {
+    background: #c08e38;
+    border: 1px solid #af7c33;
+}
+
+.minimize:active .minimize-button {
+    color: #5a2607;
+}
+
+.minimize-button {
+    color: #9a5518;
+    visibility: hidden;
+}
+
+.zoom {
+    position: absolute;
+    top: 7px;
+    left: 43px;
+    background: #ff5c5c;
+    font-size: 6pt;
+    text-align: center;
+    width: 11px;
+    height: 11px;
+    border: 1px solid #e33e41;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 1;
+}
+
+/*.zoom:active {*/
+/*    background: #029740;*/
+/*    border: 1px solid #128435;*/
+/*}*/
+
+/*.zoom:active .zoom-button {*/
+/*    color: #003107;*/
+/*}*/
+
+.zoom-button {
+    color: #006519;
+    visibility: hidden;
+}
+
+/*===============================================================*/
 /*========================= LEFT PANEL ==========================*/
 /*===============================================================*/
 
@@ -204,7 +326,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .lpanel .tiles ul li {
     background-color: #282b2d;
-    padding: 15px 0;
+    padding: calc((100vh - 445px) / 16) 0;
 }
 
 .lpanel .tiles ul li:hover {
@@ -213,9 +335,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .lpanel .tiles ul li.inactive {
-    cursor: default;
     background-color: #282b2d;
     color: #4b4b4b;
+    cursor: default;
 }
 
 .lpanel .tiles ul li.inactive:hover {
@@ -223,9 +345,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .lpanel .tiles ul li.active {
-    cursor: default;
     background-color: transparent;
     color: #e09500;
+    cursor: default;
 }
 
 .lpanel .tiles ul li.active:hover {
@@ -249,7 +371,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .lpanel .details {
     overflow-y: scroll;
-    height: calc(100vh - 30px);
+    height: calc(100vh - 45px);
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -388,7 +510,9 @@ input[type=number]::-webkit-outer-spin-button {
 /*========================= RACK PANEL ==========================*/
 /*===============================================================*/
 .lpanel .details .rack .items-container {
-    max-height: 120px;
+    max-height: calc(100vh - 500px);
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 /*===============================================================*/
@@ -403,7 +527,6 @@ input[type=number]::-webkit-outer-spin-button {
 /*======================== ORDERS PANEL =========================*/
 /*===============================================================*/
 .lpanel .details .order .items-container {
-    max-height: 260px;
 }
 
 .lpanel .order .tab .container {
@@ -476,7 +599,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .order .add {
-    max-height: 500px;
+    max-height: calc(100vh - 170px);
     overflow-y: scroll;
 }
 
@@ -490,7 +613,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .orders-list {
-    height: 490px;
+    height: 475px;
     overflow-y: scroll;
     font-family: 'Asap', sans-serif;
     color: #bababa;
@@ -623,7 +746,7 @@ input[type=number]::-webkit-outer-spin-button {
 .rpanel .logs {
     overflow: hidden;
     overflow-y: scroll;
-    height: 570px;
+    height: 555px;
     color: #bababa;
     font-size: 11px;
 }
@@ -721,7 +844,7 @@ input[type=number]::-webkit-outer-spin-button {
 .rpanel .stats {
     overflow: hidden;
     overflow-y: scroll;
-    height: 570px;
+    height: 555px;
 }
 
 .stats .row {
@@ -822,7 +945,7 @@ input[type=number]::-webkit-outer-spin-button {
 /*==============================================================*/
 
 .center-col {
-    height: 640px;
+    height: calc(100vh - 45px);
     padding: 0 30px;
 }
 
@@ -834,7 +957,7 @@ input[type=number]::-webkit-outer-spin-button {
     position: relative;
     z-index: 0;
     color: #bababa;
-    height: calc(80% - 15px);
+    height: calc(100% - 140px);
     margin-bottom: 15px;
     background: #1d1d1e;
     box-shadow: 0 0 10px black;
@@ -854,7 +977,7 @@ input[type=number]::-webkit-outer-spin-button {
 .control-row {
     position: relative;
     z-index: 2;
-    height: 20%;
+    height: 125px;
     box-shadow: 0 0 10px black;
     background: #1d1d1e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='100'><rect width='56' height='100' fill='#1d1d1e'/><path d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/><path d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(0, 0, 0, 0.13)' stroke-width='2'/></svg>") 0 15px;
     vertical-align: middle;
