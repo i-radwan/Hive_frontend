@@ -215,7 +215,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                 type: MSG_TO_SERVER.START,
                 data: {
                     mode: mode,
-                    state: JSON.stringify(state, null, 2)
+                    state: state
                 }
             });
         } else if (runningMode() === RUNNING_MODE.PAUSE) {
