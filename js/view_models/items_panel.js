@@ -109,6 +109,19 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         // Scroll view to bottom
         let container = $(".rpanel .items .items-list .items-list-rows");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
+
+        // Return focus to new item fields
+        $(".rpanel .add-item .item-name").focus();
+        $(".rpanel .add-item .item-name").select();
+    };
+
+    self.onEnter = function (d, e) {
+        if (e.keyCode !== 13)  // Not Enter
+            return true;
+
+        self.add();
+
+        return true;
     };
 
     let check = function () {

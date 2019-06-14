@@ -95,17 +95,21 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (!checkItem())
             return;
 
+        let id = parseInt(self.itemID());
         self.items.push({
-            id: parseInt(self.itemID()),
+            id: id,
             quantity: parseInt(self.itemQuantity())
         });
 
-        self.itemID("");
-        self.itemQuantity("");
+        self.itemID(id + 1);
 
         // Scroll view to bottom
         let container = $(".lpanel .order .add");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
+
+        // Return focus to new item fields
+        $(".lpanel .order .add-item .item-id").focus();
+        $(".lpanel .add-item .item-id").select();
     };
 
     self.removeItem = function () {
@@ -247,6 +251,15 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.ongoingOrders.removeAll();
         self.upcomingOrders.removeAll();
         self.finishedOrders.removeAll();
+    };
+
+    self.onEnter = function (d, e) {
+        if (e.keyCode !== 13)  // Not Enter
+            return true;
+
+        self.addItem();
+
+        return true;
     };
 
     let sendOrderToServer = function (order) {

@@ -238,16 +238,22 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (!checkItem())
             return;
 
+        let id = parseInt(self.itemID());
+
         self.items.push({
-            id: parseInt(self.itemID()),
+            id: id,
             quantity: parseInt(self.itemQuantity())
         });
 
-        console.log(state.map);
+        self.itemID(id + 1);
 
         // Scroll view to bottom
         let container = $(".lpanel .rack .items-list .items-list-rows");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
+
+        // Return focus to new item fields
+        $(".lpanel .rack .add-item .item-id").focus();
+        $(".lpanel .add-item .item-id").select();
     };
 
     self.removeItem = function () {
@@ -315,6 +321,15 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.handleEsc = function () {
         unselect();
         clear();
+    };
+
+    self.onEnter = function (d, e) {
+        if (e.keyCode !== 13)  // Not Enter
+            return true;
+
+        self.addItem();
+
+        return true;
     };
 
     let check = function () {

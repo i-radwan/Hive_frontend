@@ -276,14 +276,18 @@
                         <hr class="items-separator">
 
                         <!--======================== ADD ITEMS ========================-->
-                        <div class="form-group">
+                        <div class="form-group add-item">
                             <label>Add Item</label>
                             <div class="row item-container">
                                 <div class="col-md-10 item-container-fields">
-                                    <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                                           data-bind="textInput: leftPanelVM.rackVM.itemID, enable: runningMode() === RUNNING_MODE.DESIGN">
+                                    <input type="number" class="form-control bg-dark text-light item-id" placeholder="ID"
+                                           data-bind="textInput: leftPanelVM.rackVM.itemID,
+                                                      enable: runningMode() === RUNNING_MODE.DESIGN,
+                                                      event: {keypress: leftPanelVM.rackVM.onEnter}">
                                     <input type="number" class="form-control bg-dark text-light" placeholder="Quantity"
-                                           data-bind="textInput: leftPanelVM.rackVM.itemQuantity, enable: runningMode() === RUNNING_MODE.DESIGN">
+                                           data-bind="textInput: leftPanelVM.rackVM.itemQuantity,
+                                                      enable: runningMode() === RUNNING_MODE.DESIGN,
+                                                      event: {keypress: leftPanelVM.rackVM.onEnter}">
                                 </div>
                                 <div class="col-md-2 item-container-icon">
                                     <i class="fas fa-plus"
@@ -467,14 +471,16 @@
                         <!--========================= ADD ITEM =========================-->
                         <hr class="items-separator">
 
-                        <div class="form-group">
+                        <div class="form-group add-item">
                             <label>Add Item</label>
                             <div class="row item-container">
                                 <div class="col-md-10 item-container-fields">
-                                    <input type="number" class="form-control bg-dark text-light" placeholder="Number"
-                                           data-bind="textInput: leftPanelVM.orderVM.itemID">
+                                    <input type="number" class="form-control bg-dark text-light item-id" placeholder="ID"
+                                           data-bind="textInput: leftPanelVM.orderVM.itemID,
+                                                      event: {keypress: leftPanelVM.orderVM.onEnter}">
                                     <input type="number" class="form-control bg-dark text-light" placeholder="Quantity"
-                                           data-bind="textInput: leftPanelVM.orderVM.itemQuantity">
+                                           data-bind="textInput: leftPanelVM.orderVM.itemQuantity,
+                                                      event: {keypress: leftPanelVM.orderVM.onEnter}">
                                 </div>
                                 <div class="col-md-2 item-container-icon">
                                     <i class="fas fa-plus"
@@ -780,16 +786,21 @@
 
                 <!--========================= ADD ITEM =========================-->
                 <hr class="items-separator">
-                <div class="form-group">
+
+                <div class="form-group add-item">
                     <label>Add Item</label>
                     <div class="row item-container">
                         <div class="col-md-10 item-container-fields">
-                            <input type="text" class="form-control bg-dark text-light large"
+                            <input type="text" class="form-control bg-dark text-light large item-name"
                                    title="Item Name" placeholder="Name" maxlength="10"
-                                   data-bind="textInput: rightPanelVM.itemsVM.itemName, enabled: runningMode() === RUNNING_MODE.DESIGN">
+                                   data-bind="textInput: rightPanelVM.itemsVM.itemName,
+                                              enabled: runningMode() === RUNNING_MODE.DESIGN,
+                                              event: {keypress: rightPanelVM.itemsVM.onEnter}">
                             <input type="number" class="form-control bg-dark text-light small"
                                    title="Weight (Kg)" placeholder="Wgt"
-                                   data-bind="textInput: rightPanelVM.itemsVM.itemWeight, enabled: runningMode() === RUNNING_MODE.DESIGN">
+                                   data-bind="textInput: rightPanelVM.itemsVM.itemWeight,
+                                              enabled: runningMode() === RUNNING_MODE.DESIGN,
+                                              event: {keypress: rightPanelVM.itemsVM.onEnter}">
                         </div>
                         <div class="col-md-2 item-container-icon">
                             <i class="fas fa-plus"

@@ -120,6 +120,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .items-list {
+    font-family: 'Asap', sans-serif;
     color: #bababa;
     font-size: 12px;
     margin-top: 10px;
