@@ -193,9 +193,7 @@ let Map = function () {
         return self.getObject(r, c, type);
     };
 
-    self.getItemRacks = function(id) {
-        let racks = "";
-
+    self.getItemRack = function(id) {
         for (const [k, v] of Object.entries(self.objects)) {
             let key = k.split(",");
 
@@ -206,12 +204,16 @@ let Map = function () {
 
             for (let k = 0; k < rack.items.length; ++k) {
                 if (rack.items[k].id === id) {
-                    racks += rack.id + ", ";
+                    return {
+                        id: rack.id,
+                        row: v[0],
+                        col: v[1]
+                    };
                 }
             }
         }
 
-        return racks;
+        return undefined;
     };
 
     self.getBindableFacility = function(r, c) {

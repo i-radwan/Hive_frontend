@@ -235,23 +235,34 @@
                     <hr class="items-separator" data-bind="css: {hidden: leftPanelVM.rackVM.items().length === 0}">
 
                     <div>
-                        <div class="items-container form-group"
-                             data-bind="css: {hidden: leftPanelVM.rackVM.items().length === 0}">
-                            <span data-bind="foreach: leftPanelVM.rackVM.items">
-                                <div class="row item-container">
-                                    <div class="col-md-10 item-container-fields">
-                                        <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                                               data-bind="textInput: id" readonly>
-                                        <input type="number" class="form-control bg-dark text-light"
-                                               placeholder="Quantity"
-                                               data-bind="textInput: quantity" readonly>
+                        <div class="items-list" data-bind="css: {hidden: leftPanelVM.rackVM.items().length === 0}">
+                            <div class="form-group">
+                                <div class="row items-list-header">
+                                    <div class="row col-md-10">
+                                        <div class="col-md-7 text-left"><b>#ID</b></div>
+                                        <div class="col-md-5 text-right">Quantity</div>
                                     </div>
-                                    <div class="col-md-2 item-container-icon">
-                                        <i class="fas fa-minus"
-                                           data-bind="click: $parent.leftPanelVM.rackVM.removeItem"></i>
+                                    <div class="col-md-2 item-list-icon text-right">
+                                        <i class="fas fa-minus" data-bind="click: leftPanelVM.rackVM.removeAll"></i>
                                     </div>
                                 </div>
-                            </span>
+                                <div class="items-list-rows">
+                                    <span data-bind="foreach: leftPanelVM.rackVM.items">
+                                        <div class="row items-list-row">
+                                            <div class="col-md-10">
+                                                <div class="row">
+                                                    <div class="col-md-5 text-left"><b>#</b><b data-bind="text: id"></b></div>
+                                                    <div class="col-md-7 text-right"><span data-bind="text: quantity"></span></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 item-list-icon text-right">
+                                                <i class="fas fa-minus"
+                                                   data-bind="click: $parent.leftPanelVM.rackVM.removeItem"></i>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         <hr class="items-separator">
@@ -408,24 +419,33 @@
                         <!--====================== ITEMS LIST ======================-->
                         <hr class="items-separator" data-bind="css: {hidden: leftPanelVM.orderVM.items().length === 0}">
 
-                        <div class="items-container" data-bind="css: {hidden: leftPanelVM.orderVM.items().length === 0}">
+                        <div class="items-list" data-bind="css: {hidden: leftPanelVM.orderVM.items().length === 0}">
                             <div class="form-group">
-                                <span data-bind="foreach: leftPanelVM.orderVM.items">
-                                    <div class="row item-container">
-                                        <div class="col-md-10 item-container-fields">
-                                            <input type="number" class="form-control bg-dark text-light"
-                                                   placeholder="Number"
-                                                   data-bind="textInput: id" readonly>
-                                            <input type="number" class="form-control bg-dark text-light"
-                                                   placeholder="Quantity"
-                                                   data-bind="textInput: quantity" readonly>
-                                        </div>
-                                        <div class="col-md-2 item-container-icon">
-                                            <i class="fas fa-minus"
-                                               data-bind="click: $parent.leftPanelVM.orderVM.removeItem"></i>
-                                        </div>
+                                <div class="row items-list-header">
+                                    <div class="row col-md-10">
+                                        <div class="col-md-7 text-left"><b>#ID</b></div>
+                                        <div class="col-md-5 text-right">Quantity</div>
                                     </div>
-                                </span>
+                                    <div class="col-md-2 item-list-icon text-right">
+                                        <i class="fas fa-minus" data-bind="click: leftPanelVM.orderVM.removeAll"></i>
+                                    </div>
+                                </div>
+                                <div class="items-list-rows">
+                                    <span data-bind="foreach: leftPanelVM.orderVM.items">
+                                        <div class="row items-list-row">
+                                            <div class="col-md-10">
+                                                <div class="row">
+                                                    <div class="col-md-5 text-left"><b>#</b><b data-bind="text: id"></b></div>
+                                                    <div class="col-md-7 text-right"><span data-bind="text: quantity"></span></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 item-list-icon text-right">
+                                                <i class="fas fa-minus"
+                                                   data-bind="click: $parent.leftPanelVM.orderVM.removeItem"></i>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
@@ -688,7 +708,7 @@
 
                 <!--========================= SEARCH =========================-->
                 <div class="form-group search">
-                    <input type="text" class="form-control bg-dark text-light" placeholder="Search (ID) ..."
+                    <input type="text" class="form-control bg-dark text-light" placeholder="Search (#ID, Name) ..."
                            data-bind="textInput: rightPanelVM.itemsVM.searchValue">
                 </div>
 
@@ -697,22 +717,36 @@
                    data-bind="css: {hidden: rightPanelVM.itemsVM.items().length !== 0}">No Items!</p>
 
                 <hr class="items-separator" data-bind="css: {hidden: rightPanelVM.itemsVM.items().length === 0}">
-                <div class="items-container" data-bind="css: {hidden: rightPanelVM.itemsVM.items().length === 0}">
+
+                <div class="items-list" data-bind="css: {hidden: rightPanelVM.itemsVM.items().length === 0}">
                     <div class="form-group">
-                <span data-bind="foreach: rightPanelVM.itemsVM.filteredItems">
-                    <div class="row item-container">
-                        <div class="col-md-10 item-container-fields">
-                        <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                               data-bind="textInput: id" readonly>
-                        <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
-                               data-bind="textInput: weight" readonly>
-                       </div>
-                       <div class="col-md-2 item-container-icon">
-                            <i class="fas fa-minus"
-                               data-bind="click: $parent.rightPanelVM.itemsVM.remove"></i>
-                       </div>
-                    </div>
-                </span>
+                        <div class="row items-list-header">
+                            <div class="row col-md-10">
+                                <div class="col-md-3 text-left"><b>#ID</b></div>
+                                <div class="col-md-4 text-left">Name</div>
+                                <div class="col-md-5 text-right">Weight<sub>kg</sub></div>
+                            </div>
+                            <div class="col-md-2 item-list-icon text-right">
+                                <i class="fas fa-minus" data-bind="click: rightPanelVM.itemsVM.removeAll"></i>
+                            </div>
+                        </div>
+                        <div class="items-list-rows">
+                            <span data-bind="foreach: rightPanelVM.itemsVM.filteredItems">
+                                <div class="row items-list-row">
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-3 text-left"><b>#</b><b data-bind="text: id"></b></div>
+                                            <div class="col-md-5 text-left"><span data-bind="text: name, attr: {title: name}"></span></div>
+                                            <div class="col-md-4 text-right"><span data-bind="text: weight"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 item-list-icon text-right">
+                                        <i class="fas fa-minus"
+                                           data-bind="click: $parent.rightPanelVM.itemsVM.remove"></i>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -722,9 +756,11 @@
                     <label>Add Item</label>
                     <div class="row item-container">
                         <div class="col-md-10 item-container-fields">
-                            <input type="number" class="form-control bg-dark text-light" placeholder="ID"
-                                   data-bind="textInput: rightPanelVM.itemsVM.itemID, enabled: runningMode() === RUNNING_MODE.DESIGN" readonly>
-                            <input type="number" class="form-control bg-dark text-light" placeholder="Weight"
+                            <input type="text" class="form-control bg-dark text-light large"
+                                   title="Item Name" placeholder="Name" maxlength="10"
+                                   data-bind="textInput: rightPanelVM.itemsVM.itemName, enabled: runningMode() === RUNNING_MODE.DESIGN">
+                            <input type="number" class="form-control bg-dark text-light small"
+                                   title="Weight (Kg)" placeholder="Wgt"
                                    data-bind="textInput: rightPanelVM.itemsVM.itemWeight, enabled: runningMode() === RUNNING_MODE.DESIGN">
                         </div>
                         <div class="col-md-2 item-container-icon">

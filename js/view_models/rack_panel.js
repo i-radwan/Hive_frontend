@@ -246,7 +246,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         console.log(state.map);
 
         // Scroll view to bottom
-        let container = $(".lpanel .rack .items-container");
+        let container = $(".lpanel .rack .items-list .items-list-rows");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
     };
 
@@ -261,6 +261,19 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         }
 
         self.items.remove(this);
+    };
+
+    self.removeAll = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return;
+        }
+
+        self.items.removeAll();
     };
 
     self.adjustRack = function (id, items) {

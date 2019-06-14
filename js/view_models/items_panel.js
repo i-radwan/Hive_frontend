@@ -9,13 +9,52 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.searchValue = ko.observable("");
     self.items = ko.observableArray();
     self.itemID = ko.observable(1);
+    self.itemName = ko.observable("");
     self.itemWeight = ko.observable("");
 
     self.filteredItems = ko.computed(function () {
         return self.items().filter(function (item) {
-            return self.searchValue().length === 0 || parseInt(item.id) === parseInt(self.searchValue());
+            if (self.searchValue().length === 0)
+                return true;
+
+            if (self.searchValue().length === 1 && self.searchValue() === "#")
+                return true;
+
+            if (self.searchValue()[0] === "#") {
+                return parseInt(item.id) === parseInt(self.searchValue().substring(1));
+            }
+
+            return item.name.includes(self.searchValue());
         });
     });
+
+    self.removeAll = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN) {
+            shouter.notifySubscribers({
+                text: "This action is allowed in design mode only!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
+        self.items.remove(function (i) {
+            let rack = state.map.getItemRack(i.id); // The rack who uses this item
+
+            if (rack === undefined) {
+                return true;
+            } else {
+                shouter.notifySubscribers({
+                    text: "Rack (#" + rack.id + ") at (" + (rack.row + 1) + ", " + (rack.col + 1) + ") uses item #" + i.id + "!",
+                    type: MSG_TYPE.ERROR
+                }, SHOUT.MSG);
+
+                return false;
+            }
+        });
+
+        state.items = ko.mapping.toJS(self.items());
+    };
 
     self.remove = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
@@ -27,15 +66,15 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return false;
         }
 
-        let racks = state.map.getItemRacks(this.id); // The racks who use this item
+        let rack = state.map.getItemRack(this.id); // The rack who uses this item
 
-        if (racks.length === 0) {
+        if (rack === undefined) {
             self.items.remove(this);
 
             state.items = ko.mapping.toJS(self.items());
         } else {
             shouter.notifySubscribers({
-                text: "Racks (" + racks.slice(0, racks.length - 2) + ") use this item!",
+                text: "Rack (#" + rack.id + ") at (" + (rack.row + 1) + ", " + (rack.col + 1) + ") uses item #" + this.id + "!",
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
         }
@@ -56,7 +95,8 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         self.items.push({
             id: parseInt(self.itemID()),
-            weight: parseFloat(self.itemWeight())
+            weight: parseFloat(self.itemWeight()),
+            name: self.itemName()
         });
 
         // Auto increment
@@ -67,7 +107,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         console.log(state.items);
 
         // Scroll view to bottom
-        let container = $(".rpanel .items .items-container");
+        let container = $(".rpanel .items .items-list .items-list-rows");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
     };
 
@@ -75,6 +115,15 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (self.itemID().length === 0) {
             shouter.notifySubscribers({
                 text: "Item ID is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
+        if (self.itemName().length === 0) {
+            shouter.notifySubscribers({
+                text: "Item name is mandatory!",
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -118,6 +167,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     let clear = function () {
         self.searchValue("");
         self.itemID(state.nextIDs.item);
+        self.itemName("");
         self.itemWeight("");
 
         self.items.removeAll();

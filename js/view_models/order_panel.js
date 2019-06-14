@@ -112,6 +112,10 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.items.remove(this);
     };
 
+    self.removeAll = function () {
+        self.items.removeAll();
+    };
+
     self.toggleActiveOrdersPanel = function (m) {
         self.activePanel(m);
     };
