@@ -62,7 +62,7 @@ MAP_CELL = {
 };
 
 // Msgs configs
-MSG_TIMEOUT = 1500; // ms
+MSG_TIMEOUT = 2500; // ms
 
 // Msgs types
 MSG_TYPE = {

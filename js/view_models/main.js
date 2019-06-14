@@ -146,8 +146,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
             case MSG_FROM_SERVER.MSG:
                 self.shouter.notifySubscribers({
                     text: msg.data.msg,
-                    type: msg.data.status,
-                    persistent: true
+                    type: msg.data.status
                 }, SHOUT.MSG);
 
                 if (msg.data.status === MSG_TYPE.ERROR) {

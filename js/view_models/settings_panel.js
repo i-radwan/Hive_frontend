@@ -15,7 +15,8 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "Connection is allowed only in design mode!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return;
@@ -45,7 +46,8 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
             comm.connect(self.ip(), self.port(), function () {
                 shouter.notifySubscribers({
                     text: "Connected to server!",
-                    type: MSG_TYPE.INFO
+                    type: MSG_TYPE.INFO,
+                    volatile: true
                 }, SHOUT.MSG);
             });
 

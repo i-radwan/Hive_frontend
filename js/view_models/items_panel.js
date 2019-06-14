@@ -32,7 +32,8 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -60,7 +61,8 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -84,7 +86,8 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -113,6 +116,12 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         // Return focus to new item fields
         $(".rpanel .add-item .item-name").focus();
         $(".rpanel .add-item .item-name").select();
+
+        shouter.notifySubscribers({
+            text: "Item added successfully!",
+            type: MSG_TYPE.INFO,
+            volatile: true
+        }, SHOUT.MSG);
     };
 
     self.onEnter = function (d, e) {

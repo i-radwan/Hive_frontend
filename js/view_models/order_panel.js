@@ -110,6 +110,12 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         // Return focus to new item fields
         $(".lpanel .order .add-item .item-id").focus();
         $(".lpanel .add-item .item-id").select();
+
+        shouter.notifySubscribers({
+            text: "Item added successfully!",
+            type: MSG_TYPE.INFO,
+            volatile: true
+        }, SHOUT.MSG);
     };
 
     self.removeItem = function () {
@@ -229,7 +235,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             shouter.notifySubscribers({
                 text: "Order placed successfully!",
-                type: MSG_TYPE.INFO
+                type: MSG_TYPE.INFO,
+                volatile: true
             }, SHOUT.MSG);
 
             clear();

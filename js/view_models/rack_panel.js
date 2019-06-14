@@ -22,7 +22,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -61,7 +62,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
             shouter.notifySubscribers({
                 text: "Rack placed successfully!",
-                type: MSG_TYPE.INFO
+                type: MSG_TYPE.INFO,
+                volatile: true
             }, SHOUT.MSG);
 
             gfxEventHandler({
@@ -132,7 +134,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -197,7 +200,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -221,7 +225,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         shouter.notifySubscribers({
             text: "Rack updated successfully!",
-            type: MSG_TYPE.INFO
+            type: MSG_TYPE.INFO,
+            volatile: true
         }, SHOUT.MSG);
     };
 
@@ -229,7 +234,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -254,13 +260,20 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         // Return focus to new item fields
         $(".lpanel .rack .add-item .item-id").focus();
         $(".lpanel .add-item .item-id").select();
+
+        shouter.notifySubscribers({
+            text: "Item added successfully!",
+            type: MSG_TYPE.INFO,
+            volatile: true
+        }, SHOUT.MSG);
     };
 
     self.removeItem = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return;
@@ -273,7 +286,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return;

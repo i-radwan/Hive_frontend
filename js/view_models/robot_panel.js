@@ -29,7 +29,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -70,7 +71,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             shouter.notifySubscribers({
                 text: "Robot placed successfully!",
-                type: MSG_TYPE.INFO
+                type: MSG_TYPE.INFO,
+                volatile: true
             }, SHOUT.MSG);
 
             gfxEventHandler({
@@ -138,7 +140,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -201,7 +204,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -227,7 +231,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         shouter.notifySubscribers({
             text: "Robot updated successfully!",
-            type: MSG_TYPE.INFO
+            type: MSG_TYPE.INFO,
+            volatile: true
         }, SHOUT.MSG);
 
         gfxEventHandler({

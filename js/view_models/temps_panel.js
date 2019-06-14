@@ -116,7 +116,8 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;

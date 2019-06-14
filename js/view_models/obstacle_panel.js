@@ -14,7 +14,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -50,7 +51,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
             shouter.notifySubscribers({
                 text: "Obstacle placed successfully!",
-                type: MSG_TYPE.INFO
+                type: MSG_TYPE.INFO,
+                volatile: true
             }, SHOUT.MSG);
 
             gfxEventHandler({
@@ -118,7 +120,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -176,7 +179,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
                 text: "This action is allowed in design mode only!",
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             return false;
@@ -184,7 +188,8 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
         shouter.notifySubscribers({
             text: "Obstacle updated successfully!",
-            type: MSG_TYPE.INFO
+            type: MSG_TYPE.INFO,
+            volatile: true
         }, SHOUT.MSG);
     };
 
