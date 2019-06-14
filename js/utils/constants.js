@@ -1,6 +1,8 @@
 SERVER_IP = "127.0.0.1";
 SERVER_PORT = 1337;
 
+MIN_TIMESTEP = 1000;        // ms
+
 //
 // Shouting codes
 //
@@ -165,6 +167,7 @@ CURSOR_STYLES = {
 //
 
 // Server Msgs
+
 MSG_TO_SERVER = {
     START: 0,
     ORDER: 1,

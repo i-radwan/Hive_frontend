@@ -120,9 +120,11 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 self.centerPanelVM.controlConsoleVM.updateTimestep(self.timestep);
 
                 if (self.pendingActions === 0) {
-                    comm.send({
-                        type: MSG_TO_SERVER.ACK
-                    });
+                    setTimeout(function () {
+                        comm.send({
+                            type: MSG_TO_SERVER.ACK
+                        });
+                    }, MIN_TIMESTEP);
                 }
                 break;
 
