@@ -215,7 +215,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             id: id,
             capacity: parseInt(self.capacity()),
             weight: parseInt(self.weight()),
-            items: ko.mapping.toJS(self.items())
+            items: ko.mapping.toJS(self.items()),
+            color: GFX_SVG_DEFAULT_COLOR.RACK
         });
 
         shouter.notifySubscribers({
