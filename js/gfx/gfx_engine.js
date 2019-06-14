@@ -68,6 +68,12 @@ let gfxEngine = function () {
         }
     };
 
+    // Resize window
+    window.addEventListener('resize', function (e) {
+        self.two.width = canvas.width();
+        self.two.height = canvas.height();
+    });
+
     // Return the Z-Index enum value from the object type
     let getObjectZIndex = function (objectType) {
         switch (objectType) {
