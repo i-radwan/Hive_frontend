@@ -139,7 +139,10 @@
                            data-bind="click: leftPanelVM.mapVM.saveMap"></i>
                         <i data-toggle="tooltip" title="Load" class="fas fa-upload load"
                            data-bind="click: leftPanelVM.mapVM.loadMap"></i>
-                        <i class="fas fa-check apply" data-bind="click: leftPanelVM.mapVM.applyMapSize"></i>
+                        <i data-toggle="tooltip" title="Clear" class="fas fa-trash delete"
+                           data-bind="click: leftPanelVM.mapVM.clearMap"></i>
+                        <i class="fas fa-check apply" data-toggle="tooltip" title="Apply"
+                           data-bind="click: leftPanelVM.mapVM.applyMapSize"></i>
                     </div>
                 </div>
 

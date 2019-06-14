@@ -31,6 +31,19 @@ let State = function () {
         self.nextIDs = Object.assign({}, newState.nextIDs);
         self.map.setMap(newState.map.grid, newState.map.objects);
     };
+
+    self.clear = function () {
+        self.nextIDs = {
+            gate: 1,
+            robot: 1,
+            rack: 1,
+            station: 1,
+            obstacle: 1,
+            item: 1
+        };
+
+        self.map.clearMap();
+    };
 };
 
 module.exports = State;

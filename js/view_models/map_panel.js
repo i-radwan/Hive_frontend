@@ -34,6 +34,14 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
         shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
     };
 
+    self.clearMap = function () {
+        console.log("Clear the map");
+
+        state.clear();
+
+        shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
+    };
+
     self.applyMapSize = function () {
         if (self.mapHeight() > 0 && self.mapWidth() > 0) {
             console.log("Apply map size");

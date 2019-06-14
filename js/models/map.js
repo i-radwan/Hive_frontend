@@ -64,6 +64,24 @@ let Map = function () {
         self.objects = Object.assign({}, newObjects);
     };
 
+    self.clearMap = function () {
+        console.log("Setting the map!");
+
+        self.grid = new Array(self.height);
+
+        for (let i = 0; i < self.height; i++) {
+            self.grid[i] = new Array(self.width);
+
+            for (let j = 0; j < self.width; j++) {
+                self.grid[i][j] = {
+                    objects: []
+                };
+            }
+        }
+
+        self.objects = [];
+    };
+
     self.isFree = function(r, c) {
         return self.grid[r][c].objects.length === 0;
     };
