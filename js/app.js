@@ -45,4 +45,14 @@ $(document).ready(() => {
         else
             remote.getCurrentWindow().maximize();
     });
+
+    // Configure all text/number input fields
+    $("input[type=text]").click(function () {
+        this.select();
+        this.setSelectionRange(0, this.value.length);
+    });
+
+    $("input[type=number]").click(function () {
+        this.select();
+    });
 });
