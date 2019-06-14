@@ -221,7 +221,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             load_cap: parseInt(self.loadCap()),
             ip: self.ip(),
             port: self.port(),
-            direction: ROBOT_DIR.RIGHT
+            direction: ROBOT_DIR.RIGHT,
+            deactivated: false
         });
 
         shouter.notifySubscribers({
