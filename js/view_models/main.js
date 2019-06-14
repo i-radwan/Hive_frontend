@@ -123,9 +123,11 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
                 if (self.pendingActions.length === 0) {
                     setTimeout(function () {
-                        comm.send({
-                            type: MSG_TO_SERVER.ACK
-                        });
+                        if (self.runningMode() !== RUNNING_MODE.DESIGN) {
+                            comm.send({
+                                type: MSG_TO_SERVER.ACK
+                            });
+                        }
                     }, MIN_TIMESTEP);
                 }
                 break;
