@@ -769,7 +769,9 @@
                                     <div class="col-md-10">
                                         <div class="row">
                                             <div class="col-md-3 text-left"><b>#</b><b data-bind="text: id"></b></div>
-                                            <div class="col-md-5 text-left"><span data-bind="text: name, attr: {title: name}"></span></div>
+                                            <div class="col-md-5 text-left maxlen">
+                                                <span data-bind="text: name, attr: {title: name}"></span>
+                                            </div>
                                             <div class="col-md-4 text-right"><span data-bind="text: weight"></span></div>
                                         </div>
                                     </div>
@@ -792,7 +794,7 @@
                     <div class="row item-container">
                         <div class="col-md-10 item-container-fields">
                             <input type="text" class="form-control bg-dark text-light large item-name"
-                                   title="Item Name" placeholder="Name" maxlength="10"
+                                   title="Item Name" placeholder="Name"
                                    data-bind="textInput: rightPanelVM.itemsVM.itemName,
                                               enabled: runningMode() === RUNNING_MODE.DESIGN,
                                               event: {keypress: rightPanelVM.itemsVM.onEnter}">

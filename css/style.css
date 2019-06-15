@@ -147,6 +147,14 @@ input[type=number]::-webkit-outer-spin-button {
     margin-bottom: 5px !important;
 }
 
+.items-list-row .maxlen {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60px;
+    cursor: help;
+}
+
 .item-list-icon {
     padding-left: 5px !important;
 }
