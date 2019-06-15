@@ -119,16 +119,10 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     self.rightPanelVM.updateStats(statistics[i].key, statistics[i].value);
                 }
 
-                self.centerPanelVM.controlConsoleVM.updateTimestep(self.timestep);
-
                 if (self.pendingActions.length === 0) {
-                    setTimeout(function () {
-                        if (self.runningMode() === RUNNING_MODE.SIMULATE || self.runningMode() === RUNNING_MODE.DEPLOY) {
-                            comm.send({
-                                type: MSG_TO_SERVER.ACK
-                            });
-                        }
-                    }, MIN_TIMESTEP);
+                    comm.send({
+                        type: MSG_TO_SERVER.ACK
+                    });
                 }
                 break;
 

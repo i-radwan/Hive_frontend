@@ -6,12 +6,46 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     let self = this;
 
     self.playing = ko.observable(false);
-    self.timestep = ko.observable(0);
+    self.time = ko.observable(0);
     self.coordinates = ko.observable("(10, 16)");
     self.msg = ko.observable("");
     self.msgType = ko.observable(MSG_TYPE.INFO);
     self.timer = null;
+    
+    self.displayTime = ko.computed(function () {
+        let seconds = self.time();
+        let minutes = 0;
+        let hours = 0;
 
+        if (seconds > 60) {
+            minutes = Math.floor(seconds / 60);
+            seconds -= minutes * 60;
+        }
+
+        if (minutes > 60) {
+            hours = Math.floor(minutes / 60);
+            minutes -= hours * 60;
+        }
+
+        let s = String(seconds);
+        let m = String(minutes);
+        let h = String(hours);
+
+        if (seconds < 10) {
+            s = "0" + s;
+        }
+
+        if (minutes< 10) {
+            m = "0" + m;
+        }
+
+        if (hours < 10) {
+            h = "0" + h;
+        }
+
+        return h + ":" + m + ":" + s;
+    });
+    
     self.preSimState = null;
     self.lastStartMode = null;
 
@@ -78,6 +112,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         runningMode(RUNNING_MODE.DESIGN);
         self.playing(false);
         self.lastStartMode = null;
+        self.time(0);
 
         state.load(self.preSimState);
         shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
@@ -181,8 +216,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         self.coordinates("(" + (row + 1) + ", " + (col + 1) + ")");
     };
 
-    self.updateTimestep = function (timestep) {
-        self.timestep(timestep);
+    self.incrementTime = function() {
+        if (runningMode() === RUNNING_MODE.SIMULATE || runningMode() === RUNNING_MODE.DEPLOY) {
+            self.time(self.time() + 1);
+        }
     };
 
     shouter.subscribe(function (msg) {
@@ -223,6 +260,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             });
         }
     };
+
+    setInterval(self.incrementTime, 1000);
 };
 
 module.exports = controlConsoleViewModel;
