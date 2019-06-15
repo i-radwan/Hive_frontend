@@ -11,7 +11,9 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.msg = ko.observable("");
     self.msgType = ko.observable(MSG_TYPE.INFO);
     self.timer = null;
-    
+    self.preSimState = null;
+    self.lastStartMode = null;
+
     self.displayTime = ko.computed(function () {
         let seconds = self.time();
         let minutes = 0;
@@ -35,7 +37,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             s = "0" + s;
         }
 
-        if (minutes< 10) {
+        if (minutes < 10) {
             m = "0" + m;
         }
 
@@ -45,9 +47,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         return h + ":" + m + ":" + s;
     });
-    
-    self.preSimState = null;
-    self.lastStartMode = null;
 
     self.play = function () {
         if (!comm.connected) {
@@ -216,7 +215,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         self.coordinates("(" + (row + 1) + ", " + (col + 1) + ")");
     };
 
-    self.incrementTime = function() {
+    self.incrementTime = function () {
         if (runningMode() === RUNNING_MODE.SIMULATE || runningMode() === RUNNING_MODE.DEPLOY) {
             self.time(self.time() + 1);
         }
