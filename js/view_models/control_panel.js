@@ -109,12 +109,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         });
 
         runningMode(RUNNING_MODE.DESIGN);
-        self.playing(false);
-        self.lastStartMode = null;
-        self.time(0);
 
-        state.load(self.preSimState);
-        shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
+        reset();
     };
 
     self.deploy = function () {
@@ -235,6 +231,15 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         }
     }, self, SHOUT.MSG);
 
+    let reset = function () {
+        self.playing(false);
+        self.lastStartMode = null;
+        self.time(0);
+
+        state.load(self.preSimState);
+        shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
+    };
+
     let sendStateToServer = function (mode) {
         if (!comm.connected) {
             shouter.notifySubscribers({
@@ -259,6 +264,12 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             });
         }
     };
+
+    runningMode.subscribe(function (newRunningMode) {
+        if (newRunningMode === RUNNING_MODE.DESIGN) {
+            reset();
+        }
+    });
 
     setInterval(self.incrementTime, 1000);
 };

@@ -55,6 +55,15 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
                     setTimeout(function () {
                         self.connect();
                     }, RECONNECT_INTERVAL);
+                }, function () {
+                    shouter.notifySubscribers({
+                        text: "Server disconnected!",
+                        type: MSG_TYPE.ERROR
+                    }, SHOUT.MSG);
+
+                    runningMode(RUNNING_MODE.DESIGN);
+
+                    console.log(runningMode());
                 });
         } catch (e) {
         }

@@ -5,7 +5,7 @@ let comm = function (serverMW) {
 
     self.connected = false;
 
-    self.connect = function (ip, port, callback, errorCallback) {
+    self.connect = function (ip, port, callback, errorCallback, closeCallback) {
         if (self.rcv === undefined) {
             errorCallback();
 
@@ -35,7 +35,11 @@ let comm = function (serverMW) {
         };
 
         self.ws.onclose = function () {
-            self.connected = false;
+            if (self.connected) {
+                self.connected = false;
+
+                closeCallback();
+            }
         };
     };
 
