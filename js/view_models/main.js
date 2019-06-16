@@ -35,6 +35,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
     };
 
     self.handleServerMsg = function (msg) {
+        console.log("Received:", JSON.stringify(msg));
+
         switch (msg.type) {
             case MSG_FROM_SERVER.ACK_START:
                 self.centerPanelVM.controlConsoleVM.handleAckStart(msg);
@@ -75,6 +77,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     comm.send({
                         type: MSG_TO_SERVER.ACK
                     });
+
+                    console.log("ACK sent");
                 }
 
                 for (let i = 0; i < actions.length; ++i) {
@@ -224,6 +228,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
             comm.send({
                 type: MSG_TO_SERVER.ACK
             });
+
+            console.log("ACK sent");
         }
     };
 
