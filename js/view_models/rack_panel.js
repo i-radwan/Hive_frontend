@@ -321,7 +321,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 object: LOG_TYPE.RACK,
                 color: "#bababa",
                 msg: "Rack <b>(#" + id + ")</b> has been " + (items[i].quantity > 0 ? "filled" : "discharged") +
-                    " by <b>(" + items[i].quantity + ")</b> from Item#<b>(" + items[i].id + ")</b>."
+                    " by <b>(" + Math.abs(parseInt(items[i].quantity)) + ")</b> from Item#<b>(" + items[i].id + ")</b>."
             });
         }
 

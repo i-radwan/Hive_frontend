@@ -94,7 +94,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         self.leftPanelVM.robotVM.assignTask(robotID, rackID);
                     } else if (l.type === SERVER_LOGS.TASK_COMPLETED) {
                         let orderID = data.order_id;
-                        let rackID = data.rack;
+                        let rackID = data.rack_id;
                         let items = data.items;
 
                         self.leftPanelVM.rackVM.adjustRack(rackID, items);

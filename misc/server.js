@@ -177,6 +177,18 @@ wsServer.on('request', function (request) {
                         rack_id: parseInt(i[3]),
                     }
                 });
+            } else if (t === SERVER_LOGS.TASK_COMPLETED) {
+                logs.push({
+                    type: SERVER_LOGS.TASK_COMPLETED,
+                    data: {
+                        order_id: parseInt(i[2]),
+                        rack_id: parseInt(i[3]),
+                        items: [{
+                            id: parseInt(i[4]),
+                            quantity: parseInt(i[5])
+                        }]
+                    }
+                });
             } else if (t === SERVER_LOGS.ORDER_FULFILLED) {
                 logs.push({
                     type: SERVER_LOGS.ORDER_FULFILLED,

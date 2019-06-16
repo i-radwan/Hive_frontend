@@ -183,7 +183,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                     if (i.id !== itemID)
                         return;
 
-                    i.delivered(i.delivered() + parseInt(itemQuantity));
+                    i.delivered(i.delivered() + Math.abs(parseInt(itemQuantity)));
                 });
             }
         });
