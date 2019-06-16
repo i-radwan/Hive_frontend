@@ -117,8 +117,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         if (runningMode() !== RUNNING_MODE.DESIGN)
             return;
 
-        self.preSimState = Object.assign({}, state);
-
         let pos = state.map.getInvalidIPRobot();
 
         if (pos !== undefined) {
@@ -142,10 +140,9 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         let data = msg.data;
 
         if (data.status === ACK_START_STATUS.OK) {
-            self.preSimState = Object.assign({}, state);
+            self.preSimState = JSON.parse(JSON.stringify(state));
 
             runningMode(self.lastStartMode === START_MODE.SIMULATE ? RUNNING_MODE.SIMULATE : RUNNING_MODE.DEPLOY);
-            console.log(runningMode());
 
             self.playing(true);
 
