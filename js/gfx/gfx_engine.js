@@ -703,12 +703,14 @@ let gfxEngine = function () {
 
     // Pause animation for a given object
     self.pauseObjectAnimation = function (renderObject) {
+        renderObject.animation_variables.is_paused = renderObject.animation_variables.is_animating;
         renderObject.animation_variables.is_animating = false;
     };
 
     // Resume animation for a given object
     self.resumeObjectAnimation = function (renderObject) {
-        renderObject.animation_variables.is_animating = true;
+        renderObject.animation_variables.is_animating = renderObject.animation_variables.is_paused;
+        renderObject.animation_variables.is_paused = false;
     };
 
     // Bind 2 given objects together
