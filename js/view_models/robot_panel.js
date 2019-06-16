@@ -360,7 +360,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_COLORIZE,
             data: {
-                type: MAP_CELL.RACK,
+                type: fac.type,
                 id: fac.id,
                 row: r,
                 col: c,
@@ -467,7 +467,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             type: EVENT_TO_GFX.OBJECT_LOAD,
             data: {
                 type: MAP_CELL.ROBOT,
-                id: fac.id,
+                id: rob.id,
                 object_type: fac.type,
                 object_id: fac.id,
                 row: r,
@@ -523,21 +523,28 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.assignTask = function (robotID, rackID) {
-        let pos = state.map.getObjectPos(robotID, MAP_CELL.ROBOT);
+        let robPos = state.map.getObjectPos(robotID, MAP_CELL.ROBOT);
 
-        let r = pos[0];
-        let c = pos[1];
+        let robR = robPos[0];
+        let robC = robPos[1];
 
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getRobot(robR, robC);
+
+        let rackPos = state.map.getObjectPos(rackID, MAP_CELL.RACK);
+
+        let rackR = rackPos[0];
+        let rackC = rackPos[1];
+
+        let fac = state.map.getSpecificFacility(rackR, rackC, MAP_CELL.RACK);
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_COLORIZE,
             data: {
                 type: MAP_CELL.RACK,
                 id: rackID,
-                row: r,
-                col: c,
-                color: rob.color
+                row: rackR,
+                col: rackC,
+                color: fac.color
             }
         });
 

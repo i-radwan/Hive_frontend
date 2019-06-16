@@ -25,7 +25,12 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
     self.loadMap = function () {
         console.log("Load state");
 
-        let path = dialog.showOpenDialog()[0];
+        let paths = dialog.showOpenDialog();
+
+        if (paths.length === 0)
+            return;
+
+        let path = paths[0];
 
         let newState = JSON.parse(fs.readFileSync(path, 'utf-8'));
 

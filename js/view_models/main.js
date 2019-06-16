@@ -100,6 +100,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         self.leftPanelVM.rackVM.adjustRack(rackID, items);
                         self.leftPanelVM.orderVM.updateOrderDeliveredItems(orderID, items);
                     } else if (l.type === SERVER_LOGS.ORDER_FULFILLED) {
+                        console.log("LOG", l);
+
                         let id = data.id;
 
                         self.leftPanelVM.orderVM.finishOngoingOrder(id, self.timestep);
