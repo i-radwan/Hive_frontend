@@ -25,6 +25,11 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.activeRobotRow = -1;
     self.activeRobotCol = -1;
 
+    self.showable = ko.observable(true); // In simulation mode, when robot is clicked
+    self.active = ko.computed(function () {
+        return self.showable() || runningMode() === RUNNING_MODE.DESIGN;
+    });
+
     self.add = function (row, col) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
@@ -175,6 +180,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         self.activeRobotRow = row;
         self.activeRobotCol = col;
+        self.showable(true);
 
         self.id(rob.id);
         self.color(rob.color);
@@ -822,6 +828,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     let unselect = function () {
         self.activeRobotRow = self.activeRobotCol = -1;
         self.editing(false);
+        self.showable(false);
     };
 
     let clear = function () {

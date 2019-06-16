@@ -4,6 +4,10 @@ let ko = require('knockout');
 let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, logger) {
     let self = this;
 
+    self.active = ko.computed(function () {
+        return runningMode() === RUNNING_MODE.DESIGN;
+    });
+
     /**
      * Fetches the saved templates.
      * TODO: fetch real templates.

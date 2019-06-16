@@ -10,6 +10,11 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     self.activeObstacleRow = -1;
     self.activeObstacleCol = -1;
 
+    self.showable = ko.observable(true); // In simulation mode, when robot is clicked
+    self.active = ko.computed(function () {
+        return self.showable() || runningMode() === RUNNING_MODE.DESIGN;
+    });
+
     self.add = function (row, col) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
@@ -155,6 +160,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
         self.activeObstacleRow = row;
         self.activeObstacleCol = col;
+        self.showable(true);
 
         self.id(fac.id);
 
@@ -236,6 +242,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     let unselect = function () {
         self.activeObstacleRow = self.activeObstacleCol = -1;
         self.editing(false);
+        self.showable(false);
     };
 
     let clear = function () {

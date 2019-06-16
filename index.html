@@ -42,49 +42,49 @@
 
             <div class="col-md-3 tiles">
                 <ul>
-                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.TEMPS, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.TEMPS)">
+                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.TEMPS, inactive: !leftPanelVM.tempVM.active()}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.TEMPS)">
                         <div>
                             <i class="fas fa-star"></i>
                             <span>Temp's</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.MAP, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.MAP)">
+                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.MAP, inactive: !leftPanelVM.mapVM.active()}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.MAP)">
                         <div>
                             <i class="fas fa-th-large"></i>
                             <span>Map</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.GATE, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.GATE)">
+                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.GATE, inactive: !leftPanelVM.gateVM.active()}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.GATE)">
                         <div>
                             <i class="fas fa-door-open"></i>
                             <span>Gate</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.ROBOT, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.ROBOT)">
+                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.ROBOT, inactive: !leftPanelVM.robotVM.active()}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.ROBOT)">
                         <div>
                             <i class="fas fa-truck-loading"></i>
                             <span>Robot</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.RACK, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.RACK)">
+                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.RACK, inactive: !leftPanelVM.rackVM.active()}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.RACK)">
                         <div>
                             <i class="fas fa-boxes"></i>
                             <span>Rack</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.STATION, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.STATION)">
+                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.STATION, inactive: !leftPanelVM.stationVM.active()}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.STATION)">
                         <div>
                             <i class="fas fa-charging-station"></i>
                             <span>Station</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.OBSTACLE, inactive: runningMode() !== RUNNING_MODE.DESIGN}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.OBSTACLE)">
+                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.OBSTACLE, inactive: !leftPanelVM.obstacleVM.active()}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.OBSTACLE)">
                         <div>
                             <i class="fas fa-exclamation-triangle"></i>
                             <span>Obstacle</span>
                         </div>
                     </li>
-                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.ORDER, inactive: runningMode() === RUNNING_MODE.DESIGN}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.ORDER)">
+                    <li data-bind="css: {active: leftPanelVM.activePanel() === LEFT_PANEL.ORDER, inactive: !leftPanelVM.orderVM.active()}, click: leftPanelVM.toggle.bind($data, LEFT_PANEL.ORDER)">
                         <div>
                             <i class="fas fa-box"></i>
                             <span>Order</span>

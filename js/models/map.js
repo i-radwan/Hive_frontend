@@ -151,6 +151,10 @@ let Map = function () {
         return undefined;
     };
 
+    self.getCellObjects = function(r, c) {
+        return self.grid[r][c].objects;
+    };
+
     self.moveObject = function(r, c, nr, nc, obj) {
         self.deleteObject(r, c, obj);
         self.addObject(nr, nc, obj);

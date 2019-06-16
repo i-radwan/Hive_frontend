@@ -6,6 +6,10 @@ const {dialog} = require('electron').remote;
 let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
+    self.active = ko.computed(function () {
+        return runningMode() === RUNNING_MODE.DESIGN;
+    });
+
     self.mapWidth = ko.observable(MAP_INIT_WIDTH);
     self.mapHeight = ko.observable(MAP_INIT_HEIGHT);
 
