@@ -18,6 +18,9 @@ let gfxMap = function (logicEventHandler) {
         document.body.style.cursor = style;
     };
 
+    // Keyboard key states
+    let isCtrlDown = false;
+
     // Mouse States Variables
     let isMouseDownOnObject = false;
     let isDraggingMap = false;
@@ -506,7 +509,7 @@ let gfxMap = function (logicEventHandler) {
         let cell = getMouseCell(e.clientX, e.clientY);
         let obj = getHighestZIndexObject(cell.row, cell.col);
 
-        if (cell.inBounds && !isHovering && obj !== -1) {
+        if (cell.inBounds && !isHovering && obj !== -1 && !isCtrlDown) {
             isMouseDownOnObject = true;
 
             self.gfxEngine.startDragObject(obj, cell.row, cell.col);
@@ -539,14 +542,14 @@ let gfxMap = function (logicEventHandler) {
             col: (cell.inBounds ? cell.col : "")
         });
 
-        if (isMouseDown && !isMouseDownOnObject)
+        if (isMouseDown && (!isMouseDownOnObject || isCtrlDown))
             isDraggingMap = true;
 
         if (isHovering) {
             self.gfxEngine.moveHoverObject(cell.row, cell.col, cell.inBounds);
         }
 
-        if (isMouseDownOnObject) {
+        if (isMouseDownOnObject && !isCtrlDown) {
             isDraggingObject = true;
 
             self.gfxEngine.moveDragObject(cell.row, cell.col);
@@ -616,6 +619,24 @@ let gfxMap = function (logicEventHandler) {
         isMouseDown = false;
 
         updateCursorStyle(e);
+    };
+
+    // Key down event handler
+    self.keyDownEvent = function(e) {
+      switch (e.which) {
+          case KEY_CODE.CTRL:
+              isCtrlDown = true;
+              break;
+      }
+    };
+
+    // Key up event handler
+    self.keyUpEvent = function(e) {
+        switch (e.which) {
+            case KEY_CODE.CTRL:
+                isCtrlDown = false;
+                break;
+        }
     };
 
     // Delete key event handler

@@ -149,6 +149,9 @@ let gfx = function (logicEventHandler) {
             case ARROW.UP:
             case ARROW.DOWN:
                 gfxEngine.keyDownEvent(e);
+                break;
+            case KEY_CODE.CTRL:
+                gfxMap.keyDownEvent(e);
         }
     });
 
@@ -169,6 +172,9 @@ let gfx = function (logicEventHandler) {
                 self.logicEventHandler({
                     type: EVENT_FROM_GFX.ESC
                 });
+                break;
+            case KEY_CODE.CTRL:
+                gfxMap.keyUpEvent(e);
                 break;
         }
     });

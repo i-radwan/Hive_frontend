@@ -135,7 +135,8 @@ ARROW = {
 KEY_CODE = {
     F5: 116,
     DELETE: 46,
-    ESC: 27
+    ESC: 27,
+    CTRL: 17
 };
 
 MOVING_SPEED = 0.1;
