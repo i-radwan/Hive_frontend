@@ -17,6 +17,9 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
             defaultPath: '~/state.hive'
         });
 
+        if (path === undefined)
+            return;
+
         fs.writeFile(path, JSON.stringify(state, null, 2), 'utf-8', function () {
             console.log("Map has been saved to 'state.hive'");
         });
@@ -27,7 +30,7 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
 
         let paths = dialog.showOpenDialog();
 
-        if (paths.length === 0)
+        if (paths === undefined || paths.length === 0)
             return;
 
         let path = paths[0];

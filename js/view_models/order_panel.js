@@ -107,6 +107,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let container = $(".lpanel .order .add");
         container.animate({scrollTop: container[0].scrollHeight}, 250);
 
+        container = $(".lpanel .order .add .items-list .items-list-rows");
+        container.animate({scrollTop: container[0].scrollHeight}, 250);
+
         // Return focus to new item fields
         $(".lpanel .order .add-item .item-id").focus();
         $(".lpanel .add-item .item-id").select();
