@@ -280,13 +280,14 @@ GFX_SVG_MODEL = {
     RACK: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><title>Rack</title><line x1="25" y1="34.84" x2="40" y2="26.18" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="34.84" x2="10" y2="26.18" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="32.59" x2="40" y2="23.93" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="32.59" x2="10" y2="23.93" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="37.09" x2="40" y2="28.43" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="37.09" x2="10" y2="28.43" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><polygon points="40 21.57 40 21.68 25 30.34 10 21.68 10 21.57 25 12.91 40 21.57" fill="#bababa"/><line x1="25" y1="30.34" x2="40" y2="21.68" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="30.34" x2="10" y2="21.68" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="12.91" x2="40" y2="21.57" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/><line x1="25" y1="12.91" x2="10" y2="21.57" fill="none" stroke="#bababa" stroke-linecap="round" stroke-miterlimit="10"/></svg>'
 };
 
-GFX_SVG_DEFAULT_COLOR = {
+GFX_COLORS_DEFAULT = {
     ROBOT: "#df9626",
     ROBOT_LED: "#bababa",
     GATE: "#bababa",
     STATION: "#feea3a",
     OBSTACLE: "#bababa",
-    RACK: "#bababa"
+    RACK: "#bababa",
+    CELL: "#1d1d1e"
 };
 
 GFX_COLORS = {
@@ -295,5 +296,6 @@ GFX_COLORS = {
     LED_FAIL_COLOR: "#B71C1C",
     RACK_LOAD_COLOR: "#18FFFF",
     STATION_BIND_COLOR: "#76FF03",
-    GATE_BIND_COLOR: "#76FF03"
+    GATE_BIND_COLOR: "#76FF03",
+    CELL_HIGHLIGHT_COLOR: "#4a4a4a"
 };
