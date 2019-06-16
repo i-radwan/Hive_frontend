@@ -815,6 +815,8 @@ let gfxEngine = function () {
 
     // Translates the scene a tiny amount according to the pressed keys (should only be called in update function)
     self.keyboardDragEvent = function (timeDelta) {
+        return;
+
         let verticalDir = 0;
         let horizontalDir = 0;
         if (goingLeft)
