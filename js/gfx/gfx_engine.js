@@ -130,6 +130,7 @@ let gfxEngine = function () {
         renderObject.z_index = targetZIndex;
 
         zIndexGroups[targetZIndex].add(renderObject.two_object);
+        self.two.update();
     };
 
     // Converts from DIR enum to scalar angle
