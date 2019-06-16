@@ -55,6 +55,8 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
 
         state.items = ko.mapping.toJS(self.items());
+
+        self.itemID(1);
     };
 
     self.remove = function () {

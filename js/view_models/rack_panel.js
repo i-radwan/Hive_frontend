@@ -293,6 +293,8 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             return;
         }
 
+        self.itemID(1);
+
         self.items.removeAll();
     };
 

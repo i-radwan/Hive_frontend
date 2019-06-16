@@ -127,6 +127,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.removeAll = function () {
         self.items.removeAll();
+
+        self.itemID(1);
     };
 
     self.toggleActiveOrdersPanel = function (m) {
@@ -252,6 +254,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.clearOrders = function() {
+        self.id(0);
+
         self.ongoingOrders.removeAll();
         self.upcomingOrders.removeAll();
         self.finishedOrders.removeAll();
