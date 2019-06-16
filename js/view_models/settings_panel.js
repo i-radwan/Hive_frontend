@@ -43,28 +43,32 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
         try {
             shouter.notifySubscribers(true, SHOUT.LOADING);
 
-            comm.connect(self.ip(), self.port(),
-                function () {
-                    shouter.notifySubscribers({
-                        text: "Connected to server!",
-                        type: MSG_TYPE.INFO,
-                        volatile: true
-                    }, SHOUT.MSG);
-                }, function () {
-                    // Reconnect
-                    setTimeout(function () {
-                        self.connect();
-                    }, RECONNECT_INTERVAL);
-                }, function () {
-                    shouter.notifySubscribers({
-                        text: "Server disconnected!",
-                        type: MSG_TYPE.ERROR
-                    }, SHOUT.MSG);
+            let callback = function () {
+                shouter.notifySubscribers({
+                    text: "Connected to server!",
+                    type: MSG_TYPE.INFO,
+                    volatile: true
+                }, SHOUT.MSG);
+            };
 
-                    runningMode(RUNNING_MODE.DESIGN);
+            let errorCallback = function () {  // Reconnect
+                setTimeout(function () {
+                    comm.connect(self.ip(), self.port(), callback, errorCallback, closeCallback);
+                }, RECONNECT_INTERVAL);
+            };
 
-                    console.log(runningMode());
-                });
+            let closeCallback = function () {
+                shouter.notifySubscribers({
+                    text: "Server disconnected!",
+                    type: MSG_TYPE.ERROR
+                }, SHOUT.MSG);
+
+                runningMode(RUNNING_MODE.DESIGN);
+
+                comm.connect(self.ip(), self.port(), callback, errorCallback, closeCallback);
+            };
+
+            comm.connect(self.ip(), self.port(), callback, errorCallback, closeCallback);
         } catch (e) {
         }
 
