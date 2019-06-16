@@ -52,7 +52,7 @@ let gfxEngine = function () {
     let goingDown = false;
 
     // SVG Objects
-    let robotSVG = 0, gateSVG = 0, stationSVG = 0, obstacleSVG = 0, rackSVG = 0;
+    let robotSVG = [], gateSVG = 0, stationSVG = 0, obstacleSVG = 0, rackSVG = 0;
 
     // Removes all the translations and scale to the scene and reinitialize the Z-Index groups
     let resetScene = function () {
@@ -325,7 +325,12 @@ let gfxEngine = function () {
         zui.addLimits(MIN_ZOOM_VAL, MAX_ZOOM_VAL);
 
         // Load robot svg
-        robotSVG = self.two.load(GFX_SVG_MODEL.ROBOT);
+        robotSVG = new Array(GFX_SVG_MODEL.ROBOT.length);
+
+        for (let i = 0;i < GFX_SVG_MODEL.ROBOT.length; i++) {
+            robotSVG[i] = self.two.load(GFX_SVG_MODEL.ROBOT[i]);
+        }
+
         gateSVG = self.two.load(GFX_SVG_MODEL.GATE);
         stationSVG = self.two.load(GFX_SVG_MODEL.STATION);
         obstacleSVG = self.two.load(GFX_SVG_MODEL.OBSTACLE);
@@ -388,7 +393,7 @@ let gfxEngine = function () {
                 defaultColor = GFX_COLORS_DEFAULT.GATE;
                 break;
             case MAP_CELL.ROBOT:
-                twoObject = robotSVG.clone();
+                twoObject = robotSVG[10].clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
                 defaultColor = GFX_COLORS_DEFAULT.ROBOT;
                 ledColor = GFX_COLORS_DEFAULT.ROBOT_LED;
@@ -780,7 +785,21 @@ let gfxEngine = function () {
 
     // Update object battery level
     self.updateObject = function (renderObject, battery) {
-        // TODO
+        let robotSVGIdx = Math.floor(battery / 10);
+        let twoObject = robotSVG[robotSVGIdx].clone();
+        let color = renderObject.color;
+        let ledColor = renderObject.led_color;
+
+        zIndexGroups[renderObject.z_index].remove(renderObject.two_object);
+        twoObject.rotation = renderObject.two_object.rotation;
+        twoObject.translation.set(renderObject.two_object.translation.x, renderObject.two_object.translation.y);
+        renderObject.color = GFX_COLORS_DEFAULT.ROBOT;
+        renderObject.led_color = GFX_COLORS_DEFAULT.ROBOT_LED;
+        renderObject.two_object = twoObject;
+        zIndexGroups[renderObject.z_index].add(renderObject.two_object);
+
+        colorizeRobot(renderObject, color);
+        colorizeRobotLed(renderObject, ledColor);
     };
 
     // Key press event handler

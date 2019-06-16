@@ -91,10 +91,12 @@ let gfx = function (logicEventHandler) {
                 break;
             case 0:
                 //gfxMap.objectColorize(1, MAP_CELL.ROBOT, 0,0,"#ffcc00");
-                gfxMap.objectMove(1, 0, 0);
+                //gfxMap.objectMove(1, 0, 0);
+                gfxMap.objectRotateRight(1, 0, 0);
                 break;
             case 1:
-                gfxMap.objectRotateRight(1, 0, 1);
+                gfxMap.objectUpdate(1, MAP_CELL.ROBOT, 0, 0, 50);
+                //gfxMap.objectRotateRight(1, 0, 1);
                 break;
             case 2:
                 gfxMap.objectMove(1, 0, 1);
