@@ -485,6 +485,17 @@ let gfxMap = function (logicEventHandler) {
         }
     };
 
+    // Stop all Animations
+    self.stopAllAnimations = function () {
+        for (let row = 0; row < mapHeight; row++) {
+            for (let col = 0; col < mapWidth; col++) {
+                for (let k = 0; k < map[row][col].length; k++) {
+                    self.gfxEngine.stopObjectAnimation(map[row][col][k].render_variables);
+                }
+            }
+        }
+    };
+
     // Start simulation mode
     self.simulationStart = function () {
         isHovering = false;

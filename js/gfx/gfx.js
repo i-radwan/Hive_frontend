@@ -38,6 +38,7 @@ let gfx = function (logicEventHandler) {
     // Stop Simulation Event
     let simulationStopEvent = function () {
         runningMode = RUNNING_MODE.DESIGN;
+        gfxMap.stopAllAnimations();
     };
 
     // Update function of two.js (Calls everything that needs execution each frame)

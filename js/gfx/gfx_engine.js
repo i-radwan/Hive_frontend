@@ -713,6 +713,11 @@ let gfxEngine = function () {
         renderObject.animation_variables.is_paused = false;
     };
 
+    // Stop animation for a given object
+    self.stopObjectAnimation = function (renderObject) {
+        renderObject.animation_variables.is_animating = false;
+    };
+
     // Bind 2 given objects together
     self.bindObject = function (renderObject1, renderObject2, object2Type, isLoaded) {
         self.startObjectFlashing(renderObject1, getFlashType(true, isLoaded, false));
