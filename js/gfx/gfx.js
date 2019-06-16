@@ -38,6 +38,7 @@ let gfx = function (logicEventHandler) {
     // Stop Simulation Event
     let simulationStopEvent = function () {
         runningMode = RUNNING_MODE.DESIGN;
+        gfxMap.stopAllAnimations();
     };
 
     // Update function of two.js (Calls everything that needs execution each frame)
@@ -90,10 +91,12 @@ let gfx = function (logicEventHandler) {
                 break;
             case 0:
                 //gfxMap.objectColorize(1, MAP_CELL.ROBOT, 0,0,"#ffcc00");
-                gfxMap.objectMove(1, 0, 0);
+                //gfxMap.objectMove(1, 0, 0);
+                gfxMap.objectRotateRight(1, 0, 0);
                 break;
             case 1:
-                gfxMap.objectRotateRight(1, 0, 1);
+                gfxMap.objectUpdate(1, MAP_CELL.ROBOT, 0, 0, 50);
+                //gfxMap.objectRotateRight(1, 0, 1);
                 break;
             case 2:
                 gfxMap.objectMove(1, 0, 1);
@@ -149,6 +152,9 @@ let gfx = function (logicEventHandler) {
             case ARROW.UP:
             case ARROW.DOWN:
                 gfxEngine.keyDownEvent(e);
+                break;
+            case KEY_CODE.CTRL:
+                gfxMap.keyDownEvent(e);
         }
     });
 
@@ -169,6 +175,9 @@ let gfx = function (logicEventHandler) {
                 self.logicEventHandler({
                     type: EVENT_FROM_GFX.ESC
                 });
+                break;
+            case KEY_CODE.CTRL:
+                gfxMap.keyUpEvent(e);
                 break;
         }
     });

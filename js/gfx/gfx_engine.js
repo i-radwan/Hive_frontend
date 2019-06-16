@@ -52,7 +52,7 @@ let gfxEngine = function () {
     let goingDown = false;
 
     // SVG Objects
-    let robotSVG = 0, gateSVG = 0, stationSVG = 0, obstacleSVG = 0, rackSVG = 0;
+    let robotSVG = [], gateSVG = 0, stationSVG = 0, obstacleSVG = 0, rackSVG = 0;
 
     // Removes all the translations and scale to the scene and reinitialize the Z-Index groups
     let resetScene = function () {
@@ -150,15 +150,15 @@ let gfxEngine = function () {
     let objectTypeToDefaultColor = function (type) {
         switch (type) {
             case MAP_CELL.ROBOT:
-                return GFX_SVG_DEFAULT_COLOR.ROBOT;
+                return GFX_COLORS_DEFAULT.ROBOT;
             case MAP_CELL.GATE:
-                return GFX_SVG_DEFAULT_COLOR.GATE;
+                return GFX_COLORS_DEFAULT.GATE;
             case MAP_CELL.RACK:
-                return GFX_SVG_DEFAULT_COLOR.RACK;
+                return GFX_COLORS_DEFAULT.RACK;
             case MAP_CELL.STATION:
-                return GFX_SVG_DEFAULT_COLOR.STATION;
+                return GFX_COLORS_DEFAULT.STATION;
             case MAP_CELL.OBSTACLE:
-                return GFX_SVG_DEFAULT_COLOR.OBSTACLE;
+                return GFX_COLORS_DEFAULT.OBSTACLE;
         }
     };
 
@@ -325,7 +325,12 @@ let gfxEngine = function () {
         zui.addLimits(MIN_ZOOM_VAL, MAX_ZOOM_VAL);
 
         // Load robot svg
-        robotSVG = self.two.load(GFX_SVG_MODEL.ROBOT);
+        robotSVG = new Array(GFX_SVG_MODEL.ROBOT.length);
+
+        for (let i = 0;i < GFX_SVG_MODEL.ROBOT.length; i++) {
+            robotSVG[i] = self.two.load(GFX_SVG_MODEL.ROBOT[i]);
+        }
+
         gateSVG = self.two.load(GFX_SVG_MODEL.GATE);
         stationSVG = self.two.load(GFX_SVG_MODEL.STATION);
         obstacleSVG = self.two.load(GFX_SVG_MODEL.OBSTACLE);
@@ -385,28 +390,28 @@ let gfxEngine = function () {
             case MAP_CELL.GATE:
                 twoObject = gateSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_SVG_DEFAULT_COLOR.GATE;
+                defaultColor = GFX_COLORS_DEFAULT.GATE;
                 break;
             case MAP_CELL.ROBOT:
-                twoObject = robotSVG.clone();
+                twoObject = robotSVG[10].clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_SVG_DEFAULT_COLOR.ROBOT;
-                ledColor = GFX_SVG_DEFAULT_COLOR.ROBOT_LED;
+                defaultColor = GFX_COLORS_DEFAULT.ROBOT;
+                ledColor = GFX_COLORS_DEFAULT.ROBOT_LED;
                 break;
             case MAP_CELL.RACK:
                 twoObject = rackSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_SVG_DEFAULT_COLOR.RACK;
+                defaultColor = GFX_COLORS_DEFAULT.RACK;
                 break;
             case MAP_CELL.STATION:
                 twoObject = stationSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_SVG_DEFAULT_COLOR.STATION;
+                defaultColor = GFX_COLORS_DEFAULT.STATION;
                 break;
             case MAP_CELL.OBSTACLE:
                 twoObject = obstacleSVG.clone();
                 twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_SVG_DEFAULT_COLOR.OBSTACLE;
+                defaultColor = GFX_COLORS_DEFAULT.OBSTACLE;
                 break;
         }
 
@@ -533,15 +538,24 @@ let gfxEngine = function () {
 
     // Highlight a given object
     self.highlightObject = function (object, row, col) {
+        self.unhighlightObject();
         selectedObject.row = row;
         selectedObject.col = col;
         selectedObject.item = object;
-        // TODO
+        self.colorizeCell(row, col, GFX_COLORS.CELL_HIGHLIGHT_COLOR);
     };
 
     // UnHighlight a given object
     self.unhighlightObject = function () {
+        if (typeof selectedObject.row !== 'undefined')
+            self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL);
+
         selectedObject = {};
+    };
+
+    // Change color of a given cell
+    self.colorizeCell = function(row, col, color) {
+        zIndexGroups[Z_INDEX.BACKGROUND].children[col * mapHeight + row].fill = color;
     };
 
     // Change color of a given object
@@ -569,19 +583,19 @@ let gfxEngine = function () {
     self.deColorizeObject = function (renderObject, type) {
         switch (type) {
             case MAP_CELL.RACK:
-                colorizeRack(renderObject, GFX_SVG_DEFAULT_COLOR.RACK);
+                colorizeRack(renderObject, GFX_COLORS_DEFAULT.RACK);
                 break;
             case MAP_CELL.ROBOT:
-                colorizeRobot(renderObject, GFX_SVG_DEFAULT_COLOR.ROBOT);
+                colorizeRobot(renderObject, GFX_COLORS_DEFAULT.ROBOT);
                 break;
             case MAP_CELL.STATION:
-                colorizeStation(renderObject, GFX_SVG_DEFAULT_COLOR.STATION);
+                colorizeStation(renderObject, GFX_COLORS_DEFAULT.STATION);
                 break;
             case MAP_CELL.OBSTACLE:
-                colorizeObstacle(renderObject, GFX_SVG_DEFAULT_COLOR.OBSTACLE);
+                colorizeObstacle(renderObject, GFX_COLORS_DEFAULT.OBSTACLE);
                 break;
             case MAP_CELL.GATE:
-                colorizeGate(renderObject, GFX_SVG_DEFAULT_COLOR.GATE);
+                colorizeGate(renderObject, GFX_COLORS_DEFAULT.GATE);
                 break;
         }
     };
@@ -616,7 +630,7 @@ let gfxEngine = function () {
                     break;
             }
         } else {
-            colorizeRobotLed(renderObject, GFX_SVG_DEFAULT_COLOR.ROBOT_LED);
+            colorizeRobotLed(renderObject, GFX_COLORS_DEFAULT.ROBOT_LED);
         }
     };
 
@@ -626,7 +640,7 @@ let gfxEngine = function () {
 
     self.stopObjectFlashing = function (renderObject) {
         renderObject.animation_variables.is_flashing = false;
-        colorizeRobotLed(renderObject, GFX_SVG_DEFAULT_COLOR.ROBOT_LED);
+        colorizeRobotLed(renderObject, GFX_COLORS_DEFAULT.ROBOT_LED);
     };
 
     // Initialize animation of a given object
@@ -703,12 +717,19 @@ let gfxEngine = function () {
 
     // Pause animation for a given object
     self.pauseObjectAnimation = function (renderObject) {
+        renderObject.animation_variables.is_paused = renderObject.animation_variables.is_animating;
         renderObject.animation_variables.is_animating = false;
     };
 
     // Resume animation for a given object
     self.resumeObjectAnimation = function (renderObject) {
-        renderObject.animation_variables.is_animating = true;
+        renderObject.animation_variables.is_animating = renderObject.animation_variables.is_paused;
+        renderObject.animation_variables.is_paused = false;
+    };
+
+    // Stop animation for a given object
+    self.stopObjectAnimation = function (renderObject) {
+        renderObject.animation_variables.is_animating = false;
     };
 
     // Bind 2 given objects together
@@ -764,7 +785,21 @@ let gfxEngine = function () {
 
     // Update object battery level
     self.updateObject = function (renderObject, battery) {
-        // TODO
+        let robotSVGIdx = Math.floor(battery / 10);
+        let twoObject = robotSVG[robotSVGIdx].clone();
+        let color = renderObject.color;
+        let ledColor = renderObject.led_color;
+
+        zIndexGroups[renderObject.z_index].remove(renderObject.two_object);
+        twoObject.rotation = renderObject.two_object.rotation;
+        twoObject.translation.set(renderObject.two_object.translation.x, renderObject.two_object.translation.y);
+        renderObject.color = GFX_COLORS_DEFAULT.ROBOT;
+        renderObject.led_color = GFX_COLORS_DEFAULT.ROBOT_LED;
+        renderObject.two_object = twoObject;
+        zIndexGroups[renderObject.z_index].add(renderObject.two_object);
+
+        colorizeRobot(renderObject, color);
+        colorizeRobotLed(renderObject, ledColor);
     };
 
     // Key press event handler
@@ -808,6 +843,8 @@ let gfxEngine = function () {
 
     // Translates the scene a tiny amount according to the pressed keys (should only be called in update function)
     self.keyboardDragEvent = function (timeDelta) {
+        return;
+
         let verticalDir = 0;
         let horizontalDir = 0;
         if (goingLeft)

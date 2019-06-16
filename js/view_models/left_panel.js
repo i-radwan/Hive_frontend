@@ -73,7 +73,7 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
                 type: MAP_CELL.GATE,
-                color: GFX_SVG_DEFAULT_COLOR.GATE
+                color: GFX_COLORS_DEFAULT.GATE
             }
         });
     };
@@ -86,7 +86,7 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
                 type: MAP_CELL.ROBOT,
-                color: GFX_SVG_DEFAULT_COLOR.ROBOT
+                color: GFX_COLORS_DEFAULT.ROBOT
             }
         });
     };
@@ -99,7 +99,7 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
                 type: MAP_CELL.RACK,
-                color: GFX_SVG_DEFAULT_COLOR.RACK
+                color: GFX_COLORS_DEFAULT.RACK
             }
         });
     };
@@ -112,7 +112,7 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
                 type: MAP_CELL.STATION,
-                color: GFX_SVG_DEFAULT_COLOR.STATION
+                color: GFX_COLORS_DEFAULT.STATION
             }
         });
     };
@@ -125,7 +125,7 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
                 type: MAP_CELL.OBSTACLE,
-                color: GFX_SVG_DEFAULT_COLOR.OBSTACLE
+                color: GFX_COLORS_DEFAULT.OBSTACLE
             }
         });
     };

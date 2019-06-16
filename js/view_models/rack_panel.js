@@ -57,7 +57,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 capacity: parseInt(self.capacity()),
                 weight: parseInt(self.weight()),
                 items: ko.mapping.toJS(self.items()),
-                color: GFX_SVG_DEFAULT_COLOR.RACK
+                color: GFX_COLORS_DEFAULT.RACK
             });
 
             let nextID = Math.max(state.nextIDs.rack, id + 1);
@@ -81,7 +81,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                     capacity: parseInt(self.capacity()),
                     weight: parseInt(self.weight()),
                     items: ko.mapping.toJS(self.items()),
-                    color: GFX_SVG_DEFAULT_COLOR.RACK
+                    color: GFX_COLORS_DEFAULT.RACK
                 }
             });
         } else {
@@ -226,7 +226,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             capacity: parseInt(self.capacity()),
             weight: parseInt(self.weight()),
             items: ko.mapping.toJS(self.items()),
-            color: GFX_SVG_DEFAULT_COLOR.RACK
+            color: GFX_COLORS_DEFAULT.RACK
         });
 
         shouter.notifySubscribers({

@@ -46,7 +46,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             state.map.addObject(row, col, {
                 type: MAP_CELL.GATE,
                 id: id,
-                color: GFX_SVG_DEFAULT_COLOR.GATE
+                color: GFX_COLORS_DEFAULT.GATE
             });
 
             let nextID = Math.max(state.nextIDs.gate, id + 1);
@@ -67,7 +67,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                     id: id,
                     row: row,
                     col: col,
-                    color: GFX_SVG_DEFAULT_COLOR.GATE
+                    color: GFX_COLORS_DEFAULT.GATE
                 }
             });
         } else {
