@@ -34,33 +34,27 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         if (id === self.activePanel())
             return;
 
-        if (runningMode() === RUNNING_MODE.DESIGN) {
-            if (id === LEFT_PANEL.TEMPS) {
-                toggleTemps();
-            } else if (id === LEFT_PANEL.MAP) {
-                toggleMap();
-            } else if (id === LEFT_PANEL.GATE) {
-                toggleGate();
-            } else if (id === LEFT_PANEL.RACK) {
-                toggleRack();
-            } else if (id === LEFT_PANEL.OBSTACLE) {
-                toggleObstacle();
-            } else if (id === LEFT_PANEL.ROBOT) {
-                toggleRobot();
-            } else if (id === LEFT_PANEL.STATION) {
-                toggleStation();
-            } else {
-                return;
-            }
-
-            self.activePanel(id);
+        if (id === LEFT_PANEL.TEMPS && self.tempVM.active()) {
+            toggleTemps();
+        } else if (id === LEFT_PANEL.MAP && self.mapVM.active()) {
+            toggleMap();
+        } else if (id === LEFT_PANEL.GATE && self.gateVM.active()) {
+            toggleGate();
+        } else if (id === LEFT_PANEL.RACK && self.rackVM.active()) {
+            toggleRack();
+        } else if (id === LEFT_PANEL.OBSTACLE && self.obstacleVM.active()) {
+            toggleObstacle();
+        } else if (id === LEFT_PANEL.ROBOT && self.robotVM.active()) {
+            toggleRobot();
+        } else if (id === LEFT_PANEL.STATION && self.stationVM.active()) {
+            toggleStation();
+        } else if (id === LEFT_PANEL.ORDER && self.orderVM.active()) {
+            toggleOrder();
         } else {
-            if (id === LEFT_PANEL.ORDER) {
-                toggleOrder();
-
-                self.activePanel(id);
-            }
+            return;
         }
+
+        self.activePanel(id);
     };
 
     let toggleTemps = function () {
@@ -72,6 +66,9 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     let toggleGate = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN)
+            return;
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
@@ -82,6 +79,9 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     let toggleRobot = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN)
+            return;
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
@@ -92,6 +92,9 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     let toggleRack = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN)
+            return;
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
@@ -102,6 +105,9 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     let toggleStation = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN)
+            return;
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
@@ -112,6 +118,9 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     };
 
     let toggleObstacle = function () {
+        if (runningMode() !== RUNNING_MODE.DESIGN)
+            return;
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
@@ -173,23 +182,21 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                 }
             }
         } else {
-            if (!state.map.isRobotFree(row, col)) {
-                self.activePanel(LEFT_PANEL.ROBOT);
-                self.robotVM.fill(row, col);
-            } else if (!state.map.isFacilityFree(row, col)) {
-                let fac = state.map.getFacility(row, col);
+            shouter.notifySubscribers({}, SHOUT.ESC);
 
-                if (fac.type === MAP_CELL.RACK && fac.loaded)
-                    return;
+            let objects = state.map.getCellObjects(row, col);
 
-                switch (fac.type) {
-                    case MAP_CELL.GATE:
-                        self.activePanel(LEFT_PANEL.GATE);
-                        self.gateVM.fill(row, col);
-                        break;
+            for (let i = 0; i < objects.length; i++) {
+                let obj = objects[i];
+
+                switch (obj.type) {
                     case MAP_CELL.RACK:
                         self.activePanel(LEFT_PANEL.RACK);
                         self.rackVM.fill(row, col);
+                        break;
+                    case MAP_CELL.GATE:
+                        self.activePanel(LEFT_PANEL.GATE);
+                        self.gateVM.fill(row, col);
                         break;
                     case MAP_CELL.STATION:
                         self.activePanel(LEFT_PANEL.STATION);
@@ -200,6 +207,11 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
                         self.obstacleVM.fill(row, col);
                         break;
                 }
+            }
+
+            if (!state.map.isRobotFree(row, col)) {
+                self.activePanel(LEFT_PANEL.ROBOT);
+                self.robotVM.fill(row, col);
             }
         }
     };

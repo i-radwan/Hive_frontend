@@ -10,6 +10,11 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
     self.activeStationRow = -1;
     self.activeStationCol = -1;
 
+    self.showable = ko.observable(true); // In simulation mode, when robot is clicked
+    self.active = ko.computed(function () {
+        return self.showable() || runningMode() === RUNNING_MODE.DESIGN;
+    });
+
     self.add = function (row, col) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
@@ -155,6 +160,7 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
 
         self.activeStationRow = row;
         self.activeStationCol = col;
+        self.showable(true);
 
         self.id(fac.id);
 
@@ -236,6 +242,7 @@ let stationPanelViewModel = function (runningMode, shouter, state, gfxEventHandl
     let unselect = function () {
         self.activeStationRow = self.activeStationCol = -1;
         self.editing(false);
+        self.showable(false);
     };
 
     let clear = function () {

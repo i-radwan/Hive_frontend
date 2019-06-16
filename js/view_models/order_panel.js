@@ -8,6 +8,10 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.activePanel = ko.observable(ORDER_PANEL.ADD);
 
+    self.active = ko.computed(function () {
+        return runningMode() === RUNNING_MODE.SIMULATE;
+    });
+
     self.id = ko.observable(1);
     self.refill = ko.observable(false);
     self.gateID = ko.observable("");

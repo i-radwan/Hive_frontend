@@ -10,6 +10,11 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.activeGateRow = -1;
     self.activeGateCol = -1;
 
+    self.showable = ko.observable(true); // In simulation mode, when robot is clicked
+    self.active = ko.computed(function () {
+        return self.showable() || runningMode() === RUNNING_MODE.DESIGN;
+    });
+
     self.add = function (row, col) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
@@ -155,6 +160,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         self.activeGateRow = row;
         self.activeGateCol = col;
+        self.showable(true);
 
         self.id(fac.id);
 
@@ -236,6 +242,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     let unselect = function () {
         self.activeGateRow = self.activeGateCol = -1;
         self.editing(false);
+        self.showable(false);
     };
 
     let clear = function () {
