@@ -154,8 +154,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return or.id === id;
         });
 
-        console.log(o);
-
         o.forEach(function (or) {
             logger({
                 level: LOG_LEVEL.INFO,
@@ -176,8 +174,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             for (let i = 0; i < items.length; ++i) {
                 let itemID = items[i].id;
                 let itemQuantity = items[i].quantity;
-
-                console.log(o);
 
                 o.items().forEach(function (i) {
                     if (i.id !== itemID)
@@ -217,8 +213,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                     items().forEach(function (i) {
                         del += i.delivered();
                         tot += i.quantity;
-
-                        console.log(del + " --- " + tot);
                     });
 
                     return (del / tot) * 100;

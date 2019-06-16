@@ -82,9 +82,6 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
 
     // Events
     shouter.subscribe(function () {
-        console.log(state);
-        console.log(state.map);
-
         self.mapHeight(state.map.height);
         self.mapWidth(state.map.width);
 

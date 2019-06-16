@@ -107,7 +107,6 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         state.nextIDs.item = Math.max(state.nextIDs.item, parseInt(self.itemID()));
 
         state.items = ko.mapping.toJS(self.items());
-        console.log(state.items);
 
         // Scroll view to bottom
         let container = $(".rpanel .items .items-list .items-list-rows");
@@ -196,8 +195,6 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         for (let i = 0; i < state.items.length; ++i) {
             self.items.push(state.items[i]);
         }
-
-        console.log(self.items());
     };
 
     // Events

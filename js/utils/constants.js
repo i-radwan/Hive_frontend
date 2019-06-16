@@ -169,6 +169,25 @@ CURSOR_STYLES = {
 //
 
 // Server Msgs
+START_MODE = {
+    SIMULATE: 0,
+    DEPLOY: 1
+};
+
+ACK_START_STATUS = {
+    OK: 0,
+    ERROR: 1
+};
+
+ACK_RESUME_STATUS = {
+    OK: 0,
+    ERROR: 1
+};
+
+ACK_ORDER_STATUS = {
+    OK: 0,
+    ERROR: 1
+};
 
 MSG_TO_SERVER = {
     START: 0,
@@ -190,26 +209,6 @@ MSG_FROM_SERVER = {
     DEACTIVATE: 4,
     ACTIVATE: 5,
     MSG: 6
-};
-
-START_MODE = {
-    SIMULATE: 0,
-    DEPLOY: 1
-};
-
-ACK_START_STATUS = {
-    OK: 0,
-    ERROR: 1
-};
-
-ACK_RESUME_STATUS = {
-    OK: 0,
-    ERROR: 1
-};
-
-ACK_ORDER_STATUS = {
-    OK: 0,
-    ERROR: 1
 };
 
 SERVER_ACTIONS = {

@@ -151,8 +151,6 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     });
 
     self.tabsClipPath = ko.computed(function () {
-        console.log(self.activePanel());
-
         if (self.activePanel() === RIGHT_PANEL.LOGS) {
             return 'polygon(0% 0%, 33.33% 0%, 33.33% 100%, 0% 100%)';
         } else if (self.activePanel() === RIGHT_PANEL.STATS) {

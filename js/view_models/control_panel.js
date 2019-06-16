@@ -173,7 +173,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         if (data.status === ACK_RESUME_STATUS.OK) {
             runningMode(self.lastStartMode === START_MODE.SIMULATE ? RUNNING_MODE.SIMULATE : RUNNING_MODE.DEPLOY);
 
-            console.log(runningMode());
             self.playing(true);
 
             logger({

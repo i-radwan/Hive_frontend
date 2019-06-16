@@ -58,6 +58,25 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 let logs = msg.data.logs;
                 let statistics = msg.data.statistics;
 
+                // Push the actions to pendingActions before calling the gfx library
+                // because if the gfx changed an action (e.g. load), while we are still processing here
+                // we will have race condition between here and handleAckAction function.
+                for (let i = 0; i < actions.length; ++i) {
+                    let data = actions[i].data;
+
+                    self.pendingActions.push(data.id);
+                }
+
+                // We have to check here, because if we checked after calling the gfx lib, and gfx
+                // lib has already called handleAckAction, we may enter this block, because the
+                // pendingActions is now empty, even though it contained actions at the beginning.
+                // This will cause sending ACK twice.
+                if (self.pendingActions.length === 0) {
+                    comm.send({
+                        type: MSG_TO_SERVER.ACK
+                    });
+                }
+
                 for (let i = 0; i < actions.length; ++i) {
                     let a = actions[i];
                     let data = actions[i].data;
@@ -79,8 +98,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     } else if (a.type === SERVER_ACTIONS.OFFLOAD) {
                         self.leftPanelVM.robotVM.offload(data.id);
                     }
-
-                    self.pendingActions.push(data.id);
                 }
 
                 for (let i = 0; i < logs.length; ++i) {
@@ -100,8 +117,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         self.leftPanelVM.rackVM.adjustRack(rackID, items);
                         self.leftPanelVM.orderVM.updateOrderDeliveredItems(orderID, items);
                     } else if (l.type === SERVER_LOGS.ORDER_FULFILLED) {
-                        console.log("LOG", l);
-
                         let id = data.id;
 
                         self.leftPanelVM.orderVM.finishOngoingOrder(id, self.timestep);
@@ -119,12 +134,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
                 for (let i = 0; i < statistics.length; ++i) {
                     self.rightPanelVM.updateStats(statistics[i].key, statistics[i].value);
-                }
-
-                if (self.pendingActions.length === 0) {
-                    comm.send({
-                        type: MSG_TO_SERVER.ACK
-                    });
                 }
                 break;
 
