@@ -633,16 +633,16 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Key down event handler
-    self.keyDownEvent = function(e) {
-      switch (e.which) {
-          case KEY_CODE.CTRL:
-              isCtrlDown = true;
-              break;
-      }
+    self.keyDownEvent = function (e) {
+        switch (e.which) {
+            case KEY_CODE.CTRL:
+                isCtrlDown = true;
+                break;
+        }
     };
 
     // Key up event handler
-    self.keyUpEvent = function(e) {
+    self.keyUpEvent = function (e) {
         switch (e.which) {
             case KEY_CODE.CTRL:
                 isCtrlDown = false;

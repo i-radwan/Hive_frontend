@@ -328,7 +328,7 @@ let gfxEngine = function () {
         // Load robot svg
         robotSVG = new Array(GFX_SVG_MODEL.ROBOT.length);
 
-        for (let i = 0;i < GFX_SVG_MODEL.ROBOT.length; i++) {
+        for (let i = 0; i < GFX_SVG_MODEL.ROBOT.length; i++) {
             robotSVG[i] = self.two.load(GFX_SVG_MODEL.ROBOT[i]);
         }
 
@@ -555,7 +555,7 @@ let gfxEngine = function () {
     };
 
     // Change color of a given cell
-    self.colorizeCell = function(row, col, color) {
+    self.colorizeCell = function (row, col, color) {
         zIndexGroups[Z_INDEX.BACKGROUND].children[col * mapHeight + row].fill = color;
     };
 
