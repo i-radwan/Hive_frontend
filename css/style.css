@@ -547,7 +547,6 @@ input[type=number]::-webkit-outer-spin-button {
 .lpanel .details .map .actions {
     position: absolute;
     bottom: 20px;
-    width: 100%;
     padding: 0;
 }
 

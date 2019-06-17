@@ -61,6 +61,12 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
             state.map.changeMapSize(self.mapHeight(), self.mapWidth(), true);
 
             shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
+
+            shouter.notifySubscribers({
+                text: "Map size has been updated!",
+                type: MSG_TYPE.INFO,
+                volatile: true
+            }, SHOUT.MSG);
         }
     };
 
