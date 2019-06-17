@@ -258,7 +258,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.clearOrders = function() {
-        self.id(0);
+        self.id(1);
 
         self.ongoingOrders.removeAll();
         self.upcomingOrders.removeAll();

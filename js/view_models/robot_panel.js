@@ -379,7 +379,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
                 color: rob.color,
-                msg: "Robot <b>(#" + rob.id + ")</b> is bound to the Gate<b> (#" + fac.id + ")</b>."
+                msg: "Robot <b>(#" + rob.id + ")</b> is bound to Gate<b> (#" + fac.id + ")</b>."
             });
         } else if (fac.type === MAP_CELL.STATION) {
             logger({
@@ -438,7 +438,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.ROBOT,
                 color: rob.color,
-                msg: "Robot <b>(#" + rob.id + ")</b> is released from the Gate <b>(#" + fac.id + ")</b>."
+                msg: "Robot <b>(#" + rob.id + ")</b> is released from Gate <b>(#" + fac.id + ")</b>."
             });
         } else if (fac.type === MAP_CELL.STATION) {
             logger({

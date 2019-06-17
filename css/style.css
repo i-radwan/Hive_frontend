@@ -130,6 +130,11 @@ body {
     transform: rotate(90deg);
 }
 
+::-webkit-scrollbar:not(.logs) {
+    width: 0;
+    background: transparent;
+}
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
