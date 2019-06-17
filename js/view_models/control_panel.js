@@ -109,8 +109,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         });
 
         runningMode(RUNNING_MODE.DESIGN);
-
-        reset();
     };
 
     self.deploy = function () {

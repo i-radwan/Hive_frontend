@@ -202,6 +202,8 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     runningMode.subscribe(function (newRunningMode) {
         if (newRunningMode === RUNNING_MODE.DESIGN) {
             self.activePanel(RIGHT_PANEL.ITEMS);
+            self.logs.removeAll();
+            self.stats.removeAll();
         }
         else {
             self.activePanel(RIGHT_PANEL.LOGS);
