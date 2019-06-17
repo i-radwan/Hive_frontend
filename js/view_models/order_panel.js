@@ -300,6 +300,15 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return false;
         }
 
+        if (self.gateID().length === 0) {
+            shouter.notifySubscribers({
+                text: "Gate ID is mandatory!",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         if (self.items().length === 0) {
             shouter.notifySubscribers({
                 text: "Order must contain items!",
