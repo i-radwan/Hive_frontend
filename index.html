@@ -419,9 +419,24 @@
                                    data-bind="textInput: leftPanelVM.orderVM.gateID">
                         </div>
                         <div class="form-group">
-                            <label>Start Timestep</label>
-                            <input type="number" class="form-control bg-dark text-light"
-                                   placeholder="0 = Now" data-bind="textInput: leftPanelVM.orderVM.startTimestep">
+                            <label>Issue At</label>
+                            <div class="issue-time">
+
+                                <div>
+                                    <input type="number" class="form-control bg-dark text-light"
+                                       placeholder="00" data-bind="textInput: leftPanelVM.orderVM.issueTimeHours">
+                                </div>
+                                <span>:</span>
+                                <div>
+                                    <input type="number" class="form-control bg-dark text-light"
+                                           placeholder="00" data-bind="textInput: leftPanelVM.orderVM.issueTimeMinutes">
+                                </div>
+                                <span>:</span>
+                                <div>
+                                    <input type="number" class="form-control bg-dark text-light"
+                                           placeholder="00" data-bind="textInput: leftPanelVM.orderVM.issueTimeSeconds">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <span class="refill"
@@ -521,11 +536,12 @@
                                     <div class="cont bordered">
                                         <div class="row main-row">
                                             <div class="col-md-3 icon">
-                                                <span class="fas fa-box" data-toggle="tooltip"
-                                                      data-bind="attr: {title: function() {return progress() + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + progress() + '%, #404548 ' + progress() + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
-                                                <i class="fas fa-exclamation-circle" data-toggle="tooltip"
-                                                   title="Order has to wait (resources or gate may be blocked)"
-                                                   data-bind="css: {hidden: satisfiable}"></i>
+                                                <div>
+                                                    <span class="fas fa-box" data-toggle="tooltip"
+                                                          data-bind="attr: {title: function() {return progress() + '%';}() }, style: {'background': function(){ return '-webkit-linear-gradient(90deg, #e09500 0%, #e09500 ' + progress() + '%, #404548 ' + progress() + '%)';}(), '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent' }"></span>
+                                                    <i class="fas fa-exclamation-circle" data-toggle="tooltip"
+                                                       data-bind="attr: {'title': error}, css: {hidden: satisfiable}"></i>
+                                                </div>
                                             </div>
                                             <div class="row col-md-9 order-details">
                                                 <div class="row">
@@ -547,12 +563,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="row" data-bind="css: {hidden: !more()}">
-                                                    <div class="col-md-4">Start:</div>
-                                                    <div class="col-md-8"><small data-bind="text: start_timestep"></small></div>
+                                                    <div class="col-md-4">Issue:</div>
+                                                    <div class="col-md-8"><small data-bind="text: issue_time"></small></div>
                                                 </div>
                                                 <div class="row" data-bind="css: {hidden: !more()}">
                                                     <div class="col-md-4">Ful.:</div>
-                                                    <div class="col-md-8"><small data-bind="text: fulfilled_timestep"></small></div>
+                                                    <div class="col-md-8"><small data-bind="text: fulfilled_time"></small></div>
                                                 </div>
                                             </div>
                                         </div>

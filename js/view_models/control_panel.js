@@ -1,4 +1,5 @@
 require('../utils/constants');
+let utils = require('../utils/utils')();
 let $ = require('jquery');
 let ko = require('knockout');
 
@@ -15,37 +16,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.lastStartMode = null;
 
     self.displayTime = ko.computed(function () {
-        let seconds = self.time();
-        let minutes = 0;
-        let hours = 0;
-
-        if (seconds > 60) {
-            minutes = Math.floor(seconds / 60);
-            seconds -= minutes * 60;
-        }
-
-        if (minutes > 60) {
-            hours = Math.floor(minutes / 60);
-            minutes -= hours * 60;
-        }
-
-        let s = String(seconds);
-        let m = String(minutes);
-        let h = String(hours);
-
-        if (seconds < 10) {
-            s = "0" + s;
-        }
-
-        if (minutes < 10) {
-            m = "0" + m;
-        }
-
-        if (hours < 10) {
-            h = "0" + h;
-        }
-
-        return h + ":" + m + ":" + s;
+        return secondsToFormattedTime(self.time());
     });
 
     self.play = function () {
@@ -205,12 +176,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         self.coordinates("(" + (row + 1) + ", " + (col + 1) + ")");
     };
 
-    self.incrementTime = function () {
-        if (runningMode() === RUNNING_MODE.SIMULATE || runningMode() === RUNNING_MODE.DEPLOY) {
-            self.time(self.time() + 1);
-        }
-    };
-
     shouter.subscribe(function (msg) {
         self.msg(msg.text);
         self.msgType(msg.type);
@@ -228,7 +193,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     let reset = function () {
         self.playing(false);
         self.lastStartMode = null;
-        self.time(0);
 
         state.load(self.preSimState);
         shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
@@ -264,8 +228,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             reset();
         }
     });
-
-    setInterval(self.incrementTime, 1000);
 };
 
 module.exports = controlConsoleViewModel;

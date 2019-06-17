@@ -1,10 +1,13 @@
 require('../utils/constants');
 require('knockout-mapping');
+let utils = require('../utils/utils')();
 let $ = require('jquery');
 let ko = require('knockout');
 
 let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
+
+    self.time = ko.observable(0);
 
     self.activePanel = ko.observable(ORDER_PANEL.ADD);
 
@@ -16,7 +19,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.refill = ko.observable(false);
     self.gateID = ko.observable("");
     self.rackID = ko.observable("");
-    self.startTimestep = ko.observable(0);
+    self.issueTimeHours = ko.observable("00");
+    self.issueTimeMinutes = ko.observable("00");
+    self.issueTimeSeconds = ko.observable("00");
     self.items = ko.observableArray();
     self.itemID = ko.observable();
     self.itemQuantity = ko.observable();
@@ -79,20 +84,78 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (!check())
             return;
 
+        let raw_items = ko.mapping.toJS(self.items());
+        let items = ko.observableArray();
+
+        for (let i = 0; i < raw_items.length; ++i) {
+            let it = Object.assign({}, raw_items[i]);
+
+            it.delivered = ko.observable(0);
+            items.push(it);
+        }
+
+        let issue_time_raw = parseInt(self.issueTimeHours()) * 3600 +
+                             parseInt(self.issueTimeMinutes()) * 60 +
+                             parseInt(self.issueTimeSeconds());
+
+        let issue_time = self.issueTimeHours() + ":" + self.issueTimeMinutes() + ":" + self.issueTimeSeconds();
+
+        if (issue_time_raw < self.time()) {
+            issue_time_raw = self.time();
+
+            issue_time = secondsToFormattedTime(issue_time_raw);
+        }
+
         let order = {
             id: parseInt(self.id()),
             type: (self.refill() ? ORDER_TYPE.REFILL : ORDER_TYPE.COLLECT),
             gate_id: parseInt(self.gateID()),
             rack_id: parseInt(self.rackID()),
-            items: ko.mapping.toJS(self.items()),
-            start_timestep: self.startTimestep() !== 0 ? self.startTimestep() : state.timestep
+            raw_items: raw_items,
+            items: items,
+            more: ko.observable(false),
+            satisfiable: ko.observable(true),
+            issue_time_raw: issue_time_raw,
+            issue_time: issue_time,
+            fulfilled_time: ko.observable("TBD"),
+            scheduled: false,
+            progress: ko.computed(function () {
+                let del = 0;
+                let tot = 0;
+
+                items().forEach(function (i) {
+                    del += i.delivered();
+                    tot += i.quantity;
+                });
+
+                return (del / tot) * 100;
+            }),
+            error: ko.observable("")
         };
 
-        self.lastOrder = order;
-
-        sendOrderToServer(order);
-
         shouter.notifySubscribers(true, SHOUT.LOADING);
+
+        if (order.issue_time_raw <= self.time()) {
+            self.lastOrder = order;
+
+            sendOrderToServer(order);
+        } else {
+            order.scheduled = true;
+
+            self.upcomingOrders.push(order);
+
+            self.id(parseInt(self.id()) + 1);
+
+            shouter.notifySubscribers({
+                text: "Order scheduled successfully!",
+                type: MSG_TYPE.INFO,
+                volatile: true
+            }, SHOUT.MSG);
+
+            clear();
+
+            shouter.notifySubscribers(false, SHOUT.LOADING);
+        }
     };
 
     self.addItem = function () {
@@ -139,13 +202,13 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.activePanel(m);
     };
 
-    self.finishOngoingOrder = function (id, timestep) {
+    self.finishOngoingOrder = function (id) {
         let o = self.ongoingOrders.remove(function (or) {
             return or.id === id;
         });
 
         o.forEach(function (or) {
-            or.fulfilled_timestep(timestep);
+            or.fulfilled_time(secondsToFormattedTime(self.time()));
 
             self.finishedOrders.push(or);
         });
@@ -159,20 +222,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.issueOrder = function (id) {
-        let o = self.upcomingOrders.remove(function (or) {
-            return or.id === id;
-        });
-
-        o.forEach(function (or) {
-            logger({
-                level: LOG_LEVEL.INFO,
-                object: LOG_TYPE.ORDER,
-                color: "#bababa",
-                msg: "Order <b>(#" + or.id + ")</b> has been issued."
-            });
-
-            self.ongoingOrders.push(or);
-        });
     };
 
     self.updateOrderDeliveredItems = function (orderID, items) {
@@ -200,41 +249,15 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         if (data.status === ACK_ORDER_STATUS.OK) {
             let o = self.lastOrder;
 
-            let items = ko.observableArray();
+            self.ongoingOrders.push(o);
 
-            for (let i = 0; i < o.items.length; ++i) {
-                o.items[i].delivered = ko.observable(0);
-                items.push(o.items[i]);
+            if (!self.lastOrder.scheduled) {
+                self.id(parseInt(self.id()) + 1);
             }
 
-            let order = {
-                id: o.id,
-                gate_id: o.gate_id,
-                items: items,
-                more: ko.observable(false),
-                satisfiable: ko.observable(true),
-                start_timestep: o.start_timestep,
-                fulfilled_timestep: ko.observable("TBD"),
-                progress: ko.computed(function () {
-                    let del = 0;
-                    let tot = 0;
+            clear();
 
-                    items().forEach(function (i) {
-                        del += i.delivered();
-                        tot += i.quantity;
-                    });
-
-                    return (del / tot) * 100;
-                })
-            };
-
-            if (o.start_timestep > state.timestep) {
-                self.upcomingOrders.push(order);
-            } else {
-                self.ongoingOrders.push(order);
-            }
-
-            self.id(parseInt(self.id()) + 1);
+            self.lastOrder = null;
 
             shouter.notifySubscribers({
                 text: "Order placed successfully!",
@@ -242,22 +265,56 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 volatile: true
             }, SHOUT.MSG);
 
-            clear();
-
-            shouter.notifySubscribers(false, SHOUT.LOADING);
-
-            self.lastOrder = null;
+            logger({
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.ORDER,
+                color: "#bababa",
+                msg: "Order <b>(#" + o.id + ")</b> has been issued."
+            });
         } else if (data.status === ACK_ORDER_STATUS.ERROR) {
             shouter.notifySubscribers({
                 text: data.msg,
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
-            shouter.notifySubscribers(false, SHOUT.LOADING);
+            if (self.lastOrder.scheduled) {
+                console.log("ERRORR");
+                self.lastOrder.error(data.msg);
+                self.lastOrder.satisfiable(false);
+                self.upcomingOrders.push(self.lastOrder);
+            }
+        }
+
+        shouter.notifySubscribers(false, SHOUT.LOADING);
+
+        self.consumeUpcomingOrders();
+    };
+
+    self.incrementTime = function () {
+        self.time(self.time() + 1);
+
+        self.consumeUpcomingOrders();
+    };
+
+    self.consumeUpcomingOrders = function () {
+        let upcoming = self.upcomingOrders();
+
+        for (let i = 0; i < upcoming.length; i++) {
+            let o = upcoming[i];
+
+            if (o.issue_time_raw <= self.time() && o.satisfiable()) {
+                self.upcomingOrders.splice(i, 1);
+
+                self.lastOrder = o;
+
+                shouter.notifySubscribers(true, SHOUT.LOADING);
+
+                sendOrderToServer(o);
+            }
         }
     };
 
-    self.clearOrders = function() {
+    self.clearOrders = function () {
         self.id(1);
 
         self.ongoingOrders.removeAll();
@@ -277,7 +334,13 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     let sendOrderToServer = function (order) {
         sendToServer({
             type: MSG_TO_SERVER.ORDER,
-            data: order
+            data: {
+                id: order.id,
+                type: order.type,
+                gate_id: order.gate_id,
+                rack_id: order.rack_id,
+                items: order.raw_items
+            }
         });
     };
 
@@ -318,6 +381,27 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             return false;
         }
 
+        try {
+            if (self.issueTimeHours().length === 0 || parseInt(self.issueTimeHours()) < 0 ||
+                self.issueTimeMinutes().length === 0 || parseInt(self.issueTimeMinutes()) < 0 ||
+                parseInt(self.issueTimeMinutes()) > 59 || self.issueTimeSeconds().length === 0 ||
+                parseInt(self.issueTimeSeconds()) < 0 || parseInt(self.issueTimeSeconds()) > 59) {
+                shouter.notifySubscribers({
+                    text: "Invalid issue time",
+                    type: MSG_TYPE.ERROR
+                }, SHOUT.MSG);
+
+                return false;
+            }
+        } catch (e) {
+            shouter.notifySubscribers({
+                text: "Invalid issue time",
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return false;
+        }
+
         // -ve values
         if (parseInt(self.id()) < 0) {
             shouter.notifySubscribers({
@@ -326,14 +410,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             }, SHOUT.MSG);
 
             return false;
-        }
-
-        // Check start timestep
-        if (parseInt(self.startTimestep()) !== 0 && parseInt(self.startTimestep()) < state.timestep) {
-            shouter.notifySubscribers({
-                text: "Start timestep has to be in the future or zero (fro now)!",
-                type: MSG_TYPE.ERROR
-            }, SHOUT.MSG);
         }
 
         // Duplicate ID checks

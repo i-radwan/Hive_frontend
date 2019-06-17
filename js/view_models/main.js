@@ -14,6 +14,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     self.state = new State();
 
+    self.time = ko.observable(0);
+
     self.shouter = new ko.subscribable();
 
     self.runningMode = ko.observable(RUNNING_MODE.DESIGN);
@@ -29,6 +31,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
     self.pendingActions = []; // No. of actions sent to graphics and waiting for their ACKs
 
     self.loadingVisible = ko.observable(false);
+
+    let incrementTimeInterval;
 
     self.setGFXEventHandler = function (gfxEventHandler) {
         self.gfxEventHandler = gfxEventHandler;
@@ -124,7 +128,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         console.log("Data", data);
                         let id = data.id;
 
-                        self.leftPanelVM.orderVM.finishOngoingOrder(id, self.timestep);
+                        self.leftPanelVM.orderVM.finishOngoingOrder(id);
                     } else if (l.type === SERVER_LOGS.ORDER_ISSUED) {
                         let id = data.id;
 
@@ -255,13 +259,14 @@ let mainViewModel = function (gfxEventHandler, comm) {
         }
     };
 
-    gfxEventHandler({
-        type: EVENT_TO_GFX.INIT,
-        data: {
-            width: self.state.map.width,
-            height: self.state.map.height
+    let incrementTime = function () {
+        if (self.runningMode() === RUNNING_MODE.SIMULATE || self.runningMode() === RUNNING_MODE.DEPLOY) {
+            self.time(self.time() + 1);
+
+            self.centerPanelVM.controlConsoleVM.time(self.time());
+            self.leftPanelVM.orderVM.incrementTime();
         }
-    });
+    };
 
     // Events
     self.shouter.subscribe(function (on) {
@@ -271,6 +276,31 @@ let mainViewModel = function (gfxEventHandler, comm) {
     self.shouter.subscribe(function () {
         handleEsc();
     }, self, SHOUT.ESC);
+
+    self.runningMode.subscribe(function (newRunningMode) {
+        console.log("MODE", newRunningMode);
+
+        if (newRunningMode === RUNNING_MODE.DESIGN) {
+            self.time(0);
+            self.centerPanelVM.controlConsoleVM.time(0);
+            self.leftPanelVM.orderVM.time(0);
+
+            self.loadingVisible(false);
+
+            clearInterval(incrementTimeInterval);
+        } else {
+            clearInterval(incrementTimeInterval);
+            incrementTimeInterval = setInterval(incrementTime, 1000);
+        }
+    });
+
+    gfxEventHandler({
+        type: EVENT_TO_GFX.INIT,
+        data: {
+            width: self.state.map.width,
+            height: self.state.map.height
+        }
+    });
 };
 
 module.exports = mainViewModel;
