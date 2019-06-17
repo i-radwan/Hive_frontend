@@ -930,6 +930,27 @@ input[type=number]::-webkit-outer-spin-button {
     width: 15%;
 }
 
+.scroll-arrow {
+    z-index: 100;
+    position: absolute;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: rgba(186, 186, 186, 0.31);
+}
+
+.scroll-arrow:hover {
+    color: rgba(186, 186, 186, 0.5);
+}
+
+.scroll-up-arrow {
+    top: 60px;
+}
+
+.scroll-down-arrow {
+    bottom: 20px;
+}
+
 /*===============================================================*/
 /*========================= STATS PANEL =========================*/
 /*===============================================================*/

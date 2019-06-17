@@ -700,6 +700,8 @@
 
             <!--========================= LOGS ==========================-->
             <div class="logs" id="logs" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.LOGS}">
+                <i class="fas fa-arrow-circle-up scroll-arrow scroll-up-arrow"
+                   data-bind="visible: rightPanelVM.activateScrollUp, click: rightPanelVM.scrollUp"></i>
                 <span data-bind="foreach: rightPanelVM.logs">
                     <span data-bind="if: object !== LOG_TYPE.TEXT">
                         <div class="row item">
@@ -722,6 +724,8 @@
                         </div>
                     </span>
                  </span>
+                <i class="fas fa-arrow-circle-down scroll-arrow scroll-down-arrow"
+                   data-bind="visible: rightPanelVM.activateScrollDown, click: rightPanelVM.scrollDown"></i>
             </div>
 
             <!--========================= STATS =========================-->
