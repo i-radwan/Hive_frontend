@@ -10,7 +10,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     self.activeObstacleRow = -1;
     self.activeObstacleCol = -1;
 
-    self.showable = ko.observable(true); // In simulation mode, when robot is clicked
+    self.showable = ko.observable(false); // In simulation mode, when robot is clicked
     self.active = ko.computed(function () {
         return self.showable() || runningMode() === RUNNING_MODE.DESIGN;
     });

@@ -380,14 +380,14 @@ input[type=number]::-webkit-outer-spin-button {
     line-height: 1;
 }
 
-/*.zoom:active {*/
-/*    background: #029740;*/
-/*    border: 1px solid #128435;*/
-/*}*/
+.zoom:active {
+    background: #029740;
+    border: 1px solid #128435;
+}
 
-/*.zoom:active .zoom-button {*/
-/*    color: #003107;*/
-/*}*/
+.zoom:active .zoom-button {
+    color: #003107;
+}
 
 .zoom-button {
     color: #006519;
@@ -588,13 +588,21 @@ input[type=number]::-webkit-outer-spin-button {
 /*========================= ROBOT PANEL =========================*/
 /*===============================================================*/
 
-.lpanel-details-bottom-actions button {
+.robot-power-off {
     position: absolute;
-    left: 20px;
-    bottom: 10px;
-    padding: 5px 15px;
-    font-size: 1rem;
-    color: #ffffffdb;
+    left: 15px;
+    bottom: 15px;
+    color: rgba(186, 186, 186, 0.5);
+    cursor: pointer;
+    font-size: 25px;
+}
+
+.robot-power-off:hover {
+    text-shadow: 0 0 5px #e09500;
+}
+
+.robot-power-off.active {
+    color: lawngreen;
 }
 
 /*===============================================================*/

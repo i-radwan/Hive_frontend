@@ -18,7 +18,7 @@ let rackPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.activeRackRow = -1;
     self.activeRackCol = -1;
 
-    self.showable = ko.observable(true); // In simulation mode, when robot is clicked
+    self.showable = ko.observable(false); // In simulation mode, when robot is clicked
     self.active = ko.computed(function () {
         return self.showable() || runningMode() === RUNNING_MODE.DESIGN;
     });

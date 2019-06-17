@@ -206,12 +206,12 @@
                            data-bind="click: leftPanelVM.robotVM.update"></i>
                         <span class="delete-label">Press DELETE key to delete.</span>
                     </div>
-                    <div class="lpanel-details-bottom-actions"
+                    <div
                          data-bind="css: {hidden: runningMode() === RUNNING_MODE.DESIGN}">
-                        <button data-bind="click: toggleActivation,
-                                           css: {'btn-danger': !leftPanelVM.robotVM.deactivated(),
-                                                 'btn-success': leftPanelVM.robotVM.deactivated()},
-                                           text: leftPanelVM.robotVM.deactivated() ? 'Activate' : 'Deactivate'"></button>
+                        <i class="fas fa-power-off robot-power-off"
+                           data-bind="click: toggleActivation,
+                                      attr: {'title': leftPanelVM.robotVM.deactivated() ? 'Activate' : 'Deactivate'},
+                                      css: {'active': !leftPanelVM.robotVM.deactivated()}"></i>
                     </div>
                 </div>
 
@@ -427,7 +427,8 @@
                             <span class="refill"
                                   data-bind="click: function() {leftPanelVM.orderVM.refill(!leftPanelVM.orderVM.refill())},
                                              css: {'active': leftPanelVM.orderVM.refill()}">
-                                <i class="far fa-arrow-alt-circle-down"></i>
+                                <i class="far" data-bind="css: {'fa-arrow-alt-circle-down': !leftPanelVM.orderVM.refill(),
+                                                                'fa-arrow-alt-circle-up': leftPanelVM.orderVM.refill()}"></i>
                                 <span><span data-bind="visible: !leftPanelVM.orderVM.refill()">No </span>Refill</span>
                             </span>
                         </div>
