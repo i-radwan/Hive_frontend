@@ -1,4 +1,5 @@
 require('../utils/constants');
+require('../utils/strings');
 
 let ServerMiddleWare = function () {
     let self = this;

@@ -1,4 +1,5 @@
 require('../utils/constants');
+require('../utils/strings');
 let fs = require('fs');
 let ko = require('knockout');
 const {dialog} = require('electron').remote;

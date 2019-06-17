@@ -1,4 +1,5 @@
 require('../utils/constants');
+require('../utils/strings');
 let utils = require('../utils/utils')();
 let $ = require('jquery');
 let ko = require('knockout');

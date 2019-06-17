@@ -1,5 +1,5 @@
 require('../utils/constants');
-
+require('../utils/strings');
 let Map = function () {
     let self = this;
 

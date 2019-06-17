@@ -1,4 +1,5 @@
 require('../utils/constants');
+require('../utils/strings');
 let ko = require('knockout');
 
 let tempViewModel = require('./temps_panel');

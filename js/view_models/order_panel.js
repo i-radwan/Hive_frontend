@@ -1,4 +1,5 @@
 require('../utils/constants');
+require('../utils/strings');
 require('knockout-mapping');
 let utils = require('../utils/utils')();
 let $ = require('jquery');
@@ -278,7 +279,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             }, SHOUT.MSG);
 
             if (self.lastOrder.scheduled) {
-                console.log("ERRORR");
                 self.lastOrder.error(data.msg);
                 self.lastOrder.satisfiable(false);
                 self.upcomingOrders.push(self.lastOrder);

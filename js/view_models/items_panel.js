@@ -1,4 +1,5 @@
 require('../utils/constants');
+require('../utils/strings');
 require('knockout-mapping');
 let $ = require('jquery');
 let ko = require('knockout');
