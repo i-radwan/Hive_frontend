@@ -35,6 +35,13 @@
 /*==============================================================*/
 /*========================== GENERAL ===========================*/
 /*==============================================================*/
+* {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+}
 
 body {
     padding: 30px 30px 15px;
@@ -286,11 +293,6 @@ input[type=number]::-webkit-outer-spin-button {
     width: 100vw;
     height: 25px;
     font-size: 11pt;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
     -webkit-app-region: drag;
 }
 
