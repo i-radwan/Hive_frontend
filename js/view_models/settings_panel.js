@@ -15,7 +15,7 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
     self.connect = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "Connection is allowed only in design mode!",
+                text: STR[2014]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -25,7 +25,7 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
         if (self.ip().length === 0 || !self.ip().match(REG_IP)) {
             shouter.notifySubscribers({
-                text: "Invalid IP address!",
+                text: STR[2006](["IP address"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -34,7 +34,7 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
         if (self.port().length === 0 || isNaN(self.port())) {
             shouter.notifySubscribers({
-                text: "Invalid port!",
+                text: STR[2006](["port"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -46,7 +46,7 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
             let callback = function () {
                 shouter.notifySubscribers({
-                    text: "Connected to server!",
+                    text: STR[1004](),
                     type: MSG_TYPE.INFO,
                     volatile: true
                 }, SHOUT.MSG);
@@ -60,7 +60,7 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
             let closeCallback = function () {
                 shouter.notifySubscribers({
-                    text: "Server disconnected!",
+                    text: STR[2016]([]),
                     type: MSG_TYPE.ERROR
                 }, SHOUT.MSG);
 
@@ -76,7 +76,7 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
         shouter.notifySubscribers(false, SHOUT.LOADING);
 
         shouter.notifySubscribers({
-            text: "Couldn't connect to the server!",
+            text: STR[2015]([]),
             type: MSG_TYPE.ERROR
         }, SHOUT.MSG);
 

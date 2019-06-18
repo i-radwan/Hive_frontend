@@ -32,7 +32,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.removeAll = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -47,7 +47,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 return true;
             } else {
                 shouter.notifySubscribers({
-                    text: "Rack (#" + rack.id + ") at (" + (rack.row + 1) + ", " + (rack.col + 1) + ") uses item #" + i.id + "!",
+                    text: STR[2008]([rack.id, rack.row + 1, rack.col + 1, i.id]),
                     type: MSG_TYPE.ERROR
                 }, SHOUT.MSG);
 
@@ -63,7 +63,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.remove = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -79,7 +79,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             state.items = ko.mapping.toJS(self.items());
         } else {
             shouter.notifySubscribers({
-                text: "Rack (#" + rack.id + ") at (" + (rack.row + 1) + ", " + (rack.col + 1) + ") uses item #" + this.id + "!",
+                text: STR[2008]([rack.id, rack.row + 1, rack.col + 1, this.id]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
         }
@@ -88,7 +88,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.add = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -120,7 +120,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         $(".rpanel .add-item .item-name").select();
 
         shouter.notifySubscribers({
-            text: "Item added successfully!",
+            text: STR[1002](),
             type: MSG_TYPE.INFO,
             volatile: true
         }, SHOUT.MSG);
@@ -138,7 +138,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     let check = function () {
         if (self.itemID().length === 0) {
             shouter.notifySubscribers({
-                text: "Item ID is mandatory!",
+                text: STR[2001](["Item ID"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -147,7 +147,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         if (self.itemName().length === 0) {
             shouter.notifySubscribers({
-                text: "Item name is mandatory!",
+                text: STR[2001](["Item name"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -156,7 +156,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         if (self.itemWeight().length === 0) {
             shouter.notifySubscribers({
-                text: "Item weight is mandatory!",
+                text: STR[2001](["Item weight"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -166,7 +166,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         // -ve values
         if (parseInt(self.itemID()) < 0 || parseInt(self.itemWeight()) < 0) {
             shouter.notifySubscribers({
-                text: "Use only +ve values!",
+                text: STR[2010](),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -177,7 +177,7 @@ let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         for (let i = 0; i < self.items().length; ++i) {
             if (parseInt(self.items()[i].id) === parseInt(self.itemID())) {
                 shouter.notifySubscribers({
-                    text: "Item ID must be unique!",
+                    text: STR[2002](["Item ID"]),
                     type: MSG_TYPE.ERROR
                 }, SHOUT.MSG);
 

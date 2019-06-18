@@ -19,7 +19,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.add = function (row, col) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -56,7 +56,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             state.nextIDs.gate = nextID;
 
             shouter.notifySubscribers({
-                text: "Gate placed successfully!",
+                text: STR[1000](["Gate"]),
                 type: MSG_TYPE.INFO,
                 volatile: true
             }, SHOUT.MSG);
@@ -73,7 +73,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             });
         } else {
             shouter.notifySubscribers({
-                text: "(" + (row + 1) + ", " + (col + 1) + ") is occupied!",
+                text: STR[2000]([row + 1, col + 1]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
         }
@@ -104,7 +104,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             });
         } else {
             shouter.notifySubscribers({
-                text: "(" + (dstRow + 1) + ", " + (dstCol + 1) + ") is occupied!",
+                text:STR[2000]([dstRow + 1, dstCol + 1]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -125,7 +125,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.delete = function (row, col) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -185,7 +185,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     self.update = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -194,7 +194,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         }
 
         shouter.notifySubscribers({
-            text: "Gate updated successfully!",
+            text: STR[1001](["Gate"]),
             type: MSG_TYPE.INFO,
             volatile: true
         }, SHOUT.MSG);
@@ -208,7 +208,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
     let check = function () {
         if (self.id().length === 0) {
             shouter.notifySubscribers({
-                text: "Gate ID is mandatory!",
+                text: STR[2001](["Gate ID"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -218,7 +218,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         // -ve values
         if (parseInt(self.id()) < 0) {
             shouter.notifySubscribers({
-                text: "Use only +ve values!",
+                text: STR[2010](),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -230,7 +230,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
 
         if (pos !== undefined && (pos[0] !== self.activeGateRow || pos[1] !== self.activeGateCol)) {
             shouter.notifySubscribers({
-                text: "Gate ID must be unique!",
+                text: STR[2002](["Gate ID"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 

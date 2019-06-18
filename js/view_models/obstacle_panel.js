@@ -19,7 +19,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     self.add = function (row, col) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -56,7 +56,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
             state.nextIDs.obstacle = nextID;
 
             shouter.notifySubscribers({
-                text: "Obstacle placed successfully!",
+                text: STR[1000](["Obstacle"]),
                 type: MSG_TYPE.INFO,
                 volatile: true
             }, SHOUT.MSG);
@@ -73,7 +73,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
             });
         } else {
             shouter.notifySubscribers({
-                text: "(" + (row + 1) + ", " + (col + 1) + ") is occupied!",
+                text: STR[2000]([row + 1, col + 1]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
         }
@@ -104,7 +104,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
             });
         } else {
             shouter.notifySubscribers({
-                text: "(" + (dstRow + 1) + ", " + (dstCol + 1) + ") is occupied!",
+                text:STR[2000]([dstRow + 1, dstCol + 1]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -125,7 +125,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     self.delete = function (row, col) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -185,7 +185,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     self.update = function () {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -194,7 +194,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         }
 
         shouter.notifySubscribers({
-            text: "Obstacle updated successfully!",
+            text: STR[1001](["Obstacle"]),
             type: MSG_TYPE.INFO,
             volatile: true
         }, SHOUT.MSG);
@@ -208,7 +208,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
     let check = function () {
         if (self.id().length === 0) {
             shouter.notifySubscribers({
-                text: "Obstacle ID is mandatory!",
+                text: STR[2001](["Obstacle ID"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -218,7 +218,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
         // -ve values
         if (parseInt(self.id()) < 0) {
             shouter.notifySubscribers({
-                text: "Use only +ve values!",
+                text: STR[2010](),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -230,7 +230,7 @@ let obstaclePanelViewModel = function (runningMode, shouter, state, gfxEventHand
 
         if (pos !== undefined && (pos[0] !== self.activeObstacleRow || pos[1] !== self.activeObstacleCol)) {
             shouter.notifySubscribers({
-                text: "Obstacle ID must be unique!",
+                text: STR[2002](["Obstacle ID"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 

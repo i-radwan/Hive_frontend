@@ -45,13 +45,13 @@ STR = {
     3007: (args) => `Robot <b>(#${args[0]})</b> is bound to Gate<b> (#${args[1]})</b>.`,
     3008: (args) => `Robot <b>(#${args[0]})</b> is released from Gate <b>(#${args[1]})</b>.`,
     3009: (args) => `Robot <b>(#${args[0]})</b> is charging at Station<b> (#${args[1]})</b>.`,
-    3010: (args) => `Robot <b>(#" + rob.id + ")</b> is leaving Station <b>(#" + fac.id + ")</b>.`,
-    3011: (args) => `Robot <b>(#" + rob.id + ")</b> loaded Rack <b>(#" + fac.id + ")</b>.`,
-    3012: (args) => `Robot <b>(#" + rob.id + ")</b> offloaded Rack <b>(#" + fac.id + ")</b>.`,
-    3013: (args) => `Robot <b>(#" + robotID + ")</b> is assigned to Rack <b>(#" + rackID + ")</b>.`,
-    3014: (args) => `Robot <b>(#" + rob.id + ")</b> is back</b>.`,
+    3010: (args) => `Robot <b>(#${args[0]})</b> is leaving Station <b>(#${args[1]})</b>.`,
+    3011: (args) => `Robot <b>(#${args[0]})</b> loaded Rack <b>(#${args[1]})</b>.`,
+    3012: (args) => `Robot <b>(#${args[0]})</b> offloaded Rack <b>(#${args[1]})</b>.`,
+    3013: (args) => `Robot <b>(#${args[0]})</b> is assigned to Rack <b>(#${args[1]})</b>.`,
+    3014: (args) => `Robot <b>(#${args[0]})</b> is back</b>.`,
 
     // Error logs
-    4000: (args) => `Robot <b>(#" + rob.id + ")</b> has failed</b>.`,
-    4001: (args) => `Robot <b>(#" + parseInt(rob.id) + ")</b> cannot move</b>.`
+    4000: (args) => `Robot <b>(#${args[0]})</b> has failed</b>.`,
+    4001: (args) => `Robot <b>(#${args[0]})</b> cannot move</b>.`
 };

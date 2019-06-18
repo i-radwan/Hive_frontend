@@ -120,7 +120,7 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
     self.tempClicked = function (idx) {
         if (runningMode() !== RUNNING_MODE.DESIGN) {
             shouter.notifySubscribers({
-                text: "This action is allowed in design mode only!",
+                text: STR[2012]([]),
                 type: MSG_TYPE.ERROR,
                 volatile: true
             }, SHOUT.MSG);
@@ -130,7 +130,7 @@ let tempsPanelViewModel = function (runningMode, shouter, state, sendToServer, l
 
         if (idx < 0 || idx >= self.temps.length) {
             shouter.notifySubscribers({
-                text: "Invalid template!",
+                text: STR[2006](["template"]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 

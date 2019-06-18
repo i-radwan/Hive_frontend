@@ -23,7 +23,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.play = function () {
         if (!comm.connected) {
             shouter.notifySubscribers({
-                text: "Connect to a server first!",
+                text: STR[2013]([]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -38,7 +38,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             logger({
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.TEXT,
-                msg: "Simulation Paused"
+                msg: STR[3001]([])
             });
 
             gfxEventHandler({
@@ -59,7 +59,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.stop = function () {
         if (!comm.connected) {
             shouter.notifySubscribers({
-                text: "Connect to a server first!",
+                text: STR[2013]([]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -73,7 +73,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         logger({
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.TEXT,
-            msg: "Simulation Stopped"
+            msg: STR[3002]([])
         });
 
         gfxEventHandler({
@@ -91,7 +91,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         if (pos !== undefined) {
             shouter.notifySubscribers({
-                text: "Robot at (" + (pos[0] + 1) + ", " + (pos[1] + 1) + ") doesn't have an IP!",
+                text: STR[2007]([pos[0] + 1, pos[1] + 1]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -119,7 +119,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             logger({
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.TEXT,
-                msg: "Simulation Started"
+                msg: STR[3000]([])
             });
 
             gfxEventHandler({
@@ -202,7 +202,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     let sendStateToServer = function (mode) {
         if (!comm.connected) {
             shouter.notifySubscribers({
-                text: "Connect to a server first!",
+                text: STR[2013]([]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 

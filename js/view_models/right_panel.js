@@ -49,7 +49,7 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     // }, {
     //     level: LOG_LEVEL.INFO,
     //     object: LOG_TYPE.TEXT,
-    //     msg: "Simulation Paused"
+    //     msg: STR[3001]([])
     // }, {
     //     level: LOG_LEVEL.INFO,
     //     object: LOG_TYPE.TEXT,
