@@ -60,7 +60,7 @@ STR = {
     5001: (args) => `Server has received an ill formed message!`,
     5002: (args) => `Server has received unexpected message!`,
     5003: (args) => `Server has received invalid arguments!`,
-    5004: (args) => `Collect Order <b>(#${args[0]})</b> is infeasible due to shortage in items (${args[1].join(", ")})!`,
-    5005: (args) => ``,
-    5006: (args) => `Refill Order <b>(#${args[0]})</b> items weight exceed Rack <b>(#${args[1]})</b> capacity by (${args[2]}) Kg!`,
+    5004: (args) => `Rack (#${args[0]}) load exceed its capacity by (${args[1]}) Kg!`,
+    5005: (args) => `Collect Order (#${args[0]}) is infeasible due to shortage in items (${args[1].join(", ")})!`,
+    5006: (args) => `Refill Order (#${args[0]}) items weight exceed Rack (#${args[1]}) capacity by (${args[2]}) Kg!`,
 };

@@ -273,6 +273,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 msg: STR[3004]([o.id])
             });
         } else if (data.status === ACK_ORDER_STATUS.ERROR) {
+            console.log(data.msg.id, data.msg.args);
+
             shouter.notifySubscribers({
                 text: STR[data.msg.id](data.msg.args),
                 title: data.msg.reason,
