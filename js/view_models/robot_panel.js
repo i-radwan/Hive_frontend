@@ -579,7 +579,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: MSG_TO_SERVER.CONTROL,
                 data: {
                     id: parseInt(self.id()),
-                    type: CONTROL_MSG.DEACTIVATE
+                    type: CONTROL_MSG.ACTIVATE
                 }
             });
         }
