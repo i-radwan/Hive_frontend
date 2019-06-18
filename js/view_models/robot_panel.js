@@ -298,7 +298,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let rob = state.map.getRobot(r, c);
 
-        rob.moving = true;
         rob.direction = (rob.direction + 1) % ROBOT_DIR_CNT;
 
         gfxEventHandler({
@@ -319,7 +318,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let rob = state.map.getRobot(r, c);
 
-        rob.moving = true;
         rob.direction = (rob.direction + 2) % ROBOT_DIR_CNT;
 
         gfxEventHandler({
@@ -576,8 +574,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                     type: CONTROL_MSG.DEACTIVATE
                 }
             });
-
-            self.deactivateRobot(parseInt(self.id()));
         } else {
             sendToServer({
                 type: MSG_TO_SERVER.CONTROL,
@@ -586,71 +582,79 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                     type: CONTROL_MSG.DEACTIVATE
                 }
             });
-
-            self.activateRobot(parseInt(self.id()));
         }
-
-        self.deactivated(!self.deactivated());
     };
 
-    self.deactivateRobot = function (id) {
-        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+    self.deactivateRobots = function (ids) {
+        for (let i = 0; i < ids.length; i++) {
+            let id = ids[i];
 
-        let row = pos[0];
-        let col = pos[1];
+            let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
 
-        let rob = state.map.getRobot(row, col);
+            let row = pos[0];
+            let col = pos[1];
 
-        rob.deactivated = true;
+            let rob = state.map.getRobot(row, col);
 
-        if (rob.moving) {
-            aggregateBlocking(row, col);
-        }
+            rob.deactivated = true;
 
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_FAILURE, // ToDo: STOP or FAILURE (depends on ACK)
-            data: {
-                type: MAP_CELL.ROBOT,
-                id: parseInt(self.id()),
-                row: row,
-                col: col
+            gfxEventHandler({
+                type: EVENT_TO_GFX.OBJECT_FAILURE,
+                data: {
+                    type: MAP_CELL.ROBOT,
+                    id: parseInt(self.id()),
+                    row: row,
+                    col: col
+                }
+            });
+
+            logger({
+                level: LOG_LEVEL.ERROR,
+                object: LOG_TYPE.ROBOT,
+                color: rob.color,
+                msg: STR[4000]([rob.id])
+            });
+
+            if (id === parseInt(self.id())) { // Toggle button only if this is the selected robot
+                self.deactivated(!self.deactivated());
             }
-        });
-
-        logger({
-            level: LOG_LEVEL.ERROR,
-            object: LOG_TYPE.ROBOT,
-            color: rob.color,
-            msg: STR[4000]([rob.id])
-        });
+        }
     };
 
-    self.activateRobot = function (id) {
-        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+    self.activateRobots = function (ids) {
+        for (let i = 0; i < ids.length; i++) {
+            let id = ids[i];
 
-        let row = pos[0];
-        let col = pos[1];
+            let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
 
-        let rob = state.map.getRobot(row, col);
+            let row = pos[0];
+            let col = pos[1];
 
-        rob.deactivated = false;
+            let rob = state.map.getRobot(row, col);
 
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_FIXED,
-            data: {
-                type: MAP_CELL.ROBOT,
-                id: parseInt(self.id()),
-                row: row,
-                col: col
+            rob.deactivated = false;
+
+            gfxEventHandler({
+                type: EVENT_TO_GFX.OBJECT_FIXED,
+                data: {
+                    type: MAP_CELL.ROBOT,
+                    id: parseInt(self.id()),
+                    row: row,
+                    col: col
+                }
+            });
+
+            logger({
+                level: LOG_LEVEL.INFO,
+                object: LOG_TYPE.ROBOT,
+                color: rob.color,
+                msg: STR[3014]([rob.id])
+            });
+
+            if (id === parseInt(self.id())) { // Toggle button only if this is the selected robot
+                self.deactivated(!self.deactivated());
             }
-        });
-
-        logger({
-            level: LOG_LEVEL.INFO,
-            object: LOG_TYPE.ROBOT,
-            color: rob.color,
-            msg: STR[3014]([rob.id])
-        });
+        }
     };
 
     self.doneMoving = function (id) {
@@ -662,8 +666,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let nr = r + ROW_DELTA[rob.direction];
         let nc = c + COL_DELTA[rob.direction];
-
-        rob.moving = false;
 
         state.map.moveObject(r, c, nr, nc, rob);
 
@@ -694,50 +696,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.handleEsc = function () {
         unselect();
         clear();
-    };
-
-    let aggregateBlocking = function (row, col) {
-        let movingRobots = state.map.getMovingRobots();
-
-        for (let i = 0; i < movingRobots.length; ++i) {
-            let rob = movingRobots[0];
-
-            let pos = state.map.getObjectPos(rob.id, MAP_CELL.ROBOT);
-
-            let r = pos[0];
-            let c = pos[1];
-
-            let nr = r + ROW_DELTA[rob.direction];
-            let nc = c + COL_DELTA[rob.direction];
-
-            if (nr === row && nc === col) { // Moving toward blocked cell
-                // rob.moving = false;  // ToDo: consider this optimization, it will cause an error
-                                        // ToDo: as you will not know whether this robot was moving or not before
-                                        // ToDo: stopping it, so what is the value of `moving` after activating the
-                                        // ToDo: robot? it's lost if we override it here.
-                                        // ToDo: this optimization prevents the next recursion call from
-                                        // ToDo: considering this robot (it's been considered).
-
-                gfxEventHandler({
-                    type: EVENT_TO_GFX.OBJECT_FAILURE,
-                    data: {
-                        type: MAP_CELL.ROBOT,
-                        id: parseInt(rob.id),
-                        row: r,
-                        col: c
-                    }
-                });
-
-                logger({
-                    level: LOG_LEVEL.ERROR,
-                    object: LOG_TYPE.ROBOT,
-                    color: rob.color,
-                    msg: STR[4001]([rob.id])
-                });
-
-                aggregateBlocking(r, c);
-            }
-        }
     };
 
     let check = function () {

@@ -268,24 +268,6 @@ let Map = function () {
         return undefined;
     };
 
-    self.getMovingRobots = function() {
-        let robots = [];
-
-        for (const [k, v] of Object.entries(self.objects)) {
-            let key = k.split(",");
-
-            if (parseInt(key[1]) !== MAP_CELL.ROBOT)
-                continue;
-
-            let rob = self.getRobot(v[0], v[1]);
-
-            if (rob.moving)
-                robots.push(rob);
-        }
-
-        return robots;
-    };
-
     self.getObjects = function() {
         let objs = [];
         let cells = {};

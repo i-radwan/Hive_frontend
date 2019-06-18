@@ -32,7 +32,7 @@ ORDER: {
 ACK: {}
 
 CONTROL: {
-    id:
+    ids: []
     type: [ACTIVATE|DEACTIVATE]
 }
 

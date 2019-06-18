@@ -148,12 +148,14 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
             case MSG_FROM_SERVER.CONTROL:
                 if (msg.data.type === CONTROL_MSG.ACTIVATE) {
-                    self.leftPanelVM.robotVM.activateRobot(msg.data.id);
+                    self.leftPanelVM.robotVM.activateRobots(msg.data.ids);
                 } else if (msg.data.type === CONTROL_MSG.DEACTIVATE) {
-                    self.leftPanelVM.robotVM.deactivateRobot(msg.data.id);
+                    self.leftPanelVM.robotVM.deactivateRobots(msg.data.ids);
 
                     // Remove from pendingActions if it exists there
-                    reducePendingActions(self.pendingActions, msg.data.id);
+                    for (let i = 0; i < msg.data.ids.length; i++) {
+                        reducePendingActions(self.pendingActions, msg.data.ids[i]);
+                    }
                 }
                 break;
 
@@ -200,10 +202,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
     };
 
     self.toggleActivation = function () {
-        if (!self.leftPanelVM.robotVM.deactivated()) { // Deactivate the robot
-            reducePendingActions(self.pendingActions, parseInt(self.leftPanelVM.robotVM.id()));
-        }
-
         self.leftPanelVM.robotVM.toggleActivation();
     };
 
