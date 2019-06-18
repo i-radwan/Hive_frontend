@@ -190,6 +190,11 @@ ACK_ORDER_STATUS = {
     ERROR: 1
 };
 
+CONTROL_MSG = {
+    ACTIVATE: 0,
+    DEACTIVATE: 1
+};
+
 MSG_TO_SERVER = {
     START: 0,
     ORDER: 1,
@@ -197,9 +202,7 @@ MSG_TO_SERVER = {
     STOP: 3,
     RESUME: 4,
     ACK: 5,
-    DEACTIVATE: 6,
-    ACTIVATE: 7,
-    BLOCKED: 8
+    CONTROL: 6
 };
 
 MSG_FROM_SERVER = {
@@ -207,9 +210,8 @@ MSG_FROM_SERVER = {
     ACK_RESUME: 1,
     ACK_ORDER: 2,
     UPDATE: 3,
-    DEACTIVATE: 4,
-    ACTIVATE: 5,
-    MSG: 6
+    CONTROL: 4,
+    MSG: 5
 };
 
 SERVER_ACTIONS = {

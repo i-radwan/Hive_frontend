@@ -27,7 +27,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.itemID = ko.observable();
     self.itemQuantity = ko.observable();
 
-    self.lastOrder = null;
+    self.pendingOrder = null;
 
     self.ongoingOrders = ko.observableArray();
     self.upcomingOrders = ko.observableArray();
@@ -137,7 +137,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         shouter.notifySubscribers(true, SHOUT.LOADING);
 
         if (order.issue_time_raw <= self.time()) {
-            self.lastOrder = order;
+            self.pendingOrder = order;
 
             sendOrderToServer(order);
         } else {
@@ -248,17 +248,17 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let data = msg.data;
 
         if (data.status === ACK_ORDER_STATUS.OK) {
-            let o = self.lastOrder;
+            let o = self.pendingOrder;
 
             self.ongoingOrders.push(o);
 
-            if (!self.lastOrder.scheduled) {
+            if (!self.pendingOrder.scheduled) {
                 self.id(parseInt(self.id()) + 1);
             }
 
             clear();
 
-            self.lastOrder = null;
+            self.pendingOrder = null;
 
             shouter.notifySubscribers({
                 text: STR[1000](["Order"]),
@@ -281,10 +281,10 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
-            if (self.lastOrder.scheduled) {
-                self.lastOrder.error(STR[data.msg.id](data.msg.args));
-                self.lastOrder.satisfiable(false);
-                self.upcomingOrders.push(self.lastOrder);
+            if (self.pendingOrder.scheduled) {
+                self.pendingOrder.error(STR[data.msg.id](data.msg.args));
+                self.pendingOrder.satisfiable(false);
+                self.upcomingOrders.push(self.pendingOrder);
             }
         }
 
@@ -308,7 +308,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             if (o.issue_time_raw <= self.time() && o.satisfiable()) {
                 self.upcomingOrders.splice(i, 1);
 
-                self.lastOrder = o;
+                self.pendingOrder = o;
 
                 shouter.notifySubscribers(true, SHOUT.LOADING);
 

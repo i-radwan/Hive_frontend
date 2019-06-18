@@ -146,15 +146,15 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 }
                 break;
 
-            case MSG_FROM_SERVER.DEACTIVATE:
-                self.leftPanelVM.robotVM.deactivateRobot(msg.data.id);
+            case MSG_FROM_SERVER.CONTROL:
+                if (msg.data.type === CONTROL_MSG.ACTIVATE) {
+                    self.leftPanelVM.robotVM.activateRobot(msg.data.id);
+                } else if (msg.data.type === CONTROL_MSG.DEACTIVATE) {
+                    self.leftPanelVM.robotVM.deactivateRobot(msg.data.id);
 
-                // Remove from pendingActions if it exists there
-                removeElement(self.pendingActions, msg.data.id);
-                break;
-
-            case MSG_FROM_SERVER.ACTIVATE:
-                self.leftPanelVM.robotVM.activateRobot(msg.data.id);
+                    // Remove from pendingActions if it exists there
+                    reducePendingActions(self.pendingActions, msg.data.id);
+                }
                 break;
 
             case MSG_FROM_SERVER.MSG:
@@ -201,7 +201,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
     self.toggleActivation = function () {
         if (!self.leftPanelVM.robotVM.deactivated()) { // Deactivate the robot
-            removeElement(self.pendingActions, parseInt(self.leftPanelVM.robotVM.id()));
+            reducePendingActions(self.pendingActions, parseInt(self.leftPanelVM.robotVM.id()));
         }
 
         self.leftPanelVM.robotVM.toggleActivation();
@@ -231,15 +231,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
             self.leftPanelVM.robotVM.doneMoving(data.data.id);
         }
 
-        removeElement(self.pendingActions, data.data.id);
-
-        if (self.pendingActions.length === 0) { // All actions are done
-            comm.send({
-                type: MSG_TO_SERVER.ACK
-            });
-
-            console.log("ACK sent");
-        }
+        reducePendingActions(data.data.id);
     };
 
     let handleEsc = function () {
@@ -252,11 +244,19 @@ let mainViewModel = function (gfxEventHandler, comm) {
         });
     };
 
-    let removeElement = function (arr, elm) {
-        let index = arr.indexOf(elm);
+    let reducePendingActions = function (elm) {
+        let index = self.pendingActions.indexOf(elm);
 
         if (index > -1) {
-            arr.splice(index, 1);
+            self.pendingActions.splice(index, 1);
+        }
+
+        if (self.pendingActions.length === 0) { // All actions are done
+            comm.send({
+                type: MSG_TO_SERVER.ACK
+            });
+
+            console.log("ACK sent");
         }
     };
 

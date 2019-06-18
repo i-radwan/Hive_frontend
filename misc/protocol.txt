@@ -31,16 +31,9 @@ ORDER: {
 
 ACK: {}
 
-DEACTIVATE: {
+CONTROL: {
     id:
-}
-
-ACTIVATE: {
-    id:
-}
-
-BLOCKED: {
-    id:
+    type: [ACTIVATE|DEACTIVATE]
 }
 
 ----------------
@@ -168,12 +161,9 @@ UPDATE: {
     ]
 }
 
-DEACTIVATE: { # If this will affect other robots, you will receive a BLOCKED msg from them
+CONTROL: {
     id:
-}
-
-ACTIVATE: {
-    id:
+    type: [ACTIVATE|DEACTIVATE]
 }
 
 MSG: {

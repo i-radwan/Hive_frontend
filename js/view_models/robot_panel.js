@@ -570,18 +570,20 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.toggleActivation = function () {
         if (!self.deactivated()) { // Deactivate the robot
             sendToServer({
-                type: MSG_TO_SERVER.DEACTIVATE,
+                type: MSG_TO_SERVER.CONTROL,
                 data: {
-                    id: parseInt(self.id())
+                    id: parseInt(self.id()),
+                    type: CONTROL_MSG.DEACTIVATE
                 }
             });
 
             self.deactivateRobot(parseInt(self.id()));
         } else {
             sendToServer({
-                type: MSG_TO_SERVER.ACTIVATE,
+                type: MSG_TO_SERVER.CONTROL,
                 data: {
-                    id: parseInt(self.id())
+                    id: parseInt(self.id()),
+                    type: CONTROL_MSG.DEACTIVATE
                 }
             });
 
@@ -715,13 +717,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                                         // ToDo: robot? it's lost if we override it here.
                                         // ToDo: this optimization prevents the next recursion call from
                                         // ToDo: considering this robot (it's been considered).
-
-                sendToServer({
-                    type: MSG_TO_SERVER.BLOCKED,
-                    data: {
-                        id: parseInt(rob.id)
-                    }
-                });
 
                 gfxEventHandler({
                     type: EVENT_TO_GFX.OBJECT_FAILURE,
