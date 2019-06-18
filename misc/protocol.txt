@@ -48,17 +48,26 @@ FROM SERVER:
 ----------------
 ACK_START: {
     status: [OK|ERROR]
-    msg: msg                                    # In the ERROR case
+    msg: {                                      # In the ERROR case
+        id:
+        args: []
+    }
 }
 
 ACK_RESUME: {
     status: [OK|ERROR]
-    msg: msg                                    # In the ERROR case
+    msg: {                                      # In the ERROR case
+        id:
+        args: []
+    }
 }
 
 ACK_ORDER: {
     status: [OK|ERROR]
-    msg: msg                                    # In the ERROR case
+    msg: {                                      # In the ERROR case
+        id:
+        args: []
+    }
 }
 
 UPDATE: {
@@ -174,7 +183,10 @@ ACTIVATE: {
 
 MSG: {
     status: [INFO|ERROR]
-    msg: msg
+    msg: {
+        id:
+        args: []
+    }
 }
 
 ----------------

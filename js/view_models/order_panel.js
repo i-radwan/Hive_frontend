@@ -274,12 +274,12 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             });
         } else if (data.status === ACK_ORDER_STATUS.ERROR) {
             shouter.notifySubscribers({
-                text: data.msg,
+                text: STR[data.msg.id](data.msg.args),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
             if (self.lastOrder.scheduled) {
-                self.lastOrder.error(data.msg);
+                self.lastOrder.error(STR[data.msg.id](data.msg.args));
                 self.lastOrder.satisfiable(false);
                 self.upcomingOrders.push(self.lastOrder);
             }

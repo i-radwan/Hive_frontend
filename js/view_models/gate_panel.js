@@ -104,7 +104,7 @@ let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             });
         } else {
             shouter.notifySubscribers({
-                text:STR[2000]([dstRow + 1, dstCol + 1]),
+                text: STR[2000]([dstRow + 1, dstCol + 1]),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 

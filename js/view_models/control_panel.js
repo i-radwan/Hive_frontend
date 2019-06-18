@@ -129,7 +129,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             shouter.notifySubscribers(false, SHOUT.LOADING);
         } else if (data.status === ACK_START_STATUS.ERROR) {
             shouter.notifySubscribers({
-                text: data.msg,
+                text: STR[data.msg.id](data.msg.args),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -158,7 +158,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             shouter.notifySubscribers(false, SHOUT.LOADING);
         } else if (data.status === ACK_RESUME_STATUS.ERROR) {
             shouter.notifySubscribers({
-                text: data.msg,
+                text: STR[data.msg.id](data.msg.args),
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
