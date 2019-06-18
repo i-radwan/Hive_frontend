@@ -673,7 +673,10 @@
             <span class="coordinates" data-bind="text: centerPanelVM.controlConsoleVM.coordinates">(11, 17)</span>
 
             <div class="text-sm-center msg"
-                 data-bind="text: centerPanelVM.controlConsoleVM.msg, css: {'error-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_TYPE.ERROR, 'info-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_TYPE.INFO}"></div>
+                 data-bind="text: centerPanelVM.controlConsoleVM.msg,
+                            attr: {'title': centerPanelVM.controlConsoleVM.msgTitle},
+                            css: {'error-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_TYPE.ERROR,
+                                  'info-msg': centerPanelVM.controlConsoleVM.msgType() === MSG_TYPE.INFO}"></div>
         </div>
     </div>
 

@@ -53,5 +53,14 @@ STR = {
 
     // Error logs
     4000: (args) => `Robot <b>(#${args[0]})</b> has failed</b>.`,
-    4001: (args) => `Robot <b>(#${args[0]})</b> cannot move</b>.`
+    4001: (args) => `Robot <b>(#${args[0]})</b> cannot move</b>.`,
+
+    // Server
+    5000: (args) => `Internal server error!`,
+    5001: (args) => `Server has received an ill formed message!`,
+    5002: (args) => `Server has received unexpected message!`,
+    5003: (args) => `Server has received invalid arguments!`,
+    5004: (args) => `Collect Order <b>(#${args[0]})</b> is infeasible due to shortage in items (${args[1].join(", ")})!`,
+    5005: (args) => ``,
+    5006: (args) => `Refill Order <b>(#${args[0]})</b> items weight exceed Rack <b>(#${args[1]})</b> capacity by (${args[2]}) Kg!`,
 };

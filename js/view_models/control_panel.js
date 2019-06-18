@@ -11,6 +11,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.time = ko.observable(0);
     self.coordinates = ko.observable("(10, 16)");
     self.msg = ko.observable("");
+    self.msgTitle = ko.observable("");
     self.msgType = ko.observable(MSG_TYPE.INFO);
     self.timer = null;
     self.preSimState = null;
@@ -130,6 +131,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         } else if (data.status === ACK_START_STATUS.ERROR) {
             shouter.notifySubscribers({
                 text: STR[data.msg.id](data.msg.args),
+                title: data.msg.reason,
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -159,6 +161,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         } else if (data.status === ACK_RESUME_STATUS.ERROR) {
             shouter.notifySubscribers({
                 text: STR[data.msg.id](data.msg.args),
+                title: data.msg.reason,
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
@@ -179,6 +182,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
     shouter.subscribe(function (msg) {
         self.msg(msg.text);
+        self.msgTitle(msg.title || "");
         self.msgType(msg.type);
 
         // Timer to auto-hide the message

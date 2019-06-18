@@ -149,11 +149,6 @@ UPDATE: {
                 id:
             }
         }, {
-            type: ORDER_ISSUED                  # Move order from upcoming to ongoing
-            data: {
-                id:
-            }
-        }, {
             type: BATTERY_UPDATED
             data: {
                 id:

@@ -275,6 +275,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         } else if (data.status === ACK_ORDER_STATUS.ERROR) {
             shouter.notifySubscribers({
                 text: STR[data.msg.id](data.msg.args),
+                title: data.msg.reason,
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
