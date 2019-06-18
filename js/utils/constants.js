@@ -210,7 +210,7 @@ MSG_FROM_SERVER = {
     ACK_RESUME: 1,
     ACK_ORDER: 2,
     UPDATE: 3,
-    CONTROL: 4,
+    CONTROL: 6,     // ToDo
     MSG: 5
 };
 
