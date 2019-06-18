@@ -222,9 +222,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
     };
 
     let handleActionAck = function (data) {
-        if (self.pendingActions.length === 0)
-            return;
-
         if (data.type === EVENT_TO_GFX.OBJECT_MOVE || data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
             self.leftPanelVM.robotVM.doneMoving(data.data.id);
         }
@@ -243,6 +240,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
     };
 
     let reducePendingActions = function (elm) {
+        if (self.pendingActions.length === 0)
+            return;
+
         let index = self.pendingActions.indexOf(elm);
 
         if (index > -1) {
