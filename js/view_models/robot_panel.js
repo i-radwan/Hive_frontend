@@ -1,3 +1,7 @@
+const $ = require('jquery');
+require('bootstrap');
+require('bootstrap-colorpicker');
+
 require('../utils/constants');
 require('../utils/strings');
 const ko = require('knockout');
@@ -798,6 +802,25 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         unselect();
         clear();
     }, self, SHOUT.STATE_UPDATED);
+
+    // View configs
+    $('#robot-color').colorpicker({
+        customClass: "robot-color"
+    });
+
+    $('#robot-color').on('colorpickerChange', function(event) {
+        let color = event.color.toString();
+
+        $('.robot-color-preview').css("background", color);
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_HOVER,
+            data: {
+                type: MAP_CELL.ROBOT,
+                color: color
+            }
+        });
+    });
 };
 
 module.exports = robotPanelViewModel;
