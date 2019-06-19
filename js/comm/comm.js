@@ -1,4 +1,4 @@
-require("../utils/constants");
+require('../utils/constants');
 
 let comm = function (serverMW) {
     let self = this;

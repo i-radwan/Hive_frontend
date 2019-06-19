@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Hive</title>
+    <link rel="stylesheet" href="node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
     <link rel="stylesheet" href="vendor/css/font-awesome.css">
@@ -177,9 +178,10 @@
                         <input type="number" class="form-control bg-dark text-light" placeholder="Robot ID"
                                data-bind="textInput: leftPanelVM.robotVM.id, enable: runningMode() === RUNNING_MODE.DESIGN" readonly>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group robot-color-div">
                         <label>Robot Color</label>
-                        <input type="color" class="form-control bg-dark text-light" placeholder="#FFFFFF"
+                        <span class="robot-color-preview"></span>
+                        <input type="text" id="robot-color" class="form-control bg-dark text-light" placeholder="#FFFFFF"
                                data-bind="textInput: leftPanelVM.robotVM.color, enable: runningMode() === RUNNING_MODE.DESIGN">
                     </div>
                     <div class="form-group">
@@ -610,13 +612,13 @@
         <!--============================ MAP =============================-->
         <!--==============================================================-->
 
-        <div class="row map-row" id="map-container"></div>
+        <div id="map-container" class="row map-row"></div>
 
         <!--==============================================================-->
         <!--========================== SETTINGS ==========================-->
         <!--==============================================================-->
 
-        <div class="settings" id="settings">
+        <div id="settings" class="settings">
             <div class="row cont">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -665,7 +667,7 @@
                                     'fa-pause pause': centerPanelVM.controlConsoleVM.playing()}"></i>
                 <div class="deploy-switch" data-bind="click: centerPanelVM.controlConsoleVM.deploy">Deploy</div>
 
-                <i class="fas fa-cog settings-icon" id="settings-icon"
+                <i id="settings-icon" class="fas fa-cog settings-icon"
                    data-toggle="tooltip" title="Settings"
                    data-bind="click: centerPanelVM.toggleSettings"></i>
             </div>
@@ -718,7 +720,7 @@
         <div>
 
             <!--========================= LOGS ==========================-->
-            <div class="logs" id="logs" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.LOGS}">
+            <div id="logs" class="logs" data-bind="css: {hidden: rightPanelVM.activePanel() !== RIGHT_PANEL.LOGS}">
                 <i class="fas fa-arrow-circle-up scroll-arrow scroll-up-arrow"
                    data-bind="visible: rightPanelVM.activateScrollUp, click: rightPanelVM.scrollUp"></i>
                 <span data-bind="foreach: rightPanelVM.logs">

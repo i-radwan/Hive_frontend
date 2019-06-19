@@ -1,11 +1,13 @@
 // Includes
+require('./utils/constants');
+require('bootstrap');
+require('bootstrap-colorpicker');
 const remote = require('electron').remote;
-require("./utils/constants");
-let $ = require('jquery');
-let ko = require('knockout');
-let GFX = require('./gfx/gfx');
-let communicator = require('./comm/comm');
-let serverMiddleWare = require('./comm/server_middleware');
+const $ = require('jquery');
+const ko = require('knockout');
+const GFX = require('./gfx/gfx');
+const communicator = require('./comm/comm');
+const serverMiddleWare = require('./comm/server_middleware');
 
 // ViewModels
 let mainViewModel = require("./view_models/main");
@@ -54,5 +56,13 @@ $(document).ready(() => {
 
     $("input[type=number]").click(function () {
         this.select();
+    });
+
+    $('#robot-color').colorpicker({
+        customClass: "robot-color"
+    });
+
+    $('#robot-color').on('colorpickerChange', function(event) {
+        $('.robot-color-preview').css("background", event.color.toString());
     });
 });
