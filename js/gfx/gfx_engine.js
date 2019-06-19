@@ -701,11 +701,12 @@ let gfxEngine = function () {
             case ANIMATION_TYPE.ROTATE_RIGHT:
             case ANIMATION_TYPE.ROTATE_LEFT:
                 renderObject.animation_variables.is_rotating = true;
-                dstAngle = dirToAngle(renderObject.direction) + 90 * (animationType === ANIMATION_TYPE.ROTATE_LEFT) - 90 * (animationType === ANIMATION_TYPE.ROTATE_RIGHT) + 360;
+                let dir = (animationType === ANIMATION_TYPE.ROTATE_LEFT ? 1 : -1);
+                dstAngle = dirToAngle(renderObject.direction) + dir * 90;
                 dstAngle = normalizeAngle(dstAngle);
 
                 if (Math.abs(dstAngle - renderObject.animation_variables.cur_angle) > 180) {
-                    renderObject.animation_variables.cur_angle += 360;
+                    renderObject.animation_variables.cur_angle -= dir * 360;
                     renderObject.animation_variables.cur_angle = normalizeAngle(renderObject.animation_variables.cur_angle);
                 }
 
