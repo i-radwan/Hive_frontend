@@ -1,8 +1,8 @@
 require('../utils/constants');
 require('../utils/strings');
-let utils = require('../utils/utils')();
-let $ = require('jquery');
-let ko = require('knockout');
+const utils = require('../utils/utils')();
+const $ = require('jquery');
+const ko = require('knockout');
 
 let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHandler, comm, logger) {
     let self = this;

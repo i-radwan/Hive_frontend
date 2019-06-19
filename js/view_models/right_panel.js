@@ -1,9 +1,9 @@
 require('../utils/constants');
 require('../utils/strings');
-let $ = require('jquery');
-let ko = require('knockout');
+const $ = require('jquery');
+const ko = require('knockout');
 
-let itemsPanelViewModel = require('./items_panel');
+const itemsPanelViewModel = require('./items_panel');
 
 let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer) {
     let self = this;

@@ -1,5 +1,5 @@
 require('two.js');
-let $ = require('jquery');
+const $ = require('jquery');
 let ZUI = require('./zui');
 
 // Z-Index enum

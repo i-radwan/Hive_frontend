@@ -1,15 +1,15 @@
 require('../utils/constants');
 require('../utils/strings');
-let ko = require('knockout');
+const ko = require('knockout');
 
-let tempViewModel = require('./temps_panel');
-let mapViewModel = require('./map_panel');
-let gateViewModel = require('./gate_panel');
-let robotPanelViewModel = require('./robot_panel');
-let rackPanelViewModel = require('./rack_panel');
-let stationPanelViewModel = require('./station_panel');
-let obstacleViewModel = require('./obstacle_panel');
-let orderPanelViewModel = require('./order_panel');
+const tempViewModel = require('./temps_panel');
+const mapViewModel = require('./map_panel');
+const gateViewModel = require('./gate_panel');
+const robotPanelViewModel = require('./robot_panel');
+const rackPanelViewModel = require('./rack_panel');
+const stationPanelViewModel = require('./station_panel');
+const obstacleViewModel = require('./obstacle_panel');
+const orderPanelViewModel = require('./order_panel');
 
 let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;

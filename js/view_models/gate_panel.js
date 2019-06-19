@@ -1,6 +1,6 @@
 require('../utils/constants');
 require('../utils/strings');
-let ko = require('knockout');
+const ko = require('knockout');
 
 let gatePanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;

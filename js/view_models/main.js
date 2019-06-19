@@ -1,13 +1,13 @@
 require('../utils/constants');
-let ko = require("knockout");
+const ko = require("knockout");
 
 // Models
-let State = require("../models/state");
+const State = require("../models/state");
 
 // ViewModels
-let leftPanelViewModel = require("./left_panel");
-let centerPanelViewModel = require("./center_panel");
-let rightPanelViewModel = require("./right_panel");
+const leftPanelViewModel = require("./left_panel");
+const centerPanelViewModel = require("./center_panel");
+const rightPanelViewModel = require("./right_panel");
 
 let mainViewModel = function (gfxEventHandler, comm) {
     let self = this;

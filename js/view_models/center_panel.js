@@ -1,10 +1,10 @@
 require('../utils/constants');
 require('../utils/strings');
-let $ = require('jquery');
-let ko = require('knockout');
+const $ = require('jquery');
+const ko = require('knockout');
 
-let controlConsoleViewModel = require("./control_panel");
-let settingsPanelViewModel = require("./settings_panel");
+const controlConsoleViewModel = require("./control_panel");
+const settingsPanelViewModel = require("./settings_panel");
 
 let controlPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, comm, logger) {
     let self = this;

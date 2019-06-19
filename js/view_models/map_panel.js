@@ -1,7 +1,7 @@
 require('../utils/constants');
 require('../utils/strings');
-let fs = require('fs');
-let ko = require('knockout');
+const fs = require('fs');
+const ko = require('knockout');
 const {dialog} = require('electron').remote;
 
 let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {

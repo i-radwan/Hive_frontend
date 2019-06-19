@@ -1,5 +1,5 @@
 let GfxMap = require('./gfx_map');
-let $ = require('jquery');
+const $ = require('jquery');
 
 let gfx = function (logicEventHandler) {
     let self = this;

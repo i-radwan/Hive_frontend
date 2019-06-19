@@ -10,7 +10,7 @@ const communicator = require('./comm/comm');
 const serverMiddleWare = require('./comm/server_middleware');
 
 // ViewModels
-let mainViewModel = require("./view_models/main");
+const mainViewModel = require("./view_models/main");
 
 // Apply the binding
 $(document).ready(() => {

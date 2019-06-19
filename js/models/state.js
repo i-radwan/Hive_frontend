@@ -1,6 +1,6 @@
 require('../utils/constants');
 require('../utils/strings');
-let Map = require('./map');
+const Map = require('./map');
 
 let State = function () {
     let self = this;

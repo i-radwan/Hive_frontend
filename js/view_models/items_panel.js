@@ -1,8 +1,8 @@
 require('../utils/constants');
 require('../utils/strings');
 require('knockout-mapping');
-let $ = require('jquery');
-let ko = require('knockout');
+const $ = require('jquery');
+const ko = require('knockout');
 
 let itemsPanelViewModel = function (runningMode, shouter, state, gfxEventHandler) {
     let self = this;
