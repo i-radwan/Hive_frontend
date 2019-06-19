@@ -142,6 +142,9 @@ let gfxMap = function (logicEventHandler) {
 
         map[row][col][idx].render_variables.direction = angleToDir(map[row][col][idx].render_variables.animation_variables.cur_angle);
 
+        if (map[row][col][idx].render_variables.is_selected === true)
+            self.gfxEngine.moveHighlightObject(dstRow, dstCol);
+
         swapObjectPosition(map[row][col][idx].id, map[row][col][idx].type, row, col, dstRow, dstCol);
     };
 
@@ -405,6 +408,19 @@ let gfxMap = function (logicEventHandler) {
 
             self.gfxEngine.objectStop(loadedObj.render_variables, loadedObj.type);
         }
+
+        self.logicEventHandler({
+            type: EVENT_FROM_GFX.ACK_ACTION,
+            data: {
+                type: EVENT_TO_GFX.OBJECT_STOP,
+                data: {
+                    id: id,
+                    type: type,
+                    row: row,
+                    col: col
+                }
+            }
+        });
     };
 
     // Resume a given object

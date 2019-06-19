@@ -428,6 +428,7 @@ let gfxEngine = function () {
             bound_object_type: -1,
             render_variables: {
                 two_object: twoObject,
+                is_selected: false,
                 z_index: zIndexValue,
                 direction: ROBOT_DIR.RIGHT,
                 color: defaultColor,
@@ -457,6 +458,7 @@ let gfxEngine = function () {
 
     // Deletes an object from the scene
     self.deleteObject = function (renderObject, type) {
+        self.unhighlightObject();
         zIndexGroups[getObjectZIndex(type)].remove(renderObject.two_object);
     };
 
@@ -529,6 +531,9 @@ let gfxEngine = function () {
         draggedObject.dst_row = dstRow;
         draggedObject.dst_col = dstCol;
 
+        if (draggedObject.item.render_variables.is_selected === true)
+            self.moveHighlightObject(dstRow, dstCol);
+
         self.translateObject(draggedObject.item.render_variables, dstRow, dstCol);
     };
 
@@ -545,13 +550,25 @@ let gfxEngine = function () {
         selectedObject.row = row;
         selectedObject.col = col;
         selectedObject.item = object;
+        selectedObject.item.render_variables.is_selected = true;
+
         self.colorizeCell(row, col, GFX_COLORS.CELL_HIGHLIGHT_COLOR);
     };
 
-    // UnHighlight a given object
+    // Move the highlighted object
+    self.moveHighlightObject = function (row, col) {
+        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL);
+        selectedObject.row = row;
+        selectedObject.col = col;
+        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS.CELL_HIGHLIGHT_COLOR);
+    };
+
+    // Unhighlight the highlighted object
     self.unhighlightObject = function () {
-        if (typeof selectedObject.row !== 'undefined')
+        if (typeof selectedObject.row !== 'undefined') {
             self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL);
+            selectedObject.item.render_variables.is_selected = false;
+        }
 
         selectedObject = {};
     };
