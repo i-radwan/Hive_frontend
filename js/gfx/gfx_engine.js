@@ -7,8 +7,8 @@ let Z_INDEX = {
     BACKGROUND: 0,
     STATION: 1,
     GATE: 2,
-    ROBOT: 3,
-    RACK: 4,
+    RACK: 3,
+    ROBOT: 4,
     OBSTACLE: 5,
     DRAG: 6,
     HOVER: 6
@@ -263,8 +263,9 @@ let gfxEngine = function () {
     // Colorizes the rack
     let colorizeRack = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
-            renderObject.two_object.children[i].fill = color;
-            renderObject.two_object.children[i].stroke = color;
+            if (renderObject.two_object.children[i].fill === renderObject.color) {
+                renderObject.two_object.children[i].fill = color;
+            }
         }
 
         renderObject.color = color;
@@ -314,7 +315,6 @@ let gfxEngine = function () {
     let colorizeGate = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
             renderObject.two_object.children[i].fill = color;
-            renderObject.two_object.children[i].stroke = color;
         }
 
         renderObject.color = color;
@@ -450,6 +450,8 @@ let gfxEngine = function () {
     self.translateObject = function (renderObject, dstRow, dstCol) {
         let cellTopLeft = getCellTopLeft(dstRow, dstCol);
 
+        renderObject.animation_variables.cur_x = cellTopLeft.x;
+        renderObject.animation_variables.cur_y = cellTopLeft.y;
         renderObject.two_object.translation.set(cellTopLeft.x, cellTopLeft.y);
     };
 
