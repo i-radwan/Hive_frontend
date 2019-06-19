@@ -7,8 +7,8 @@ let Z_INDEX = {
     BACKGROUND: 0,
     STATION: 1,
     GATE: 2,
-    ROBOT: 3,
-    RACK: 4,
+    RACK: 3,
+    ROBOT: 4,
     OBSTACLE: 5,
     DRAG: 6,
     HOVER: 6
@@ -147,6 +147,24 @@ let gfxEngine = function () {
         }
     };
 
+    // Convert given angle to DIR enum
+    let angleToDir = function (angle) {
+        switch (angle) {
+            case 0:
+            case 360:
+                return ROBOT_DIR.RIGHT;
+            case 90:
+            case -270:
+                return ROBOT_DIR.UP;
+            case 180:
+            case -180:
+                return ROBOT_DIR.LEFT;
+            case 270:
+            case -90:
+                return ROBOT_DIR.DOWN;
+        }
+    };
+
     // Returns the default color of the object
     let objectTypeToDefaultColor = function (type) {
         switch (type) {
@@ -263,8 +281,9 @@ let gfxEngine = function () {
     // Colorizes the rack
     let colorizeRack = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
-            renderObject.two_object.children[i].fill = color;
-            renderObject.two_object.children[i].stroke = color;
+            if (renderObject.two_object.children[i].fill === renderObject.color) {
+                renderObject.two_object.children[i].fill = color;
+            }
         }
 
         renderObject.color = color;
@@ -314,7 +333,6 @@ let gfxEngine = function () {
     let colorizeGate = function (renderObject, color) {
         for (let i = 0; i < renderObject.two_object.children.length; i++) {
             renderObject.two_object.children[i].fill = color;
-            renderObject.two_object.children[i].stroke = color;
         }
 
         renderObject.color = color;
@@ -428,6 +446,7 @@ let gfxEngine = function () {
             bound_object_type: -1,
             render_variables: {
                 two_object: twoObject,
+                is_selected: false,
                 z_index: zIndexValue,
                 direction: ROBOT_DIR.RIGHT,
                 color: defaultColor,
@@ -450,11 +469,14 @@ let gfxEngine = function () {
     self.translateObject = function (renderObject, dstRow, dstCol) {
         let cellTopLeft = getCellTopLeft(dstRow, dstCol);
 
+        renderObject.animation_variables.cur_x = cellTopLeft.x;
+        renderObject.animation_variables.cur_y = cellTopLeft.y;
         renderObject.two_object.translation.set(cellTopLeft.x, cellTopLeft.y);
     };
 
     // Deletes an object from the scene
     self.deleteObject = function (renderObject, type) {
+        self.unhighlightObject();
         zIndexGroups[getObjectZIndex(type)].remove(renderObject.two_object);
     };
 
@@ -527,6 +549,9 @@ let gfxEngine = function () {
         draggedObject.dst_row = dstRow;
         draggedObject.dst_col = dstCol;
 
+        if (draggedObject.item.render_variables.is_selected === true)
+            self.moveHighlightObject(dstRow, dstCol);
+
         self.translateObject(draggedObject.item.render_variables, dstRow, dstCol);
     };
 
@@ -543,13 +568,25 @@ let gfxEngine = function () {
         selectedObject.row = row;
         selectedObject.col = col;
         selectedObject.item = object;
+        selectedObject.item.render_variables.is_selected = true;
+
         self.colorizeCell(row, col, GFX_COLORS.CELL_HIGHLIGHT_COLOR);
     };
 
-    // UnHighlight a given object
+    // Move the highlighted object
+    self.moveHighlightObject = function (row, col) {
+        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL);
+        selectedObject.row = row;
+        selectedObject.col = col;
+        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS.CELL_HIGHLIGHT_COLOR);
+    };
+
+    // Unhighlight the highlighted object
     self.unhighlightObject = function () {
-        if (typeof selectedObject.row !== 'undefined')
+        if (typeof selectedObject.row !== 'undefined') {
             self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL);
+            selectedObject.item.render_variables.is_selected = false;
+        }
 
         selectedObject = {};
     };
@@ -664,11 +701,12 @@ let gfxEngine = function () {
             case ANIMATION_TYPE.ROTATE_RIGHT:
             case ANIMATION_TYPE.ROTATE_LEFT:
                 renderObject.animation_variables.is_rotating = true;
-                dstAngle = dirToAngle(renderObject.direction) + 90 * (animationType === ANIMATION_TYPE.ROTATE_LEFT) - 90 * (animationType === ANIMATION_TYPE.ROTATE_RIGHT) + 360;
+                let dir = (animationType === ANIMATION_TYPE.ROTATE_LEFT ? 1 : -1);
+                dstAngle = dirToAngle(renderObject.direction) + dir * 90;
                 dstAngle = normalizeAngle(dstAngle);
 
                 if (Math.abs(dstAngle - renderObject.animation_variables.cur_angle) > 180) {
-                    renderObject.animation_variables.cur_angle += 360;
+                    renderObject.animation_variables.cur_angle -= dir * 360;
                     renderObject.animation_variables.cur_angle = normalizeAngle(renderObject.animation_variables.cur_angle);
                 }
 
@@ -713,6 +751,22 @@ let gfxEngine = function () {
         if (!renderObject.animation_variables.is_moving && !renderObject.animation_variables.is_rotating) {
             renderObject.animation_variables.is_animating = false;
             return true;
+        }
+    };
+
+    // Finishes the object's animation
+    self.finishObjectAnimation = function(object, loadedObject) {
+        let dstRow = object.render_variables.animation_variables.nxt_row;
+        let dstCol = object.render_variables.animation_variables.nxt_col;
+
+        object.render_variables.direction = angleToDir(object.render_variables.animation_variables.cur_angle);
+
+        if (object.render_variables.is_selected === true)
+            self.moveHighlightObject(dstRow, dstCol);
+
+        if (loadedObject !== -1) {
+            loadedObject.render_variables.animation_variables.cur_angle = object.render_variables.animation_variables.cur_angle;
+            loadedObject.render_variables.direction = object.render_variables.direction;
         }
     };
 

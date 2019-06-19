@@ -93,25 +93,37 @@ let gfx = function (logicEventHandler) {
                 //gfxMap.objectColorize(1, MAP_CELL.ROBOT, 0,0,"#ffcc00");
                 //gfxMap.objectMove(1, 0, 0);
                 gfxMap.objectRotateRight(1, 0, 0);
+                gfxMap.objectRotateRight(2, 0, 1);
+                gfxMap.objectRotateRight(3, 0, 2);
+                gfxMap.objectRotateRight(4, 0, 3);
                 break;
             case 1:
-                gfxMap.objectUpdate(1, MAP_CELL.ROBOT, 0, 0, 50);
+                gfxMap.objectMove(1, 0, 0);
+                gfxMap.objectMove(2, 0, 1);
+                gfxMap.objectMove(3, 0, 2);
+                gfxMap.objectMove(4, 0, 3);
                 //gfxMap.objectRotateRight(1, 0, 1);
                 break;
             case 2:
-                gfxMap.objectMove(1, 0, 1);
+                gfxMap.objectUpdate(1, MAP_CELL.ROBOT, 1, 0, 70);
+                gfxMap.objectUpdate(2, MAP_CELL.ROBOT, 1, 1, 30);
+                gfxMap.objectUpdate(3, MAP_CELL.ROBOT, 1, 2, 90);
+                gfxMap.objectBind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.GATE);
+                gfxMap.objectBind(3, MAP_CELL.ROBOT, 1, 2, 2, MAP_CELL.STATION);
+                gfxMap.objectLoad(2, MAP_CELL.ROBOT, 1, 1, 2, MAP_CELL.RACK);
+                gfxMap.objectLoad(4, MAP_CELL.ROBOT, 1, 3, 1, MAP_CELL.RACK);
                 break;
             case 3:
-                gfxMap.objectMove(1, 1, 1);
+                gfxMap.objectRotateLeft(4, 1, 3);
                 break;
             case 4:
-                gfxMap.objectRotateRight(1, 2, 1);
+                gfxMap.objectRotateRight(4, 1, 3);
                 break;
             case 5:
-                gfxMap.objectMove(1, 2, 1);
+                gfxMap.objectMove(4, 1, 3);
                 break;
             case 6:
-                gfxMap.objectRotateRight(1, 2, 0);
+                gfxMap.objectBind(4, MAP_CELL.ROBOT, 2, 3, 1, MAP_CELL.STATION);
                 break;
             case 7:
                 gfxMap.objectLoad(1, MAP_CELL.ROBOT, 2, 0, 1, MAP_CELL.RACK);
