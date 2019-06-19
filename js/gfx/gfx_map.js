@@ -30,24 +30,6 @@ let gfxMap = function (logicEventHandler) {
     let isMouseInBounds = false;
     let isMouseOnObject = false;
 
-    // Convert given angle to DIR enum
-    let angleToDir = function (angle) {
-        switch (angle) {
-            case 0:
-            case 360:
-                return ROBOT_DIR.RIGHT;
-            case 90:
-            case -270:
-                return ROBOT_DIR.UP;
-            case 180:
-            case -180:
-                return ROBOT_DIR.LEFT;
-            case 270:
-            case -90:
-                return ROBOT_DIR.DOWN;
-        }
-    };
-
     // Return the 3rd dimension index of a given objects id, type, row, col
     let getObjectIndex = function (id, type, row, col) {
         for (let i = 0; i < map[row][col].length; i++) {
@@ -137,15 +119,14 @@ let gfxMap = function (logicEventHandler) {
 
     // Finalize the animation of a given objects position
     let finishObjectAnimation = function (row, col, idx) {
-        let dstRow = map[row][col][idx].render_variables.animation_variables.nxt_row;
-        let dstCol = map[row][col][idx].render_variables.animation_variables.nxt_col;
+        let object = map[row][col][idx];
+        let dstRow = object.render_variables.animation_variables.nxt_row;
+        let dstCol = object.render_variables.animation_variables.nxt_col;
+        let loadedObject = (object.loaded_object_id !== -1 ?
+            getObject(object.loaded_object_id, object.loaded_object_type, row, col) : -1);
 
-        map[row][col][idx].render_variables.direction = angleToDir(map[row][col][idx].render_variables.animation_variables.cur_angle);
-
-        if (map[row][col][idx].render_variables.is_selected === true)
-            self.gfxEngine.moveHighlightObject(dstRow, dstCol);
-
-        swapObjectPosition(map[row][col][idx].id, map[row][col][idx].type, row, col, dstRow, dstCol);
+        self.gfxEngine.finishObjectAnimation(object, loadedObject);
+        swapObjectPosition(object.id, object.type, row, col, dstRow, dstCol);
     };
 
     // Set the event handler that communicates with the mainVM
@@ -218,20 +199,12 @@ let gfxMap = function (logicEventHandler) {
     self.objectRotateRight = function (id, row, col) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
         self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.ROTATE_RIGHT);
-
-        if (obj.loaded_object_id !== -1) {
-            self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.ROTATE_RIGHT);
-        }
     };
 
     // Rotate an object 90 degrees to the left
     self.objectRotateLeft = function (id, row, col) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
         self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.ROTATE_LEFT);
-
-        if (obj.loaded_object_id !== -1) {
-            self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.ROTATE_LEFT);
-        }
     };
 
     // Rotate an object 180 degrees then move one step

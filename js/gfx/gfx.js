@@ -114,16 +114,16 @@ let gfx = function (logicEventHandler) {
                 gfxMap.objectLoad(4, MAP_CELL.ROBOT, 1, 3, 1, MAP_CELL.RACK);
                 break;
             case 3:
-                gfxMap.objectMove(4, 1, 3);
+                gfxMap.objectRotateLeft(4, 1, 3);
                 break;
             case 4:
-                gfxMap.objectBind(4, MAP_CELL.ROBOT, 2, 3, 1, MAP_CELL.STATION);
+                gfxMap.objectRotateRight(4, 1, 3);
                 break;
             case 5:
-                gfxMap.objectMove(1, 2, 1);
+                gfxMap.objectMove(4, 1, 3);
                 break;
             case 6:
-                gfxMap.objectRotateRight(1, 2, 0);
+                gfxMap.objectBind(4, MAP_CELL.ROBOT, 2, 3, 1, MAP_CELL.STATION);
                 break;
             case 7:
                 gfxMap.objectLoad(1, MAP_CELL.ROBOT, 2, 0, 1, MAP_CELL.RACK);

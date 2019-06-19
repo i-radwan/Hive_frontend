@@ -147,6 +147,24 @@ let gfxEngine = function () {
         }
     };
 
+    // Convert given angle to DIR enum
+    let angleToDir = function (angle) {
+        switch (angle) {
+            case 0:
+            case 360:
+                return ROBOT_DIR.RIGHT;
+            case 90:
+            case -270:
+                return ROBOT_DIR.UP;
+            case 180:
+            case -180:
+                return ROBOT_DIR.LEFT;
+            case 270:
+            case -90:
+                return ROBOT_DIR.DOWN;
+        }
+    };
+
     // Returns the default color of the object
     let objectTypeToDefaultColor = function (type) {
         switch (type) {
@@ -732,6 +750,22 @@ let gfxEngine = function () {
         if (!renderObject.animation_variables.is_moving && !renderObject.animation_variables.is_rotating) {
             renderObject.animation_variables.is_animating = false;
             return true;
+        }
+    };
+
+    // Finishes the object's animation
+    self.finishObjectAnimation = function(object, loadedObject) {
+        let dstRow = object.render_variables.animation_variables.nxt_row;
+        let dstCol = object.render_variables.animation_variables.nxt_col;
+
+        object.render_variables.direction = angleToDir(object.render_variables.animation_variables.cur_angle);
+
+        if (object.render_variables.is_selected === true)
+            self.moveHighlightObject(dstRow, dstCol);
+
+        if (loadedObject !== -1) {
+            loadedObject.render_variables.animation_variables.cur_angle = object.render_variables.animation_variables.cur_angle;
+            loadedObject.render_variables.direction = object.render_variables.direction;
         }
     };
 
