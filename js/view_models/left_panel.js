@@ -87,7 +87,7 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
                 type: MAP_CELL.ROBOT,
-                color: GFX_COLORS_DEFAULT.ROBOT
+                color: self.robotVM.color()
             }
         });
     };

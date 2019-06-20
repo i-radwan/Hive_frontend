@@ -299,7 +299,7 @@ OBJECT_FAILURE: { # Stop, Send ACK, Flash red
     col:                                        # supposed to be at before finishing the current move)
 }
 
-OBJECT_STOP: { # Force stop, don't send ACK of the previous move
+OBJECT_STOP: { # Force stop, Send ACK of the previous move
     id:
     type:                                       # not necessarily needed
     row:                                        # The old row/col (the one that this robot was
