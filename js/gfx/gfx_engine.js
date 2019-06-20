@@ -120,7 +120,7 @@ let gfxEngine = function () {
         let cell = getCellTopLeft(row, col);
 
         squareGraphicsObject.clear();
-        squareGraphicsObject.lineStyle(3, strokeColor);
+        squareGraphicsObject.lineStyle(2, strokeColor);
         squareGraphicsObject.beginFill(color);
         squareGraphicsObject.drawRect(cell.x, cell.y, GRID_CELL_LENGTH, GRID_CELL_LENGTH);
         squareGraphicsObject.endFill();
