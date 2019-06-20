@@ -648,7 +648,7 @@ let gfxMap = function (logicEventHandler) {
     };
 
     // Delete key event handler
-    self.deleteEvent = function (e) {
+    self.deleteEvent = function () {
         let obj = self.gfxEngine.getSelectedObject();
 
         if (obj.row === undefined)

@@ -84,7 +84,7 @@ let gfx = function (logicEventHandler) {
 
     // Test Code for simulation mode
     let x = -1;
-    canvas.bind('contextmenu', function (e) {
+    canvas.bind('contextmenu', function () {
         switch (x) {
             case -1:
                 simulationStartEvent();

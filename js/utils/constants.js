@@ -301,9 +301,8 @@ GFX_COLORS_DEFAULT = {
     STATION: "#feea3a",
     OBSTACLE: "#bababa",
     RACK: "#bababa",
-    CELL: "#1d1d1e",
-    PIXI_CELL: 0x1d1d1e,
-    PIXI_CELL_STROKE: 0xbababa
+    CELL: 0x1d1d1e,
+    CELL_STROKE: 0xbababa
 };
 
 GFX_COLORS = {
@@ -313,7 +312,6 @@ GFX_COLORS = {
     RACK_LOAD_COLOR: "#18FFFF",
     STATION_BIND_COLOR: "#76FF03",
     GATE_BIND_COLOR: "#76FF03",
-    CELL_HIGHLIGHT_COLOR: "#4a4a4a",
-    PIXI_CELL_HIGHLIGHT_COLOR: 0x4a4a4a,
-    PIXI_CELL_HIGHLIGHT_STROKE: 0xbababa,
+    CELL_HIGHLIGHT_COLOR: 0x4a4a4a,
+    CELL_HIGHLIGHT_STROKE: 0xbababa,
 };

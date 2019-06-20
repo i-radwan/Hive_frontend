@@ -41,22 +41,10 @@ let gfxEngine = function () {
     // Pixi.js Groups for Z-Index
     let zIndexGroups = [];
 
-    // Map Drag variables
-    let dragVariables = {};
-
     // Hovered & dragged & selected object & their metadata
     let hoveredObject = {};
     let draggedObject = {};
     let selectedObject = {};
-
-    // Keyboard Dragging Variables
-    let goingLeft = false;
-    let goingRight = false;
-    let goingUp = false;
-    let goingDown = false;
-
-    // SVG Objects
-    let robotSVG = [], gateSVG = 0, stationSVG = 0, obstacleSVG = 0, rackSVG = 0;
 
     // Removes all the translations and scale to the scene and reinitialize the Z-Index groups
     let resetScene = function () {
@@ -71,7 +59,6 @@ let gfxEngine = function () {
                 maxWidth: MAX_ZOOM_LENGTH,
                 maxHeight: MAX_ZOOM_LENGTH})
             .wheel();
-        // self.pixi_app.stage.removeChildren();
 
         viewport.moveCorner(0, 0);
 
@@ -84,7 +71,7 @@ let gfxEngine = function () {
     };
 
     // Resize window
-    window.addEventListener('resize', function (e) {
+    window.addEventListener('resize', function () {
         self.pixi_app.renderer.resize(canvas.width(), canvas.height());
         viewport.resize(canvas.width(), canvas.height());
     });
@@ -143,7 +130,7 @@ let gfxEngine = function () {
     let createCell = function (row, col) {
         let square = new PIXI.Graphics();
 
-        updateSquare(square, row, col, GFX_COLORS_DEFAULT.PIXI_CELL, GFX_COLORS_DEFAULT.PIXI_CELL_STROKE);
+        updateSquare(square, row, col, GFX_COLORS_DEFAULT.CELL, GFX_COLORS_DEFAULT.CELL_STROKE);
 
         return square;
     };
@@ -185,34 +172,6 @@ let gfxEngine = function () {
             case 270:
             case -90:
                 return ROBOT_DIR.UP;
-        }
-    };
-
-    // Returns the default color of the object
-    let objectTypeToDefaultColor = function (type) {
-        switch (type) {
-            case MAP_CELL.ROBOT:
-                return GFX_COLORS_DEFAULT.ROBOT;
-            case MAP_CELL.GATE:
-                return GFX_COLORS_DEFAULT.GATE;
-            case MAP_CELL.RACK:
-                return GFX_COLORS_DEFAULT.RACK;
-            case MAP_CELL.STATION:
-                return GFX_COLORS_DEFAULT.STATION;
-            case MAP_CELL.OBSTACLE:
-                return GFX_COLORS_DEFAULT.OBSTACLE;
-        }
-    };
-
-    // Returns the color of the bound object
-    let objectTypeToBindColor = function (type) {
-        switch (type) {
-            case MAP_CELL.GATE:
-                return GFX_COLORS.GATE_BIND_COLOR;
-            case MAP_CELL.RACK:
-                return GFX_COLORS.RACK_LOAD_COLOR;
-            case MAP_CELL.STATION:
-                return GFX_COLORS.STATION_BIND_COLOR;
         }
     };
 
@@ -460,20 +419,6 @@ let gfxEngine = function () {
 
     // Initialize the Graphics engine
     self.init = function () {
-        // zui.addLimits(MIN_ZOOM_VAL, MAX_ZOOM_VAL);
-        //viewport.plugins.pause('drag');
-
-        // Load robot svg
-        /*robotSVG = new Array(GFX_SVG_MODEL.ROBOT.length);
-
-        for (let i = 0; i < GFX_SVG_MODEL.ROBOT.length; i++) {
-            robotSVG[i] = self.two.load(GFX_SVG_MODEL.ROBOT[i]);
-        }
-
-        gateSVG = self.two.load(GFX_SVG_MODEL.GATE);
-        stationSVG = self.two.load(GFX_SVG_MODEL.STATION);
-        obstacleSVG = self.two.load(GFX_SVG_MODEL.OBSTACLE);
-        rackSVG = self.two.load(GFX_SVG_MODEL.RACK);*/
     };
 
     // Draw the grid of the map with the given width and height
@@ -678,21 +623,21 @@ let gfxEngine = function () {
         selectedObject.item = object;
         selectedObject.item.render_variables.is_selected = true;
 
-        self.colorizeCell(row, col, GFX_COLORS.PIXI_CELL_HIGHLIGHT_COLOR, GFX_COLORS.PIXI_CELL_HIGHLIGHT_STROKE);
+        self.colorizeCell(row, col, GFX_COLORS.CELL_HIGHLIGHT_COLOR, GFX_COLORS.CELL_HIGHLIGHT_STROKE);
     };
 
     // Move the highlighted object
     self.moveHighlightObject = function (row, col) {
-        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.PIXI_CELL, GFX_COLORS_DEFAULT.PIXI_CELL_STROKE);
+        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL, GFX_COLORS_DEFAULT.CELL_STROKE);
         selectedObject.row = row;
         selectedObject.col = col;
-        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS.PIXI_CELL_HIGHLIGHT_COLOR, GFX_COLORS.PIXI_CELL_HIGHLIGHT_STROKE);
+        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS.CELL_HIGHLIGHT_COLOR, GFX_COLORS.CELL_HIGHLIGHT_STROKE);
     };
 
     // Unhighlight the highlighted object
     self.unhighlightObject = function () {
         if (typeof selectedObject.row !== 'undefined') {
-            self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.PIXI_CELL, GFX_COLORS_DEFAULT.PIXI_CELL_STROKE);
+            self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL, GFX_COLORS_DEFAULT.CELL_STROKE);
             selectedObject.item.render_variables.is_selected = false;
         }
 
@@ -853,9 +798,6 @@ let gfxEngine = function () {
         if (!renderObject.animation_variables.is_animating)
             return false;
 
-        //if (renderObject.animation_variables.cur_angle === renderObject.animation_variables.nxt_angle)
-        //    renderObject.animation_variables.is_rotating = false;
-
         if (renderObject.animation_variables.is_rotating) {
             rotateObject(renderObject, timeDelta);
         } else if (renderObject.animation_variables.is_moving) {
@@ -948,8 +890,6 @@ let gfxEngine = function () {
     self.objectFixed = function (renderObject, type, isBound, isLoaded) {
         if (type === MAP_CELL.ROBOT)
             self.startObjectFlashing(renderObject, getFlashType(isBound, isLoaded, false));
-
-        // self.resumeObjectAnimation(renderObject);
     };
 
     // Update object battery level
@@ -960,41 +900,10 @@ let gfxEngine = function () {
 
     // Key press event handler
     self.keyDownEvent = function (e) {
-        switch (e.which) {
-            case ARROW.LEFT:
-                goingLeft = true;
-                break;
-            case ARROW.RIGHT:
-                goingRight = true;
-                break;
-            case ARROW.UP:
-                goingUp = true;
-                break;
-            case ARROW.DOWN:
-                goingDown = true;
-                break;
-        }
     };
 
     // Key release event handler
     self.keyUpEvent = function (e) {
-        switch (e.which) {
-            case ARROW.LEFT:
-                goingLeft = false;
-                break;
-            case ARROW.RIGHT:
-                goingRight = false;
-                break;
-            case ARROW.UP:
-                goingUp = false;
-                break;
-            case ARROW.DOWN:
-                goingDown = false;
-                break;
-            case KEY_CODE.F5:
-                self.drawMapGrid(mapWidth, mapHeight);
-                break;
-        }
     };
 
     // Translates the scene a tiny amount according to the pressed keys (should only be called in update function)
