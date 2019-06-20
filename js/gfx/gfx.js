@@ -42,11 +42,11 @@ let gfx = function (logicEventHandler) {
     };
 
     // Update function of two.js (Calls everything that needs execution each frame)
-    gfxEngine.two.bind('update', function () {
-        gfxEngine.keyboardDragEvent(gfxEngine.two.timeDelta);
+    gfxEngine.pixi_app.ticker.add((delta) => {
+        gfxEngine.keyboardDragEvent(delta);
 
         if (runningMode === RUNNING_MODE.SIMULATE)
-            gfxMap.animateObjects(gfxEngine.two.timeDelta);
+            gfxMap.animateObjects(delta);
     });
 
     // Mouse wheel event handler
@@ -114,10 +114,12 @@ let gfx = function (logicEventHandler) {
                 gfxMap.objectLoad(4, MAP_CELL.ROBOT, 1, 3, 1, MAP_CELL.RACK);
                 break;
             case 3:
-                gfxMap.objectRotateLeft(4, 1, 3);
+                // gfxMap.objectRotateLeft(4, 1, 3);
+                gfxMap.objectRetreat(4, 1, 3);
                 break;
             case 4:
-                gfxMap.objectRotateRight(4, 1, 3);
+                gfxMap.objectRetreat(4, 0, 3);
+                // gfxMap.objectRotateRight(4, 1, 3);
                 break;
             case 5:
                 gfxMap.objectMove(4, 1, 3);

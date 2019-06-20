@@ -199,12 +199,20 @@ let gfxMap = function (logicEventHandler) {
     self.objectRotateRight = function (id, row, col) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
         self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.ROTATE_RIGHT);
+
+        if (obj.loaded_object_id !== -1) {
+            self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.ROTATE_RIGHT);
+        }
     };
 
     // Rotate an object 90 degrees to the left
     self.objectRotateLeft = function (id, row, col) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
         self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.ROTATE_LEFT);
+
+        if (obj.loaded_object_id !== -1) {
+            self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.ROTATE_LEFT);
+        }
     };
 
     // Rotate an object 180 degrees then move one step
@@ -513,9 +521,9 @@ let gfxMap = function (logicEventHandler) {
             isMouseDownOnObject = true;
 
             self.gfxEngine.startDragObject(obj, cell.row, cell.col);
-        } else {
-            self.gfxEngine.mouseDownEvent(e);
         }
+
+        self.gfxEngine.mouseDownEvent(isMouseDownOnObject);
 
         updateCursorStyle(e);
     };
@@ -524,7 +532,7 @@ let gfxMap = function (logicEventHandler) {
     self.simulationModeMouseDownEvent = function (e) {
         isMouseDown = true;
 
-        self.gfxEngine.mouseDownEvent(e);
+        self.gfxEngine.mouseDownEvent(false);
 
         updateCursorStyle(e);
     };
@@ -542,6 +550,8 @@ let gfxMap = function (logicEventHandler) {
             col: (cell.inBounds ? cell.col : "")
         });
 
+        self.gfxEngine.mouseMoveEvent(isMouseDown, isMouseOnObject, isCtrlDown);
+
         if (isMouseDown && (!isMouseDownOnObject || isCtrlDown))
             isDraggingMap = true;
 
@@ -553,8 +563,6 @@ let gfxMap = function (logicEventHandler) {
             isDraggingObject = true;
 
             self.gfxEngine.moveDragObject(cell.row, cell.col);
-        } else {
-            self.gfxEngine.mouseMoveEvent(e);
         }
 
         updateCursorStyle(e);

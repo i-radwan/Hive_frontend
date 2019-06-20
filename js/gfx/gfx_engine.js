@@ -1,6 +1,6 @@
-require('two.js');
+let PIXI = require('pixi.js');
 const $ = require('jquery');
-let ZUI = require('./zui');
+let Viewport = require('pixi-viewport');
 
 // Z-Index enum
 let Z_INDEX = {
@@ -19,26 +19,30 @@ const Z_INDEX_GROUPS_CNT = 7;
 let gfxEngine = function () {
     let self = this;
 
-    // Zui and Two.js variables
-    let zui;
+    // Pixi.js and Viewport variables
     let canvas = $('.map-row');
-    self.two = new Two({
+    self.pixi_app = new PIXI.Application({
         width: canvas.width(),
         height: canvas.height(),
-        autostart: true
-    }).appendTo(canvas[0]);
+        backgroundColor: 0x1d1d1e,
+        resolution: 1,
+    });
+    canvas[0].appendChild(self.pixi_app.view);
+
+    let viewport = self.pixi_app.stage.addChild(new Viewport({
+        screenWidth: canvas.width(),
+        screenHeight: canvas.width(),
+        interaction: self.pixi_app.renderer.plugins.interaction
+    }));
 
     // Map information
     let mapWidth, mapHeight;
 
-    // Two.js Groups for Z-Index
+    // Pixi.js Groups for Z-Index
     let zIndexGroups = [];
 
     // Map Drag variables
     let dragVariables = {};
-
-    // Mouse state
-    let isMouseDown = false;
 
     // Hovered & dragged & selected object & their metadata
     let hoveredObject = {};
@@ -56,22 +60,33 @@ let gfxEngine = function () {
 
     // Removes all the translations and scale to the scene and reinitialize the Z-Index groups
     let resetScene = function () {
-        zui.reset();
-        zui.updateSurface();
-        self.two.scene.translation.set(0, 0);
-        self.two.clear();
+        viewport.removeChildren();
+        viewport.resize(canvas.width(), canvas.height(), mapWidth * GRID_CELL_LENGTH, mapHeight * GRID_CELL_LENGTH);
+
+        viewport.drag()
+            .decelerate()
+            .clampZoom({
+                minWidth: MIN_ZOOM_LENGTH,
+                minHeight: MIN_ZOOM_LENGTH,
+                maxWidth: MAX_ZOOM_LENGTH,
+                maxHeight: MAX_ZOOM_LENGTH})
+            .wheel();
+        // self.pixi_app.stage.removeChildren();
+
+        viewport.moveCorner(0, 0);
 
         // Initialize z index groups
         zIndexGroups = new Array(Z_INDEX_GROUPS_CNT);
         for (let i = 0; i < Z_INDEX_GROUPS_CNT; i++) {
-            zIndexGroups[i] = self.two.makeGroup();
+            zIndexGroups[i] = new PIXI.Container();
+            viewport.addChild(zIndexGroups[i]);
         }
     };
 
     // Resize window
     window.addEventListener('resize', function (e) {
-        self.two.width = canvas.width();
-        self.two.height = canvas.height();
+        self.pixi_app.renderer.resize(canvas.width(), canvas.height());
+        viewport.resize(canvas.width(), canvas.height());
     });
 
     // Return the Z-Index enum value from the object type
@@ -91,9 +106,8 @@ let gfxEngine = function () {
     };
 
     // Translate the scene with the given direction (Handles ZUI transformation matrix)
-    let translateScene = function (dx, dy) {
-        zui.translateSurface(dx, dy);
-        self.two.scene.translation.addSelf(dx, dy);
+    let translateScene = function (newX, newY) {
+        viewport.moveCenter(newX, newY);
     };
 
     // Gets the Top left of the cell in coordinate values (x, y) to draw the objects
@@ -114,23 +128,32 @@ let gfxEngine = function () {
         return ret;
     };
 
+    // updates a square object.
+    let updateSquare = function(squareGraphicsObject, row, col, color, strokeColor) {
+        let cell = getCellTopLeft(row, col);
+
+        squareGraphicsObject.clear();
+        squareGraphicsObject.lineStyle(3, strokeColor);
+        squareGraphicsObject.beginFill(color);
+        squareGraphicsObject.drawRect(cell.x, cell.y, GRID_CELL_LENGTH, GRID_CELL_LENGTH);
+        squareGraphicsObject.endFill();
+    };
+
     // Creates a cell at the given position and creates the objects that this cell contains
     let createCell = function (row, col) {
-        let cellCenter = getCellCenter(row, col);
+        let square = new PIXI.Graphics();
 
-        let square = self.two.makeRectangle(cellCenter.x, cellCenter.y, GRID_CELL_LENGTH, GRID_CELL_LENGTH);
-        square.fill = '#1d1d1e';
-        square.stroke = '#bababa';
+        updateSquare(square, row, col, GFX_COLORS_DEFAULT.PIXI_CELL, GFX_COLORS_DEFAULT.PIXI_CELL_STROKE);
 
         return square;
     };
 
     // Updates the object Z-Index
     let updateZIndex = function (renderObject, targetZIndex) {
+        zIndexGroups[targetZIndex].removeChild(renderObject.pixi_object);
+        zIndexGroups[targetZIndex].addChild(renderObject.pixi_object);
+        renderObject.pixi_object.zIndex = targetZIndex;
         renderObject.z_index = targetZIndex;
-
-        zIndexGroups[targetZIndex].add(renderObject.two_object);
-        self.two.update();
     };
 
     // Converts from DIR enum to scalar angle
@@ -139,11 +162,11 @@ let gfxEngine = function () {
             case ROBOT_DIR.RIGHT:
                 return 0;
             case ROBOT_DIR.UP:
-                return 90;
+                return 270;
             case ROBOT_DIR.LEFT:
                 return 180;
             case ROBOT_DIR.DOWN:
-                return 270;
+                return 90;
         }
     };
 
@@ -155,13 +178,13 @@ let gfxEngine = function () {
                 return ROBOT_DIR.RIGHT;
             case 90:
             case -270:
-                return ROBOT_DIR.UP;
+                return ROBOT_DIR.DOWN;
             case 180:
             case -180:
                 return ROBOT_DIR.LEFT;
             case 270:
             case -90:
-                return ROBOT_DIR.DOWN;
+                return ROBOT_DIR.UP;
         }
     };
 
@@ -206,33 +229,36 @@ let gfxEngine = function () {
     };
 
     // Move object with the given time delta
-    let moveObject = function (object, timeDelta) {
-        let dir = new Two.Vector(object.animation_variables.nxt_x - object.animation_variables.cur_x, object.animation_variables.nxt_y - object.animation_variables.cur_y);
+    let moveObject = function (renderObject, timeDelta) {
+        let dirX = renderObject.animation_variables.nxt_x - renderObject.animation_variables.cur_x;
+        let dirY = renderObject.animation_variables.nxt_y - renderObject.animation_variables.cur_y;
+        let length = Math.sqrt(dirX*dirX + dirY*dirY);
 
-        dir.normalize();
-        dir.multiplyScalar(object.animation_variables.moving_speed * timeDelta);
+        dirX = (dirX / length) * renderObject.animation_variables.moving_speed * timeDelta;
+        dirY = (dirY / length) * renderObject.animation_variables.moving_speed * timeDelta;
 
-        object.animation_variables.cur_x += dir.x;
-        object.animation_variables.cur_y += dir.y;
+        renderObject.animation_variables.cur_x += dirX;
+        renderObject.animation_variables.cur_y += dirY;
 
-        let dir2 = new Two.Vector(object.animation_variables.nxt_x - object.animation_variables.cur_x, object.animation_variables.nxt_y - object.animation_variables.cur_y);
+        let dir2X = renderObject.animation_variables.nxt_x - renderObject.animation_variables.cur_x;
+        let dir2Y = renderObject.animation_variables.nxt_y - renderObject.animation_variables.cur_y;
+        let length2 = Math.sqrt(dir2X*dir2X + dir2Y*dir2Y);
 
-        dir2.normalize();
-        dir2.multiplyScalar(object.animation_variables.moving_speed * timeDelta);
+        dir2X = (dir2X / length2) * renderObject.animation_variables.moving_speed * timeDelta;
+        dir2Y = (dir2Y / length2) * renderObject.animation_variables.moving_speed * timeDelta;
 
         // End of animation
-        if (!dir.equals(dir2) || (object.animation_variables.cur_x === object.animation_variables.nxt_x && object.animation_variables.cur_y === object.animation_variables.nxt_y)) {
-            let v = new Two.Vector(object.animation_variables.cur_x - dir.x, object.animation_variables.cur_y - dir.y);
-            let v2 = new Two.Vector(object.animation_variables.nxt_x, object.animation_variables.nxt_y);
+        if ((dirX !== dir2X || dirY !== dir2Y) ||
+            (renderObject.animation_variables.cur_x === renderObject.animation_variables.nxt_x &&
+                renderObject.animation_variables.cur_y === renderObject.animation_variables.nxt_y)) {
 
-            dir.setLength(v.distanceTo(v2));
-
-            object.animation_variables.cur_x = object.animation_variables.nxt_x;
-            object.animation_variables.cur_y = object.animation_variables.nxt_y;
-            object.animation_variables.is_moving = false;
+            renderObject.animation_variables.cur_x = renderObject.animation_variables.nxt_x;
+            renderObject.animation_variables.cur_y = renderObject.animation_variables.nxt_y;
+            renderObject.animation_variables.is_moving = false;
         }
 
-        object.two_object.translation.addSelf(dir);
+        renderObject.pixi_object.x = renderObject.animation_variables.cur_x;
+        renderObject.pixi_object.y = renderObject.animation_variables.cur_y;
     };
 
     // Normalizes a given angle (positive <= 360)
@@ -258,93 +284,187 @@ let gfxEngine = function () {
 
         // End of animation
         if (dir !== dir2 || object.animation_variables.cur_angle === object.animation_variables.nxt_angle) {
-            dir = object.animation_variables.nxt_angle - object.animation_variables.cur_angle + dir;
             object.animation_variables.cur_angle = object.animation_variables.nxt_angle;
             object.animation_variables.is_rotating = false;
         }
 
-        // I hate Two.js 😅
-        let theta = dir * Math.PI / 180;
-        let v2 = object.animation_variables.rotation_vector;
-        let v1 = v2.clone();
-
-        v2.x = v1.x * Math.cos(theta) - v1.y * Math.sin(theta);
-        v2.y = v1.x * Math.sin(theta) + v1.y * Math.cos(theta);
-
-        v1.multiplyScalar(-1);
-        v1.addSelf(v2);
-
-        object.two_object.rotation -= dir * Math.PI / 180;
-        object.two_object.translation.addSelf(v1.y, v1.x);
+        object.pixi_object.angle = object.animation_variables.cur_angle;
     };
+
+    // Load the texture from SVG.
+    let loadTexture = function(type, color, options) {
+        let targetColor = color;
+        let svgString;
+        switch (type) {
+            case MAP_CELL.GATE:
+                if (options.is_bound)
+                    targetColor = GFX_COLORS.GATE_BIND_COLOR;
+
+                svgString = $(GFX_SVG_MODEL.GATE).wrapAll('<div>');
+                svgString = $(svgString).find('.gate_body').attr('fill', targetColor).closest('div').html();
+                break;
+            case MAP_CELL.ROBOT:
+                let batteryIdx = Math.floor(options.battery / 10);
+                let targetLedColor = GFX_COLORS_DEFAULT.ROBOT_LED;
+
+                if (options.is_failed)
+                    targetLedColor = GFX_COLORS.LED_FAIL_COLOR;
+                else if (options.is_bound)
+                    targetLedColor = GFX_COLORS.LED_BIND_COLOR;
+                else if (options.is_loaded)
+                    targetLedColor = GFX_COLORS.LED_LOAD_COLOR;
+
+                svgString = $(GFX_SVG_MODEL.ROBOT[batteryIdx]).wrapAll('<div>');
+
+                if (batteryIdx > 0)         // TODO remove if you change the robot model so it includes the class = "robot_body" in 0% charge level
+                    $(svgString).find('.robot_body').attr('fill', targetColor);
+
+                svgString = $(svgString).find('.led_body').attr('fill', targetLedColor).closest('div').html();
+                break;
+            case MAP_CELL.RACK:
+                if (options.is_loaded)
+                    targetColor = GFX_COLORS.RACK_LOAD_COLOR;
+
+                svgString = $(GFX_SVG_MODEL.RACK).wrapAll('<div>');
+                svgString = $(svgString).find('.rack_body').attr('fill', targetColor).closest('div').html();
+                break;
+            case MAP_CELL.STATION:
+                if (options.is_bound)
+                    targetColor = GFX_COLORS.STATION_BIND_COLOR;
+
+                svgString = $(GFX_SVG_MODEL.STATION).wrapAll('<div>');
+                svgString = $(svgString).find('.station_body').attr('fill', targetColor).closest('div').html();
+                break;
+            case MAP_CELL.OBSTACLE:
+                svgString = $(GFX_SVG_MODEL.OBSTACLE).wrapAll('<div>');
+                svgString = $(svgString).find('.obstacle_body').attr('fill', targetColor).closest('div').html();
+                break;
+        }
+
+        return PIXI.Texture.from(svgString);
+    };
+
+    // Load all the Gate textures from SVG.
+    let loadTexturesGate = function(color) {
+        return {
+            idle: loadTexture(MAP_CELL.GATE, color, {
+                is_bound: false,
+            }),
+            bound: loadTexture(MAP_CELL.GATE, color, {
+                is_bound: true,
+            })
+        };
+    };
+
+    // Load all the robot textures from SVG.
+    let loadTexturesRobot = function(color, battery = 100) {
+        return {
+            idle: loadTexture(MAP_CELL.ROBOT, color, {
+                battery: battery,
+                is_loaded: false,
+                is_bound: false,
+                is_failed: false
+            }),
+            loaded: loadTexture(MAP_CELL.ROBOT, color, {
+                battery: battery,
+                is_loaded: true,
+                is_bound: false,
+                is_failed: false
+            }),
+            bound: loadTexture(MAP_CELL.ROBOT, color, {
+                battery: battery,
+                is_loaded: false,
+                is_bound: true,
+                is_failed: false
+            }),
+            failed: loadTexture(MAP_CELL.ROBOT, color, {
+                battery: battery,
+                is_loaded: false,
+                is_bound: false,
+                is_failed: true
+            })
+        };
+    };
+
+    // Load all the rack textures from SVG.
+    let loadTexturesRack = function(color) {
+        return {
+            idle: loadTexture(MAP_CELL.RACK, color, {
+                is_loaded: false,
+            }),
+            loaded: loadTexture(MAP_CELL.RACK, color, {
+                is_loaded: true,
+            })
+        };
+    };
+
+    // Load all the Station textures from SVG.
+    let loadTexturesStation = function(color) {
+        return {
+            idle: loadTexture(MAP_CELL.STATION, color, {
+                is_bound: false,
+            }),
+            bound: loadTexture(MAP_CELL.STATION, color, {
+                is_bound: true,
+            })
+        };
+    };
+
+    // Load all the Obstacle textures from SVG.
+    let loadTexturesObstacle = function(color) {
+        return {
+            idle: loadTexture(MAP_CELL.OBSTACLE, color, undefined),
+        };
+    };
+
 
     // Colorizes the rack
     let colorizeRack = function (renderObject, color) {
-        for (let i = 0; i < renderObject.two_object.children.length; i++) {
-            if (renderObject.two_object.children[i].fill === renderObject.color) {
-                renderObject.two_object.children[i].fill = color;
-            }
-        }
+        renderObject.textures = loadTexturesRack(color);
+        renderObject.pixi_object.texture = renderObject.textures.idle;
 
         renderObject.color = color;
     };
 
     // Colorizes the robot
     let colorizeRobot = function (renderObject, color) {
-        for (let i = 0; i < renderObject.two_object.children.length; i++) {
-            if (renderObject.two_object.children[i].fill === renderObject.color) {
-                renderObject.two_object.children[i].fill = color;
-            }
-        }
+        renderObject.textures = loadTexturesRobot(color);
+        renderObject.pixi_object.texture = renderObject.textures.idle;
 
         renderObject.color = color;
     };
 
-    // Colorize the robot LED
-    let colorizeRobotLed = function (renderObject, color) {
-        for (let i = 0; i < renderObject.two_object.children.length; i++) {
-            if (renderObject.two_object.children[i].fill === renderObject.led_color) {
-                renderObject.two_object.children[i].fill = color;
-            }
-        }
-
-        renderObject.led_color = color;
-    };
-
     // Colorizes the station
     let colorizeStation = function (renderObject, color) {
-        for (let i = 0; i < renderObject.two_object.children.length; i++) {
-            renderObject.two_object.children[i].fill = color;
-        }
+        renderObject.textures = loadTexturesStation(color);
+        renderObject.pixi_object.texture = renderObject.textures.idle;
 
         renderObject.color = color;
     };
 
     // Colorizes the obstacle
     let colorizeObstacle = function (renderObject, color) {
-        for (let i = 0; i < renderObject.two_object.children.length; i++) {
-            renderObject.two_object.children[i].fill = color;
-        }
+        renderObject.textures = loadTexturesObstacle(color);
+        renderObject.pixi_object.texture = renderObject.textures.idle;
 
         renderObject.color = color;
     };
 
     // Colorizes the gate
     let colorizeGate = function (renderObject, color) {
-        for (let i = 0; i < renderObject.two_object.children.length; i++) {
-            renderObject.two_object.children[i].fill = color;
-        }
+        renderObject.textures = loadTexturesGate(color);
+        renderObject.pixi_object.texture = renderObject.textures.idle;
 
         renderObject.color = color;
     };
 
     // Initialize the Graphics engine
     self.init = function () {
-        zui = new ZUI(self.two);
-        zui.addLimits(MIN_ZOOM_VAL, MAX_ZOOM_VAL);
+        // zui.addLimits(MIN_ZOOM_VAL, MAX_ZOOM_VAL);
+        //viewport.plugins.pause('drag');
 
         // Load robot svg
-        robotSVG = new Array(GFX_SVG_MODEL.ROBOT.length);
+        /*robotSVG = new Array(GFX_SVG_MODEL.ROBOT.length);
 
         for (let i = 0; i < GFX_SVG_MODEL.ROBOT.length; i++) {
             robotSVG[i] = self.two.load(GFX_SVG_MODEL.ROBOT[i]);
@@ -353,7 +473,7 @@ let gfxEngine = function () {
         gateSVG = self.two.load(GFX_SVG_MODEL.GATE);
         stationSVG = self.two.load(GFX_SVG_MODEL.STATION);
         obstacleSVG = self.two.load(GFX_SVG_MODEL.OBSTACLE);
-        rackSVG = self.two.load(GFX_SVG_MODEL.RACK);
+        rackSVG = self.two.load(GFX_SVG_MODEL.RACK);*/
     };
 
     // Draw the grid of the map with the given width and height
@@ -365,17 +485,12 @@ let gfxEngine = function () {
 
         for (let c = 0; c < width; c++) {
             for (let r = 0; r < height; r++) {
-                zIndexGroups[Z_INDEX.BACKGROUND].add(createCell(r, c));
+                zIndexGroups[Z_INDEX.BACKGROUND].addChild(createCell(r, c));
             }
         }
 
-        translateScene(self.two.width / 2, self.two.height / 2);
-        translateScene(-(mapWidth * GRID_CELL_LENGTH) / 2, -(mapHeight * GRID_CELL_LENGTH) / 2);
-
-        // What a magical equation !
-        zui.zoomBy(-Math.pow(mapWidth * mapHeight, 0.5) / 30, self.two.width / 2 + canvas.offset().left, self.two.height / 2 + canvas.offset().top);
-
-        self.two.update();
+        translateScene((mapWidth * GRID_CELL_LENGTH) / 2, (mapHeight * GRID_CELL_LENGTH) / 2);
+        viewport.zoom((mapWidth + 1) * GRID_CELL_LENGTH - canvas.width(), true);
     };
 
     // Return the object that is currently selected
@@ -385,59 +500,55 @@ let gfxEngine = function () {
 
     // Gets from the mouse raw position the row and column of the cell that is being clicked
     self.getMouseCell = function (mouseX, mouseY) {
-        mouseX = mouseX - canvas.offset().left - zIndexGroups[Z_INDEX.BACKGROUND].getBoundingClientRect().left;
-        mouseY = mouseY - canvas.offset().top - zIndexGroups[Z_INDEX.BACKGROUND].getBoundingClientRect().top;
+        let worldPosition = viewport.toWorld(mouseX - canvas.offset().left, mouseY - canvas.offset().top);
 
-        let cellWidth = (zIndexGroups[Z_INDEX.BACKGROUND].getBoundingClientRect().width) / mapWidth;
-
-        let cellRow = Math.floor(mouseY / cellWidth);
-        let cellCol = Math.floor(mouseX / cellWidth);
+        let cellRow = Math.floor(worldPosition.y / GRID_CELL_LENGTH);
+        let cellCol = Math.floor(worldPosition.x / GRID_CELL_LENGTH);
 
         return {row: cellRow, col: cellCol};
     };
 
     // Adds an object to the scene
     self.addObject = function (id, type, row, col, color, zIndexValue = -1) {
-        let cellTopLeft = getCellTopLeft(row, col);
-        let defaultColor;
-        let targetColor = color;
+        let cellCenter = getCellCenter(row, col);
         let ledColor = undefined;
 
-        let twoObject;
+        let textures, pixiObject;
 
         switch (type) {
             case MAP_CELL.GATE:
-                twoObject = gateSVG.clone();
-                twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_COLORS_DEFAULT.GATE;
+                textures = loadTexturesGate(color);
+                pixiObject = new PIXI.Sprite(textures.idle);
                 break;
             case MAP_CELL.ROBOT:
-                twoObject = robotSVG[10].clone();
-                twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_COLORS_DEFAULT.ROBOT;
+                textures = loadTexturesRobot(color);
+                pixiObject = new PIXI.Sprite(textures.idle);
                 ledColor = GFX_COLORS_DEFAULT.ROBOT_LED;
                 break;
             case MAP_CELL.RACK:
-                twoObject = rackSVG.clone();
-                twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_COLORS_DEFAULT.RACK;
+                textures = loadTexturesRack(color);
+                pixiObject = new PIXI.Sprite(textures.idle);
                 break;
             case MAP_CELL.STATION:
-                twoObject = stationSVG.clone();
-                twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_COLORS_DEFAULT.STATION;
+                textures = loadTexturesStation(color);
+                pixiObject = new PIXI.Sprite(textures.idle);
                 break;
             case MAP_CELL.OBSTACLE:
-                twoObject = obstacleSVG.clone();
-                twoObject.translation.set(cellTopLeft.x, cellTopLeft.y);
-                defaultColor = GFX_COLORS_DEFAULT.OBSTACLE;
+                textures = loadTexturesObstacle(color);
+                pixiObject = new PIXI.Sprite(textures.idle);
                 break;
         }
 
         zIndexValue = (zIndexValue === -1 ? getObjectZIndex(type) : zIndexValue);
-        zIndexGroups[zIndexValue].add(twoObject);
+        pixiObject.scale.x = 1/3;
+        pixiObject.scale.y = 1/3;
+        pixiObject.anchor.set(0.5, 0.5);
+        pixiObject.x = cellCenter.x;
+        pixiObject.y = cellCenter.y;
+        pixiObject.zIndex = zIndexValue;
+        zIndexGroups[zIndexValue].addChild(pixiObject);
 
-        let ret = {
+        return {
             type: type,
             id: id,
             loaded_object_id: -1,
@@ -445,39 +556,38 @@ let gfxEngine = function () {
             bound_object_id: -1,
             bound_object_type: -1,
             render_variables: {
-                two_object: twoObject,
+                pixi_object: pixiObject,
+                textures: textures,
                 is_selected: false,
                 z_index: zIndexValue,
                 direction: ROBOT_DIR.RIGHT,
-                color: defaultColor,
+                color: color,
                 led_color: ledColor,
                 animation_variables: {
-                    cur_x: cellTopLeft.x,
-                    cur_y: cellTopLeft.y,
+                    cur_x: cellCenter.x,
+                    cur_y: cellCenter.y,
                     cur_angle: 0,
-                    rotation_vector: new Two.Vector(-GRID_CELL_LENGTH / 2, -GRID_CELL_LENGTH / 2)
+                    rotation_vector: 0
                 }
             }
         };
-
-        self.colorizeObject(ret.render_variables, ret.type, targetColor);
-
-        return ret;
     };
 
     // Translates the given object to the given new row and column
     self.translateObject = function (renderObject, dstRow, dstCol) {
-        let cellTopLeft = getCellTopLeft(dstRow, dstCol);
+        let cellCenter = getCellCenter(dstRow, dstCol);
 
-        renderObject.animation_variables.cur_x = cellTopLeft.x;
-        renderObject.animation_variables.cur_y = cellTopLeft.y;
-        renderObject.two_object.translation.set(cellTopLeft.x, cellTopLeft.y);
+        renderObject.animation_variables.cur_x = cellCenter.x;
+        renderObject.animation_variables.cur_y = cellCenter.y;
+        renderObject.pixi_object.x = cellCenter.x;
+        renderObject.pixi_object.y = cellCenter.y;
     };
 
     // Deletes an object from the scene
     self.deleteObject = function (renderObject, type) {
         self.unhighlightObject();
-        zIndexGroups[getObjectZIndex(type)].remove(renderObject.two_object);
+        zIndexGroups[getObjectZIndex(type)].removeChild(renderObject.pixi_object);
+        renderObject.pixi_object.destroy(false, false, false);
     };
 
     // Creates a hover object of the given type
@@ -496,19 +606,18 @@ let gfxEngine = function () {
         if (hoveredObject.is_drawn)
             return;
 
+        let cellCenter = getCellCenter(hoveredObject.row, hoveredObject.col);
+
         hoveredObject.is_drawn = true;
-
-        let cellTopLeft = getCellTopLeft(hoveredObject.row, hoveredObject.col);
-
-        zIndexGroups[Z_INDEX.HOVER].add(hoveredObject.item.render_variables.two_object);
-
-        hoveredObject.item.render_variables.two_object.translation.set(cellTopLeft.x, cellTopLeft.y);
+        hoveredObject.item.render_variables.pixi_object.renderable = true;
+        hoveredObject.item.render_variables.pixi_object.x = cellCenter.x;
+        hoveredObject.item.render_variables.pixi_object.y = cellCenter.y;
     };
 
     // Hide hovering object from the drawing area
     self.hideHoveringObject = function () {
         hoveredObject.is_drawn = false;
-        zIndexGroups[Z_INDEX.HOVER].remove(hoveredObject.item.render_variables.two_object);
+        hoveredObject.item.render_variables.pixi_object.renderable = false;
     };
 
     // Moves the hover object to the given row and column
@@ -527,7 +636,8 @@ let gfxEngine = function () {
     // Delete the hover object
     self.removeHoveringObject = function () {
         if (hoveredObject.is_drawn) {
-            zIndexGroups[Z_INDEX.HOVER].remove(hoveredObject.item.render_variables.two_object);
+            zIndexGroups[Z_INDEX.HOVER].removeChild(hoveredObject.item.render_variables.pixi_object);
+            hoveredObject.item.render_variables.pixi_object.destroy(false, false, false);
         }
 
         hoveredObject = {};
@@ -540,8 +650,6 @@ let gfxEngine = function () {
         draggedObject.src_col = col;
 
         updateZIndex(draggedObject.item.render_variables, Z_INDEX.DRAG);
-        //draggedObject.dst_row = row;
-        //draggedObject.dst_col = col;
     };
 
     // Move the drag object to the given row and column
@@ -570,21 +678,21 @@ let gfxEngine = function () {
         selectedObject.item = object;
         selectedObject.item.render_variables.is_selected = true;
 
-        self.colorizeCell(row, col, GFX_COLORS.CELL_HIGHLIGHT_COLOR);
+        self.colorizeCell(row, col, GFX_COLORS.PIXI_CELL_HIGHLIGHT_COLOR, GFX_COLORS.PIXI_CELL_HIGHLIGHT_STROKE);
     };
 
     // Move the highlighted object
     self.moveHighlightObject = function (row, col) {
-        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL);
+        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.PIXI_CELL, GFX_COLORS_DEFAULT.PIXI_CELL_STROKE);
         selectedObject.row = row;
         selectedObject.col = col;
-        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS.CELL_HIGHLIGHT_COLOR);
+        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS.PIXI_CELL_HIGHLIGHT_COLOR, GFX_COLORS.PIXI_CELL_HIGHLIGHT_STROKE);
     };
 
     // Unhighlight the highlighted object
     self.unhighlightObject = function () {
         if (typeof selectedObject.row !== 'undefined') {
-            self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL);
+            self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.PIXI_CELL, GFX_COLORS_DEFAULT.PIXI_CELL_STROKE);
             selectedObject.item.render_variables.is_selected = false;
         }
 
@@ -592,8 +700,10 @@ let gfxEngine = function () {
     };
 
     // Change color of a given cell
-    self.colorizeCell = function (row, col, color) {
-        zIndexGroups[Z_INDEX.BACKGROUND].children[col * mapHeight + row].fill = color;
+    self.colorizeCell = function (row, col, color, strokeColor) {
+        let square = zIndexGroups[Z_INDEX.BACKGROUND].children[col * mapHeight + row];
+
+        updateSquare(square, row, col, color, strokeColor);
     };
 
     // Change color of a given object
@@ -658,17 +768,21 @@ let gfxEngine = function () {
         if (sequence === 0) {
             switch (renderObject.animation_variables.flash_type) {
                 case FLASH_TYPE.BIND:
-                    colorizeRobotLed(renderObject, GFX_COLORS.LED_BIND_COLOR);
+                    renderObject.pixi_object.texture = renderObject.textures.bound;
+                    renderObject.led_color = GFX_COLORS.LED_BIND_COLOR;
                     break;
                 case FLASH_TYPE.LOAD:
-                    colorizeRobotLed(renderObject, GFX_COLORS.LED_LOAD_COLOR);
+                    renderObject.pixi_object.texture = renderObject.textures.loaded;
+                    renderObject.led_color = GFX_COLORS.LED_LOAD_COLOR;
                     break;
                 case FLASH_TYPE.FAILURE:
-                    colorizeRobotLed(renderObject, GFX_COLORS.LED_FAIL_COLOR);
+                    renderObject.pixi_object.texture = renderObject.textures.failed;
+                    renderObject.led_color = GFX_COLORS.LED_FAIL_COLOR;
                     break;
             }
         } else {
-            colorizeRobotLed(renderObject, GFX_COLORS_DEFAULT.ROBOT_LED);
+            renderObject.pixi_object.texture = renderObject.textures.idle;
+            renderObject.led_color = GFX_COLORS_DEFAULT.ROBOT_LED;
         }
     };
 
@@ -678,7 +792,7 @@ let gfxEngine = function () {
 
     self.stopObjectFlashing = function (renderObject) {
         renderObject.animation_variables.is_flashing = false;
-        colorizeRobotLed(renderObject, GFX_COLORS_DEFAULT.ROBOT_LED);
+        renderObject.pixi_object.texture = renderObject.textures.idle;
     };
 
     // Initialize animation of a given object
@@ -701,7 +815,7 @@ let gfxEngine = function () {
             case ANIMATION_TYPE.ROTATE_RIGHT:
             case ANIMATION_TYPE.ROTATE_LEFT:
                 renderObject.animation_variables.is_rotating = true;
-                let dir = (animationType === ANIMATION_TYPE.ROTATE_LEFT ? 1 : -1);
+                let dir = (animationType === ANIMATION_TYPE.ROTATE_LEFT ? -1 : 1);
                 dstAngle = dirToAngle(renderObject.direction) + dir * 90;
                 dstAngle = normalizeAngle(dstAngle);
 
@@ -721,10 +835,10 @@ let gfxEngine = function () {
                 break;
         }
 
-        let dstTopLeft = getCellTopLeft(dstRow, dstCol);
+        let dstCenter = getCellCenter(dstRow, dstCol);
 
-        renderObject.animation_variables.nxt_x = dstTopLeft.x;
-        renderObject.animation_variables.nxt_y = dstTopLeft.y;
+        renderObject.animation_variables.nxt_x = dstCenter.x;
+        renderObject.animation_variables.nxt_y = dstCenter.y;
         renderObject.animation_variables.nxt_row = dstRow;
         renderObject.animation_variables.nxt_col = dstCol;
         renderObject.animation_variables.moving_speed = MOVING_SPEED;
@@ -790,13 +904,13 @@ let gfxEngine = function () {
     // Bind 2 given objects together
     self.bindObject = function (renderObject1, renderObject2, object2Type, isLoaded) {
         self.startObjectFlashing(renderObject1, getFlashType(true, isLoaded, false));
-        self.colorizeObject(renderObject2, object2Type, objectTypeToBindColor(object2Type));
+        renderObject2.pixi_object.texture = renderObject2.textures.bound;
     };
 
     // Unbind 2 given objects
     self.unbindObject = function (renderObject1, renderObject2, object2Type, isLoaded) {
         self.startObjectFlashing(renderObject1, getFlashType(false, isLoaded, false));
-        self.colorizeObject(renderObject2, object2Type, objectTypeToDefaultColor(object2Type));
+        renderObject2.pixi_object.texture = renderObject2.textures.idle;
     };
 
     // Load 2 given objects
@@ -805,13 +919,13 @@ let gfxEngine = function () {
         renderObject2.direction = renderObject1.direction;
 
         self.startObjectFlashing(renderObject1, getFlashType(isBound, true, false));
-        self.colorizeObject(renderObject2, object2Type, objectTypeToBindColor(object2Type));
+        renderObject2.pixi_object.texture = renderObject2.textures.loaded;
     };
 
     // Offload 2 given objects
     self.offloadObject = function (renderObject1, renderObject2, object2Type, isBound) {
         self.startObjectFlashing(renderObject1, getFlashType(isBound, false, false));
-        self.colorizeObject(renderObject2, object2Type, objectTypeToDefaultColor(object2Type));
+        renderObject2.pixi_object.texture = renderObject2.textures.idle;
     };
 
     // object is failed
@@ -840,21 +954,8 @@ let gfxEngine = function () {
 
     // Update object battery level
     self.updateObject = function (renderObject, battery) {
-        let robotSVGIdx = Math.floor(battery / 10);
-        let twoObject = robotSVG[robotSVGIdx].clone();
-        let color = renderObject.color;
-        let ledColor = renderObject.led_color;
-
-        zIndexGroups[renderObject.z_index].remove(renderObject.two_object);
-        twoObject.rotation = renderObject.two_object.rotation;
-        twoObject.translation.set(renderObject.two_object.translation.x, renderObject.two_object.translation.y);
-        renderObject.color = GFX_COLORS_DEFAULT.ROBOT;
-        renderObject.led_color = GFX_COLORS_DEFAULT.ROBOT_LED;
-        renderObject.two_object = twoObject;
-        zIndexGroups[renderObject.z_index].add(renderObject.two_object);
-
-        colorizeRobot(renderObject, color);
-        colorizeRobotLed(renderObject, ledColor);
+        renderObject.textures = loadTexturesRobot(renderObject.color, battery);
+        self.flashObject(renderObject, 0);
     };
 
     // Key press event handler
@@ -898,54 +999,30 @@ let gfxEngine = function () {
 
     // Translates the scene a tiny amount according to the pressed keys (should only be called in update function)
     self.keyboardDragEvent = function (timeDelta) {
-        return;
-
-        let verticalDir = 0;
-        let horizontalDir = 0;
-        if (goingLeft)
-            horizontalDir = 1;
-        else if (goingRight)
-            horizontalDir = -1;
-
-        if (goingUp)
-            verticalDir = 1;
-        else if (goingDown)
-            verticalDir = -1;
-
-        translateScene(timeDelta * KEYBOARD_DRAG_SPEED * horizontalDir, timeDelta * KEYBOARD_DRAG_SPEED * verticalDir);
     };
 
     // Zoom event handler
     self.zoomEvent = function (e) {
-        const delta = e.originalEvent.wheelDelta / 1000;
-
-        zui.zoomBy(delta, e.clientX, e.clientY);
     };
 
     // Mouse press event handler
-    self.mouseDownEvent = function (e) {
-        dragVariables.startDragX = e.clientX - canvas.offset().left;
-        dragVariables.startDragY = e.clientY - canvas.offset().top;
-
-        isMouseDown = true;
+    self.mouseDownEvent = function (isMouseDownOnObject) {
+        if (isMouseDownOnObject)
+            viewport.pausePlugin('drag');
     };
 
     // Mouse move event handler
-    self.mouseMoveEvent = function (e) {
-        if (!isMouseDown) return;
+    self.mouseMoveEvent = function (isMouseDown, isMouseOnObject, isCtrlDown) {
+        if (isMouseDown) return;
 
-        let dirX = e.clientX - canvas.offset().left - dragVariables.startDragX;
-        let dirY = e.clientY - canvas.offset().top - dragVariables.startDragY;
-
-        translateScene(dirX, dirY);
-
-        dragVariables.startDragX = e.clientX - canvas.offset().left;
-        dragVariables.startDragY = e.clientY - canvas.offset().top;
+        if (isMouseOnObject && !isCtrlDown)
+            viewport.pausePlugin('drag');
+        else
+            viewport.resumePlugin('drag');
     };
 
     // Mouse release event handler
     self.mouseUpEvent = function () {
-        isMouseDown = false;
     }
 };
 
