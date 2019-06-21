@@ -186,18 +186,6 @@ let gfxEngine = function () {
         }
     };
 
-    // Returns the flash color to make.
-    let getFlashType = function (isBound, isLoaded, isFailed) {
-        if (isFailed)
-            return FLASH_TYPE.FAILURE;
-        if (isBound)
-            return FLASH_TYPE.BIND;
-        if (isLoaded)
-            return FLASH_TYPE.LOAD;
-
-        return FLASH_TYPE.NO_FLASH;
-    };
-
     // Move object with the given time delta
     let moveObject = function (renderObject, timeDelta) {
         let dirX = renderObject.animation_variables.nxt_x - renderObject.animation_variables.cur_x;
@@ -285,11 +273,11 @@ let gfxEngine = function () {
                 let targetLedColor = GFX_COLORS_DEFAULT.ROBOT_LED;
 
                 if (options.is_failed)
-                    targetLedColor = GFX_COLORS.LED_FAIL_COLOR;
+                    targetLedColor = GFX_COLORS.LED_RED_COLOR;
                 else if (options.is_bound)
-                    targetLedColor = GFX_COLORS.LED_BIND_COLOR;
+                    targetLedColor = GFX_COLORS.LED_GREEN_COLOR;
                 else if (options.is_loaded)
-                    targetLedColor = GFX_COLORS.LED_LOAD_COLOR;
+                    targetLedColor = GFX_COLORS.LED_BLUE_COLOR;
 
                 svgString = $(GFX_SVG_MODEL.ROBOT[batteryIdx]).wrapAll('<div>');
 
@@ -560,6 +548,7 @@ let gfxEngine = function () {
                 is_selected: false,
                 z_index: zIndexValue,
                 direction: ROBOT_DIR.RIGHT,
+                default_color: color,
                 color: color,
                 led_color: ledColor,
                 animation_variables: {
@@ -753,13 +742,42 @@ let gfxEngine = function () {
         }
     };
 
-    self.startObjectFlashing = function (renderObject, flashType) {
-        if (flashType === FLASH_TYPE.NO_FLASH)
-            self.stopObjectFlashing(renderObject);
+    // change the led color of a given robot
+    self.changeLedColor = function(renderObject, color) {
+        switch (color) {
+            case GFX_COLORS.LED_BLUE_COLOR:
+                renderObject.pixi_object.texture = renderObject.textures.loaded;
+                break;
+            case GFX_COLORS.LED_GREEN_COLOR:
+                renderObject.pixi_object.texture = renderObject.textures.bound;
+                break;
+            case GFX_COLORS.LED_RED_COLOR:
+                renderObject.pixi_object.texture = renderObject.textures.failed;
+                break;
+            case GFX_COLORS_DEFAULT.ROBOT_LED:
+                renderObject.pixi_object.texture = renderObject.textures.idle;
+                break;
+        }
+    };
 
-        renderObject.animation_variables.is_flashing = true;
+    // colorize the led of a given robot
+    self.colorizeObjectLed = function (renderObject, color, mode) {
+        renderObject.led_color = color;
+        renderObject.animation_variables.is_flashing = false;
         renderObject.animation_variables.flash_time = 0;
-        renderObject.animation_variables.flash_type = flashType;
+        renderObject.animation_variables.led_color_mode = mode;
+
+        switch (mode) {
+            case LED_COLOR_MODE.OFF:
+                self.stopObjectFlashing(renderObject);
+                break;
+            case LED_COLOR_MODE.ON:
+                self.changeLedColor(renderObject, color);
+                break;
+            case LED_COLOR_MODE.FLASH:
+                renderObject.animation_variables.is_flashing = true;
+                break;
+        }
     };
 
     self.flashObject = function (renderObject, timeDelta) {
@@ -771,23 +789,9 @@ let gfxEngine = function () {
         let sequence = Math.floor(renderObject.animation_variables.flash_time / FLASHING_SPEED) % 2;
 
         if (sequence === 0) {
-            switch (renderObject.animation_variables.flash_type) {
-                case FLASH_TYPE.BIND:
-                    renderObject.pixi_object.texture = renderObject.textures.bound;
-                    renderObject.led_color = GFX_COLORS.LED_BIND_COLOR;
-                    break;
-                case FLASH_TYPE.LOAD:
-                    renderObject.pixi_object.texture = renderObject.textures.loaded;
-                    renderObject.led_color = GFX_COLORS.LED_LOAD_COLOR;
-                    break;
-                case FLASH_TYPE.FAILURE:
-                    renderObject.pixi_object.texture = renderObject.textures.failed;
-                    renderObject.led_color = GFX_COLORS.LED_FAIL_COLOR;
-                    break;
-            }
+            self.changeLedColor(renderObject, renderObject.led_color)
         } else {
-            renderObject.pixi_object.texture = renderObject.textures.idle;
-            renderObject.led_color = GFX_COLORS_DEFAULT.ROBOT_LED;
+            self.changeLedColor(renderObject, GFX_COLORS_DEFAULT.ROBOT_LED);
         }
     };
 
@@ -797,7 +801,7 @@ let gfxEngine = function () {
 
     self.stopObjectFlashing = function (renderObject) {
         renderObject.animation_variables.is_flashing = false;
-        renderObject.pixi_object.texture = renderObject.textures.idle;
+        self.changeLedColor(renderObject, GFX_COLORS_DEFAULT.ROBOT_LED);
     };
 
     // Initialize animation of a given object
@@ -915,37 +919,34 @@ let gfxEngine = function () {
     };
 
     // Bind 2 given objects together
-    self.bindObject = function (renderObject1, renderObject2, object2Type, isLoaded) {
-        self.startObjectFlashing(renderObject1, getFlashType(true, isLoaded, false));
+    self.bindObject = function (renderObject1, renderObject2) {
         renderObject2.pixi_object.texture = renderObject2.textures.bound;
+        // TODO I might check for it or I guarantee that the gate and station have the same color
+        renderObject2.color = GFX_COLORS.STATION_BIND_COLOR;
     };
 
     // Unbind 2 given objects
-    self.unbindObject = function (renderObject1, renderObject2, object2Type, isLoaded) {
-        self.startObjectFlashing(renderObject1, getFlashType(false, isLoaded, false));
+    self.unbindObject = function (renderObject1, renderObject2) {
         renderObject2.pixi_object.texture = renderObject2.textures.idle;
+        renderObject2.color = renderObject2.default_color;
     };
 
     // Load 2 given objects
-    self.loadObject = function (renderObject1, renderObject2, object2Type, isBound) {
+    self.loadObject = function (renderObject1, renderObject2) {
         renderObject2.animation_variables.cur_angle = renderObject1.animation_variables.cur_angle;
         renderObject2.direction = renderObject1.direction;
-
-        self.startObjectFlashing(renderObject1, getFlashType(isBound, true, false));
         renderObject2.pixi_object.texture = renderObject2.textures.loaded;
+        renderObject2.color = GFX_COLORS.RACK_LOAD_COLOR;
     };
 
     // Offload 2 given objects
-    self.offloadObject = function (renderObject1, renderObject2, object2Type, isBound) {
-        self.startObjectFlashing(renderObject1, getFlashType(isBound, false, false));
+    self.offloadObject = function (renderObject1, renderObject2) {
         renderObject2.pixi_object.texture = renderObject2.textures.idle;
+        renderObject2.color = renderObject2.default_color;
     };
 
     // object is failed
-    self.objectFailure = function (renderObject, type) {
-        if (type === MAP_CELL.ROBOT)
-            self.startObjectFlashing(renderObject, getFlashType(false, false, true));
-
+    self.objectFailure = function (renderObject) {
         self.pauseObjectAnimation(renderObject);
     };
 
@@ -959,8 +960,6 @@ let gfxEngine = function () {
 
     // object is fixed
     self.objectFixed = function (renderObject, type, isBound, isLoaded) {
-        if (type === MAP_CELL.ROBOT)
-            self.startObjectFlashing(renderObject, getFlashType(isBound, isLoaded, false));
     };
 
     // Update object battery level

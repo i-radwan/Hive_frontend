@@ -91,6 +91,10 @@ let gfx = function (logicEventHandler) {
                 gfxMap.objectRotateRight(2, 0, 1);
                 gfxMap.objectRotateRight(3, 0, 2);
                 gfxMap.objectRotateRight(4, 0, 3);
+                gfxMap.objectColorizeLed(1, MAP_CELL.ROBOT, 0, 0, GFX_COLORS.LED_GREEN_COLOR, LED_COLOR_MODE.ON);
+                gfxMap.objectColorizeLed(2, MAP_CELL.ROBOT, 0, 1, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.FLASH);
+                gfxMap.objectColorizeLed(3, MAP_CELL.ROBOT, 0, 2, GFX_COLORS.LED_GREEN_COLOR, LED_COLOR_MODE.FLASH);
+                gfxMap.objectColorizeLed(4, MAP_CELL.ROBOT, 0, 3, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.FLASH);
                 break;
             case 1:
                 gfxMap.objectMove(1, 0, 0);
@@ -109,6 +113,10 @@ let gfx = function (logicEventHandler) {
                 gfxMap.objectLoad(4, MAP_CELL.ROBOT, 1, 3, 1, MAP_CELL.RACK);
                 gfxMap.objectHighlight(4, MAP_CELL.ROBOT, 1, 3);
                 gfxMap.objectHighlight(1, MAP_CELL.RACK, 1, 3);
+                gfxMap.objectColorizeLed(1, MAP_CELL.ROBOT, 1, 0, GFX_COLORS.LED_GREEN_COLOR, LED_COLOR_MODE.FLASH);
+                gfxMap.objectColorizeLed(2, MAP_CELL.ROBOT, 1, 1, GFX_COLORS.LED_RED_COLOR, LED_COLOR_MODE.FLASH);
+                gfxMap.objectColorizeLed(3, MAP_CELL.ROBOT, 1, 2, GFX_COLORS.LED_GREEN_COLOR, LED_COLOR_MODE.ON);
+                gfxMap.objectColorizeLed(4, MAP_CELL.ROBOT, 1, 3, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.ON);
                 break;
             case 3:
                 // gfxMap.objectRotateLeft(4, 1, 3);
@@ -116,6 +124,7 @@ let gfx = function (logicEventHandler) {
                 break;
             case 4:
                 gfxMap.objectOffload(4, MAP_CELL.ROBOT, 0, 3, 1, MAP_CELL.RACK);
+                gfxMap.objectColorizeLed(4, MAP_CELL.ROBOT, 0, 3, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.OFF);
                 break;
             case 5:
                 gfxMap.objectRetreat(4, 0, 3);
@@ -209,6 +218,9 @@ let gfx = function (logicEventHandler) {
                 break;
             case EVENT_TO_GFX.OBJECT_DECOLORIZE:
                 gfxMap.objectDecolorize(event.data.id, event.data.type, event.data.row, event.data.col);
+                break;
+            case EVENT_TO_GFX.OBJECT_COLORIZE_LED:
+                gfxMap.objectColorizeLed(event.data.id, event.data.type, event.data.row, event.data.col, event.data.color, event.data.mode);
                 break;
             case EVENT_TO_GFX.OBJECT_BIND:
                 gfxMap.objectBind(event.data.id, event.data.type, event.data.row, event.data.col, event.data.object_id, event.data.object_type);

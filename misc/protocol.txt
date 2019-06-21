@@ -256,6 +256,15 @@ OBJECT_DECOLORIZE: {
     col:
 }
 
+OBJECT_COLORIZE_LED: {
+    type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
+    id:
+    row:
+    col:
+    color:  [GFX_COLORS.LED_BLUE_COLOR|GFX_COLORS_DEFAULT.ROBOT_LED]
+    mode: [LED_COLOR_MODE.ON|LED_COLOR_MODE.OFF|LED_COLOR_MODE.FLASH]
+}
+
 OBJECT_BIND: { # Flash the bound object, send ACK
     type:                                       # not necessarily needed
     id:                                         # Robot ID
