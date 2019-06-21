@@ -107,47 +107,31 @@ let gfx = function (logicEventHandler) {
                 gfxMap.objectBind(3, MAP_CELL.ROBOT, 1, 2, 2, MAP_CELL.STATION);
                 gfxMap.objectLoad(2, MAP_CELL.ROBOT, 1, 1, 2, MAP_CELL.RACK);
                 gfxMap.objectLoad(4, MAP_CELL.ROBOT, 1, 3, 1, MAP_CELL.RACK);
+                gfxMap.objectHighlight(4, MAP_CELL.ROBOT, 1, 3);
+                gfxMap.objectHighlight(1, MAP_CELL.RACK, 1, 3);
                 break;
             case 3:
                 // gfxMap.objectRotateLeft(4, 1, 3);
                 gfxMap.objectRetreat(4, 1, 3);
                 break;
             case 4:
+                gfxMap.objectOffload(4, MAP_CELL.ROBOT, 0, 3, 1, MAP_CELL.RACK);
+                break;
+            case 5:
                 gfxMap.objectRetreat(4, 0, 3);
                 // gfxMap.objectRotateRight(4, 1, 3);
                 break;
-            case 5:
+            case 6:
                 gfxMap.objectMove(4, 1, 3);
                 break;
-            case 6:
+            case 7:
                 gfxMap.objectBind(4, MAP_CELL.ROBOT, 2, 3, 1, MAP_CELL.STATION);
                 break;
-            case 7:
+            case 8:
                 gfxMap.objectLoad(1, MAP_CELL.ROBOT, 2, 0, 1, MAP_CELL.RACK);
                 break;
-            case 8:
-                gfxMap.objectMove(1, 2, 0);
-                break;
             case 9:
-                gfxMap.objectFailure(1, MAP_CELL.ROBOT, 2, 0);
-                break;
-            case 10:
-                gfxMap.objectFixed(1, MAP_CELL.ROBOT, 2, 0);
-                break;
-            case 11:
                 gfxMap.objectMove(1, 2, 0);
-                break;
-            case 12:
-                gfxMap.objectBind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.STATION);
-                break;
-            case 13:
-                gfxMap.objectOffload(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.RACK);
-                break;
-            case 14:
-                gfxMap.objectUnbind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.STATION);
-                break;
-            case 15:
-                gfxMap.objectRotateLeft(1, 1, 0);
                 break;
         }
         x++;
@@ -216,6 +200,9 @@ let gfx = function (logicEventHandler) {
                 break;
             case EVENT_TO_GFX.OBJECT_HIGHLIGHT:
                 gfxMap.objectHighlight(event.data.id, event.data.type, event.data.row, event.data.col);
+                break;
+            case EVENT_TO_GFX.OBJECT_UNHIGHLIGHT:
+                gfxMap.objectUnhighlight();
                 break;
             case EVENT_TO_GFX.OBJECT_COLORIZE:
                 gfxMap.objectColorize(event.data.id, event.data.type, event.data.row, event.data.col, event.data.color);

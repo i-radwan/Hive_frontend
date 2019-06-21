@@ -49,7 +49,7 @@ let gfxEngine = function () {
     // Hovered & dragged & selected object & their metadata
     let hoveredObject = {};
     let draggedObject = {};
-    let selectedObject = {};
+    let selectedObjects = [];
 
     // Removes all the translations and scale to the scene and reinitialize the Z-Index groups
     let resetScene = function () {
@@ -221,7 +221,7 @@ let gfxEngine = function () {
             renderObject.animation_variables.is_moving = false;
         }
 
-        if (renderObject.is_selected)
+        if (renderObject.is_selected && renderObject.animation_variables.should_move_view_port)
             viewport.moveCenter(renderObject.animation_variables.cur_x, renderObject.animation_variables.cur_y);
 
         renderObject.pixi_object.x = renderObject.animation_variables.cur_x;
@@ -255,7 +255,7 @@ let gfxEngine = function () {
             renderObject.animation_variables.is_rotating = false;
         }
 
-        if (renderObject.is_selected)
+        if (renderObject.is_selected && renderObject.animation_variables.should_move_view_port)
             viewport.moveCenter(renderObject.animation_variables.cur_x, renderObject.animation_variables.cur_y);
 
         if (renderObject.animation_variables.should_rotate)
@@ -456,9 +456,24 @@ let gfxEngine = function () {
         viewport.zoom((mapWidth + 1) * GRID_CELL_LENGTH - canvas.width(), true);
     };
 
-    // Return the object that is currently selected
-    self.getSelectedObject = function () {
-        return selectedObject;
+    // Return the top object that is currently selected
+    self.getFirstSelectedObject = function () {
+        return selectedObjects[0];
+    };
+
+    // Return the First robot that is currently selected
+    self.getFirstSelectedObjectTypeIndex = function (type) {
+        for (let i = 0; i < selectedObjects.length; i++) {
+            if (selectedObjects[i].item.type === type)
+                return i;
+        }
+
+        return -1;
+    };
+
+    // Return the First robot that is currently selected
+    self.getFirstSelectedObjectType = function (type) {
+        return selectedObjects[self.getFirstSelectedObjectTypeIndex(type)];
     };
 
     // Gets from the mouse raw position the row and column of the cell that is being clicked
@@ -548,7 +563,7 @@ let gfxEngine = function () {
 
     // Deletes an object from the scene
     self.deleteObject = function (renderObject, type) {
-        self.unhighlightObject();
+        self.unhighlightObjects();
         zIndexGroups[getObjectZIndex(type)].removeChild(renderObject.pixi_object);
         renderObject.pixi_object.destroy(false, false, false);
     };
@@ -620,8 +635,8 @@ let gfxEngine = function () {
         draggedObject.dst_row = dstRow;
         draggedObject.dst_col = dstCol;
 
-        if (draggedObject.item.render_variables.is_selected === true)
-            self.moveHighlightObject(dstRow, dstCol);
+        if (draggedObject.item.render_variables.is_selected)
+            self.moveHighlightObject(dstRow, dstCol, draggedObject.item.type);
 
         self.translateObject(draggedObject.item.render_variables, dstRow, dstCol);
     };
@@ -635,17 +650,21 @@ let gfxEngine = function () {
 
     // Highlight a given object
     self.highlightObject = function (object, row, col) {
-        self.unhighlightObject();
+        let selectedObject = {};
         selectedObject.row = row;
         selectedObject.col = col;
         selectedObject.item = object;
         selectedObject.item.render_variables.is_selected = true;
+        selectedObjects.push(selectedObject);
+
+        console.log(selectedObjects);
 
         self.colorizeCell(row, col, GFX_COLORS.CELL_HIGHLIGHT_COLOR, GFX_COLORS.CELL_HIGHLIGHT_STROKE);
     };
 
     // Move the highlighted object
-    self.moveHighlightObject = function (row, col) {
+    self.moveHighlightObject = function (row, col, type) {
+        let selectedObject = self.getFirstSelectedObjectType(type);
         self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL, GFX_COLORS_DEFAULT.CELL_STROKE);
         selectedObject.row = row;
         selectedObject.col = col;
@@ -653,13 +672,15 @@ let gfxEngine = function () {
     };
 
     // Unhighlight the highlighted object
-    self.unhighlightObject = function () {
-        if (typeof selectedObject.row !== 'undefined') {
+    self.unhighlightObjects = function () {
+        for (let i = 0; i < selectedObjects.length; i++) {
+            let selectedObject = selectedObjects[i];
+
             self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL, GFX_COLORS_DEFAULT.CELL_STROKE);
             selectedObject.item.render_variables.is_selected = false;
         }
 
-        selectedObject = {};
+        selectedObjects = [];
     };
 
     // Change color of a given cell
@@ -765,6 +786,7 @@ let gfxEngine = function () {
         renderObject.animation_variables.is_moving = false;
         renderObject.animation_variables.is_rotating = false;
         renderObject.animation_variables.should_rotate = false;
+        renderObject.animation_variables.should_move_view_port = (type === MAP_CELL.ROBOT);
 
         let dstRow = row;
         let dstCol = col;
@@ -842,12 +864,15 @@ let gfxEngine = function () {
 
         object.render_variables.direction = angleToDir(object.render_variables.animation_variables.cur_angle);
 
-        if (object.render_variables.is_selected === true)
-            self.moveHighlightObject(dstRow, dstCol);
+        if (object.render_variables.is_selected)
+            self.moveHighlightObject(dstRow, dstCol, MAP_CELL.ROBOT);
 
         if (loadedObject !== -1) {
             loadedObject.render_variables.animation_variables.cur_angle = object.render_variables.animation_variables.cur_angle;
             loadedObject.render_variables.direction = object.render_variables.direction;
+
+            if (loadedObject.render_variables.is_selected)
+                self.moveHighlightObject(dstRow, dstCol, MAP_CELL.RACK);
         }
     };
 
@@ -944,7 +969,8 @@ let gfxEngine = function () {
     // gfx Update loop
     self.gfxUpdateEvent = function (timeDelta) {
         if (isSpaceKeyDown) {
-            if (typeof selectedObject.row === "undefined")
+            let selectedObject = self.getFirstSelectedObject();
+            if (typeof selectedObject === "undefined")
                 return;
 
             viewport.moveCenter(selectedObject.item.render_variables.animation_variables.cur_x,

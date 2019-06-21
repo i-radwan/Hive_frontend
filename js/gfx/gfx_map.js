@@ -274,6 +274,11 @@ let gfxMap = function (logicEventHandler) {
         self.gfxEngine.highlightObject(getObject(id, type, row, col), row, col);
     };
 
+    // Highlight all highlighted objects
+    self.objectUnhighlight = function () {
+        self.gfxEngine.unhighlightObjects();
+    };
+
     // Colorize a given object
     self.objectColorize = function (id, type, row, col, color) {
         self.gfxEngine.colorizeObject(getObject(id, type, row, col).render_variables, type, color);
@@ -553,7 +558,7 @@ let gfxMap = function (logicEventHandler) {
     self.escapeEvent = function () {
         isHovering = false;
 
-        self.gfxEngine.unhighlightObject();
+        self.gfxEngine.unhighlightObjects();
         self.gfxEngine.removeHoveringObject();
 
         updateCursorStyle();
@@ -698,9 +703,9 @@ let gfxMap = function (logicEventHandler) {
 
     // Delete key event handler
     self.deleteEvent = function () {
-        let obj = self.gfxEngine.getSelectedObject();
+        let obj = self.gfxEngine.getFirstSelectedObject();
 
-        if (obj.row === undefined)
+        if (typeof obj === 'undefined')
             return;
 
         self.logicEventHandler({
