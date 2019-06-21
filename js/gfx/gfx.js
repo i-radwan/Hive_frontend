@@ -43,15 +43,10 @@ let gfx = function (logicEventHandler) {
 
     // Update function of two.js (Calls everything that needs execution each frame)
     gfxEngine.pixi_app.ticker.add((delta) => {
-        gfxEngine.keyboardDragEvent(delta);
+        gfxEngine.gfxUpdateEvent(delta);
 
         if (runningMode === RUNNING_MODE.SIMULATE)
-            gfxMap.animateObjects(delta);
-    });
-
-    // Mouse wheel event handler
-    canvas.bind('mousewheel', function (e) {
-        gfxEngine.zoomEvent(e);
+            gfxMap.gfxUpdateEvent(delta);
     });
 
     // Mouse press event handler
@@ -161,6 +156,9 @@ let gfx = function (logicEventHandler) {
     // Key press event handler
     $(document).on('keydown', function (e) {
         switch (e.which) {
+            case KEY_CODE.SPACE:
+                gfxEngine.keyDownEvent(e);
+                break;
             case KEY_CODE.CTRL:
                 gfxMap.keyDownEvent(e);
         }

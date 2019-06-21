@@ -475,6 +475,11 @@ let gfxMap = function (logicEventHandler) {
         self.gfxEngine.updateObject(getObject(id, type, row, col).render_variables, battery);
     };
 
+    // Gfx update event
+    self.gfxUpdateEvent = function(timeDelta) {
+        self.animateObjects(timeDelta);
+    };
+
     // Animate all objects with the given time step
     self.animateObjects = function (timeDelta) {
         for (let row = 0; row < mapHeight; row++) {

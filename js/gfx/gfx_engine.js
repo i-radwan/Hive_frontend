@@ -43,6 +43,9 @@ let gfxEngine = function () {
     // Pixi.js Groups for Z-Index
     let zIndexGroups = [];
 
+    // Keys information.
+    let isSpaceKeyDown = false;
+
     // Hovered & dragged & selected object & their metadata
     let hoveredObject = {};
     let draggedObject = {};
@@ -922,27 +925,31 @@ let gfxEngine = function () {
 
     // Key press event handler
     self.keyDownEvent = function (e) {
-    };
-
-    // Key release event handler
-    self.keyUpEvent = function (e) {
-
         switch (e.which) {
             case KEY_CODE.SPACE:
-                if (typeof selectedObject.row === "undefined")
-                    return;
-
-                viewport.moveCenter(selectedObject.item.render_variables.animation_variables.cur_x, selectedObject.item.render_variables.animation_variables.cur_y);
+                isSpaceKeyDown = true;
                 break;
         }
     };
 
-    // Translates the scene a tiny amount according to the pressed keys (should only be called in update function)
-    self.keyboardDragEvent = function (timeDelta) {
+    // Key release event handler
+    self.keyUpEvent = function (e) {
+        switch (e.which) {
+            case KEY_CODE.SPACE:
+                isSpaceKeyDown = false;
+                break;
+        }
     };
 
-    // Zoom event handler
-    self.zoomEvent = function (e) {
+    // gfx Update loop
+    self.gfxUpdateEvent = function (timeDelta) {
+        if (isSpaceKeyDown) {
+            if (typeof selectedObject.row === "undefined")
+                return;
+
+            viewport.moveCenter(selectedObject.item.render_variables.animation_variables.cur_x,
+                selectedObject.item.render_variables.animation_variables.cur_y);
+        }
     };
 
     // Mouse press event handler
