@@ -406,6 +406,9 @@ let gfxEngine = function () {
         renderObject.textures = loadTexturesRack(color);
         renderObject.pixi_object.texture = renderObject.textures.idle;
 
+        if (renderObject.is_selected)
+            renderObject.pixi_object.filters = [new PIXI_FILTERS.GlowFilter(15, 1, 0, hexToPixiColor(color), 1)];
+
         renderObject.color = color;
     };
 
@@ -413,6 +416,9 @@ let gfxEngine = function () {
     let colorizeRobot = function (renderObject, color) {
         renderObject.textures = loadTexturesRobot(color);
         renderObject.pixi_object.texture = renderObject.textures.idle;
+
+        if (renderObject.is_selected)
+            renderObject.pixi_object.filters = [new PIXI_FILTERS.GlowFilter(15, 1, 0, hexToPixiColor(color), 1)];
 
         renderObject.color = color;
     };
@@ -422,6 +428,9 @@ let gfxEngine = function () {
         renderObject.textures = loadTexturesStation(color);
         renderObject.pixi_object.texture = renderObject.textures.idle;
 
+        if (renderObject.is_selected)
+            renderObject.pixi_object.filters = [new PIXI_FILTERS.GlowFilter(15, 1, 0, hexToPixiColor(color), 1)];
+
         renderObject.color = color;
     };
 
@@ -430,6 +439,9 @@ let gfxEngine = function () {
         renderObject.textures = loadTexturesObstacle(color);
         renderObject.pixi_object.texture = renderObject.textures.idle;
 
+        if (renderObject.is_selected)
+            renderObject.pixi_object.filters = [new PIXI_FILTERS.GlowFilter(15, 1, 0, hexToPixiColor(color), 1)];
+
         renderObject.color = color;
     };
 
@@ -437,6 +449,9 @@ let gfxEngine = function () {
     let colorizeGate = function (renderObject, color) {
         renderObject.textures = loadTexturesGate(color);
         renderObject.pixi_object.texture = renderObject.textures.idle;
+
+        if (renderObject.is_selected)
+            renderObject.pixi_object.filters = [new PIXI_FILTERS.GlowFilter(15, 1, 0, hexToPixiColor(color), 1)];
 
         renderObject.color = color;
     };
