@@ -218,6 +218,9 @@ let gfxEngine = function () {
             renderObject.animation_variables.is_moving = false;
         }
 
+        if (renderObject.is_selected)
+            viewport.moveCenter(renderObject.animation_variables.cur_x, renderObject.animation_variables.cur_y);
+
         renderObject.pixi_object.x = renderObject.animation_variables.cur_x;
         renderObject.pixi_object.y = renderObject.animation_variables.cur_y;
     };
@@ -234,22 +237,25 @@ let gfxEngine = function () {
     };
 
     // Rotate object with the given time delta
-    let rotateObject = function (object, timeDelta) {
-        let dir = (object.animation_variables.nxt_angle - object.animation_variables.cur_angle) / Math.abs(object.animation_variables.nxt_angle - object.animation_variables.cur_angle);
-        dir *= object.animation_variables.rotating_speed * timeDelta;
+    let rotateObject = function (renderObject, timeDelta) {
+        let dir = (renderObject.animation_variables.nxt_angle - renderObject.animation_variables.cur_angle) / Math.abs(renderObject.animation_variables.nxt_angle - renderObject.animation_variables.cur_angle);
+        dir *= renderObject.animation_variables.rotating_speed * timeDelta;
 
-        object.animation_variables.cur_angle += dir;
+        renderObject.animation_variables.cur_angle += dir;
 
-        let dir2 = (object.animation_variables.nxt_angle - object.animation_variables.cur_angle) / Math.abs(object.animation_variables.nxt_angle - object.animation_variables.cur_angle);
-        dir2 *= object.animation_variables.rotating_speed * timeDelta;
+        let dir2 = (renderObject.animation_variables.nxt_angle - renderObject.animation_variables.cur_angle) / Math.abs(renderObject.animation_variables.nxt_angle - renderObject.animation_variables.cur_angle);
+        dir2 *= renderObject.animation_variables.rotating_speed * timeDelta;
 
         // End of animation
-        if (dir !== dir2 || object.animation_variables.cur_angle === object.animation_variables.nxt_angle) {
-            object.animation_variables.cur_angle = object.animation_variables.nxt_angle;
-            object.animation_variables.is_rotating = false;
+        if (dir !== dir2 || renderObject.animation_variables.cur_angle === renderObject.animation_variables.nxt_angle) {
+            renderObject.animation_variables.cur_angle = renderObject.animation_variables.nxt_angle;
+            renderObject.animation_variables.is_rotating = false;
         }
 
-        object.pixi_object.angle = object.animation_variables.cur_angle;
+        if (renderObject.is_selected)
+            viewport.moveCenter(renderObject.animation_variables.cur_x, renderObject.animation_variables.cur_y);
+
+        renderObject.pixi_object.angle = renderObject.animation_variables.cur_angle;
     };
 
     // Load the texture from SVG.
