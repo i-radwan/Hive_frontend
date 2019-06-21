@@ -196,6 +196,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.port(rob.port);
         self.deactivated(rob.deactivated);
 
+        $('.robot-color-preview').css("background", rob.color);
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HIGHLIGHT,
             data: {
