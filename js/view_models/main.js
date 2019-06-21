@@ -206,6 +206,10 @@ let mainViewModel = function (gfxEventHandler, comm) {
     };
 
     let handleCellClick = function (row, col) {
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_UNHIGHLIGHT
+        });
+
         self.leftPanelVM.handleCellClick(row, col);
     };
 
