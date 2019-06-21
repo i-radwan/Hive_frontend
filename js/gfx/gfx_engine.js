@@ -25,7 +25,8 @@ let gfxEngine = function () {
         width: canvas.width(),
         height: canvas.height(),
         backgroundColor: 0x1d1d1e,
-        resolution: 1,
+        autoDensity: true,
+        resolution: window.devicePixelRatio || 1,
         antialias: true
     });
     canvas[0].appendChild(self.pixi_app.view);
@@ -301,7 +302,13 @@ let gfxEngine = function () {
                 break;
         }
 
-        return PIXI.Texture.from(svgString);
+        return PIXI.Texture.from(svgString, {
+            scaleMode: PIXI.SCALE_MODES.LINEAR,
+            mipmap: PIXI.MIPMAP_MODES.ON,
+            resourceOptions: {
+                scale: 5
+            }
+        });
     };
 
     // Load all the Gate textures from SVG.
@@ -486,8 +493,8 @@ let gfxEngine = function () {
         }
 
         zIndexValue = (zIndexValue === -1 ? getObjectZIndex(type) : zIndexValue);
-        pixiObject.scale.x = 1/3;
-        pixiObject.scale.y = 1/3;
+        pixiObject.scale.x = 1/15;
+        pixiObject.scale.y = 1/15;
         pixiObject.anchor.set(0.5, 0.5);
         pixiObject.x = cellCenter.x;
         pixiObject.y = cellCenter.y;
