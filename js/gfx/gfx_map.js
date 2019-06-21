@@ -117,6 +117,21 @@ let gfxMap = function (logicEventHandler) {
         }
     };
 
+    // Converts from a direction to a specific move action
+    let dirToMoveAction = function(direction) {
+        switch (direction) {
+            case ROBOT_DIR.RIGHT:
+                return ANIMATION_TYPE.MOVE_RIGHT;
+            case ROBOT_DIR.LEFT:
+                return ANIMATION_TYPE.MOVE_LEFT;
+            case ROBOT_DIR.UP:
+                return ANIMATION_TYPE.MOVE_UP;
+            case ROBOT_DIR.DOWN:
+                return ANIMATION_TYPE.MOVE_DOWN;
+        }
+    };
+
+
     // Finalize the animation of a given objects position
     let finishObjectAnimation = function (row, col, idx) {
         let object = map[row][col][idx];
@@ -188,40 +203,69 @@ let gfxMap = function (logicEventHandler) {
     // Move an object one step in its direction
     self.objectMove = function (id, row, col) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
-        self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.MOVE);
+        let action = dirToMoveAction(obj.render_variables.direction);
+        self.gfxEngine.startObjectAnimation(row,
+            col,
+            obj.type,
+            obj.render_variables,
+            action);
 
         if (obj.loaded_object_id !== -1) {
-            self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.MOVE);
+            self.gfxEngine.startObjectAnimation(row,
+                col,
+                getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).type,
+                getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables,
+                action);
         }
     };
 
     // Rotate an object 90 degrees to the right
     self.objectRotateRight = function (id, row, col) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
-        self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.ROTATE_RIGHT);
+        self.gfxEngine.startObjectAnimation(row,
+            col,
+            obj.type,
+            obj.render_variables,
+            ANIMATION_TYPE.ROTATE_RIGHT);
 
         if (obj.loaded_object_id !== -1) {
-            self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.ROTATE_RIGHT);
+            self.gfxEngine.startObjectAnimation(row,
+                col,
+                getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).type,
+                getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables,
+                ANIMATION_TYPE.ROTATE_RIGHT);
         }
     };
 
     // Rotate an object 90 degrees to the left
     self.objectRotateLeft = function (id, row, col) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
-        self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.ROTATE_LEFT);
+        self.gfxEngine.startObjectAnimation(row,
+            col,
+            obj.type,
+            obj.render_variables,
+            ANIMATION_TYPE.ROTATE_LEFT);
 
         if (obj.loaded_object_id !== -1) {
-            self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.ROTATE_LEFT);
+            self.gfxEngine.startObjectAnimation(row,
+                col,
+                getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).type,
+                getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables,
+                ANIMATION_TYPE.ROTATE_LEFT);
         }
     };
 
     // Rotate an object 180 degrees then move one step
     self.objectRetreat = function (id, row, col) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
-        self.gfxEngine.startObjectAnimation(row, col, obj.render_variables, ANIMATION_TYPE.RETREAT);
+        self.gfxEngine.startObjectAnimation(row, col, obj.type, obj.render_variables, ANIMATION_TYPE.RETREAT);
 
         if (obj.loaded_object_id !== -1) {
-            self.gfxEngine.startObjectAnimation(row, col, getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables, ANIMATION_TYPE.RETREAT);
+            self.gfxEngine.startObjectAnimation(row,
+                col,
+                getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).type,
+                getObject(obj.loaded_object_id, obj.loaded_object_type, row, col).render_variables,
+                ANIMATION_TYPE.RETREAT);
         }
     };
 

@@ -255,7 +255,8 @@ let gfxEngine = function () {
         if (renderObject.is_selected)
             viewport.moveCenter(renderObject.animation_variables.cur_x, renderObject.animation_variables.cur_y);
 
-        renderObject.pixi_object.angle = renderObject.animation_variables.cur_angle;
+        if (renderObject.animation_variables.should_rotate)
+            renderObject.pixi_object.angle = renderObject.animation_variables.cur_angle;
     };
 
     // Load the texture from SVG.
@@ -755,25 +756,31 @@ let gfxEngine = function () {
     };
 
     // Initialize animation of a given object
-    self.startObjectAnimation = function (row, col, renderObject, animationType) {
+    self.startObjectAnimation = function (row, col, type, renderObject, animationType) {
         renderObject.animation_variables.is_animating = true;
         renderObject.animation_variables.animation_type = animationType;
         renderObject.animation_variables.is_moving = false;
         renderObject.animation_variables.is_rotating = false;
+        renderObject.animation_variables.should_rotate = false;
 
         let dstRow = row;
         let dstCol = col;
         let dstAngle = renderObject.animation_variables.cur_angle;
 
         switch (animationType) {
-            case ANIMATION_TYPE.MOVE:
+            case ANIMATION_TYPE.MOVE_RIGHT:
+            case ANIMATION_TYPE.MOVE_LEFT:
+            case ANIMATION_TYPE.MOVE_UP:
+            case ANIMATION_TYPE.MOVE_DOWN:
                 renderObject.animation_variables.is_moving = true;
-                dstRow = row + (renderObject.direction === ROBOT_DIR.DOWN) - (renderObject.direction === ROBOT_DIR.UP);
-                dstCol = col + (renderObject.direction === ROBOT_DIR.RIGHT) - (renderObject.direction === ROBOT_DIR.LEFT);
+                renderObject.animation_variables.animation_type = ANIMATION_TYPE.MOVE;
+                dstRow = row + (animationType === ANIMATION_TYPE.MOVE_DOWN) - (animationType === ANIMATION_TYPE.MOVE_UP);
+                dstCol = col + (animationType === ANIMATION_TYPE.MOVE_RIGHT) - (animationType === ANIMATION_TYPE.MOVE_LEFT);
                 break;
             case ANIMATION_TYPE.ROTATE_RIGHT:
             case ANIMATION_TYPE.ROTATE_LEFT:
                 renderObject.animation_variables.is_rotating = true;
+                renderObject.animation_variables.should_rotate = (type === MAP_CELL.ROBOT);
                 let dir = (animationType === ANIMATION_TYPE.ROTATE_LEFT ? -1 : 1);
                 dstAngle = dirToAngle(renderObject.direction) + dir * 90;
                 dstAngle = normalizeAngle(dstAngle);
@@ -787,6 +794,7 @@ let gfxEngine = function () {
             case ANIMATION_TYPE.RETREAT:
                 renderObject.animation_variables.is_moving = true;
                 renderObject.animation_variables.is_rotating = true;
+                renderObject.animation_variables.should_rotate = (type === MAP_CELL.ROBOT);
                 dstRow = row + ((renderObject.direction + 2) % 4 === ROBOT_DIR.DOWN) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.UP);
                 dstCol = col + ((renderObject.direction + 2) % 4 === ROBOT_DIR.RIGHT) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.LEFT);
                 dstAngle = dirToAngle(renderObject.direction) + 180;
