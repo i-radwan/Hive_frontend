@@ -56,6 +56,10 @@ let leftPanelViewModel = function (runningMode, shouter, state, gfxEventHandler,
         }
 
         self.activePanel(id);
+
+        gfxEventHandler({
+            type: EVENT_TO_GFX.OBJECT_UNHIGHLIGHT
+        });
     };
 
     let toggleTemps = function () {
