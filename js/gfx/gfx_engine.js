@@ -1,6 +1,7 @@
 let PIXI = require('pixi.js');
 const $ = require('jquery');
 let Viewport = require('pixi-viewport');
+let PIXI_FILTERS = require('pixi-filters');
 
 // Z-Index enum
 let Z_INDEX = {
@@ -80,6 +81,11 @@ let gfxEngine = function () {
         self.pixi_app.renderer.resize(canvas.width(), canvas.height());
         viewport.resize(canvas.width(), canvas.height());
     });
+
+    // Convert from "#FFFFFF" format to 0xFFFFFF
+    let hexToPixiColor = function(hexString) {
+        return parseInt(hexString.substring(1, hexString.length), 16);
+    };
 
     // Return the Z-Index enum value from the object type
     let getObjectZIndex = function (objectType) {
@@ -655,9 +661,8 @@ let gfxEngine = function () {
         selectedObject.col = col;
         selectedObject.item = object;
         selectedObject.item.render_variables.is_selected = true;
+        selectedObject.item.render_variables.pixi_object.filters = [new PIXI_FILTERS.GlowFilter(15, 1, 0, hexToPixiColor(selectedObject.item.render_variables.color), 1)];
         selectedObjects.push(selectedObject);
-
-        console.log(selectedObjects);
 
         self.colorizeCell(row, col, GFX_COLORS.CELL_HIGHLIGHT_COLOR, GFX_COLORS.CELL_HIGHLIGHT_STROKE);
     };
@@ -676,6 +681,7 @@ let gfxEngine = function () {
         for (let i = 0; i < selectedObjects.length; i++) {
             let selectedObject = selectedObjects[i];
 
+            selectedObject.item.render_variables.pixi_object.filters = [];
             self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL, GFX_COLORS_DEFAULT.CELL_STROKE);
             selectedObject.item.render_variables.is_selected = false;
         }
@@ -687,7 +693,7 @@ let gfxEngine = function () {
     self.colorizeCell = function (row, col, color, strokeColor) {
         let square = zIndexGroups[Z_INDEX.BACKGROUND].children[col * mapHeight + row];
 
-        updateSquare(square, row, col, color, strokeColor);
+        //updateSquare(square, row, col, color, strokeColor);
     };
 
     // Change color of a given object

@@ -25,6 +25,7 @@
     "jquery": "^3.4.0",
     "knockout": "^3.4.2",
     "knockout-mapping": "^2.6.0",
+    "pixi-filters": "^3.0.3",
     "pixi-viewport": "^3.23.2",
     "pixi.js": "^5.0.4",
     "popper.js": "^1.14.7",
