@@ -101,7 +101,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         } else {
             shouter.notifySubscribers({
                 text: STR[2000]([row + 1, col + 1]),
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
         }
     };
@@ -129,7 +130,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         } else {
             shouter.notifySubscribers({
                 text: STR[2000]([dstRow + 1, dstCol + 1]),
-                type: MSG_TYPE.ERROR
+                type: MSG_TYPE.ERROR,
+                volatile: true
             }, SHOUT.MSG);
 
             gfxEventHandler({
@@ -812,6 +814,9 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let color = event.color.toString();
 
         $('.robot-color-preview').css("background", color);
+
+        if (self.editing())
+            return;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
