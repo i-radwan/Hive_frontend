@@ -815,6 +815,9 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         $('.robot-color-preview').css("background", color);
 
+        if (self.editing())
+            return;
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_HOVER,
             data: {
