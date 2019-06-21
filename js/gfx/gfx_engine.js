@@ -26,6 +26,7 @@ let gfxEngine = function () {
         height: canvas.height(),
         backgroundColor: 0x1d1d1e,
         resolution: 1,
+        antialias: true
     });
     canvas[0].appendChild(self.pixi_app.view);
 
