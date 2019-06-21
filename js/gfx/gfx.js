@@ -161,12 +161,6 @@ let gfx = function (logicEventHandler) {
     // Key press event handler
     $(document).on('keydown', function (e) {
         switch (e.which) {
-            case ARROW.LEFT:
-            case ARROW.RIGHT:
-            case ARROW.UP:
-            case ARROW.DOWN:
-                gfxEngine.keyDownEvent(e);
-                break;
             case KEY_CODE.CTRL:
                 gfxMap.keyDownEvent(e);
         }
@@ -175,11 +169,7 @@ let gfx = function (logicEventHandler) {
     // Key release event handler
     $(document).on('keyup', function (e) {
         switch (e.which) {
-            case ARROW.LEFT:
-            case ARROW.RIGHT:
-            case ARROW.UP:
-            case ARROW.DOWN:
-            case KEY_CODE.F5:
+            case KEY_CODE.SPACE:
                 gfxEngine.keyUpEvent(e);
                 break;
             case KEY_CODE.DELETE:

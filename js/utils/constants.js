@@ -136,7 +136,8 @@ KEY_CODE = {
     F5: 116,
     DELETE: 46,
     ESC: 27,
-    CTRL: 17
+    CTRL: 17,
+    SPACE: 32
 };
 
 MOVING_SPEED = 1.5;

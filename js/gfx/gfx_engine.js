@@ -918,6 +918,15 @@ let gfxEngine = function () {
 
     // Key release event handler
     self.keyUpEvent = function (e) {
+
+        switch (e.which) {
+            case KEY_CODE.SPACE:
+                if (typeof selectedObject.row === "undefined")
+                    return;
+
+                viewport.moveCenter(selectedObject.item.render_variables.animation_variables.cur_x, selectedObject.item.render_variables.animation_variables.cur_y);
+                break;
+        }
     };
 
     // Translates the scene a tiny amount according to the pressed keys (should only be called in update function)
