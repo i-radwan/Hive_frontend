@@ -84,7 +84,7 @@ let gfxMap = function (logicEventHandler) {
     let updateCursorStyle = function () {
         setCursorStyle(CURSOR_STYLES.DEFAULT);
 
-        if (isDraggingMap) {
+        if (isDraggingMap || isCtrlDown) {
             setCursorStyle(CURSOR_STYLES.CROSS);
             return;
         }
@@ -688,6 +688,7 @@ let gfxMap = function (logicEventHandler) {
         switch (e.which) {
             case KEY_CODE.CTRL:
                 isCtrlDown = true;
+                updateCursorStyle();
                 break;
         }
     };
@@ -697,6 +698,7 @@ let gfxMap = function (logicEventHandler) {
         switch (e.which) {
             case KEY_CODE.CTRL:
                 isCtrlDown = false;
+                updateCursorStyle();
                 break;
         }
     };
