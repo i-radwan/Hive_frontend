@@ -262,9 +262,6 @@ let gfxEngine = function () {
         let svgString;
         switch (type) {
             case MAP_CELL.GATE:
-                if (options.is_bound)
-                    targetColor = GFX_COLORS.GATE_BIND_COLOR;
-
                 svgString = $(GFX_SVG_MODEL.GATE).wrapAll('<div>');
                 svgString = $(svgString).find('.gate_body').attr('fill', targetColor).closest('div').html();
                 break;
@@ -287,16 +284,10 @@ let gfxEngine = function () {
                 svgString = $(svgString).find('.led_body').attr('fill', targetLedColor).closest('div').html();
                 break;
             case MAP_CELL.RACK:
-                if (options.is_loaded)
-                    targetColor = GFX_COLORS.RACK_LOAD_COLOR;
-
                 svgString = $(GFX_SVG_MODEL.RACK).wrapAll('<div>');
                 svgString = $(svgString).find('.rack_body').attr('fill', targetColor).closest('div').html();
                 break;
             case MAP_CELL.STATION:
-                if (options.is_bound)
-                    targetColor = GFX_COLORS.STATION_BIND_COLOR;
-
                 svgString = $(GFX_SVG_MODEL.STATION).wrapAll('<div>');
                 svgString = $(svgString).find('.station_body').attr('fill', targetColor).closest('div').html();
                 break;
@@ -318,12 +309,7 @@ let gfxEngine = function () {
     // Load all the Gate textures from SVG.
     let loadTexturesGate = function(color) {
         return {
-            idle: loadTexture(MAP_CELL.GATE, color, {
-                is_bound: false,
-            }),
-            bound: loadTexture(MAP_CELL.GATE, color, {
-                is_bound: true,
-            })
+            idle: loadTexture(MAP_CELL.GATE, color)
         };
     };
 
@@ -360,24 +346,14 @@ let gfxEngine = function () {
     // Load all the rack textures from SVG.
     let loadTexturesRack = function(color) {
         return {
-            idle: loadTexture(MAP_CELL.RACK, color, {
-                is_loaded: false,
-            }),
-            loaded: loadTexture(MAP_CELL.RACK, color, {
-                is_loaded: true,
-            })
+            idle: loadTexture(MAP_CELL.RACK, color)
         };
     };
 
     // Load all the Station textures from SVG.
     let loadTexturesStation = function(color) {
         return {
-            idle: loadTexture(MAP_CELL.STATION, color, {
-                is_bound: false,
-            }),
-            bound: loadTexture(MAP_CELL.STATION, color, {
-                is_bound: true,
-            })
+            idle: loadTexture(MAP_CELL.STATION, color)
         };
     };
 
@@ -725,19 +701,19 @@ let gfxEngine = function () {
     self.deColorizeObject = function (renderObject, type) {
         switch (type) {
             case MAP_CELL.RACK:
-                colorizeRack(renderObject, GFX_COLORS_DEFAULT.RACK);
+                colorizeRack(renderObject, renderObject.default_color);
                 break;
             case MAP_CELL.ROBOT:
-                colorizeRobot(renderObject, GFX_COLORS_DEFAULT.ROBOT);
+                colorizeRobot(renderObject, renderObject.default_color);
                 break;
             case MAP_CELL.STATION:
-                colorizeStation(renderObject, GFX_COLORS_DEFAULT.STATION);
+                colorizeStation(renderObject, renderObject.default_color);
                 break;
             case MAP_CELL.OBSTACLE:
-                colorizeObstacle(renderObject, GFX_COLORS_DEFAULT.OBSTACLE);
+                colorizeObstacle(renderObject, renderObject.default_color);
                 break;
             case MAP_CELL.GATE:
-                colorizeGate(renderObject, GFX_COLORS_DEFAULT.GATE);
+                colorizeGate(renderObject, renderObject.default_color);
                 break;
         }
     };
@@ -920,29 +896,20 @@ let gfxEngine = function () {
 
     // Bind 2 given objects together
     self.bindObject = function (renderObject1, renderObject2) {
-        renderObject2.pixi_object.texture = renderObject2.textures.bound;
-        // TODO I might check for it or I guarantee that the gate and station have the same color
-        renderObject2.color = GFX_COLORS.STATION_BIND_COLOR;
     };
 
     // Unbind 2 given objects
     self.unbindObject = function (renderObject1, renderObject2) {
-        renderObject2.pixi_object.texture = renderObject2.textures.idle;
-        renderObject2.color = renderObject2.default_color;
     };
 
     // Load 2 given objects
     self.loadObject = function (renderObject1, renderObject2) {
         renderObject2.animation_variables.cur_angle = renderObject1.animation_variables.cur_angle;
         renderObject2.direction = renderObject1.direction;
-        renderObject2.pixi_object.texture = renderObject2.textures.loaded;
-        renderObject2.color = GFX_COLORS.RACK_LOAD_COLOR;
     };
 
     // Offload 2 given objects
     self.offloadObject = function (renderObject1, renderObject2) {
-        renderObject2.pixi_object.texture = renderObject2.textures.idle;
-        renderObject2.color = renderObject2.default_color;
     };
 
     // object is failed
