@@ -64,14 +64,17 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
                     type: MSG_TYPE.ERROR
                 }, SHOUT.MSG);
 
+                gfxEventHandler({
+                    type: EVENT_TO_GFX.SIMULATION_STOP
+                });
+        
                 runningMode(RUNNING_MODE.DESIGN);
 
                 comm.connect(self.ip(), self.port(), callback, errorCallback, closeCallback);
             };
 
             comm.connect(self.ip(), self.port(), callback, errorCallback, closeCallback);
-        } catch (e) {
-        }
+        } catch (e) {}
 
         shouter.notifySubscribers(false, SHOUT.LOADING);
 
