@@ -606,7 +606,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: EVENT_TO_GFX.OBJECT_STOP,
                 data: {
                     type: MAP_CELL.ROBOT,
-                    id: parseInt(self.id()),
+                    id: id,
                     row: row,
                     col: col
                 }
@@ -631,7 +631,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: EVENT_TO_GFX.OBJECT_FAILURE,
                 data: {
                     type: MAP_CELL.ROBOT,
-                    id: parseInt(self.id()),
+                    id: id,
                     row: row,
                     col: col
                 }
@@ -667,7 +667,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: EVENT_TO_GFX.OBJECT_FIXED,
                 data: {
                     type: MAP_CELL.ROBOT,
-                    id: parseInt(self.id()),
+                    id: id,
                     row: row,
                     col: col
                 }
