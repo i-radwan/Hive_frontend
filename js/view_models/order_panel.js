@@ -26,8 +26,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.issueTimeMinutes = ko.observable("00");
     self.issueTimeSeconds = ko.observable("00");
     self.items = ko.observableArray();
-    self.itemID = ko.observable();
-    self.itemQuantity = ko.observable();
+    self.itemID = ko.observable("");
+    self.itemQuantity = ko.observable("");
 
     self.pendingOrder = null;
 
