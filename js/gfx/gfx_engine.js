@@ -918,10 +918,7 @@ let gfxEngine = function () {
     };
 
     // object is stopped
-    self.objectStop = function (renderObject, type) {
-        if (type === MAP_CELL.ROBOT)
-            self.stopObjectFlashing(renderObject);
-
+    self.objectStop = function (renderObject) {
         self.pauseObjectAnimation(renderObject);
     };
 

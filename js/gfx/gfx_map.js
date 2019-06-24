@@ -428,12 +428,12 @@ let gfxMap = function (logicEventHandler) {
     self.objectStop = function (id, type, row, col) {
         let obj = getObject(id, type, row, col);
 
-        self.gfxEngine.objectStop(obj.render_variables, type);
+        self.gfxEngine.objectStop(obj.render_variables);
 
         if (obj.loaded_object_id !== -1) {
             let loadedObj = getObject(obj.loaded_object_id, obj.loaded_object_type, row, col);
 
-            self.gfxEngine.objectStop(loadedObj.render_variables, loadedObj.type);
+            self.gfxEngine.objectStop(loadedObj.render_variables);
         }
 
         self.logicEventHandler({
