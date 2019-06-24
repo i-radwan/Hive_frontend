@@ -289,6 +289,11 @@ let gfxMap = function (logicEventHandler) {
         self.gfxEngine.deColorizeObject(getObject(id, type, row, col).render_variables, type);
     };
 
+    // colorize the led of a given object
+    self.objectColorizeLed = function (id, type, row, col, color, mode) {
+        self.gfxEngine.colorizeObjectLed(getObject(id, type, row, col).render_variables, color, mode);
+    };
+
     // Bind 2 given objects together
     self.objectBind = function (id, type, row, col, objectId, objectType) {
         getObject(id, type, row, col).bound_object_id = objectId;
@@ -296,9 +301,7 @@ let gfxMap = function (logicEventHandler) {
 
         self.gfxEngine.bindObject(
             getObject(id, type, row, col).render_variables,
-            getObject(objectId, objectType, row, col).render_variables,
-            objectType,
-            (getObject(id, type, row, col).loaded_object_id !== -1)
+            getObject(objectId, objectType, row, col).render_variables
         );
 
         self.logicEventHandler({
@@ -324,9 +327,7 @@ let gfxMap = function (logicEventHandler) {
 
         self.gfxEngine.unbindObject(
             getObject(id, type, row, col).render_variables,
-            getObject(objectId, objectType, row, col).render_variables,
-            objectType,
-            (getObject(id, type, row, col).loaded_object_id !== -1)
+            getObject(objectId, objectType, row, col).render_variables
         );
 
         self.logicEventHandler({
@@ -352,9 +353,7 @@ let gfxMap = function (logicEventHandler) {
 
         self.gfxEngine.loadObject(
             getObject(id, type, row, col).render_variables,
-            getObject(objectId, objectType, row, col).render_variables,
-            objectType,
-            getObject(id, type, row, col).bound_object_id !== -1
+            getObject(objectId, objectType, row, col).render_variables
         );
 
         self.logicEventHandler({
@@ -380,9 +379,7 @@ let gfxMap = function (logicEventHandler) {
 
         self.gfxEngine.offloadObject(
             getObject(id, type, row, col).render_variables,
-            getObject(objectId, objectType, row, col).render_variables,
-            objectType,
-            getObject(id, type, row, col).bound_object_id !== -1
+            getObject(objectId, objectType, row, col).render_variables
         );
 
         self.logicEventHandler({
@@ -405,12 +402,12 @@ let gfxMap = function (logicEventHandler) {
     self.objectFailure = function (id, type, row, col) {
         let obj = getObject(id, type, row, col);
 
-        self.gfxEngine.objectFailure(obj.render_variables, type);
+        self.gfxEngine.objectFailure(obj.render_variables);
 
         if (obj.loaded_object_id !== -1) {
             let loadedObj = getObject(obj.loaded_object_id, obj.loaded_object_type, row, col);
 
-            self.gfxEngine.objectFailure(loadedObj.render_variables, loadedObj.type);
+            self.gfxEngine.objectFailure(loadedObj.render_variables);
         }
 
         self.logicEventHandler({

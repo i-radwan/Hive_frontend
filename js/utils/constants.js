@@ -155,11 +155,10 @@ ANIMATION_TYPE = {
     RETREAT: 8
 };
 
-FLASH_TYPE = {
-    FAILURE: 0,
-    LOAD: 1,
-    BIND: 2,
-    NO_FLASH: 3
+LED_COLOR_MODE = {
+    OFF: 0,
+    ON: 1,
+    FLASH: 2
 };
 
 CURSOR_STYLES = {
@@ -264,19 +263,20 @@ EVENT_TO_GFX = {
     OBJECT_UNHIGHLIGHT: 10,
     OBJECT_COLORIZE: 11,
     OBJECT_DECOLORIZE: 12,
-    OBJECT_BIND: 13,
-    OBJECT_UNBIND: 14,
-    OBJECT_LOAD: 15,
-    OBJECT_OFFLOAD: 16,
-    OBJECT_FAILURE: 17,
-    OBJECT_STOP: 18,
-    OBJECT_FIXED: 19,
-    OBJECT_UPDATE: 20,
-    SIMULATION_START: 21,
-    SIMULATION_PAUSE: 22,
-    SIMULATION_RESUME: 23,
-    SIMULATION_STOP: 24,
-    ESC: 25
+    OBJECT_COLORIZE_LED: 13,
+    OBJECT_BIND: 14,
+    OBJECT_UNBIND: 15,
+    OBJECT_LOAD: 16,
+    OBJECT_OFFLOAD: 17,
+    OBJECT_FAILURE: 18,
+    OBJECT_STOP: 19,
+    OBJECT_FIXED: 20,
+    OBJECT_UPDATE: 21,
+    SIMULATION_START: 22,
+    SIMULATION_PAUSE: 23,
+    SIMULATION_RESUME: 24,
+    SIMULATION_STOP: 25,
+    ESC: 26
 };
 
 // GFX SVG models
@@ -296,7 +296,7 @@ GFX_SVG_MODEL = {
     ],
     GATE: '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250"><title>gate_thick_gapped_thin_border</title><path class="gate_body" d="M3.49,18.68A0.49,0.49,0,0,1,3,18.2V8.7A5.71,5.71,0,0,1,8.71,3l9.45,0.06a0.49,0.49,0,0,1,0,1h0L8.71,4A4.73,4.73,0,0,0,4,8.7v9.5A0.49,0.49,0,0,1,3.49,18.68Z" fill="#bababa"/><path class="gate_body" d="M18.16,47h0l-9.45-.06A5.71,5.71,0,0,1,3,41.24V31.87a0.49,0.49,0,0,1,1,0v9.37A4.73,4.73,0,0,0,8.71,46L18.16,46A0.49,0.49,0,0,1,18.16,47Z" fill="#bababa"/><path class="gate_body" d="M31.84,47a0.49,0.49,0,0,1,0-1L41.29,46A4.73,4.73,0,0,0,46,41.24V31.87a0.49,0.49,0,0,1,1,0v9.37a5.71,5.71,0,0,1-5.71,5.7L31.85,47h0Z" fill="#bababa"/><path class="gate_body" d="M46.51,18.68A0.49,0.49,0,0,1,46,18.2V8.7A4.73,4.73,0,0,0,41.29,4L31.85,4h0a0.49,0.49,0,0,1,0-1L41.29,3A5.71,5.71,0,0,1,47,8.7v9.5A0.49,0.49,0,0,1,46.51,18.68Z" fill="#bababa"/><path class="gate_body" d="M33.5,23.6h-17a1,1,0,0,1,0-2h17A1,1,0,0,1,33.5,23.6Z" fill="#bababa"/><path class="gate_body" d="M33.5,28.4h-17a1,1,0,0,1,0-2h17A1,1,0,0,1,33.5,28.4Z" fill="#bababa"/><path class="gate_body" d="M33.5,23.6a1,1,0,0,1-.71-0.3l-5-5.08a1,1,0,0,1,1.43-1.4l5,5.08A1,1,0,0,1,33.5,23.6Z" fill="#bababa"/><path class="gate_body" d="M21.5,33.47a1,1,0,0,1-.71-0.3l-5-5.08a1,1,0,1,1,1.42-1.4l5,5.08A1,1,0,0,1,21.5,33.47Z" fill="#bababa"/></svg>',
     STATION: '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250"><title>station_rotated</title><polygon class="station_body" points="30 24.17 25.42 24.17 27.25 15 20 25.83 24.58 25.83 22.75 35 30 24.17" fill="#feea3a"/><path class="station_body" d="M18.38,3.49a2,2,0,1,1-2-2A2,2,0,0,1,18.38,3.49Zm-3.2,0a1.2,1.2,0,1,0,1.2-1.2A1.2,1.2,0,0,0,15.18,3.49Z" fill="#feea3a"/><ellipse class="station_body" cx="33.63" cy="3.49" rx="1.6" ry="1.55" fill="#feea3a"/><path class="station_body" d="M35.63,3.49a2,2,0,0,1-4,0A2,2,0,0,1,35.63,3.49Zm-3.2,0a1.2,1.2,0,0,0,2.4,0A1.2,1.2,0,0,0,32.42,3.49Z" fill="#feea3a"/><path class="station_body" d="M8.71,4A4.74,4.74,0,0,0,4,8.71V41.29A4.74,4.74,0,0,0,8.71,46H41.29A4.74,4.74,0,0,0,46,41.29V8.71A4.74,4.74,0,0,0,41.29,4V3A5.72,5.72,0,0,1,47,8.71V41.29A5.72,5.72,0,0,1,41.29,47H8.71A5.72,5.72,0,0,1,3,41.29V8.71A5.72,5.72,0,0,1,8.71,3V4Z" fill="#feea3a"/><rect class="station_body" x="8.71" y="3" width="5.87" height="0.98" fill="#feea3a"/><rect class="station_body" x="35.42" y="3" width="5.87" height="0.98" fill="#feea3a"/></svg>',
-    OBSTACLE: '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250"><title>obstacle_less_dense_with_borders</title><polyline class="obstacle_body" points="27.07 22.39 24.76 17.45 29.45 18.73 31.32 21.11 28.78 25.36" fill="#bababa"/><polyline class="obstacle_body" points="31.05 32.55 28.53 26.84 32.21 21.81 36.96 32.55" fill="#bababa"/><polyline class="obstacle_body" points="29.45 32.55 20.06 32.55 22.21 26.72 26.76 25.44" fill="#bababa"/><polyline class="obstacle_body" points="21.89 26.05 20.06 24.16 23.35 17.45 26.04 22.82 26.34 24.46" fill="#bababa"/><polyline class="obstacle_body" points="17.8 32.55 13.04 32.55 13.59 28.27 18.53 25.36 21.09 26.36" fill="#bababa"/><path class="obstacle_body" d="M3.49,18.68A0.49,0.49,0,0,1,3,18.2V8.7A5.71,5.71,0,0,1,8.71,3l9.45,0.06a0.49,0.49,0,0,1,0,1h0L8.71,4A4.73,4.73,0,0,0,4,8.7v9.5A0.49,0.49,0,0,1,3.49,18.68Z" fill="#bababa"/><path class="obstacle_body" d="M18.16,47h0l-9.45-.06A5.71,5.71,0,0,1,3,41.24V31.87a0.49,0.49,0,0,1,1,0v9.37A4.73,4.73,0,0,0,8.71,46L18.16,46A0.49,0.49,0,0,1,18.16,47Z" fill="#bababa"/><path class="obstacle_body" d="M31.84,47a0.49,0.49,0,0,1,0-1L41.29,46A4.73,4.73,0,0,0,46,41.24V31.87a0.49,0.49,0,0,1,1,0v9.37a5.71,5.71,0,0,1-5.71,5.7L31.85,47h0Z" fill="#bababa"/><path class="obstacle_body" d="M46.51,18.68A0.49,0.49,0,0,1,46,18.2V8.7A4.73,4.73,0,0,0,41.29,4L31.85,4h0a0.49,0.49,0,0,1,0-1L41.29,3A5.71,5.71,0,0,1,47,8.7v9.5A0.49,0.49,0,0,1,46.51,18.68Z" fill="#bababa"/></svg>',
+    OBSTACLE: '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250"><title>obstacle_less_dense</title><polyline class="obstacle_body" points="27.07 22.39 24.76 17.45 29.45 18.73 31.32 21.11 28.78 25.36" fill="#bababa"/><polyline class="obstacle_body" points="31.05 32.55 28.53 26.84 32.21 21.81 36.96 32.55" fill="#bababa"/><polyline class="obstacle_body" points="29.45 32.55 20.06 32.55 22.21 26.72 26.76 25.44" fill="#bababa"/><polyline class="obstacle_body" points="21.89 26.05 20.06 24.16 23.35 17.45 26.04 22.82 26.34 24.46" fill="#bababa"/><polyline class="obstacle_body" points="17.8 32.55 13.04 32.55 13.59 28.27 18.53 25.36 21.09 26.36" fill="#bababa"/></svg>',
     RACK: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250"><title>rack_thick</title><circle cx="25" cy="25" r="12.5" fill="#1d1d1e"/><path class="rack_body" d="M32.64,30.5H17.36a0.52,0.52,0,0,1,0-1H32.64A0.52,0.52,0,0,1,32.64,30.5Z" fill="#bababa"/><path class="rack_body" d="M32.64,31H17.36a1,1,0,0,1,0-2H32.64A1,1,0,0,1,32.64,31Zm0-1v0h0Z" fill="#bababa"/><path class="rack_body" d="M32.64,25.5H17.36a0.52,0.52,0,0,1,0-1H32.64A0.52,0.52,0,0,1,32.64,25.5Z" fill="#bababa"/><path class="rack_body" d="M32.64,26H17.36a1,1,0,0,1,0-2H32.64A1,1,0,0,1,32.64,26Zm0-1v0h0Z" fill="#bababa"/><path class="rack_body" d="M32.64,20.5H17.36a0.52,0.52,0,0,1,0-1H32.64A0.52,0.52,0,0,1,32.64,20.5Z" fill="#bababa"/><path class="rack_body" d="M32.64,21H17.36a0.91,0.91,0,0,1-.76-1,0.91,0.91,0,0,1,.76-1H32.64a0.91,0.91,0,0,1,.76,1A0.91,0.91,0,0,1,32.64,21Zm0-1v0h0Z" fill="#bababa"/></svg>'
 };
 
@@ -305,16 +305,16 @@ GFX_COLORS_DEFAULT = {
     ROBOT_LED: "#bababa",
     GATE: "#bababa",
     STATION: "#feea3a",
-    OBSTACLE: "#bababa",
+    OBSTACLE: "#d10000",
     RACK: "#bababa",
     CELL: 0x1d1d1e,
     CELL_STROKE: 0xbababa
 };
 
 GFX_COLORS = {
-    LED_LOAD_COLOR: "#18FFFF",
-    LED_BIND_COLOR: "#76FF03",
-    LED_FAIL_COLOR: "#B71C1C",
+    LED_BLUE_COLOR: "#18FFFF",
+    LED_GREEN_COLOR: "#76FF03",
+    LED_RED_COLOR: "#d10000",
     RACK_LOAD_COLOR: "#18FFFF",
     STATION_BIND_COLOR: "#76FF03",
     GATE_BIND_COLOR: "#76FF03",
