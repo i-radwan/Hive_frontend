@@ -32,11 +32,7 @@ let gfxEngine = function () {
     });
     canvas[0].appendChild(self.pixi_app.view);
 
-    let viewport = self.pixi_app.stage.addChild(new Viewport({
-        screenWidth: canvas.width(),
-        screenHeight: canvas.width(),
-        interaction: self.pixi_app.renderer.plugins.interaction
-    }));
+    let viewport;
 
     // Map information
     let mapWidth, mapHeight;
@@ -54,7 +50,12 @@ let gfxEngine = function () {
 
     // Removes all the translations and scale to the scene and reinitialize the Z-Index groups
     let resetScene = function () {
-        viewport.removeChildren();
+        self.pixi_app.stage.removeChildren();
+        viewport = self.pixi_app.stage.addChild(new Viewport({
+            screenWidth: canvas.width(),
+            screenHeight: canvas.width(),
+            interaction: self.pixi_app.renderer.plugins.interaction
+        }));
         viewport.resize(canvas.width(), canvas.height(), mapWidth * GRID_CELL_LENGTH, mapHeight * GRID_CELL_LENGTH);
 
         viewport.drag()
