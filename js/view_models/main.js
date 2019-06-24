@@ -156,6 +156,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     reducePendingActions(self.pendingActions, msg.data.deactivated[i]);
                 }
 
+                for (let i = 0; i < msg.data.blocked.length; i++) {
+                    reducePendingActions(self.pendingActions, msg.data.blocked[i]);
+                }
                 break;
 
             case MSG_FROM_SERVER.MSG:
