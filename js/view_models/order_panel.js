@@ -13,7 +13,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.activePanel = ko.observable(ORDER_PANEL.ADD);
 
     self.active = ko.computed(function () {
-        return runningMode() === RUNNING_MODE.SIMULATE;
+        return runningMode() === RUNNING_MODE.SIMULATE ||
+            runningMode() === RUNNING_MODE.DEPLOY ||
+            runningMode() === RUNNING_MODE.PAUSE;
     });
 
     self.id = ko.observable(1);
@@ -96,8 +98,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
 
         let issue_time_raw = parseInt(self.issueTimeHours()) * 3600 +
-                             parseInt(self.issueTimeMinutes()) * 60 +
-                             parseInt(self.issueTimeSeconds());
+            parseInt(self.issueTimeMinutes()) * 60 +
+            parseInt(self.issueTimeSeconds());
 
         let issue_time = self.issueTimeHours() + ":" + self.issueTimeMinutes() + ":" + self.issueTimeSeconds();
 

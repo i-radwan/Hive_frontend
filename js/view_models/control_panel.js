@@ -85,6 +85,15 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     };
 
     self.deploy = function () {
+        if (!comm.connected) {
+            shouter.notifySubscribers({
+                text: STR[2013]([]),
+                type: MSG_TYPE.ERROR
+            }, SHOUT.MSG);
+
+            return;
+        }
+
         if (runningMode() !== RUNNING_MODE.DESIGN)
             return;
 
