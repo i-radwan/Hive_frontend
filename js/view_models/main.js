@@ -147,16 +147,15 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 break;
 
             case MSG_FROM_SERVER.CONTROL:
-                if (msg.data.type === CONTROL_MSG.ACTIVATE) {
-                    self.leftPanelVM.robotVM.activateRobots(msg.data.ids);
-                } else if (msg.data.type === CONTROL_MSG.DEACTIVATE) {
-                    self.leftPanelVM.robotVM.deactivateRobots(msg.data.ids);
+                self.leftPanelVM.robotVM.blockRobot(msg.data.blocked);
+                self.leftPanelVM.robotVM.deactivateRobots(msg.data.deactivated);
+                self.leftPanelVM.robotVM.activateRobots(msg.data.activated);
 
-                    // Remove from pendingActions if it exists there
-                    for (let i = 0; i < msg.data.ids.length; i++) {
-                        reducePendingActions(self.pendingActions, msg.data.ids[i]);
-                    }
+                // Remove from pendingActions if it exists there
+                for (let i = 0; i < msg.data.deactivated.length; i++) {
+                    reducePendingActions(self.pendingActions, msg.data.deactivated[i]);
                 }
+
                 break;
 
             case MSG_FROM_SERVER.MSG:
