@@ -283,8 +283,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
     }, self, SHOUT.ESC);
 
     self.runningMode.subscribe(function (newRunningMode) {
-        console.log("MODE", newRunningMode);
-
         if (newRunningMode === RUNNING_MODE.DESIGN) {
             self.time(0);
             self.centerPanelVM.controlConsoleVM.time(0);

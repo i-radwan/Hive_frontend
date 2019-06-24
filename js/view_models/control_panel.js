@@ -101,6 +101,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
         self.lastStartMode = START_MODE.DEPLOY;
 
+        shouter.notifySubscribers(true, SHOUT.LOADING);
+
         sendStateToServer(self.lastStartMode);
     };
 
