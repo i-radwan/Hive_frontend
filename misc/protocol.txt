@@ -162,8 +162,9 @@ UPDATE: {
 }
 
 CONTROL: {
-    id:
-    type: [ACTIVATE|DEACTIVATE]
+    blocked: []
+    deactivated: []
+    activated: []
 }
 
 MSG: {
@@ -309,15 +310,15 @@ OBJECT_FAILURE: { # Stop, Send ACK, Flash red
 }
 
 OBJECT_STOP: { # Force stop, Send ACK of the previous move
-    id:
     type:                                       # not necessarily needed
+    id:
     row:                                        # The old row/col (the one that this robot was
     col:                                        # supposed to be at before finishing the current move)
 }
 
 OBJECT_FIXED: { # Resume last move, Send ACK after finishing the original move
-    id:
     type:                                       # not necessarily needed
+    id:
     row:                                        # The old row/col (the one that this robot was
     col:                                        # supposed to be at before finishing the current move)
 }

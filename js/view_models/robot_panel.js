@@ -593,6 +593,27 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     };
 
+    self.blockRobot = function(ids) {
+        for (let i = 0; i < ids.length; i++) {
+            let id = ids[i];
+
+            let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+
+            let row = pos[0];
+            let col = pos[1];
+
+            gfxEventHandler({
+                type: EVENT_TO_GFX.OBJECT_STOP,
+                data: {
+                    type: MAP_CELL.ROBOT,
+                    id: id,
+                    row: row,
+                    col: col
+                }
+            });
+        }
+    };
+
     self.deactivateRobots = function (ids) {
         for (let i = 0; i < ids.length; i++) {
             let id = ids[i];
@@ -610,7 +631,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: EVENT_TO_GFX.OBJECT_FAILURE,
                 data: {
                     type: MAP_CELL.ROBOT,
-                    id: parseInt(self.id()),
+                    id: id,
                     row: row,
                     col: col
                 }
@@ -646,7 +667,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 type: EVENT_TO_GFX.OBJECT_FIXED,
                 data: {
                     type: MAP_CELL.ROBOT,
-                    id: parseInt(self.id()),
+                    id: id,
                     row: row,
                     col: col
                 }
