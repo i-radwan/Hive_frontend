@@ -231,8 +231,14 @@ let mainViewModel = function (gfxEventHandler, comm) {
         console.log("GFX Action ACK received: ", JSON.stringify(data),
                     "PendingActions: ", JSON.stringify(self.pendingActions));
 
-        if (data.type === EVENT_TO_GFX.OBJECT_MOVE || data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
+        if (data.type === EVENT_TO_GFX.OBJECT_MOVE) {
             self.leftPanelVM.robotVM.doneMoving(data.data.id);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_ROTATE_RIGHT) {
+            self.leftPanelVM.robotVM.doneRotatingRight(data.data.id);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_ROTATE_LEFT) {
+            self.leftPanelVM.robotVM.doneRotatingLeft(data.data.id);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
+            self.leftPanelVM.robotVM.doneRetreating(data.data.id);
         }
 
         reducePendingActions(data.data.id);
