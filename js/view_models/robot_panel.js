@@ -684,7 +684,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let nr = r + ROW_DELTA[rob.direction];
         let nc = c + COL_DELTA[rob.direction];
 
-        console.log("New robot position: ", nr, nc);
+        console.log("Robot #" + id + " new robot position: ", nr, nc);
 
         state.map.moveObject(r, c, nr, nc, rob);
 
@@ -704,7 +704,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         rob.direction = (rob.direction - 1 + ROBOT_DIR_CNT) % ROBOT_DIR_CNT;
 
-        console.log("New robot direct after rotating right: ", rob.direction);
+        console.log("Robot #" + id + " new robot direction after rotating right: ", rob.direction);
     };
 
     self.doneRotatingLeft = function (id) {
@@ -716,7 +716,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         rob.direction = (rob.direction + 1) % ROBOT_DIR_CNT;
 
-        console.log("New robot direction after rotating left: ", rob.direction);
+        console.log("Robot #" + id + " new robot direction after rotating left: ", rob.direction);
     };
 
     self.doneRetreating = function (id) {
@@ -728,7 +728,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         rob.direction = (rob.direction + 2) % ROBOT_DIR_CNT;
 
-        console.log("New robot direction after retreating: ", rob.direction);
+        console.log("Robot #" + id + " new robot direction after retreating: ", rob.direction);
     };
 
     self.updateBattery = function (id, battery) {
