@@ -622,9 +622,6 @@ let gfxEngine = function () {
         draggedObject.dst_row = dstRow;
         draggedObject.dst_col = dstCol;
 
-        if (draggedObject.item.render_variables.is_selected)
-            self.moveHighlightObject(dstRow, dstCol, draggedObject.item.type);
-
         self.translateObject(draggedObject.item.render_variables, dstRow, dstCol);
     };
 
@@ -644,17 +641,6 @@ let gfxEngine = function () {
         selectedObject.item.render_variables.is_selected = true;
         selectedObject.item.render_variables.pixi_object.filters = [new PIXI_FILTERS.GlowFilter(15, 1, 0, hexToPixiColor(selectedObject.item.render_variables.color), 1)];
         selectedObjects.push(selectedObject);
-
-        self.colorizeCell(row, col, GFX_COLORS.CELL_HIGHLIGHT_COLOR, GFX_COLORS.CELL_HIGHLIGHT_STROKE);
-    };
-
-    // Move the highlighted object
-    self.moveHighlightObject = function (row, col, type) {
-        let selectedObject = self.getFirstSelectedObjectType(type);
-        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL, GFX_COLORS_DEFAULT.CELL_STROKE);
-        selectedObject.row = row;
-        selectedObject.col = col;
-        self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS.CELL_HIGHLIGHT_COLOR, GFX_COLORS.CELL_HIGHLIGHT_STROKE);
     };
 
     // Unhighlight the highlighted object
@@ -663,18 +649,10 @@ let gfxEngine = function () {
             let selectedObject = selectedObjects[i];
 
             selectedObject.item.render_variables.pixi_object.filters = [];
-            self.colorizeCell(selectedObject.row, selectedObject.col, GFX_COLORS_DEFAULT.CELL, GFX_COLORS_DEFAULT.CELL_STROKE);
             selectedObject.item.render_variables.is_selected = false;
         }
 
         selectedObjects = [];
-    };
-
-    // Change color of a given cell
-    self.colorizeCell = function (row, col, color, strokeColor) {
-        let square = zIndexGroups[Z_INDEX.BACKGROUND].children[col * mapHeight + row];
-
-        //updateSquare(square, row, col, color, strokeColor);
     };
 
     // Change color of a given object
@@ -854,28 +832,22 @@ let gfxEngine = function () {
         }
 
         if (!renderObject.animation_variables.is_moving && !renderObject.animation_variables.is_rotating) {
-            renderObject.animation_variables.is_animating = false;
             return true;
         }
     };
 
     // Finishes the object's animation
-    self.finishObjectAnimation = function(object, loadedObject) {
-        let dstRow = object.render_variables.animation_variables.nxt_row;
-        let dstCol = object.render_variables.animation_variables.nxt_col;
+    self.finishObjectAnimation = function(renderObject) {
+        renderObject.animation_variables.cur_x = renderObject.animation_variables.nxt_x;
+        renderObject.animation_variables.cur_y = renderObject.animation_variables.nxt_y;
+        renderObject.pixi_object.x = renderObject.animation_variables.cur_x;
+        renderObject.pixi_object.y = renderObject.animation_variables.cur_y;
 
-        object.render_variables.direction = angleToDir(object.render_variables.animation_variables.cur_angle);
+        if (renderObject.animation_variables.should_rotate)
+            renderObject.pixi_object.angle = renderObject.animation_variables.cur_angle;
 
-        if (object.render_variables.is_selected)
-            self.moveHighlightObject(dstRow, dstCol, MAP_CELL.ROBOT);
-
-        if (loadedObject !== -1) {
-            loadedObject.render_variables.animation_variables.cur_angle = object.render_variables.animation_variables.cur_angle;
-            loadedObject.render_variables.direction = object.render_variables.direction;
-
-            if (loadedObject.render_variables.is_selected)
-                self.moveHighlightObject(dstRow, dstCol, MAP_CELL.RACK);
-        }
+        renderObject.direction = angleToDir(renderObject.animation_variables.nxt_angle);
+        renderObject.animation_variables.is_animating = false;
     };
 
     // Pause animation for a given object
