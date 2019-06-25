@@ -29,8 +29,6 @@ let comm = function (serverMW) {
         self.ws.onmessage = function (e) {
             let msg = JSON.parse(e.data);
 
-            console.log('received:', msg);
-
             self.rcv(serverMW.receive(msg));
         };
 

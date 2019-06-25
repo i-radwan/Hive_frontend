@@ -284,10 +284,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let r = pos[0];
         let c = pos[1];
 
-        let rob = state.map.getRobot(r, c);
-
-        rob.direction = (rob.direction - 1 + ROBOT_DIR_CNT) % ROBOT_DIR_CNT;
-
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_ROTATE_RIGHT,
             data: {
@@ -304,10 +300,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let r = pos[0];
         let c = pos[1];
 
-        let rob = state.map.getRobot(r, c);
-
-        rob.direction = (rob.direction + 1) % ROBOT_DIR_CNT;
-
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_ROTATE_LEFT,
             data: {
@@ -323,10 +315,6 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let r = pos[0];
         let c = pos[1];
-
-        let rob = state.map.getRobot(r, c);
-
-        rob.direction = (rob.direction + 2) % ROBOT_DIR_CNT;
 
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_RETREAT,
@@ -696,6 +684,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let nr = r + ROW_DELTA[rob.direction];
         let nc = c + COL_DELTA[rob.direction];
 
+        console.log("New robot position: ", nr, nc);
+
         state.map.moveObject(r, c, nr, nc, rob);
 
         if (rob.loaded) {
@@ -703,6 +693,42 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             state.map.moveObject(r, c, nr, nc, fac);
         }
+    };
+
+    self.doneRotatingRight = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+        let r = pos[0];
+        let c = pos[1];
+
+        let rob = state.map.getRobot(r, c);
+
+        rob.direction = (rob.direction - 1 + ROBOT_DIR_CNT) % ROBOT_DIR_CNT;
+
+        console.log("New robot direct after rotating right: ", rob.direction);
+    };
+
+    self.doneRotatingLeft = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+        let r = pos[0];
+        let c = pos[1];
+
+        let rob = state.map.getRobot(r, c);
+
+        rob.direction = (rob.direction + 1) % ROBOT_DIR_CNT;
+
+        console.log("New robot direction after rotating left: ", rob.direction);
+    };
+
+    self.doneRetreating = function (id) {
+        let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
+        let r = pos[0];
+        let c = pos[1];
+
+        let rob = state.map.getRobot(r, c);
+
+        rob.direction = (rob.direction + 2) % ROBOT_DIR_CNT;
+
+        console.log("New robot direction after retreating: ", rob.direction);
     };
 
     self.updateBattery = function (id, battery) {
