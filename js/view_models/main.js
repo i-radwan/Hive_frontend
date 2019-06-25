@@ -66,7 +66,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
                 // Push the actions to pendingActions before calling the gfx library
                 // because if the gfx changed an action (e.g. load), while we are still processing here
-                // we will have race condition between here and handleAckAction function.
+                // we will have race condition between here and handleActionAck function.
                 for (let i = 0; i < actions.length; ++i) {
                     let data = actions[i].data;
 
@@ -74,7 +74,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 }
 
                 // We have to check here, because if we checked after calling the gfx lib, and gfx
-                // lib has already called handleAckAction, we may enter this block, because the
+                // lib has already called handleActionAck, we may enter this block, because the
                 // pendingActions is now empty, even though it contained actions at the beginning.
                 // This will cause sending ACK twice.
                 if (self.pendingActions.length === 0) {
@@ -82,7 +82,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                         type: MSG_TO_SERVER.ACK
                     });
 
-                    console.log("ACK sent");
+                    console.log("ACK sent from update message handler due to empty actions array");
                 }
 
                 for (let i = 0; i < actions.length; ++i) {
@@ -228,6 +228,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
     };
 
     let handleActionAck = function (data) {
+        console.log("GFX Action ACK received: ", JSON.stringify(data),
+                    "PendingActions: ", JSON.stringify(self.pendingActions));
+
         if (data.type === EVENT_TO_GFX.OBJECT_MOVE || data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
             self.leftPanelVM.robotVM.doneMoving(data.data.id);
         }
@@ -260,7 +263,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 type: MSG_TO_SERVER.ACK
             });
 
-            console.log("ACK sent");
+            console.log("ACK sent from reduce pending actions.");
         }
     };
 
