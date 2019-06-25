@@ -299,6 +299,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
             self.loadingVisible(false);
 
+            self.pendingActions = [];
+
             clearInterval(incrementTimeInterval);
         } else {
             clearInterval(incrementTimeInterval);
