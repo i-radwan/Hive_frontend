@@ -69,37 +69,37 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
                     reducePendingActions(self.pendingActions, robotID);
                 } else if (actionType === SERVER_ACTIONS.MOVE) {
+                    self.pendingActions.push(robotID);
+
                     self.leftPanelVM.robotVM.move(robotID);
-
-                    self.pendingActions.push(robotID);
                 } else if (actionType === SERVER_ACTIONS.ROTATE_RIGHT) {
+                    self.pendingActions.push(robotID);
+
                     self.leftPanelVM.robotVM.rotateRight(robotID);
-
-                    self.pendingActions.push(robotID);
                 } else if (actionType === SERVER_ACTIONS.ROTATE_LEFT) {
+                    self.pendingActions.push(robotID);
+
                     self.leftPanelVM.robotVM.rotateLeft(robotID);
-
-                    self.pendingActions.push(robotID);
                 } else if (actionType === SERVER_ACTIONS.RETREAT) {
+                    self.pendingActions.push(robotID);
+
                     self.leftPanelVM.robotVM.retreat(robotID);
-
-                    self.pendingActions.push(robotID);
                 } else if (actionType === SERVER_ACTIONS.LOAD) {
+                    self.pendingActions.push(robotID);
+
                     self.leftPanelVM.robotVM.load(robotID);
-
-                    self.pendingActions.push(robotID);
                 } else if (actionType === SERVER_ACTIONS.OFFLOAD) {
+                    self.pendingActions.push(robotID);
+
                     self.leftPanelVM.robotVM.offload(robotID);
-
-                    self.pendingActions.push(robotID);
                 } else if (actionType === SERVER_ACTIONS.BIND) {
+                    self.pendingActions.push(robotID);
+
                     self.leftPanelVM.robotVM.bind(robotID);
-
-                    self.pendingActions.push(robotID);
                 } else if (actionType === SERVER_ACTIONS.UNBIND) {
-                    self.leftPanelVM.robotVM.unbind(robotID);
-
                     self.pendingActions.push(robotID);
+
+                    self.leftPanelVM.robotVM.unbind(robotID);
                 }
 
                 break;
