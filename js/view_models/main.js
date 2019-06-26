@@ -102,6 +102,10 @@ let mainViewModel = function (gfxEventHandler, comm) {
                     self.leftPanelVM.robotVM.unbind(robotID);
                 }
 
+                if ((new Set(self.pendingActions)).size !== self.pendingActions.length) {
+                    throw "Error: there must not be any duplicates in the pendingActions array";
+                }
+
                 break;
             }
 

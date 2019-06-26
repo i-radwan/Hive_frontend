@@ -558,6 +558,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         let rob = state.map.getRobot(robR, robC);
 
+        rob.assignedTask = true;
+
         let rackPos = state.map.getObjectPos(rackID, MAP_CELL.RACK);
 
         let rackR = rackPos[0];
@@ -596,11 +598,15 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         console.log("Robot #" + robotID + " assigned a task with rack: " + rackID);
     };
 
-    self.completeTask = function(robotID, rackID) {
+    self.completeTask = function (robotID, rackID) {
         let robPos = state.map.getObjectPos(robotID, MAP_CELL.ROBOT);
 
         let robR = robPos[0];
         let robC = robPos[1];
+
+        let rob = state.map.getRobot(robR, robC);
+
+        rob.assignedTask = false;
 
         let rackPos = state.map.getObjectPos(rackID, MAP_CELL.RACK);
 
@@ -658,7 +664,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     };
 
-    self.stop = function(id) {
+    self.stop = function (id) {
         let pos = state.map.getObjectPos(id, MAP_CELL.ROBOT);
 
         let r = pos[0];
@@ -743,17 +749,31 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             }
         });
 
-        gfxEventHandler({
-            type: EVENT_TO_GFX.OBJECT_LED_COLORIZE,
-            data: {
-                type: MAP_CELL.ROBOT,
-                id: id,
-                row: r,
-                col: c,
-                mode: LED_COLOR_MODE.OFF,
-                color: GFX_COLORS.LED_RED_COLOR
-            }
-        });
+        if (rob.assignedTask) {
+            gfxEventHandler({
+                type: EVENT_TO_GFX.OBJECT_LED_COLORIZE,
+                data: {
+                    type: MAP_CELL.ROBOT,
+                    id: id,
+                    row: r,
+                    col: c,
+                    mode: LED_COLOR_MODE.FLASH,
+                    color: GFX_COLORS.LED_BLUE_COLOR
+                }
+            });
+        } else {
+            gfxEventHandler({
+                type: EVENT_TO_GFX.OBJECT_LED_COLORIZE,
+                data: {
+                    type: MAP_CELL.ROBOT,
+                    id: id,
+                    row: r,
+                    col: c,
+                    mode: LED_COLOR_MODE.OFF,
+                    color: GFX_COLORS.LED_RED_COLOR
+                }
+            });
+        }
 
         logger({
             level: LOG_LEVEL.INFO,
@@ -982,7 +1002,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         customClass: "robot-color"
     });
 
-    $('#robot-color').on('colorpickerChange', function(event) {
+    $('#robot-color').on('colorpickerChange', function (event) {
         let color = event.color.toString();
 
         $('.robot-color-preview').css("background", color);
