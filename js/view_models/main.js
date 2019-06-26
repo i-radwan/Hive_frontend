@@ -67,7 +67,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 if (actionType === SERVER_ACTIONS.STOP) {
                     self.leftPanelVM.robotVM.stop(robotID);
 
-                    reducePendingActions(self.pendingActions, robotID);
+                    reducePendingActions(robotID);
                 } else if (actionType === SERVER_ACTIONS.MOVE) {
                     self.pendingActions.push(robotID);
 
@@ -144,9 +144,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 if (msgType === CONTROL_MSG.ACTIVATE) {
                     self.leftPanelVM.robotVM.activate(robotID);
                 } else if (msgType === CONTROL_MSG.DEACTIVATE) {
-                    self.leftPanelVM.robotVM.deactivate(robotID);
+                    reducePendingActions(robotID, false);
 
-                    reducePendingActions(self.pendingActions, robotID);
+                    self.leftPanelVM.robotVM.deactivate(robotID);
                 }
 
                 break;
@@ -249,7 +249,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
         });
     };
 
-    let reducePendingActions = function (robotID) {
+    let reducePendingActions = function (robotID, sendDone = true) {
         if (self.pendingActions.length === 0)
             return;
 
@@ -258,14 +258,16 @@ let mainViewModel = function (gfxEventHandler, comm) {
         if (index > -1) { // If robot id found
             self.pendingActions.splice(index, 1);
 
-            comm.send({
-                type: MSG_TO_SERVER.DONE,
-                data: {
-                    id: robotID
-                }
-            });
+            if (sendDone) {
+                comm.send({
+                    type: MSG_TO_SERVER.DONE,
+                    data: {
+                        id: robotID
+                    }
+                });
 
-            console.log("DONE sent from reduce pending actions for the Robot #" + robotID);
+                console.log("DONE sent from reduce pending actions for the Robot #" + robotID);
+            }
         }
     };
 

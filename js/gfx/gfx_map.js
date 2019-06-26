@@ -138,7 +138,7 @@ let gfxMap = function (logicEventHandler) {
         let dstRow = object.render_variables.animation_variables.nxt_row;
         let dstCol = object.render_variables.animation_variables.nxt_col;
 
-        console.log("Finished animation for", object, "Moving it from ", row, col, " to ", dstRow, dstCol);
+        // console.log("Finished animation for", object, "Moving it from ", row, col, " to ", dstRow, dstCol);
         let loadedObject = (object.loaded_object_id !== -1 ?
             getObject(object.loaded_object_id, object.loaded_object_type, row, col) : -1);
 
@@ -209,7 +209,7 @@ let gfxMap = function (logicEventHandler) {
     // Move an object one step in its direction
     self.objectMove = function (id, row, col) {
         let obj = getObject(id, MAP_CELL.ROBOT, row, col);
-        console.log("Moving object at ", row, col, "and is ", obj);
+        // console.log("Moving object at ", row, col, "and is ", obj);
         let action = dirToMoveAction(obj.render_variables.direction);
         self.gfxEngine.startObjectAnimation(row,
             col,
