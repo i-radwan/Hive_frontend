@@ -255,7 +255,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
         let index = self.pendingActions.indexOf(robotID);
 
-        while (index > -1) { // If robot id found
+        if (index > -1) { // If robot id found
             self.pendingActions.splice(index, 1);
 
             comm.send({
@@ -266,8 +266,6 @@ let mainViewModel = function (gfxEventHandler, comm) {
             });
 
             console.log("DONE sent from reduce pending actions for the Robot #" + robotID);
-
-            index = self.pendingActions.indexOf(robotID);
         }
     };
 
