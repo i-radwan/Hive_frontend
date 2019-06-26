@@ -312,7 +312,7 @@ let gfxMap = function (logicEventHandler) {
         );
 
         self.logicEventHandler({
-            type: EVENT_FROM_GFX.ACK_ACTION,
+            type: EVENT_FROM_GFX.DONE,
             data: {
                 type: EVENT_TO_GFX.OBJECT_BIND,
                 data: {
@@ -338,7 +338,7 @@ let gfxMap = function (logicEventHandler) {
         );
 
         self.logicEventHandler({
-            type: EVENT_FROM_GFX.ACK_ACTION,
+            type: EVENT_FROM_GFX.DONE,
             data: {
                 type: EVENT_TO_GFX.OBJECT_UNBIND,
                 data: {
@@ -364,7 +364,7 @@ let gfxMap = function (logicEventHandler) {
         );
 
         self.logicEventHandler({
-            type: EVENT_FROM_GFX.ACK_ACTION,
+            type: EVENT_FROM_GFX.DONE,
             data: {
                 type: EVENT_TO_GFX.OBJECT_LOAD,
                 data: {
@@ -390,7 +390,7 @@ let gfxMap = function (logicEventHandler) {
         );
 
         self.logicEventHandler({
-            type: EVENT_FROM_GFX.ACK_ACTION,
+            type: EVENT_FROM_GFX.DONE,
             data: {
                 type: EVENT_TO_GFX.OBJECT_OFFLOAD,
                 data: {
@@ -418,7 +418,7 @@ let gfxMap = function (logicEventHandler) {
         }
 
         self.logicEventHandler({
-            type: EVENT_FROM_GFX.ACK_ACTION,
+            type: EVENT_FROM_GFX.DONE,
             data: {
                 type: EVENT_TO_GFX.OBJECT_FAILURE,
                 data: {
@@ -444,7 +444,7 @@ let gfxMap = function (logicEventHandler) {
         }
 
         self.logicEventHandler({
-            type: EVENT_FROM_GFX.ACK_ACTION,
+            type: EVENT_FROM_GFX.DONE,
             data: {
                 type: EVENT_TO_GFX.OBJECT_STOP,
                 data: {
@@ -499,7 +499,7 @@ let gfxMap = function (logicEventHandler) {
                     if (isAnimationFinished) {
                         if (map[row][col][k].type === MAP_CELL.ROBOT) {
                             self.logicEventHandler({
-                                type: EVENT_FROM_GFX.ACK_ACTION,
+                                type: EVENT_FROM_GFX.DONE,
                                 data: {
                                     type: map[row][col][k].render_variables.animation_variables.animation_type,
                                     data: {

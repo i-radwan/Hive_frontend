@@ -9,11 +9,11 @@ START: {
     state: state*
 }
 
-RESUME: {}
+STOP: {}
 
 PAUSE: {}
 
-STOP: {}
+RESUME: {}
 
 ORDER: {
     id:
@@ -26,30 +26,32 @@ ORDER: {
             quantity:
         }
     ]
-    start_timestep:                             # To support orders scheduling
 }
 
-ACK: {}
-
 CONTROL: {
-    ids: []
     type: [ACTIVATE|DEACTIVATE]
+    id:
+}
+
+DONE: {
+    id:                                 # The agent id
 }
 
 ----------------
 FROM SERVER:
 ----------------
+
 ACK_START: {
     status: [OK|ERROR]
-    msg: {                                      # In the ERROR case
+    msg: {                              # In the ERROR case
         id:
         args: []
     }
 }
 
-ACK_RESUME: {
+ACK_RESUME: {                           # TODO: unnecessarily, keeping it only for consistency.
     status: [OK|ERROR]
-    msg: {                                      # In the ERROR case
+    msg: {                              # In the ERROR case
         id:
         args: []
     }
@@ -57,114 +59,67 @@ ACK_RESUME: {
 
 ACK_ORDER: {
     status: [OK|ERROR]
-    msg: {                                      # In the ERROR case
+    msg: {                              # In the ERROR case
         id:
         args: []
     }
 }
 
-UPDATE: {
-    timestep:
-    actions: [
-        {
-            type: [MOVE|ROTATE_RIGHT|ROTATE_LEFT|RETREAT|LOAD|OFFLOAD|BIND|UNBIND],
-            data: {...}
-        }, {  # Default ROBOT direction = ROBOT_DIR.RIGHT
-            type: MOVE,
-            data: {
-                id
-            }
-        }, {
-            type: ROTATE_RIGHT,
-            data: {
-                id:
-            }
-        }, {
-            type: ROTATE_LEFT,
-            data: {
-                id:
-            }
-        }, {
-            type: RETREAT,
-            data: {
-                id:
-            }
-        }, {
-            type: LOAD,
-            data: {
-                id:
-            }
-        },
-            type: OFFLOAD,
-            data: {
-                id:
-            }
-        }, {
-            type: BIND,
-            data: {
-                id:
-            }
-        }, {
-            type: UNBIND,
-            data: {
-                id:
-            }
-        }
-    ],
-    logs: [
-        {
-            type: [TASK_ASSIGNED|ITEM_DELIVERED|ORDER_FULFILLED|RACK_ADJUSTED|...]
-            data: {...}
-        }, {
-            type: TASK_ASSIGNED
-            data: {
-                robot_id:
-                rack_id:
-            }
-        }, {
-            type: TASK_COMPLETED
-            data: {
-                order_id:
-                rack_id:
-                items: [
-                    {
-                        id:
-                        quantity: [+ve|-ve]
-                    }, {
-                        id:
-                        quantity: [+ve|-ve]
-                    }
-                ]
-            }
-        }, {
-            type: ORDER_FULFILLED
-            data: {
-                id:
-            }
-        }, {
-            type: BATTERY_UPDATED
-            data: {
-                id:
-                battery:                        # Percentage
-            }
-         }
-    ],
-    statistics: [                               # All statistics at once
-        {
-            key:
-            value:
-        },
-        {
-            key:
-            value:
-        }
-    ]
+CONTROL: {
+    type: [ACTIVATE|DEACTIVATE]
+    id:
 }
 
-CONTROL: {
-    blocked: []
-    deactivated: []
-    activated: []
+ACTION: {
+    type: [STOP|MOVE|ROTATE_RIGHT|ROTATE_LEFT|RETREAT|LOAD|OFFLOAD|BIND|UNBIND],
+    id:
+}
+
+LOG: {
+    type: [TASK_ASSIGNED|TASK_COMPLETED|ORDER_FULFILLED|BATTERY_UPDATED]
+    data: {...}
+}
+
+LOG: {
+    type: TASK_ASSIGNED
+    data: {
+        order_id:
+        robot_id:
+        rack_id:
+    }
+}
+
+LOG: {
+    type: TASK_COMPLETED
+    data: {
+        order_id:
+        robot_id:
+        rack_id:
+        items: [
+            {
+                id:
+                quantity: [+ve|-ve]     # +ve to add into the rack
+            }, {
+                id:
+                quantity: [+ve|-ve]
+            }
+        ]
+    }
+}
+
+LOG: {
+    type: ORDER_FULFILLED
+    data: {
+        id:
+    }
+}
+
+LOG: {
+    type: BATTERY_UPDATED
+    data: {
+        id:
+        battery:                        # Level in [0, 9]
+    }
 }
 
 MSG: {
@@ -257,7 +212,7 @@ OBJECT_DECOLORIZE: {
     col:
 }
 
-OBJECT_COLORIZE_LED: {
+OBJECT_LED_COLORIZE: {
     type: [MAP_CELL.GATE|MAP_CELL.ROBOT|...]
     id:
     row:

@@ -224,9 +224,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.issueOrder = function (id) {
-    };
-
     self.updateOrderDeliveredItems = function (orderID, items) {
         self.ongoingOrders().forEach(function (o) {
             if (o.id !== orderID)

@@ -86,7 +86,7 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
         return false;
     };
 
-    self.connect();
+    setTimeout(self.connect, 500);
 };
 
 module.exports = settingsPanelViewModel;

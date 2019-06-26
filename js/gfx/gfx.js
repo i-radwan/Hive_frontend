@@ -225,7 +225,7 @@ let gfx = function (logicEventHandler) {
             case EVENT_TO_GFX.OBJECT_DECOLORIZE:
                 gfxMap.objectDecolorize(event.data.id, event.data.type, event.data.row, event.data.col);
                 break;
-            case EVENT_TO_GFX.OBJECT_COLORIZE_LED:
+            case EVENT_TO_GFX.OBJECT_LED_COLORIZE:
                 gfxMap.objectColorizeLed(event.data.id, event.data.type, event.data.row, event.data.col, event.data.color, event.data.mode);
                 break;
             case EVENT_TO_GFX.OBJECT_BIND:
