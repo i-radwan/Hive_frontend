@@ -243,7 +243,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.handleAckOrder = function (msg) {
+    self.handleOrderAck = function (msg) {
         let data = msg.data;
 
         if (data.status === ACK_ORDER_STATUS.OK) {

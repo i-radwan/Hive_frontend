@@ -43,19 +43,19 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
         switch (msg.type) {
             case MSG_FROM_SERVER.ACK_START: {
-                self.centerPanelVM.controlConsoleVM.handleAckStart(msg);
+                self.centerPanelVM.controlConsoleVM.handleStartAck(msg);
 
                 break;
             }
 
             case MSG_FROM_SERVER.ACK_RESUME: {
-                self.centerPanelVM.controlConsoleVM.handleAckResume(msg);
+                self.centerPanelVM.controlConsoleVM.handleResumeAck(msg);
 
                 break;
             }
 
             case MSG_FROM_SERVER.ACK_ORDER: {
-                self.leftPanelVM.orderVM.handleAckOrder(msg);
+                self.leftPanelVM.orderVM.handleOrderAck(msg);
 
                 break;
             }

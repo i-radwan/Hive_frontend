@@ -118,7 +118,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
     self.handleEsc = function () {
     };
 
-    self.handleAckStart = function (msg) {
+    self.handleStartAck = function (msg) {
         let data = msg.data;
 
         if (data.status === ACK_START_STATUS.OK) {
@@ -150,7 +150,7 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         }
     };
 
-    self.handleAckResume = function (msg) {
+    self.handleResumeAck = function (msg) {
         let data = msg.data;
 
         if (data.status === ACK_RESUME_STATUS.OK) {
