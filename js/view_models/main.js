@@ -187,7 +187,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 break;
 
             case EVENT_FROM_GFX.DONE:
-                handleDone(event.data);
+                handleGFXDone(event.data);
                 break;
 
             case EVENT_FROM_GFX.ESC:
@@ -220,7 +220,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
         self.centerPanelVM.controlConsoleVM.handleCellHover(row, col);
     };
 
-    let handleDone = function (data) {
+    let handleGFXDone = function (data) {
         console.log("GFX Action DONE received: " + JSON.stringify(data),
             "PendingActions: " + JSON.stringify(self.pendingActions));
 
@@ -228,15 +228,27 @@ let mainViewModel = function (gfxEventHandler, comm) {
 
         if (data.type === EVENT_TO_GFX.OBJECT_MOVE) {
             self.leftPanelVM.robotVM.doneMoving(robotID);
+
+            reducePendingActions(robotID);
         } else if (data.type === EVENT_TO_GFX.OBJECT_ROTATE_RIGHT) {
             self.leftPanelVM.robotVM.doneRotatingRight(robotID);
+
+            reducePendingActions(robotID);
         } else if (data.type === EVENT_TO_GFX.OBJECT_ROTATE_LEFT) {
             self.leftPanelVM.robotVM.doneRotatingLeft(robotID);
+
+            reducePendingActions(robotID);
         } else if (data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
             self.leftPanelVM.robotVM.doneRetreating(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_LOAD) {
+            reducePendingActions(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_OFFLOAD) {
+            reducePendingActions(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_BIND) {
+            reducePendingActions(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_UNBIND) {
+            reducePendingActions(robotID);
         }
-
-        reducePendingActions(robotID);
     };
 
     let handleEsc = function () {
