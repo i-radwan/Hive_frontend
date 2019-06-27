@@ -283,7 +283,7 @@ OBJECT_UPDATE: { # New status for the object (e.g. robot), such as the battery l
     id:
     row:                                        # The old row/col (the one that this robot was
     col:                                        # supposed to be at before finishing the current move)
-    battery:                                    # Percentage
+    battery:                                    # [0 - 10]
 }
 
 SIMULATION_START: {}

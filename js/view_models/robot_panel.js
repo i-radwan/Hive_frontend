@@ -858,7 +858,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 id: id,
                 row: r,
                 col: c,
-                battery: battery * 10
+                battery: battery
             }
         });
 
