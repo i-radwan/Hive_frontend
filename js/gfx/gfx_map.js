@@ -608,7 +608,7 @@ let gfxMap = function (logicEventHandler) {
             col: (cell.inBounds ? cell.col : "")
         });
 
-        self.gfxEngine.mouseMoveEvent(isMouseDown, isMouseOnObject, isCtrlDown);
+        self.gfxEngine.mouseMoveEvent(cell, isMouseDown, isMouseOnObject, isCtrlDown);
 
         if (isMouseDown && (!isMouseDownOnObject || isCtrlDown))
             isDraggingMap = true;
