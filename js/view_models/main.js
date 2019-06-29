@@ -42,126 +42,121 @@ let mainViewModel = function (gfxEventHandler, comm) {
         console.log("Received:", JSON.stringify(msg));
 
         switch (msg.type) {
-            case MSG_FROM_SERVER.ACK_START:
-                self.centerPanelVM.controlConsoleVM.handleAckStart(msg);
+            case MSG_FROM_SERVER.ACK_START: {
+                self.centerPanelVM.controlConsoleVM.handleStartAck(msg);
+
                 break;
+            }
 
-            case MSG_FROM_SERVER.ACK_RESUME:
-                self.centerPanelVM.controlConsoleVM.handleAckResume(msg);
+            case MSG_FROM_SERVER.ACK_RESUME: {
+                self.centerPanelVM.controlConsoleVM.handleResumeAck(msg);
+
                 break;
+            }
 
-            case MSG_FROM_SERVER.ACK_ORDER:
-                self.leftPanelVM.orderVM.handleAckOrder(msg);
+            case MSG_FROM_SERVER.ACK_ORDER: {
+                self.leftPanelVM.orderVM.handleOrderAck(msg);
+
                 break;
+            }
 
-            case MSG_FROM_SERVER.UPDATE:
-                self.timestep = msg.data.timestep;
-                self.state.timestep = self.timestep;
+            case MSG_FROM_SERVER.ACTION: {
+                let actionType = msg.data.type;
+                let robotID = msg.data.id;
 
-                self.pendingActions = [];
+                if (actionType === SERVER_ACTIONS.STOP) {
+                    self.leftPanelVM.robotVM.stop(robotID);
 
-                let actions = msg.data.actions;
-                let logs = msg.data.logs;
-                let statistics = msg.data.statistics;
+                    reducePendingActions(robotID);
+                } else if (actionType === SERVER_ACTIONS.MOVE) {
+                    self.pendingActions.push(robotID);
 
-                // Push the actions to pendingActions before calling the gfx library
-                // because if the gfx changed an action (e.g. load), while we are still processing here
-                // we will have race condition between here and handleActionAck function.
-                for (let i = 0; i < actions.length; ++i) {
-                    let data = actions[i].data;
+                    self.leftPanelVM.robotVM.move(robotID);
+                } else if (actionType === SERVER_ACTIONS.ROTATE_RIGHT) {
+                    self.pendingActions.push(robotID);
 
-                    self.pendingActions.push(data.id);
+                    self.leftPanelVM.robotVM.rotateRight(robotID);
+                } else if (actionType === SERVER_ACTIONS.ROTATE_LEFT) {
+                    self.pendingActions.push(robotID);
+
+                    self.leftPanelVM.robotVM.rotateLeft(robotID);
+                } else if (actionType === SERVER_ACTIONS.RETREAT) {
+                    self.pendingActions.push(robotID);
+
+                    self.leftPanelVM.robotVM.retreat(robotID);
+                } else if (actionType === SERVER_ACTIONS.LOAD) {
+                    self.pendingActions.push(robotID);
+
+                    self.leftPanelVM.robotVM.load(robotID);
+                } else if (actionType === SERVER_ACTIONS.OFFLOAD) {
+                    self.pendingActions.push(robotID);
+
+                    self.leftPanelVM.robotVM.offload(robotID);
+                } else if (actionType === SERVER_ACTIONS.BIND) {
+                    self.pendingActions.push(robotID);
+
+                    self.leftPanelVM.robotVM.bind(robotID);
+                } else if (actionType === SERVER_ACTIONS.UNBIND) {
+                    self.pendingActions.push(robotID);
+
+                    self.leftPanelVM.robotVM.unbind(robotID);
                 }
 
-                // We have to check here, because if we checked after calling the gfx lib, and gfx
-                // lib has already called handleActionAck, we may enter this block, because the
-                // pendingActions is now empty, even though it contained actions at the beginning.
-                // This will cause sending ACK twice.
-                if (self.pendingActions.length === 0) {
-                    comm.send({
-                        type: MSG_TO_SERVER.ACK
-                    });
-
-                    console.log("ACK sent from update message handler due to empty actions array");
+                if ((new Set(self.pendingActions)).size !== self.pendingActions.length) {
+                    throw "Error: there must not be any duplicates in the pendingActions array";
                 }
 
-                for (let i = 0; i < actions.length; ++i) {
-                    let a = actions[i];
-                    let data = actions[i].data;
-
-                    if (a.type === SERVER_ACTIONS.MOVE) {
-                        self.leftPanelVM.robotVM.move(data.id);
-                    } else if (a.type === SERVER_ACTIONS.ROTATE_RIGHT) {
-                        self.leftPanelVM.robotVM.rotateRight(data.id);
-                    } else if (a.type === SERVER_ACTIONS.ROTATE_LEFT) {
-                        self.leftPanelVM.robotVM.rotateLeft(data.id);
-                    } else if (a.type === SERVER_ACTIONS.RETREAT) {
-                        self.leftPanelVM.robotVM.retreat(data.id);
-                    } else if (a.type === SERVER_ACTIONS.BIND) {
-                        self.leftPanelVM.robotVM.bind(data.id);
-                    } else if (a.type === SERVER_ACTIONS.UNBIND) {
-                        self.leftPanelVM.robotVM.unbind(data.id);
-                    } else if (a.type === SERVER_ACTIONS.LOAD) {
-                        self.leftPanelVM.robotVM.load(data.id);
-                    } else if (a.type === SERVER_ACTIONS.OFFLOAD) {
-                        self.leftPanelVM.robotVM.offload(data.id);
-                    }
-                }
-
-                for (let i = 0; i < logs.length; ++i) {
-                    let l = logs[i];
-                    let data = logs[i].data;
-
-                    if (l.type === SERVER_LOGS.TASK_ASSIGNED) {
-                        let robotID = data.robot_id;
-                        let rackID = data.rack_id;
-
-                        self.leftPanelVM.robotVM.assignTask(robotID, rackID);
-                    } else if (l.type === SERVER_LOGS.TASK_COMPLETED) {
-                        let orderID = data.order_id;
-                        let rackID = data.rack_id;
-                        let items = data.items;
-
-                        self.leftPanelVM.rackVM.adjustRack(rackID, items);
-                        self.leftPanelVM.orderVM.updateOrderDeliveredItems(orderID, items);
-                    } else if (l.type === SERVER_LOGS.ORDER_FULFILLED) {
-                        console.log("Data", data);
-                        let id = data.id;
-
-                        self.leftPanelVM.orderVM.finishOngoingOrder(id);
-                    } else if (l.type === SERVER_LOGS.ORDER_ISSUED) {
-                        let id = data.id;
-
-                        self.leftPanelVM.orderVM.issueOrder(id);
-                    } else if (l.type === SERVER_LOGS.BATTERY_UPDATED) {
-                        let id = data.id;
-                        let battery = data.battery;
-
-                        self.leftPanelVM.robotVM.updateBattery(id, battery);
-                    }
-                }
-
-                for (let i = 0; i < statistics.length; ++i) {
-                    self.rightPanelVM.updateStats(statistics[i].key, statistics[i].value);
-                }
                 break;
+            }
 
-            case MSG_FROM_SERVER.CONTROL:
-                self.leftPanelVM.robotVM.blockRobot(msg.data.blocked);
-                self.leftPanelVM.robotVM.deactivateRobots(msg.data.deactivated);
-                self.leftPanelVM.robotVM.activateRobots(msg.data.activated);
+            case MSG_FROM_SERVER.LOG: {
+                let logType = msg.data.type;
+                let logData = msg.data.data;
 
-                // Remove from pendingActions if it exists there
-                for (let i = 0; i < msg.data.deactivated.length; i++) {
-                    reducePendingActions(self.pendingActions, msg.data.deactivated[i]);
+                if (logType === SERVER_LOGS.TASK_ASSIGNED) {
+                    let robotID = logData.robot_id;
+                    let rackID = logData.rack_id;
+
+                    self.leftPanelVM.robotVM.assignTask(robotID, rackID);
+                } else if (logType === SERVER_LOGS.TASK_COMPLETED) {
+                    let robotID = logData.robot_id;
+                    let orderID = logData.order_id;
+                    let rackID = logData.rack_id;
+                    let items = logData.items;
+
+                    self.leftPanelVM.robotVM.completeTask(robotID, rackID);
+                    self.leftPanelVM.rackVM.adjustRack(rackID, items);
+                    self.leftPanelVM.orderVM.updateOrderDeliveredItems(orderID, items);
+                } else if (logType === SERVER_LOGS.ORDER_FULFILLED) {
+                    let id = logData.id;
+
+                    self.leftPanelVM.orderVM.finishOngoingOrder(id);
+                } else if (logType === SERVER_LOGS.BATTERY_UPDATED) {
+                    let id = logData.id;
+                    let battery = logData.battery;
+
+                    self.leftPanelVM.robotVM.updateBattery(id, battery);
                 }
 
-                for (let i = 0; i < msg.data.blocked.length; i++) {
-                    reducePendingActions(self.pendingActions, msg.data.blocked[i]);
-                }
                 break;
+            }
 
-            case MSG_FROM_SERVER.MSG:
+            case MSG_FROM_SERVER.CONTROL: {
+                let msgType = msg.data.type;
+                let robotID = msg.data.id;
+
+                if (msgType === CONTROL_MSG.ACTIVATE) {
+                    self.leftPanelVM.robotVM.activate(robotID);
+                } else if (msgType === CONTROL_MSG.DEACTIVATE) {
+                    reducePendingActions(robotID, false);
+
+                    self.leftPanelVM.robotVM.deactivate(robotID);
+                }
+
+                break;
+            }
+
+            case MSG_FROM_SERVER.MSG: {
                 self.shouter.notifySubscribers({
                     text: STR[data.msg.id](data.msg.args),
                     title: data.msg.reason,
@@ -171,7 +166,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 if (msg.data.status === MSG_TYPE.ERROR) {
                     self.centerPanelVM.controlConsoleVM.stop();
                 }
+
                 break;
+            }
         }
     };
 
@@ -193,8 +190,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 handleCellHover(event.row, event.col);
                 break;
 
-            case EVENT_FROM_GFX.ACK_ACTION:
-                handleActionAck(event.data);
+            case EVENT_FROM_GFX.DONE:
+                handleGFXDone(event.data);
                 break;
 
             case EVENT_FROM_GFX.ESC:
@@ -227,21 +224,35 @@ let mainViewModel = function (gfxEventHandler, comm) {
         self.centerPanelVM.controlConsoleVM.handleCellHover(row, col);
     };
 
-    let handleActionAck = function (data) {
-        console.log("GFX Action ACK received: ", JSON.stringify(data),
-                    "PendingActions: ", JSON.stringify(self.pendingActions));
+    let handleGFXDone = function (data) {
+        console.log("GFX Action DONE received: " + JSON.stringify(data),
+            "PendingActions: " + JSON.stringify(self.pendingActions));
+
+        let robotID = data.data.id;
 
         if (data.type === EVENT_TO_GFX.OBJECT_MOVE) {
-            self.leftPanelVM.robotVM.doneMoving(data.data.id);
-        } else if (data.type === EVENT_TO_GFX.OBJECT_ROTATE_RIGHT) {
-            self.leftPanelVM.robotVM.doneRotatingRight(data.data.id);
-        } else if (data.type === EVENT_TO_GFX.OBJECT_ROTATE_LEFT) {
-            self.leftPanelVM.robotVM.doneRotatingLeft(data.data.id);
-        } else if (data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
-            self.leftPanelVM.robotVM.doneRetreating(data.data.id);
-        }
+            self.leftPanelVM.robotVM.doneMoving(robotID);
 
-        reducePendingActions(data.data.id);
+            reducePendingActions(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_ROTATE_RIGHT) {
+            self.leftPanelVM.robotVM.doneRotatingRight(robotID);
+
+            reducePendingActions(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_ROTATE_LEFT) {
+            self.leftPanelVM.robotVM.doneRotatingLeft(robotID);
+
+            reducePendingActions(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
+            self.leftPanelVM.robotVM.doneRetreating(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_LOAD) {
+            reducePendingActions(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_OFFLOAD) {
+            reducePendingActions(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_BIND) {
+            reducePendingActions(robotID);
+        } else if (data.type === EVENT_TO_GFX.OBJECT_UNBIND) {
+            reducePendingActions(robotID);
+        }
     };
 
     let handleEsc = function () {
@@ -254,22 +265,25 @@ let mainViewModel = function (gfxEventHandler, comm) {
         });
     };
 
-    let reducePendingActions = function (elm) {
+    let reducePendingActions = function (robotID, sendDone = true) {
         if (self.pendingActions.length === 0)
             return;
 
-        let index = self.pendingActions.indexOf(elm);
+        let index = self.pendingActions.indexOf(robotID);
 
-        if (index > -1) {
+        if (index > -1) { // If robot id found
             self.pendingActions.splice(index, 1);
-        }
 
-        if (self.pendingActions.length === 0) { // All actions are done
-            comm.send({
-                type: MSG_TO_SERVER.ACK
-            });
+            if (sendDone) {
+                comm.send({
+                    type: MSG_TO_SERVER.DONE,
+                    data: {
+                        id: robotID
+                    }
+                });
 
-            console.log("ACK sent from reduce pending actions.");
+                console.log("DONE sent from reduce pending actions for the Robot #" + robotID);
+            }
         }
     };
 
@@ -298,6 +312,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
             self.leftPanelVM.orderVM.time(0);
 
             self.loadingVisible(false);
+
+            self.pendingActions = [];
 
             clearInterval(incrementTimeInterval);
         } else {

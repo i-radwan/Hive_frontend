@@ -115,19 +115,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
         sendStateToServer(self.lastStartMode);
     };
 
-    self.handleEsc = function () {
-    };
-
-    self.handleAckStart = function (msg) {
+    self.handleStartAck = function (msg) {
         let data = msg.data;
 
         if (data.status === ACK_START_STATUS.OK) {
-            self.preSimState = JSON.parse(JSON.stringify(state));
-
-            runningMode(self.lastStartMode === START_MODE.SIMULATE ? RUNNING_MODE.SIMULATE : RUNNING_MODE.DEPLOY);
-
-            self.playing(true);
-
             logger({
                 level: LOG_LEVEL.INFO,
                 object: LOG_TYPE.TEXT,
@@ -138,6 +129,14 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                 type: EVENT_TO_GFX.SIMULATION_START
             });
 
+            console.log("Simulation started");
+
+            self.preSimState = JSON.parse(JSON.stringify(state));
+
+            runningMode(self.lastStartMode === START_MODE.SIMULATE ? RUNNING_MODE.SIMULATE : RUNNING_MODE.DEPLOY);
+
+            self.playing(true);
+
             shouter.notifySubscribers(false, SHOUT.LOADING);
         } else if (data.status === ACK_START_STATUS.ERROR) {
             shouter.notifySubscribers({
@@ -146,11 +145,13 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
                 type: MSG_TYPE.ERROR
             }, SHOUT.MSG);
 
+            console.log("Simulation started failed!");
+
             shouter.notifySubscribers(false, SHOUT.LOADING);
         }
     };
 
-    self.handleAckResume = function (msg) {
+    self.handleResumeAck = function (msg) {
         let data = msg.data;
 
         if (data.status === ACK_RESUME_STATUS.OK) {
@@ -178,6 +179,9 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
 
             shouter.notifySubscribers(false, SHOUT.LOADING);
         }
+    };
+
+    self.handleEsc = function () {
     };
 
     self.handleCellHover = function (row, col) {

@@ -15,7 +15,6 @@ let State = function () {
         obstacle: 1,
         item: 1
     };
-    self.timestep = 0;
 
     self.getItem = function (id) {
         for (let i = 0; i < self.items.length; ++i) {

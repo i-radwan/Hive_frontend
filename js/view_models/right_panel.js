@@ -12,6 +12,8 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.logs = ko.observableArray();
     self.stats = ko.observableArray();
 
+    self.queuedLogs = ko.observableArray(); // Logs sent during design mode.
+
     self.activateScrollUp = ko.observable(false);
     self.activateScrollDown = ko.observable(false);
 
@@ -178,7 +180,13 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             logsList.scrollTop() + logsList.innerHeight() < logsList[0].scrollHeight;
 
         // Add the log
-        self.logs.push(log);
+        if (runningMode() !== RUNNING_MODE.DESIGN || log.object === LOG_TYPE.TEXT) {
+            console.log("Adding to logs: " + JSON.stringify(log));
+            self.logs.push(log);
+        } else {
+            console.log("Queuing to logs: " + JSON.stringify(log));
+            self.queuedLogs.push(log);
+        }
 
         // Scroll view to bottom if the user is already not scrolling to top
         if (!userScrollingUp)
@@ -217,11 +225,18 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             self.stats.removeAll();
         } else {
             self.activePanel(RIGHT_PANEL.LOGS);
+
+            console.log("Adding queued logs");
+
+            self.queuedLogs.remove(function (l) {
+                self.logs.push(l);
+
+                return true;
+            });
         }
     });
 
     self.handleEsc = function () {
-
     };
 
     self.scrollUp = function () {

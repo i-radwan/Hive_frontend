@@ -224,9 +224,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.issueOrder = function (id) {
-    };
-
     self.updateOrderDeliveredItems = function (orderID, items) {
         self.ongoingOrders().forEach(function (o) {
             if (o.id !== orderID)
@@ -246,7 +243,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.handleAckOrder = function (msg) {
+    self.handleOrderAck = function (msg) {
         let data = msg.data;
 
         if (data.status === ACK_ORDER_STATUS.OK) {

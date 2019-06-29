@@ -117,6 +117,74 @@ ROBOT_DIR = {
 ROW_DELTA = [0, -1, 0, 1];
 COL_DELTA = [1, 0, -1, 0];
 
+LOW_BATTERY_LEVEL = 4;
+
+
+// Server Msgs
+START_MODE = {
+    SIMULATE: 0,
+    DEPLOY: 1
+};
+
+ACK_START_STATUS = {
+    OK: 0,
+    ERROR: 1
+};
+
+ACK_RESUME_STATUS = {
+    OK: 0,
+    ERROR: 1
+};
+
+ACK_ORDER_STATUS = {
+    OK: 0,
+    ERROR: 1
+};
+
+CONTROL_MSG = {
+    ACTIVATE: 0,
+    DEACTIVATE: 1
+};
+
+MSG_TO_SERVER = {
+    START: 0,
+    STOP: 1,
+    PAUSE: 2,
+    RESUME: 3,
+    ORDER: 4,
+    CONTROL: 5,
+    DONE: 6
+};
+
+MSG_FROM_SERVER = {
+    ACK_START: 0,
+    ACK_RESUME: 1,
+    ACK_ORDER: 2,
+    ACTION: 3,
+    LOG: 4,
+    CONTROL: 5,
+    MSG: 6
+};
+
+SERVER_ACTIONS = {
+    STOP: 0,
+    MOVE: 1,
+    ROTATE_RIGHT: 2,
+    ROTATE_LEFT: 3,
+    RETREAT: 4,
+    LOAD: 5,
+    OFFLOAD: 6,
+    BIND: 7,
+    UNBIND: 8
+};
+
+SERVER_LOGS = {
+    TASK_ASSIGNED: 0,
+    TASK_COMPLETED: 1,
+    ORDER_FULFILLED: 2,
+    BATTERY_UPDATED: 3
+};
+
 //
 // GFX
 //
@@ -169,83 +237,13 @@ CURSOR_STYLES = {
     GRABBING: "grabbing"
 };
 
-//
-// Events
-//
-
-// Server Msgs
-START_MODE = {
-    SIMULATE: 0,
-    DEPLOY: 1
-};
-
-ACK_START_STATUS = {
-    OK: 0,
-    ERROR: 1
-};
-
-ACK_RESUME_STATUS = {
-    OK: 0,
-    ERROR: 1
-};
-
-ACK_ORDER_STATUS = {
-    OK: 0,
-    ERROR: 1
-};
-
-CONTROL_MSG = {
-    ACTIVATE: 0,
-    DEACTIVATE: 1
-};
-
-MSG_TO_SERVER = {
-    START: 0,
-    ORDER: 1,
-    PAUSE: 2,
-    STOP: 3,
-    RESUME: 4,
-    ACK: 5,
-    CONTROL: 6
-};
-
-MSG_FROM_SERVER = {
-    ACK_START: 0,
-    ACK_RESUME: 1,
-    ACK_ORDER: 2,
-    UPDATE: 3,
-    CONTROL: 6,     // ToDo
-    MSG: 5
-};
-
-SERVER_ACTIONS = {
-    MOVE: 0,
-    ROTATE_RIGHT: 1,
-    ROTATE_LEFT: 2,
-    RETREAT: 3,
-    LOAD: 4,
-    OFFLOAD: 5,
-    BIND: 6,
-    UNBIND: 7
-};
-
-SERVER_LOGS = {
-    TASK_ASSIGNED: 0,
-    TASK_COMPLETED: 1,
-    ORDER_FULFILLED: 2,
-    ORDER_ISSUED: 3,
-    ORDER_DELAYED: 4,
-    ORDER_RESUMED: 5,
-    BATTERY_UPDATED: 6
-};
-
 // GFX Events
 EVENT_FROM_GFX = {
     CELL_CLICK: 0,
     CELL_DRAG: 1,
     CELL_DELETE: 2,
     CELL_HOVER: 3,
-    ACK_ACTION: 4,
+    DONE: 4,
     ESC: 5
 };
 
@@ -263,7 +261,7 @@ EVENT_TO_GFX = {
     OBJECT_UNHIGHLIGHT: 10,
     OBJECT_COLORIZE: 11,
     OBJECT_DECOLORIZE: 12,
-    OBJECT_COLORIZE_LED: 13,
+    OBJECT_LED_COLORIZE: 13,
     OBJECT_BIND: 14,
     OBJECT_UNBIND: 15,
     OBJECT_LOAD: 16,
