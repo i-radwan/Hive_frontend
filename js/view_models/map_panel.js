@@ -56,10 +56,10 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
     };
 
     self.applyMapSize = function () {
-        if (self.mapHeight() > 0 && self.mapWidth() > 0) {
+        if (parseInt(self.mapHeight()) > 0 && parseInt(self.mapWidth()) > 0) {
             console.log("Apply map size");
 
-            state.map.changeMapSize(self.mapHeight(), self.mapWidth(), true);
+            state.map.changeMapSize(parseInt(self.mapHeight()), parseInt(self.mapWidth()), true);
 
             shouter.notifySubscribers({}, SHOUT.STATE_UPDATED);
 
@@ -96,8 +96,8 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
 
     // Events
     shouter.subscribe(function () {
-        self.mapHeight(state.map.height);
-        self.mapWidth(state.map.width);
+        self.mapHeight(parseInt(state.map.height));
+        self.mapWidth(parseInt(state.map.width));
 
         informGFX();
     }, self, SHOUT.STATE_UPDATED);

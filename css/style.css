@@ -251,7 +251,7 @@ input[type=number]::-webkit-outer-spin-button {
     padding-top: 8px !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
-    text-align: center;
+    text-align: right;
 }
 
 .item-container-icon i {

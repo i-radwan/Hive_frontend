@@ -6,12 +6,12 @@ let Utils = function () {
         let minutes = 0;
         let hours = 0;
 
-        if (seconds > 60) {
+        if (seconds >= 60) {
             minutes = Math.floor(seconds / 60);
             seconds -= minutes * 60;
         }
 
-        if (minutes > 60) {
+        if (minutes >= 60) {
             hours = Math.floor(minutes / 60);
             minutes -= hours * 60;
         }
