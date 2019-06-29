@@ -447,10 +447,10 @@ let gfxEngine = function () {
         }
 
         translateScene((mapWidth * GRID_CELL_LENGTH) / 2, (mapHeight * GRID_CELL_LENGTH) / 2);
-        if (mapWidth * (canvas.height() / canvas.width()) >= mapHeight)
-            viewport.zoom((mapWidth + 2) * GRID_CELL_LENGTH - canvas.width(), true);
+        if (mapWidth * (self.pixi_app.renderer.height / self.pixi_app.renderer.width) >= mapHeight)
+            viewport.zoom((mapWidth + 2) * GRID_CELL_LENGTH - self.pixi_app.renderer.width, true);
         else
-            viewport.zoom((mapHeight + 2) * GRID_CELL_LENGTH - canvas.height(), true);
+            viewport.zoom((mapHeight + 4) * GRID_CELL_LENGTH - self.pixi_app.renderer.height, true);
     };
 
     // Return the top object that is currently selected
