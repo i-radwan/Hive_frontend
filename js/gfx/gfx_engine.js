@@ -21,6 +21,7 @@ let gfxEngine = function () {
     let self = this;
 
     // Pixi.js and Viewport variables
+    let positionText;
     let canvas = $('.map-row');
     self.pixi_app = new PIXI.Application({
         width: canvas.width(),
@@ -57,7 +58,6 @@ let gfxEngine = function () {
             interaction: self.pixi_app.renderer.plugins.interaction
         }));
         viewport.resize(canvas.width(), canvas.height(), mapWidth * GRID_CELL_LENGTH, mapHeight * GRID_CELL_LENGTH);
-
         viewport.drag()
             .decelerate()
             .clampZoom({
@@ -66,8 +66,9 @@ let gfxEngine = function () {
                 maxWidth: MAX_ZOOM_LENGTH,
                 maxHeight: MAX_ZOOM_LENGTH})
             .wheel();
-
         viewport.moveCorner(0, 0);
+
+        self.initializePositionText();
 
         // Initialize z index groups
         zIndexGroups = new Array(Z_INDEX_GROUPS_CNT);
@@ -942,7 +943,8 @@ let gfxEngine = function () {
     };
 
     // Mouse move event handler
-    self.mouseMoveEvent = function (isMouseDown, isMouseOnObject, isCtrlDown) {
+    self.mouseMoveEvent = function (mouseCellPos, isMouseDown, isMouseOnObject, isCtrlDown) {
+        self.updatePositionText(mouseCellPos);
         if (isMouseDown) return;
 
         if (isMouseOnObject && !isCtrlDown)
@@ -953,7 +955,35 @@ let gfxEngine = function () {
 
     // Mouse release event handler
     self.mouseUpEvent = function () {
-    }
+    };
+
+    // Initializes the position text
+    self.initializePositionText = function() {
+        // Initialize the position Text
+        let textStyle = new PIXI.TextStyle({
+            fill: GFX_COLORS_DEFAULT.CELL_STROKE,
+            fontFamily: 'Asap',
+            fontSize: 13,
+        });
+        positionText = new PIXI.Text('', textStyle);
+        positionText.anchor.set();
+        positionText.x = 0;
+        positionText.y = 0;
+
+        self.pixi_app.stage.addChild(positionText);
+    };
+
+    // Updates the text displayed on the top left of the screen.
+    self.updatePositionText = function(mouseCellPos) {
+        let resultText = '';
+
+        if (mouseCellPos.inBounds) {
+            resultText = '(' + (mouseCellPos.row + 1) + ', ' + (mouseCellPos.col + 1) + ')';
+        }
+
+        if (positionText.text !== resultText)
+            positionText.text = resultText;
+    };
 };
 
 module.exports = gfxEngine;
