@@ -21,7 +21,6 @@ let gfxEngine = function () {
     let self = this;
 
     // Pixi.js and Viewport variables
-    let positionText;
     let canvas = $('.map-row');
     self.pixi_app = new PIXI.Application({
         width: canvas.width(),
@@ -67,8 +66,6 @@ let gfxEngine = function () {
                 maxHeight: MAX_ZOOM_LENGTH})
             .wheel();
         viewport.moveCorner(0, 0);
-
-        self.initializePositionText();
 
         // Initialize z index groups
         zIndexGroups = new Array(Z_INDEX_GROUPS_CNT);
@@ -439,8 +436,18 @@ let gfxEngine = function () {
             }
         }
 
+        // Add indexing for rows and columns
+        for (let c = 0; c < width; c++) {
+            zIndexGroups[Z_INDEX.BACKGROUND].addChild(self.createText((c+1).toString(), GRID_CELL_LENGTH / 2 + c * GRID_CELL_LENGTH, -GRID_CELL_LENGTH / 2));
+            zIndexGroups[Z_INDEX.BACKGROUND].addChild(self.createText((c+1).toString(), GRID_CELL_LENGTH / 2 + c * GRID_CELL_LENGTH, mapHeight * GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2));
+        }
+        for (let r = 0; r < height; r++) {
+            zIndexGroups[Z_INDEX.BACKGROUND].addChild(self.createText((r+1).toString(), -GRID_CELL_LENGTH / 2, GRID_CELL_LENGTH / 2 + r * GRID_CELL_LENGTH));
+            zIndexGroups[Z_INDEX.BACKGROUND].addChild(self.createText((r+1).toString(), mapWidth * GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2, GRID_CELL_LENGTH / 2 + r * GRID_CELL_LENGTH));
+        }
+
         translateScene((mapWidth * GRID_CELL_LENGTH) / 2, (mapHeight * GRID_CELL_LENGTH) / 2);
-        viewport.zoom((mapWidth + 1) * GRID_CELL_LENGTH - canvas.width(), true);
+        viewport.zoom((mapWidth + 2) * GRID_CELL_LENGTH - canvas.width(), true);
     };
 
     // Return the top object that is currently selected
@@ -944,7 +951,6 @@ let gfxEngine = function () {
 
     // Mouse move event handler
     self.mouseMoveEvent = function (mouseCellPos, isMouseDown, isMouseOnObject, isCtrlDown) {
-        self.updatePositionText(mouseCellPos);
         if (isMouseDown) return;
 
         if (isMouseOnObject && !isCtrlDown)
@@ -957,32 +963,25 @@ let gfxEngine = function () {
     self.mouseUpEvent = function () {
     };
 
-    // Initializes the position text
-    self.initializePositionText = function() {
+    // Creates a text at a certain x, y (x, y represent the text center)
+    self.createText = function(text, x, y) {
+        let ret;
         // Initialize the position Text
         let textStyle = new PIXI.TextStyle({
             fill: GFX_COLORS_DEFAULT.CELL_STROKE,
             fontFamily: 'Asap',
-            fontSize: 13,
+            fontSize: 195,
         });
-        positionText = new PIXI.Text('', textStyle);
-        positionText.anchor.set();
-        positionText.x = 0;
-        positionText.y = 0;
+        ret = new PIXI.Text(text, textStyle);
+        ret.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.LINEAR;
+        ret.texture.baseTexture.mipmap = PIXI.MIPMAP_MODES.ON;
+        ret.scale.x = 1/15;
+        ret.scale.y = 1/15;
+        ret.anchor.set(0.5, 0.5);
+        ret.x = x;
+        ret.y = y;
 
-        self.pixi_app.stage.addChild(positionText);
-    };
-
-    // Updates the text displayed on the top left of the screen.
-    self.updatePositionText = function(mouseCellPos) {
-        let resultText = '';
-
-        if (mouseCellPos.inBounds) {
-            resultText = '(' + (mouseCellPos.row + 1) + ', ' + (mouseCellPos.col + 1) + ')';
-        }
-
-        if (positionText.text !== resultText)
-            positionText.text = resultText;
+        return ret;
     };
 };
 
