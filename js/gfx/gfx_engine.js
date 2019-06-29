@@ -1,6 +1,6 @@
 let PIXI = require('pixi.js');
 const $ = require('jquery');
-let Viewport = require('pixi-viewport');
+let Viewport = require('pixi-viewport').Viewport;
 let PIXI_FILTERS = require('pixi-filters');
 
 // Z-Index enum
@@ -949,7 +949,7 @@ let gfxEngine = function () {
     // Mouse press event handler
     self.mouseDownEvent = function (isMouseDownOnObject) {
         if (isMouseDownOnObject)
-            viewport.pausePlugin('drag');
+            viewport.plugins.pause('drag');
     };
 
     // Mouse move event handler
@@ -957,9 +957,9 @@ let gfxEngine = function () {
         if (isMouseDown) return;
 
         if (isMouseOnObject && !isCtrlDown)
-            viewport.pausePlugin('drag');
+            viewport.plugins.pause('drag');
         else
-            viewport.resumePlugin('drag');
+            viewport.plugins.resume('drag');
     };
 
     // Mouse release event handler
