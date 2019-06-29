@@ -53,7 +53,7 @@ let gfxEngine = function () {
         self.pixi_app.stage.removeChildren();
         viewport = self.pixi_app.stage.addChild(new Viewport({
             screenWidth: canvas.width(),
-            screenHeight: canvas.width(),
+            screenHeight: canvas.height(),
             interaction: self.pixi_app.renderer.plugins.interaction
         }));
         viewport.resize(canvas.width(), canvas.height(), mapWidth * GRID_CELL_LENGTH, mapHeight * GRID_CELL_LENGTH);
@@ -430,24 +430,27 @@ let gfxEngine = function () {
 
         resetScene();
 
-        for (let c = 0; c < width; c++) {
-            for (let r = 0; r < height; r++) {
+        for (let c = 0; c < mapWidth; c++) {
+            for (let r = 0; r < mapHeight; r++) {
                 zIndexGroups[Z_INDEX.BACKGROUND].addChild(createCell(r, c));
             }
         }
 
         // Add indexing for rows and columns
-        for (let c = 0; c < width; c++) {
+        for (let c = 0; c < mapWidth; c++) {
             zIndexGroups[Z_INDEX.BACKGROUND].addChild(self.createText((c+1).toString(), GRID_CELL_LENGTH / 2 + c * GRID_CELL_LENGTH, -GRID_CELL_LENGTH / 2));
             zIndexGroups[Z_INDEX.BACKGROUND].addChild(self.createText((c+1).toString(), GRID_CELL_LENGTH / 2 + c * GRID_CELL_LENGTH, mapHeight * GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2));
         }
-        for (let r = 0; r < height; r++) {
+        for (let r = 0; r < mapHeight; r++) {
             zIndexGroups[Z_INDEX.BACKGROUND].addChild(self.createText((r+1).toString(), -GRID_CELL_LENGTH / 2, GRID_CELL_LENGTH / 2 + r * GRID_CELL_LENGTH));
             zIndexGroups[Z_INDEX.BACKGROUND].addChild(self.createText((r+1).toString(), mapWidth * GRID_CELL_LENGTH + GRID_CELL_LENGTH / 2, GRID_CELL_LENGTH / 2 + r * GRID_CELL_LENGTH));
         }
 
         translateScene((mapWidth * GRID_CELL_LENGTH) / 2, (mapHeight * GRID_CELL_LENGTH) / 2);
-        viewport.zoom((mapWidth + 2) * GRID_CELL_LENGTH - canvas.width(), true);
+        if (mapWidth * (canvas.height() / canvas.width()) >= mapHeight)
+            viewport.zoom((mapWidth + 2) * GRID_CELL_LENGTH - canvas.width(), true);
+        else
+            viewport.zoom((mapHeight + 2) * GRID_CELL_LENGTH - canvas.height(), true);
     };
 
     // Return the top object that is currently selected
