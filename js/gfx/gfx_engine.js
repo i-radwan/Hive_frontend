@@ -68,8 +68,11 @@ let gfxEngine = function () {
         viewport.moveCorner(0, 0);
 
         // Initialize z index groups
+        for (let i = 0; i < zIndexGroups.length; i++) {
+            zIndexGroups[i].destroy({children: true, texture: true, baseTexture: true});
+        }
         zIndexGroups = new Array(Z_INDEX_GROUPS_CNT);
-        for (let i = 0; i < Z_INDEX_GROUPS_CNT; i++) {
+        for (let i = 0; i < zIndexGroups.length; i++) {
             zIndexGroups[i] = new PIXI.Container();
             viewport.addChild(zIndexGroups[i]);
         }
