@@ -12,8 +12,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.time = ko.observable(0);
 
-    self.waitingServer = false;
-
     self.activePanel = ko.observable(ORDER_PANEL.ADD);
 
     self.active = ko.computed(function () {
@@ -291,6 +289,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             await new Promise(resolve => setTimeout(resolve, 140));
 
             self.add(true);
+
+            await new Promise(resolve => setTimeout(resolve, 200));
         }
     };
 
@@ -346,8 +346,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             clear();
 
-            self.pendingOrder = null;
-
             shouter.notifySubscribers({
                 text: STR[1000](["Order"]),
                 type: MSG_TYPE.INFO,
@@ -376,9 +374,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             }
         }
 
-        self.waitingServer = false;
-
         shouter.notifySubscribers(false, SHOUT.LOADING);
+
+        self.pendingOrder = null;
 
         self.consumeUpcomingOrders();
     };
@@ -392,19 +390,23 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.consumeUpcomingOrders = function () {
         let upcoming = self.upcomingOrders();
 
-        if (upcoming.length === 0 || self.waitingServer)
+        if (self.pendingOrder !== null)
             return;
 
-        let o = upcoming[0];
+        for (let i = 0; i < upcoming.length; i++) {
+            let o = upcoming[i];
 
-        if (o.issue_time_raw <= self.time() && o.satisfiable()) {
-            self.upcomingOrders.splice(0, 1);
+            if (o.issue_time_raw <= self.time() && o.satisfiable()) {
+                self.upcomingOrders.splice(i, 1);
 
-            self.pendingOrder = o;
+                self.pendingOrder = o;
 
-            shouter.notifySubscribers(true, SHOUT.LOADING);
+                shouter.notifySubscribers(true, SHOUT.LOADING);
 
-            sendOrderToServer(o);
+                sendOrderToServer(o);
+
+                break;
+            }
         }
     };
 
@@ -426,8 +428,6 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     let sendOrderToServer = function (order) {
-        self.waitingServer = true;
-
         sendToServer({
             type: MSG_TO_SERVER.ORDER,
             data: {
