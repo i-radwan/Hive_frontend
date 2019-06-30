@@ -4,11 +4,15 @@ require('knockout-mapping');
 const utils = require('../utils/utils')();
 const $ = require('jquery');
 const ko = require('knockout');
+const fs = require('fs');
+const {dialog} = require('electron').remote;
 
 let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, sendToServer, logger) {
     let self = this;
 
     self.time = ko.observable(0);
+
+    self.waitingServer = false;
 
     self.activePanel = ko.observable(ORDER_PANEL.ADD);
 
@@ -83,7 +87,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     });
 
-    self.add = function () {
+    self.add = function (loading = false) {
         if (!check())
             return;
 
@@ -138,7 +142,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
         shouter.notifySubscribers(true, SHOUT.LOADING);
 
-        if (order.issue_time_raw <= self.time()) {
+        // All loaded orders are added to the upcoming orders even if they are in the past,
+        // in order to take the same pipeline
+        if (order.issue_time_raw <= self.time() && !loading) {
             self.pendingOrder = order;
 
             sendOrderToServer(order);
@@ -203,6 +209,89 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.toggleActiveOrdersPanel = function (m) {
         self.activePanel(m);
+    };
+
+    self.saveOrders = function () {
+        console.log("Save orders");
+
+        let path = dialog.showSaveDialog({
+            title: 'Save Hive Orders!',
+            defaultPath: '~/state_orders.hive'
+        });
+
+        if (path === undefined)
+            return;
+
+        var mapping = {
+            'ignore': ["satisfiable", "more", "issue_time_raw", "error", "progress", "scheduled", "fulfilled_time", "items"]
+        };
+
+        let orders = [];
+        orders.push(...ko.mapping.toJS(self.ongoingOrders(), mapping));
+        orders.push(...ko.mapping.toJS(self.upcomingOrders(), mapping));
+        orders.push(...ko.mapping.toJS(self.finishedOrders(), mapping));
+
+        fs.writeFile(path, JSON.stringify(orders, null, 2), 'utf-8', function () {
+            console.log("All orders have been saved!");
+        });
+    };
+
+    self.loadOrders = async function () {
+        console.log("Load orders");
+
+        let paths = dialog.showOpenDialog();
+
+        if (paths === undefined || paths.length === 0)
+            return;
+
+        let path = paths[0];
+
+        let orders = JSON.parse(fs.readFileSync(path, 'utf-8'));
+
+        // Promises are for animations
+        for (let i = 0; i < orders.length; i++) {
+            let o = orders[i];
+
+            self.id(o.id);
+
+            await new Promise(resolve => setTimeout(resolve, 70));
+
+            self.gateID(o.gate_id);
+
+            await new Promise(resolve => setTimeout(resolve, 70));
+
+            if (parseInt(o.type) === ORDER_TYPE.REFILL) {
+                self.rackID(o.rack_id);
+                self.refill(true);
+            } else {
+                self.rackID("");
+                self.refill(false);
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 70));
+
+            let issueTime = o.issue_time.split(":");
+            self.issueTimeHours(issueTime[0]);
+            self.issueTimeMinutes(issueTime[1]);
+            self.issueTimeSeconds(issueTime[2]);
+
+            await new Promise(resolve => setTimeout(resolve, 70));
+
+            let orderItems = o.raw_items;
+
+            for (let j = 0; j < orderItems.length; j++) {
+                self.itemID(orderItems[j].id);
+                self.itemQuantity(orderItems[j].quantity);
+
+                await new Promise(resolve => setTimeout(resolve, 70));
+
+                self.addItem();
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 140));
+
+            self.add(true);
+        }
     };
 
     self.finishOngoingOrder = function (id) {
@@ -287,6 +376,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             }
         }
 
+        self.waitingServer = false;
+
         shouter.notifySubscribers(false, SHOUT.LOADING);
 
         self.consumeUpcomingOrders();
@@ -301,18 +392,19 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.consumeUpcomingOrders = function () {
         let upcoming = self.upcomingOrders();
 
-        for (let i = 0; i < upcoming.length; i++) {
-            let o = upcoming[i];
+        if (upcoming.length === 0 || self.waitingServer)
+            return;
 
-            if (o.issue_time_raw <= self.time() && o.satisfiable()) {
-                self.upcomingOrders.splice(i, 1);
+        let o = upcoming[0];
 
-                self.pendingOrder = o;
+        if (o.issue_time_raw <= self.time() && o.satisfiable()) {
+            self.upcomingOrders.splice(0, 1);
 
-                shouter.notifySubscribers(true, SHOUT.LOADING);
+            self.pendingOrder = o;
 
-                sendOrderToServer(o);
-            }
+            shouter.notifySubscribers(true, SHOUT.LOADING);
+
+            sendOrderToServer(o);
         }
     };
 
@@ -334,6 +426,8 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     let sendOrderToServer = function (order) {
+        self.waitingServer = true;
+
         sendToServer({
             type: MSG_TO_SERVER.ORDER,
             data: {

@@ -546,46 +546,33 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*===============================================================*/
-/*========================= MAPS PANEL ==========================*/
+/*========================== MAP PANEL ==========================*/
 /*===============================================================*/
 
-.lpanel .details .map {
-    padding: 0;
-}
-
-.lpanel .details .map .actions {
+.lpanel .details .map .lpanel-details-bottom-actions i {
     position: absolute;
-    bottom: 20px;
-    padding: 0;
-}
-
-.lpanel .details .map .actions i {
-    position: relative;
-    left: 0;
-    color: #bababa;
-    margin-right: 9px;
-    cursor: pointer;
+    right: auto;
+    bottom: 15px;
+    top: auto;
     font-size: 13px;
-    border-radius: 30px;
-    border: 2px solid #bababa;
-    padding: 0.4em 0.4em;
 }
 
-.lpanel .details .map .actions i:hover {
-    color: #e09500;
-    border: 2px solid #e09500;
-    box-shadow: 0 0 5px #e09500;
+.lpanel .details .map .lpanel-details-bottom-actions i.save {
+    left: 15px;
 }
 
-.lpanel .details .map .actions .apply {
-    color: #bababa;
-    margin-right: 9px;
-    cursor: pointer;
+.lpanel .details .map .lpanel-details-bottom-actions i.load {
+    left: 55px;
+}
+
+.lpanel .details .map .lpanel-details-bottom-actions i.delete {
+    left: 95px;
+}
+
+.lpanel .details .map .lpanel-details-bottom-actions i.apply {
+    right: 15px;
+    left: auto;
     font-size: 22px;
-    border-radius: 30px;
-    border: 2px solid #bababa;
-    padding: 0.4em 0.4em;
-    margin-left: 42px;
 }
 
 /*===============================================================*/
@@ -881,6 +868,30 @@ input[type=number]::-webkit-outer-spin-button {
     padding-left: 0;
     padding-right: 0;
 }
+
+
+.lpanel .details .order .lpanel-details-bottom-actions i {
+    position: absolute;
+    right: auto;
+    bottom: 15px;
+    top: auto;
+    font-size: 13px;
+}
+
+.lpanel .details .order .lpanel-details-bottom-actions i.save {
+    left: 15px;
+}
+
+.lpanel .details .order .lpanel-details-bottom-actions i.load {
+    left: 55px;
+}
+
+.lpanel .details .order .lpanel-details-bottom-actions i.add {
+    right: 15px;
+    left: auto;
+    font-size: 22px;
+}
+
 
 /*===============================================================*/
 /*========================= RIGHT PANEL =========================*/
