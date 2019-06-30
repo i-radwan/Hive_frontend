@@ -268,7 +268,7 @@ let gfxEngine = function () {
                 svgString = $(svgString).find('.gate_body').attr('fill', targetColor).closest('div').html();
                 break;
             case MAP_CELL.ROBOT:
-                let batteryIdx = Math.floor(options.battery / 10);
+                let batteryIdx = options.battery;
                 let targetLedColor = GFX_COLORS_DEFAULT.ROBOT_LED;
 
                 if (options.is_failed)
@@ -316,7 +316,7 @@ let gfxEngine = function () {
     };
 
     // Load all the robot textures from SVG.
-    let loadTexturesRobot = function(color, battery = 100) {
+    let loadTexturesRobot = function(color, battery = 10) {
         return {
             idle: loadTexture(MAP_CELL.ROBOT, color, {
                 battery: battery,
