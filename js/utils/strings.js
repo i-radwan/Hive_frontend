@@ -14,6 +14,7 @@ STR = {
     1003: (args) => `Map size has been updated!`,
     1004: (args) => `Connected to server!`,
     1005: (args) => `Order scheduled successfully!`,
+    1006: (args) => `Orders loading completed!`,
 
     // Error messages
     2000: (args) => `(${args[0]}, ${args[1]}) is occupied!`,

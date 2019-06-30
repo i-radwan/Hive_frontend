@@ -234,7 +234,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         });
     };
 
-    self.loadOrders = async function () {
+    self.loadOrders = function () {
         console.log("Load orders");
 
         let paths = dialog.showOpenDialog();
@@ -252,11 +252,7 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
             self.id(o.id);
 
-            await new Promise(resolve => setTimeout(resolve, 70));
-
             self.gateID(o.gate_id);
-
-            await new Promise(resolve => setTimeout(resolve, 70));
 
             if (parseInt(o.type) === ORDER_TYPE.REFILL) {
                 self.rackID(o.rack_id);
@@ -266,14 +262,10 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 self.refill(false);
             }
 
-            await new Promise(resolve => setTimeout(resolve, 70));
-
             let issueTime = o.issue_time.split(":");
             self.issueTimeHours(issueTime[0]);
             self.issueTimeMinutes(issueTime[1]);
             self.issueTimeSeconds(issueTime[2]);
-
-            await new Promise(resolve => setTimeout(resolve, 70));
 
             let orderItems = o.raw_items;
 
@@ -281,17 +273,18 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                 self.itemID(orderItems[j].id);
                 self.itemQuantity(orderItems[j].quantity);
 
-                await new Promise(resolve => setTimeout(resolve, 70));
-
                 self.addItem();
             }
 
-            await new Promise(resolve => setTimeout(resolve, 140));
-
             self.add(true);
 
-            await new Promise(resolve => setTimeout(resolve, 200));
         }
+
+        shouter.notifySubscribers({
+            text: STR[1006](),
+            type: MSG_TYPE.INFO,
+            volatile: true
+        }, SHOUT.MSG);
     };
 
     self.finishOngoingOrder = function (id) {
