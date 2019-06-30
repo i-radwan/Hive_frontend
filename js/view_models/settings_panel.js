@@ -56,6 +56,8 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 setTimeout(function () {
                     comm.connect(self.ip(), self.port(), callback, errorCallback, closeCallback);
                 }, RECONNECT_INTERVAL);
+
+                shouter.notifySubscribers(false, SHOUT.LOADING);
             };
 
             let closeCallback = function () {
@@ -67,7 +69,9 @@ let settingsPanelViewModel = function (runningMode, shouter, state, gfxEventHand
                 gfxEventHandler({
                     type: EVENT_TO_GFX.SIMULATION_STOP
                 });
-        
+
+                shouter.notifySubscribers(false, SHOUT.LOADING);
+
                 runningMode(RUNNING_MODE.DESIGN);
 
                 comm.connect(self.ip(), self.port(), callback, errorCallback, closeCallback);

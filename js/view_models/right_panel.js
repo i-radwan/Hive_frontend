@@ -236,6 +236,12 @@ let rightPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         }
     });
 
+    shouter.subscribe(function () {
+        self.queuedLogs.removeAll();
+        self.logs.removeAll();
+        self.stats.removeAll();
+    }, self, SHOUT.STATE_UPDATED);
+
     self.handleEsc = function () {
     };
 

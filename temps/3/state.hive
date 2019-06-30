@@ -1,0 +1,522 @@
+{
+  "map": {
+    "height": 6,
+    "width": 12,
+    "grid": [
+      [
+        {
+          "objects": [
+            {
+              "type": 0,
+              "id": 3,
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 1,
+              "id": 2,
+              "color": "#17319C",
+              "load_cap": 100,
+              "ip": "172.20.10.2",
+              "port": "12333",
+              "direction": 0,
+              "deactivated": false
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 0,
+              "id": 1,
+              "color": "#bababa"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        }
+      ],
+      [
+        {
+          "objects": [
+            {
+              "type": 4,
+              "id": 3,
+              "color": "#d10000"
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 2,
+              "id": 2,
+              "capacity": 250,
+              "weight": 50,
+              "items": [
+                {
+                  "id": 2,
+                  "quantity": 11
+                }
+              ],
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": [
+            {
+              "type": 2,
+              "id": 1,
+              "capacity": 250,
+              "weight": 50,
+              "items": [
+                {
+                  "id": 1,
+                  "quantity": 11
+                }
+              ],
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 2,
+              "id": 5,
+              "capacity": 250,
+              "weight": 50,
+              "items": [
+                {
+                  "id": 1,
+                  "quantity": 111
+                }
+              ],
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": [
+            {
+              "type": 2,
+              "id": 6,
+              "capacity": 250,
+              "weight": 50,
+              "items": [
+                {
+                  "id": 2,
+                  "quantity": 111
+                }
+              ],
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 4,
+              "id": 2,
+              "color": "#d10000"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "objects": [
+            {
+              "type": 4,
+              "id": 1,
+              "color": "#d10000"
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 2,
+              "id": 3,
+              "capacity": 250,
+              "weight": 50,
+              "items": [
+                {
+                  "id": 3,
+                  "quantity": 111
+                }
+              ],
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": [
+            {
+              "type": 2,
+              "id": 4,
+              "capacity": 250,
+              "weight": 50,
+              "items": [
+                {
+                  "id": 4,
+                  "quantity": 111
+                }
+              ],
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 2,
+              "id": 7,
+              "capacity": 250,
+              "weight": 50,
+              "items": [
+                {
+                  "id": 3,
+                  "quantity": 111
+                }
+              ],
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": [
+            {
+              "type": 2,
+              "id": 8,
+              "capacity": 250,
+              "weight": 50,
+              "items": [
+                {
+                  "id": 4,
+                  "quantity": 111
+                }
+              ],
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 4,
+              "id": 4,
+              "color": "#d10000"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        }
+      ],
+      [
+        {
+          "objects": [
+            {
+              "type": 0,
+              "id": 2,
+              "color": "#bababa"
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 1,
+              "id": 1,
+              "color": "#FF0000",
+              "load_cap": 100,
+              "ip": "172.20.10.3",
+              "port": "12345",
+              "direction": 0,
+              "deactivated": true
+            }
+          ]
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": []
+        },
+        {
+          "objects": [
+            {
+              "type": 0,
+              "id": 4,
+              "color": "#bababa"
+            }
+          ]
+        }
+      ]
+    ],
+    "objects": {
+      "1,0": [
+        0,
+        11
+      ],
+      "2,0": [
+        5,
+        0
+      ],
+      "2,4": [
+        2,
+        11
+      ],
+      "6,2": [
+        2,
+        9
+      ],
+      "7,2": [
+        3,
+        8
+      ],
+      "8,2": [
+        3,
+        9
+      ],
+      "5,2": [
+        2,
+        8
+      ],
+      "2,2": [
+        2,
+        2
+      ],
+      "3,2": [
+        3,
+        2
+      ],
+      "1,2": [
+        2,
+        3
+      ],
+      "4,2": [
+        3,
+        3
+      ],
+      "1,4": [
+        3,
+        0
+      ],
+      "3,4": [
+        2,
+        0
+      ],
+      "4,4": [
+        3,
+        11
+      ],
+      "3,0": [
+        0,
+        0
+      ],
+      "4,0": [
+        5,
+        11
+      ],
+      "1,1": [
+        5,
+        5
+      ],
+      "2,1": [
+        0,
+        6
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": 1,
+      "weight": 1,
+      "name": "1"
+    },
+    {
+      "id": 2,
+      "weight": 1,
+      "name": "2"
+    },
+    {
+      "id": 3,
+      "weight": 1,
+      "name": "3"
+    },
+    {
+      "id": 4,
+      "weight": 1,
+      "name": "4"
+    }
+  ],
+  "nextIDs": {
+    "gate": 5,
+    "robot": 3,
+    "rack": 9,
+    "station": 1,
+    "obstacle": 5,
+    "item": 5
+  }
+}
