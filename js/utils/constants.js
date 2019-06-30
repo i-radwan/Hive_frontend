@@ -1,124 +1,11 @@
+//
+// Server communication
+//
+
 SERVER_IP = "127.0.0.1";
 SERVER_PORT = 1337;
 
 RECONNECT_INTERVAL = 150;   // ms
-
-MIN_TIMESTEP = 1000;        // ms
-
-//
-// Shouting codes
-//
-SHOUT = {
-    STATE_UPDATED: 0,
-    MSG: 1,
-    LOADING: 2,
-    ESC: 3
-};
-
-//
-// Running modes
-//
-RUNNING_MODE = {
-    DESIGN: 0,
-    SIMULATE: 1,
-    DEPLOY: 2,
-    PAUSE: 3
-};
-
-// Panels
-LEFT_PANEL = {
-    EMPTY: 0,
-    TEMPS: 1,
-    MAP: 2,
-    GATE: 3,
-    ROBOT: 4,
-    RACK: 5,
-    STATION: 6,
-    OBSTACLE: 7,
-    ORDER: 8
-};
-
-RIGHT_PANEL = {
-    EMPTY: 0,
-    LOGS: 1,
-    STATS: 2,
-    ITEMS: 3
-};
-
-ORDER_PANEL = {
-    ADD: 0,
-    ONGOING: 1,
-    UPCOMING: 2,
-    FINISHED: 3
-};
-
-// Map
-MAP_INIT_WIDTH = 17;
-MAP_INIT_HEIGHT = 10;
-MAP_CELL = {
-    GATE: 0,
-    ROBOT: 1,
-    RACK: 2,
-    STATION: 3,
-    OBSTACLE: 4
-};
-
-// Msgs configs
-MSG_TIMEOUT = 2500; // ms
-
-// Msgs types
-MSG_TYPE = {
-    INFO: 0,
-    ERROR: 1
-};
-
-// Logs levels
-LOG_LEVEL = {
-    INFO: 0,
-    WARNING: 1,
-    ERROR: 2
-};
-
-LOG_TYPE = {
-    ROBOT: 0,
-    RACK: 1,
-    ORDER: 2,
-    TEXT: 3
-};
-
-// Regex
-REG_HTML_COLOR = "^#([A-Fa-f0-9]{6})$";
-REG_IP = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
-
-RACK_INIT_CAP = 250;
-RACK_INIT_WEIGHT = 50;
-
-ORDER_TYPE = {
-    COLLECT: 0,
-    REFILL: 1
-};
-
-ORDER_STATUS = {
-    ONGOING: 0,
-    UPCOMING: 1,
-    FINISHED: 2
-};
-
-UPCOMING_ORDERS_CONSUMPTION_INTERVAL = 1000 * 60; // 1 Min
-
-ROBOT_DIR_CNT = 4;
-ROBOT_DIR = {
-    RIGHT: 0,
-    UP: 1,
-    LEFT: 2,
-    DOWN: 3
-};
-
-ROW_DELTA = [0, -1, 0, 1];
-COL_DELTA = [1, 0, -1, 0];
-
-LOW_BATTERY_LEVEL = 4;
-
 
 // Server Msgs
 START_MODE = {
@@ -186,8 +73,144 @@ SERVER_LOGS = {
 };
 
 //
+// Shouting codes
+//
+
+SHOUT = {
+    STATE_UPDATED: 0,
+    MSG: 1,
+    LOADING: 2,
+    ESC: 3
+};
+
+//
+// Running modes
+//
+
+RUNNING_MODE = {
+    DESIGN: 0,
+    SIMULATE: 1,
+    DEPLOY: 2,
+    PAUSE: 3
+};
+
+//
+// Panels
+//
+
+LEFT_PANEL = {
+    EMPTY: 0,
+    TEMPS: 1,
+    MAP: 2,
+    GATE: 3,
+    ROBOT: 4,
+    RACK: 5,
+    STATION: 6,
+    OBSTACLE: 7,
+    ORDER: 8
+};
+
+RIGHT_PANEL = {
+    EMPTY: 0,
+    LOGS: 1,
+    STATS: 2,
+    ITEMS: 3
+};
+
+ORDER_PANEL = {
+    ADD: 0,
+    ONGOING: 1,
+    UPCOMING: 2,
+    FINISHED: 3
+};
+
+//
+// Map
+//
+
+MAP_INIT_WIDTH = 17;
+MAP_INIT_HEIGHT = 10;
+MAP_CELL = {
+    GATE: 0,
+    ROBOT: 1,
+    RACK: 2,
+    STATION: 3,
+    OBSTACLE: 4
+};
+
+RACK_INIT_CAP = 250;
+RACK_INIT_WEIGHT = 50;
+
+ROBOT_DIR_CNT = 4;
+ROBOT_DIR = {
+    RIGHT: 0,
+    UP: 1,
+    LEFT: 2,
+    DOWN: 3
+};
+
+ROW_DELTA = [0, -1, 0, 1];
+COL_DELTA = [1, 0, -1, 0];
+
+LOW_BATTERY_LEVEL = 3; // Should match the hardware low level too, in order to sync led flashing
+
+//
+// General
+//
+
+TEMPS_PATH = "./temps/";
+TEMP_IMAGE_NAME = "preview_img.png";
+TEMP_STATE_NAME = "state.hive";
+
+// Msgs configs
+MSG_TIMEOUT = 2500; // ms
+
+// Msgs types
+MSG_TYPE = {
+    INFO: 0,
+    ERROR: 1
+};
+
+// Regex
+REG_HTML_COLOR = "^#([A-Fa-f0-9]{6})$";
+REG_IP = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
+
+//
+// Logs
+//
+
+LOG_LEVEL = {
+    INFO: 0,
+    WARNING: 1,
+    ERROR: 2
+};
+
+LOG_TYPE = {
+    ROBOT: 0,
+    RACK: 1,
+    ORDER: 2,
+    TEXT: 3
+};
+
+//
+// Orders
+//
+
+ORDER_TYPE = {
+    COLLECT: 0,
+    REFILL: 1
+};
+
+ORDER_STATUS = {
+    ONGOING: 0,
+    UPCOMING: 1,
+    FINISHED: 2
+};
+
+//
 // GFX
 //
+
 GRID_CELL_LENGTH = 50;
 MAX_ZOOM_LENGTH = 30 * GRID_CELL_LENGTH;
 MIN_ZOOM_LENGTH = GRID_CELL_LENGTH;
