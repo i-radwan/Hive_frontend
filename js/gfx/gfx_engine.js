@@ -22,12 +22,13 @@ let gfxEngine = function () {
 
     // Pixi.js and Viewport variables
     let canvas = $('.map-row');
+    let devicePixelRatio = window.devicePixelRatio || 1;
     self.pixi_app = new PIXI.Application({
         width: canvas.width(),
         height: canvas.height(),
         backgroundColor: 0x1d1d1e,
         autoDensity: true,
-        resolution: window.devicePixelRatio || 1,
+        resolution: devicePixelRatio,
         antialias: true
     });
     canvas[0].appendChild(self.pixi_app.view);
@@ -451,9 +452,9 @@ let gfxEngine = function () {
 
         translateScene((mapWidth * GRID_CELL_LENGTH) / 2, (mapHeight * GRID_CELL_LENGTH) / 2);
         if (mapWidth * (self.pixi_app.renderer.height / self.pixi_app.renderer.width) >= mapHeight)
-            viewport.zoom((mapWidth + 2) * GRID_CELL_LENGTH - self.pixi_app.renderer.width, true);
+            viewport.zoom((mapWidth + 2) * GRID_CELL_LENGTH - self.pixi_app.renderer.width / devicePixelRatio, true);
         else
-            viewport.zoom((mapHeight + 4) * GRID_CELL_LENGTH - self.pixi_app.renderer.height, true);
+            viewport.zoom((mapHeight + 4) * GRID_CELL_LENGTH - self.pixi_app.renderer.height / devicePixelRatio, true);
     };
 
     // Return the top object that is currently selected
