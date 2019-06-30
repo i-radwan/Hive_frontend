@@ -119,7 +119,7 @@
                 </div>
 
                 <!--==============================================================-->
-                <!--========================= MAPS PANEL =========================-->
+                <!--========================== MAP PANEL =========================-->
                 <!--==============================================================-->
 
                 <div class="map" data-bind="css: {hidden: leftPanelVM.activePanel() !== LEFT_PANEL.MAP}">
@@ -135,7 +135,7 @@
                     </div>
 
                     <!--======================== BOTTOM ACTIONS ========================-->
-                    <div class="actions" data-bind="css: {hidden: runningMode() !== RUNNING_MODE.DESIGN}">
+                    <div class="lpanel-details-bottom-actions" data-bind="css: {hidden: runningMode() !== RUNNING_MODE.DESIGN}">
                         <i data-toggle="tooltip" title="Save" class="fas fa-download save"
                            data-bind="click: leftPanelVM.mapVM.saveMap"></i>
                         <i data-toggle="tooltip" title="Load" class="fas fa-upload load"
@@ -510,8 +510,11 @@
 
                         <!--======================== BOTTOM ACTIONS ========================-->
                         <div class="lpanel-details-bottom-actions">
-                            <i class="fas fa-check"
-                               data-toggle="tooltip" title="Add"
+                            <i data-toggle="tooltip save" title="Save" class="fas fa-download save"
+                               data-bind="click: leftPanelVM.orderVM.saveOrders"></i>
+                            <i data-toggle="tooltip load" title="Load" class="fas fa-upload load"
+                               data-bind="click: leftPanelVM.orderVM.loadOrders"></i>
+                            <i class="fas fa-check add" data-toggle="tooltip" title="Add"
                                data-bind="click: leftPanelVM.orderVM.add"></i>
                         </div>
                     </div>
