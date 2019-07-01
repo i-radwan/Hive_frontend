@@ -33,7 +33,12 @@ let mapPanelViewModel = function (runningMode, shouter, state, gfxEventHandler, 
     self.loadMap = function () {
         console.log("Load state");
 
-        let paths = dialog.showOpenDialog();
+        let paths = dialog.showOpenDialog({
+                title: "Load Hive State",
+                defaultPath: "~",
+                buttonLabel: "Load",
+                filters: [{name: 'Hive State', extensions: ['hive']}]
+            });
 
         if (paths === undefined || paths.length === 0)
             return;

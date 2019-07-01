@@ -237,7 +237,12 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     self.loadOrders = function () {
         console.log("Load orders");
 
-        let paths = dialog.showOpenDialog();
+        let paths = dialog.showOpenDialog({
+            title: "Load Hive Orders",
+            defaultPath: "~",
+            buttonLabel: "Load",
+            filters: [{name: 'Hive Order', extensions: ['hive']}]
+        });
 
         if (paths === undefined || paths.length === 0)
             return;
