@@ -4,9 +4,9 @@ It's a cross platform system that is built using **ElectronJS**.
 
 Through this GUI the user can perform three main things:
     
-    - Design their warehouse to mimic their real life warehouse.
-    - Simulate the warehouse automation system operations.
-    - Deploy and start operating on real life warehouse.
+- Design their warehouse to mimic their real life warehouse.
+- Simulate the warehouse automation system operations.
+- Deploy and start operating on real life warehouse.
 
 ### System Architecture 
 The system architecture is heavily based on **KnockoutJS** which applies the MVVM
