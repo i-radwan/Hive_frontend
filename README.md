@@ -37,7 +37,7 @@ and animations.
     
 The real life robots prototype we've developed can be found here: [Hive hardware](https://github.com/i-radwan/Hive_hardware/).
 
-### How to use
+### How to Use
 - `npm install`
 - `npm start`
 
