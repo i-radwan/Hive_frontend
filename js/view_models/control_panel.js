@@ -49,6 +49,10 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             runningMode(RUNNING_MODE.PAUSE);
             self.playing(false);
         } else {
+            if (runningMode() === RUNNING_MODE.DESIGN) { // Not resuming
+                self.preSimState = JSON.parse(JSON.stringify(state));
+            }
+
             self.lastStartMode = self.lastStartMode ? self.lastStartMode : START_MODE.SIMULATE;
 
             sendStateToServer(self.lastStartMode);
@@ -108,6 +112,8 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             return false;
         }
 
+        self.preSimState = JSON.parse(JSON.stringify(state));
+
         self.lastStartMode = START_MODE.DEPLOY;
 
         shouter.notifySubscribers(true, SHOUT.LOADING);
@@ -130,8 +136,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             });
 
             console.log("Simulation started");
-
-            self.preSimState = JSON.parse(JSON.stringify(state));
 
             runningMode(self.lastStartMode === START_MODE.SIMULATE ? RUNNING_MODE.SIMULATE : RUNNING_MODE.DEPLOY);
 

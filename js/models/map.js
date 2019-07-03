@@ -59,6 +59,10 @@ let Map = function () {
 
             for (let j = 0; j < self.width; j++) {
                 self.grid[i][j] = Object.assign({}, newMap[i][j]);
+
+                if (self.grid[i][j].type === MAP_CELL.ROBOT && self.grid[i][j].deactivated) {
+                    throw "No robot should be saved as deactivated!";
+                }
             }
         }
 

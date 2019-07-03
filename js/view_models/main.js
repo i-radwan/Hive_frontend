@@ -41,6 +41,10 @@ let mainViewModel = function (gfxEventHandler, comm) {
     self.handleServerMsg = function (msg) {
         console.log("Received:", JSON.stringify(msg));
 
+        if (self.runningMode() === RUNNING_MODE.DESIGN) {
+            console.log("Msg received during design mode!!");
+        }
+
         switch (msg.type) {
             case MSG_FROM_SERVER.ACK_START: {
                 self.centerPanelVM.controlConsoleVM.handleStartAck(msg);
