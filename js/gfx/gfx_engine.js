@@ -780,6 +780,7 @@ let gfxEngine = function () {
         let dstRow = row;
         let dstCol = col;
         let dstAngle = renderObject.animation_variables.nxt_angle;
+        renderObject.animation_variables.animation_type = animationType;
 
         switch (animationType) {
             case ANIMATION_TYPE.MOVE_RIGHT:
@@ -833,7 +834,6 @@ let gfxEngine = function () {
         renderObject.animation_variables.moving_speed = MOVING_SPEED;
         renderObject.animation_variables.nxt_angle = dstAngle;
         renderObject.animation_variables.rotating_speed = ROTATING_SPEED;
-        renderObject.animation_variables.animation_type = animationType;
         renderObject.animation_variables.should_move_view_port = (type === MAP_CELL.ROBOT);
     };
 
