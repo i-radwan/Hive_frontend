@@ -180,7 +180,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     };
 
     self.fill = function (r, c) {
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getRobot(r, c); // Note: doesn't work well if there're multiple robots in a cell.
 
         if (rob === undefined)
             return;
@@ -268,6 +268,10 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let r = pos[0];
         let c = pos[1];
 
+        let rob = state.map.getSpecificRobot(r, c, id);
+
+        rob.moving = true;
+
         gfxEventHandler({
             type: EVENT_TO_GFX.OBJECT_MOVE,
             data: {
@@ -341,7 +345,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let c = pos[1];
 
         let fac = state.map.getBindableFacility(r, c);
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         if (fac === undefined) {
             throw "Error: there should be facility here!";
@@ -414,7 +418,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let c = pos[1];
 
         let fac = state.map.getBoundFacility(r, c);
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         if (fac === undefined) {
             throw "Error: there should be facility here!";
@@ -475,7 +479,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let c = pos[1];
 
         let fac = state.map.getSpecificFacility(r, c, MAP_CELL.RACK);
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         if (fac === undefined) {
             throw "Error: there should be facility here!";
@@ -516,7 +520,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let c = pos[1];
 
         let fac = state.map.getSpecificFacility(r, c, MAP_CELL.RACK);
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         if (fac === undefined) {
             throw "Error: there should be facility here!";
@@ -556,7 +560,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let robR = robPos[0];
         let robC = robPos[1];
 
-        let rob = state.map.getRobot(robR, robC);
+        let rob = state.map.getSpecificRobot(robR, robC, robotID);
 
         rob.assignedTask = true;
 
@@ -604,7 +608,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let robR = robPos[0];
         let robC = robPos[1];
 
-        let rob = state.map.getRobot(robR, robC);
+        let rob = state.map.getSpecificRobot(robR, robC, robotID);
 
         rob.assignedTask = false;
 
@@ -689,7 +693,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let r = pos[0];
         let c = pos[1];
 
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         rob.deactivated = true;
 
@@ -735,7 +739,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let r = pos[0];
         let c = pos[1];
 
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         rob.deactivated = false;
 
@@ -794,7 +798,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let r = pos[0];
         let c = pos[1];
 
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         let nr = r + ROW_DELTA[rob.direction];
         let nc = c + COL_DELTA[rob.direction];
@@ -802,6 +806,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         console.log("Robot #" + id + " new robot position: " + nr + " " + nc);
 
         state.map.moveObject(r, c, nr, nc, rob);
+
+        rob.moving = false;
 
         if (rob.loaded) {
             let fac = state.map.getSpecificFacility(r, c, MAP_CELL.RACK);
@@ -815,7 +821,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let r = pos[0];
         let c = pos[1];
 
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         rob.direction = (rob.direction - 1 + ROBOT_DIR_CNT) % ROBOT_DIR_CNT;
 
@@ -827,7 +833,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let r = pos[0];
         let c = pos[1];
 
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         rob.direction = (rob.direction + 1) % ROBOT_DIR_CNT;
 
@@ -839,9 +845,19 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         let r = pos[0];
         let c = pos[1];
 
-        let rob = state.map.getRobot(r, c);
+        let rob = state.map.getSpecificRobot(r, c, id);
 
         rob.direction = (rob.direction + 2) % ROBOT_DIR_CNT;
+
+        if (!rob.moving) {
+            let nr = r + ROW_DELTA[rob.direction];
+            let nc = c + COL_DELTA[rob.direction];
+
+            console.log("Moving Robot #" + id + ", due to retreating while the robot was not moving, to " +
+                        " the new robot position: " + nr + " " + nc);
+
+            state.map.moveObject(r, c, nr, nc, rob);
+        }
 
         console.log("Robot #" + id + " new robot direction after retreating: " + rob.direction);
     };

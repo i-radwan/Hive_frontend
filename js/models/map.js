@@ -156,6 +156,19 @@ let Map = function () {
         return undefined;
     };
 
+    self.getSpecificObject = function(r, c, type, id) {
+        let objs = self.grid[r][c].objects;
+        let objsLen = objs.length;
+
+        for (let i = 0; i < objsLen; ++i) {
+            if (objs[i].type === type && objs[i].id === id) {
+                return objs[i];
+            }
+        }
+
+        return undefined;
+    };
+
     self.getCellObjects = function(r, c) {
         return self.grid[r][c].objects;
     };
@@ -173,6 +186,10 @@ let Map = function () {
         return self.getObject(r, c, MAP_CELL.ROBOT);
     };
 
+    self.getSpecificRobot = function(r, c, id) {
+        return self.getSpecificObject(r, c, MAP_CELL.ROBOT, id);
+    };
+
     self.getInvalidIPRobot = function() {
         for (const [k, v] of Object.entries(self.objects)) {
             let key = k.split(",");
@@ -180,7 +197,7 @@ let Map = function () {
             if (parseInt(key[1]) !== MAP_CELL.ROBOT)
                 continue;
 
-            let rob = self.getRobot(v[0], v[1]);
+            let rob = self.getSpecificRobot(v[0], v[1], parseInt(key[0]));
 
             if (!rob.ip.match(REG_IP)) {
                 return [v[0], v[1]];

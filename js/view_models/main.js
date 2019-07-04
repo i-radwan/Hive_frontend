@@ -71,7 +71,7 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 if (actionType === SERVER_ACTIONS.STOP) {
                     self.leftPanelVM.robotVM.stop(robotID);
 
-                    reducePendingActions(robotID);
+                    reducePendingActions(robotID, false);
                 } else if (actionType === SERVER_ACTIONS.MOVE) {
                     self.pendingActions.push(robotID);
 
@@ -248,6 +248,8 @@ let mainViewModel = function (gfxEventHandler, comm) {
             reducePendingActions(robotID);
         } else if (data.type === EVENT_TO_GFX.OBJECT_RETREAT) {
             self.leftPanelVM.robotVM.doneRetreating(robotID);
+
+            reducePendingActions(robotID);
         } else if (data.type === EVENT_TO_GFX.OBJECT_LOAD) {
             reducePendingActions(robotID);
         } else if (data.type === EVENT_TO_GFX.OBJECT_OFFLOAD) {

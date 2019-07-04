@@ -442,6 +442,9 @@ let orderPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         self.refill(false);
         self.gateID("");
         self.rackID("");
+        self.issueTimeSeconds("00");
+        self.issueTimeMinutes("00");
+        self.issueTimeHours("00");
         self.items.removeAll();
         self.itemID("");
         self.itemQuantity("");
