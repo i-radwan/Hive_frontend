@@ -130,10 +130,10 @@ let gfx = function (logicEventHandler) {
                 /*gfxMap.objectOffload(4, MAP_CELL.ROBOT, 0, 3, 1, MAP_CELL.RACK);
                 gfxMap.objectDecolorize(1, MAP_CELL.RACK, 0, 3);
                 gfxMap.objectColorizeLed(4, MAP_CELL.ROBOT, 0, 3, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.OFF);*/
-                gfxMap.objectStop(4, MAP_CELL.ROBOT, 1, 3);
+                gfxMap.objectFailure(4, MAP_CELL.ROBOT, 1, 3);
                 break;
             case 5:
-                gfxMap.objectRetreat(4, 1, 3);
+                gfxMap.objectMove(4, 1, 3);
                 // gfxMap.objectRotateRight(4, 1, 3);
                 break;
             case 6:

@@ -810,10 +810,9 @@ let gfxEngine = function () {
                 renderObject.animation_variables.is_rotating = true;
                 break;
             case ANIMATION_TYPE.RETREAT:
-                let afterLastActionDir = angleToDir(dstAngle);
                 if (!renderObject.animation_variables.is_moving) {
-                    dstRow = row + ((afterLastActionDir + 2) % 4 === ROBOT_DIR.DOWN) - ((afterLastActionDir + 2) % 4 === ROBOT_DIR.UP);
-                    dstCol = col + ((afterLastActionDir + 2) % 4 === ROBOT_DIR.RIGHT) - ((afterLastActionDir + 2) % 4 === ROBOT_DIR.LEFT);
+                    dstRow = row + ((renderObject.direction + 2) % 4 === ROBOT_DIR.DOWN) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.UP);
+                    dstCol = col + ((renderObject.direction + 2) % 4 === ROBOT_DIR.RIGHT) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.LEFT);
                 }
 
                 dstAngle = dstAngle + 180;
@@ -887,6 +886,7 @@ let gfxEngine = function () {
         renderObject.animation_variables.is_animating = false;
         renderObject.animation_variables.is_moving = false;
         renderObject.animation_variables.is_rotating = false;
+        renderObject.animation_variables.nxt_angle = dirToAngle(renderObject.direction);
     };
 
     // Bind 2 given objects together
