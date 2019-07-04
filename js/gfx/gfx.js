@@ -104,9 +104,9 @@ let gfx = function (logicEventHandler) {
                 //gfxMap.objectRotateRight(1, 0, 1);
                 break;
             case 2:
-                gfxMap.objectUpdate(1, MAP_CELL.ROBOT, 1, 0, 70);
-                gfxMap.objectUpdate(2, MAP_CELL.ROBOT, 1, 1, 30);
-                gfxMap.objectUpdate(3, MAP_CELL.ROBOT, 1, 2, 90);
+                gfxMap.objectUpdate(1, MAP_CELL.ROBOT, 1, 0, 7);
+                gfxMap.objectUpdate(2, MAP_CELL.ROBOT, 1, 1, 3);
+                gfxMap.objectUpdate(3, MAP_CELL.ROBOT, 1, 2, 9);
                 gfxMap.objectBind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.GATE);
                 gfxMap.objectBind(3, MAP_CELL.ROBOT, 1, 2, 2, MAP_CELL.STATION);
                 gfxMap.objectLoad(2, MAP_CELL.ROBOT, 1, 1, 2, MAP_CELL.RACK);
@@ -124,15 +124,16 @@ let gfx = function (logicEventHandler) {
                 break;
             case 3:
                 // gfxMap.objectRotateLeft(4, 1, 3);
-                gfxMap.objectRetreat(4, 1, 3);
+                gfxMap.objectMove(4, 1, 3);
                 break;
             case 4:
-                gfxMap.objectOffload(4, MAP_CELL.ROBOT, 0, 3, 1, MAP_CELL.RACK);
+                /*gfxMap.objectOffload(4, MAP_CELL.ROBOT, 0, 3, 1, MAP_CELL.RACK);
                 gfxMap.objectDecolorize(1, MAP_CELL.RACK, 0, 3);
-                gfxMap.objectColorizeLed(4, MAP_CELL.ROBOT, 0, 3, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.OFF);
+                gfxMap.objectColorizeLed(4, MAP_CELL.ROBOT, 0, 3, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.OFF);*/
+                gfxMap.objectStop(4, MAP_CELL.ROBOT, 1, 3);
                 break;
             case 5:
-                gfxMap.objectRetreat(4, 0, 3);
+                gfxMap.objectRetreat(4, 1, 3);
                 // gfxMap.objectRotateRight(4, 1, 3);
                 break;
             case 6:

@@ -547,6 +547,7 @@ let gfxEngine = function () {
                     cur_x: cellCenter.x,
                     cur_y: cellCenter.y,
                     cur_angle: 0,
+                    nxt_angle: 0,
                     rotation_vector: 0
                 }
             }
@@ -776,31 +777,25 @@ let gfxEngine = function () {
 
     // Initialize animation of a given object
     self.startObjectAnimation = function (row, col, type, renderObject, animationType) {
-        renderObject.animation_variables.is_animating = true;
-        renderObject.animation_variables.animation_type = animationType;
-        renderObject.animation_variables.is_moving = false;
-        renderObject.animation_variables.is_rotating = false;
-        renderObject.animation_variables.should_rotate = false;
-        renderObject.animation_variables.should_move_view_port = (type === MAP_CELL.ROBOT);
-
         let dstRow = row;
         let dstCol = col;
-        let dstAngle = renderObject.animation_variables.cur_angle;
+        let dstAngle = renderObject.animation_variables.nxt_angle;
 
         switch (animationType) {
             case ANIMATION_TYPE.MOVE_RIGHT:
             case ANIMATION_TYPE.MOVE_LEFT:
             case ANIMATION_TYPE.MOVE_UP:
             case ANIMATION_TYPE.MOVE_DOWN:
-                renderObject.animation_variables.is_moving = true;
                 renderObject.animation_variables.animation_type = ANIMATION_TYPE.MOVE;
                 dstRow = row + (animationType === ANIMATION_TYPE.MOVE_DOWN) - (animationType === ANIMATION_TYPE.MOVE_UP);
                 dstCol = col + (animationType === ANIMATION_TYPE.MOVE_RIGHT) - (animationType === ANIMATION_TYPE.MOVE_LEFT);
+
+                renderObject.animation_variables.is_moving = true;
+                renderObject.animation_variables.is_rotating = false;
+                renderObject.animation_variables.should_rotate = false;
                 break;
             case ANIMATION_TYPE.ROTATE_RIGHT:
             case ANIMATION_TYPE.ROTATE_LEFT:
-                renderObject.animation_variables.is_rotating = true;
-                renderObject.animation_variables.should_rotate = (type === MAP_CELL.ROBOT);
                 let dir = (animationType === ANIMATION_TYPE.ROTATE_LEFT ? -1 : 1);
                 dstAngle = dirToAngle(renderObject.direction) + dir * 90;
                 dstAngle = normalizeAngle(dstAngle);
@@ -810,15 +805,22 @@ let gfxEngine = function () {
                     renderObject.animation_variables.cur_angle = normalizeAngle(renderObject.animation_variables.cur_angle);
                 }
 
+                renderObject.animation_variables.should_rotate = (type === MAP_CELL.ROBOT);
+                renderObject.animation_variables.is_moving = false;
+                renderObject.animation_variables.is_rotating = true;
                 break;
             case ANIMATION_TYPE.RETREAT:
+                let afterLastActionDir = angleToDir(dstAngle);
+                if (!renderObject.animation_variables.is_moving) {
+                    dstRow = row + ((afterLastActionDir + 2) % 4 === ROBOT_DIR.DOWN) - ((afterLastActionDir + 2) % 4 === ROBOT_DIR.UP);
+                    dstCol = col + ((afterLastActionDir + 2) % 4 === ROBOT_DIR.RIGHT) - ((afterLastActionDir + 2) % 4 === ROBOT_DIR.LEFT);
+                }
+
+                dstAngle = dstAngle + 180;
+                dstAngle = normalizeAngle(dstAngle);
                 renderObject.animation_variables.is_moving = true;
                 renderObject.animation_variables.is_rotating = true;
                 renderObject.animation_variables.should_rotate = (type === MAP_CELL.ROBOT);
-                dstRow = row + ((renderObject.direction + 2) % 4 === ROBOT_DIR.DOWN) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.UP);
-                dstCol = col + ((renderObject.direction + 2) % 4 === ROBOT_DIR.RIGHT) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.LEFT);
-                dstAngle = dirToAngle(renderObject.direction) + 180;
-                dstAngle = normalizeAngle(dstAngle);
                 break;
         }
 
@@ -828,9 +830,12 @@ let gfxEngine = function () {
         renderObject.animation_variables.nxt_y = dstCenter.y;
         renderObject.animation_variables.nxt_row = dstRow;
         renderObject.animation_variables.nxt_col = dstCol;
+        renderObject.animation_variables.is_animating = true;
         renderObject.animation_variables.moving_speed = MOVING_SPEED;
         renderObject.animation_variables.nxt_angle = dstAngle;
         renderObject.animation_variables.rotating_speed = ROTATING_SPEED;
+        renderObject.animation_variables.animation_type = animationType;
+        renderObject.animation_variables.should_move_view_port = (type === MAP_CELL.ROBOT);
     };
 
     // Animate a given object
@@ -880,6 +885,8 @@ let gfxEngine = function () {
     // Stop animation for a given object
     self.stopObjectAnimation = function (renderObject) {
         renderObject.animation_variables.is_animating = false;
+        renderObject.animation_variables.is_moving = false;
+        renderObject.animation_variables.is_rotating = false;
     };
 
     // Bind 2 given objects together
@@ -893,6 +900,7 @@ let gfxEngine = function () {
     // Load 2 given objects
     self.loadObject = function (renderObject1, renderObject2) {
         renderObject2.animation_variables.cur_angle = renderObject1.animation_variables.cur_angle;
+        renderObject2.animation_variables.nxt_angle = renderObject1.animation_variables.nxt_angle;
         renderObject2.direction = renderObject1.direction;
     };
 
@@ -902,7 +910,7 @@ let gfxEngine = function () {
 
     // object is failed
     self.objectFailure = function (renderObject) {
-        self.pauseObjectAnimation(renderObject);
+        self.stopObjectAnimation(renderObject);
     };
 
     // object is stopped
