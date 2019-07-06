@@ -814,8 +814,12 @@ let gfxEngine = function () {
                 if (!renderObject.animation_variables.is_moving) {
                     dstRow = row + ((renderObject.direction + 2) % 4 === ROBOT_DIR.DOWN) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.UP);
                     dstCol = col + ((renderObject.direction + 2) % 4 === ROBOT_DIR.RIGHT) - ((renderObject.direction + 2) % 4 === ROBOT_DIR.LEFT);
+                } else if (renderObject.animation_variables.is_retreating) {
+                    dstRow = renderObject.animation_variables.nxt_row;
+                    dstCol = renderObject.animation_variables.nxt_col;
                 }
 
+                renderObject.animation_variables.is_retreating = true;
                 dstAngle = dstAngle + 180;
                 dstAngle = normalizeAngle(dstAngle);
                 renderObject.animation_variables.is_moving = true;
@@ -867,25 +871,22 @@ let gfxEngine = function () {
 
         renderObject.direction = angleToDir(renderObject.animation_variables.nxt_angle);
         renderObject.animation_variables.is_animating = false;
+        renderObject.animation_variables.is_retreating = false;
     };
 
     // Pause animation for a given object
     self.pauseObjectAnimation = function (renderObject) {
-        renderObject.animation_variables.is_paused = renderObject.animation_variables.is_animating;
-        renderObject.animation_variables.is_animating = false;
+        renderObject.animation_variables.is_paused = true;
     };
 
     // Resume animation for a given object
     self.resumeObjectAnimation = function (renderObject) {
-        renderObject.animation_variables.is_animating = renderObject.animation_variables.is_paused;
         renderObject.animation_variables.is_paused = false;
     };
 
     // Stop animation for a given object
     self.stopObjectAnimation = function (renderObject) {
         renderObject.animation_variables.is_animating = false;
-        renderObject.animation_variables.is_moving = false;
-        renderObject.animation_variables.is_rotating = false;
         renderObject.animation_variables.nxt_angle = dirToAngle(renderObject.direction);
     };
 
@@ -910,12 +911,11 @@ let gfxEngine = function () {
 
     // object is failed
     self.objectFailure = function (renderObject) {
-        self.stopObjectAnimation(renderObject);
     };
 
     // object is stopped
     self.objectStop = function (renderObject) {
-        self.pauseObjectAnimation(renderObject);
+        self.stopObjectAnimation(renderObject);
     };
 
     // object is fixed
