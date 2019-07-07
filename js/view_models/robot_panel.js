@@ -857,6 +857,12 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
                         " the new robot position: " + nr + " " + nc);
 
             state.map.moveObject(r, c, nr, nc, rob);
+
+            if (rob.loaded) {
+                let fac = state.map.getSpecificFacility(r, c, MAP_CELL.RACK);
+
+                state.map.moveObject(r, c, nr, nc, fac);
+            }
         }
 
         console.log("Robot #" + id + " new robot direction after retreating: " + rob.direction);

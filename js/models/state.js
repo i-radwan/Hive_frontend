@@ -38,7 +38,7 @@ let State = function () {
             rack: 1,
             station: 1,
             obstacle: 1,
-            item: 1
+            item: self.nextIDs.item // We don't reset the items here
         };
 
         self.map.clearMap();
