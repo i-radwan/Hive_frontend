@@ -140,8 +140,6 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             runningMode(self.lastStartMode === START_MODE.SIMULATE ? RUNNING_MODE.SIMULATE : RUNNING_MODE.DEPLOY);
 
             self.playing(true);
-
-            shouter.notifySubscribers(false, SHOUT.LOADING);
         } else if (data.status === ACK_START_STATUS.ERROR) {
             shouter.notifySubscribers({
                 text: STR[data.msg.id](data.msg.args),
@@ -150,9 +148,9 @@ let controlConsoleViewModel = function (runningMode, shouter, state, gfxEventHan
             }, SHOUT.MSG);
 
             console.log("Simulation started failed!");
-
-            shouter.notifySubscribers(false, SHOUT.LOADING);
         }
+
+        shouter.notifySubscribers(false, SHOUT.LOADING);
     };
 
     self.handleResumeAck = function (msg) {
