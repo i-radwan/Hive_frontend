@@ -49,7 +49,7 @@ STR = {
     3010: (args) => `Robot <b>(#${args[0]})</b> is leaving Station <b>(#${args[1]})</b>.`,
     3011: (args) => `Robot <b>(#${args[0]})</b> loaded Rack <b>(#${args[1]})</b>.`,
     3012: (args) => `Robot <b>(#${args[0]})</b> offloaded Rack <b>(#${args[1]})</b>.`,
-    3013: (args) => `Robot <b>(#${args[0]})</b> is assigned to Rack <b>(#${args[1]})</b>.`,
+    3013: (args) => `Robot <b>(#${args[0]})</b> is assigned to Rack <b>(#${args[1]})</b> for Order  <b>(#${args[2]})</b>.`,
     3014: (args) => `Robot <b>(#${args[0]})</b> is back</b>.`,
 
     // Error logs
@@ -64,4 +64,7 @@ STR = {
     5004: (args) => `Rack (#${args[0]}) load exceed its capacity by (${args[1]}) Kg!`,
     5005: (args) => `Collect Order (#${args[0]}) is infeasible due to shortage in items (${args[1].join(", ")})!`,
     5006: (args) => `Refill Order (#${args[0]}) items weight exceed Rack (#${args[1]}) capacity by (${args[2]}) Kg!`,
+    5007: (args) => `Refill Order (#${args[0]}) is infeasible due to rack-to-gate unreachability!`,
+    5008: (args) => `No Gate is reachable from Rack (#${args[0]})`,
+    5009: (args) => `No Robot can load Rack (#${args[0]}) in its full capacity!`
 };

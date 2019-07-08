@@ -21,7 +21,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
 
     self.id = ko.observable(1);
     self.color = ko.observable("#FF0000");
-    self.loadCap = ko.observable(100);
+    self.loadCap = ko.observable(ROBOT_INIT_LOAD_CAP);
     self.ip = ko.observable("");
     self.port = ko.observable("");
     self.deactivated = ko.observable(false);
@@ -554,7 +554,7 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
         console.log("Robot #" + id + " offloaded rack: " + fac.id);
     };
 
-    self.assignTask = function (robotID, rackID) {
+    self.assignTask = function (robotID, rackID, orderID) {
         let robPos = state.map.getObjectPos(robotID, MAP_CELL.ROBOT);
 
         let robR = robPos[0];
@@ -596,10 +596,10 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
             level: LOG_LEVEL.INFO,
             object: LOG_TYPE.ROBOT,
             color: rob.color,
-            msg: STR[3013]([robotID, rackID])
+            msg: STR[3013]([robotID, rackID, orderID])
         });
 
-        console.log("Robot #" + robotID + " assigned a task with rack: " + rackID);
+        console.log("Robot #" + robotID + " assigned a task with rack: " + rackID + " for order: " + orderID);
     };
 
     self.completeTask = function (robotID, rackID) {
@@ -1008,7 +1008,8 @@ let robotPanelViewModel = function (runningMode, shouter, state, gfxEventHandler
     let clear = function () {
         self.id(state.nextIDs.robot);
         self.color("#FF0000");
-        self.loadCap(100);
+        $('.robot-color-preview').css("background", "#FF0000");
+        self.loadCap(ROBOT_INIT_LOAD_CAP);
         self.ip("");
         self.port("");
     };

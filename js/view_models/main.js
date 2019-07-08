@@ -120,8 +120,9 @@ let mainViewModel = function (gfxEventHandler, comm) {
                 if (logType === SERVER_LOGS.TASK_ASSIGNED) {
                     let robotID = logData.robot_id;
                     let rackID = logData.rack_id;
+                    let orderID = logData.order_id;
 
-                    self.leftPanelVM.robotVM.assignTask(robotID, rackID);
+                    self.leftPanelVM.robotVM.assignTask(robotID, rackID, orderID);
                 } else if (logType === SERVER_LOGS.TASK_COMPLETED) {
                     let robotID = logData.robot_id;
                     let orderID = logData.order_id;
