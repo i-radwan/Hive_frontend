@@ -49,7 +49,7 @@ STR = {
     3010: (args) => `Robot <b>(#${args[0]})</b> is leaving Station <b>(#${args[1]})</b>.`,
     3011: (args) => `Robot <b>(#${args[0]})</b> loaded Rack <b>(#${args[1]})</b>.`,
     3012: (args) => `Robot <b>(#${args[0]})</b> offloaded Rack <b>(#${args[1]})</b>.`,
-    3013: (args) => `Robot <b>(#${args[0]})</b> is assigned to Rack <b>(#${args[1]})</b> for Order  <b>(#${args[2]})</b>.`,
+    3013: (args) => `Robot <b>(#${args[0]})</b> is assigned to Rack <b>(#${args[1]})</b> for Order <b>(#${args[2]})</b>.`,
     3014: (args) => `Robot <b>(#${args[0]})</b> is back</b>.`,
 
     // Error logs
@@ -66,5 +66,7 @@ STR = {
     5006: (args) => `Refill Order (#${args[0]}) items weight exceed Rack (#${args[1]}) capacity by (${args[2]}) Kg!`,
     5007: (args) => `Refill Order (#${args[0]}) is infeasible due to rack-to-gate unreachability!`,
     5008: (args) => `No Gate is reachable from Rack (#${args[0]})`,
-    5009: (args) => `No Robot can load Rack (#${args[0]}) in its full capacity!`
+    5009: (args) => (args[1] !== -1 ? STR[5010](args) : STR[5011](args)),
+    5010: (args) => `Rack (#${args[0]}) cannot be loaded if full, the maximum region load capacity is ${args[1]}!`,
+    5011: (args) => `Rack (#${args[0]}) cannot be loaded by any Robot!`
 };
