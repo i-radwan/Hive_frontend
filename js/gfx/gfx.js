@@ -78,79 +78,8 @@ let gfx = function (logicEventHandler) {
     });
 
     // Test Code for simulation mode
-    let x = -1;
     canvas.bind('contextmenu', function () {
-        switch (x) {
-            case -1:
-                simulationStartEvent();
-                break;
-            case 0:
-                //gfxMap.objectColorize(1, MAP_CELL.ROBOT, 0,0,"#ffcc00");
-                //gfxMap.objectMove(1, 0, 0);
-                gfxMap.objectRotateRight(1, 0, 0);
-                gfxMap.objectRotateRight(2, 0, 1);
-                gfxMap.objectRotateRight(3, 0, 2);
-                gfxMap.objectRotateRight(4, 0, 3);
-                gfxMap.objectColorizeLed(1, MAP_CELL.ROBOT, 0, 0, GFX_COLORS.LED_GREEN_COLOR, LED_COLOR_MODE.ON);
-                gfxMap.objectColorizeLed(2, MAP_CELL.ROBOT, 0, 1, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.FLASH);
-                gfxMap.objectColorizeLed(3, MAP_CELL.ROBOT, 0, 2, GFX_COLORS.LED_GREEN_COLOR, LED_COLOR_MODE.FLASH);
-                gfxMap.objectColorizeLed(4, MAP_CELL.ROBOT, 0, 3, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.FLASH);
-                break;
-            case 1:
-                gfxMap.objectMove(1, 0, 0);
-                gfxMap.objectMove(2, 0, 1);
-                gfxMap.objectMove(3, 0, 2);
-                gfxMap.objectMove(4, 0, 3);
-                //gfxMap.objectRotateRight(1, 0, 1);
-                break;
-            case 2:
-                gfxMap.objectUpdate(1, MAP_CELL.ROBOT, 1, 0, 7);
-                gfxMap.objectUpdate(2, MAP_CELL.ROBOT, 1, 1, 3);
-                gfxMap.objectUpdate(3, MAP_CELL.ROBOT, 1, 2, 9);
-                gfxMap.objectBind(1, MAP_CELL.ROBOT, 1, 0, 1, MAP_CELL.GATE);
-                gfxMap.objectBind(3, MAP_CELL.ROBOT, 1, 2, 2, MAP_CELL.STATION);
-                gfxMap.objectLoad(2, MAP_CELL.ROBOT, 1, 1, 2, MAP_CELL.RACK);
-                gfxMap.objectLoad(4, MAP_CELL.ROBOT, 1, 3, 1, MAP_CELL.RACK);
-                gfxMap.objectHighlight(4, MAP_CELL.ROBOT, 1, 3);
-                gfxMap.objectHighlight(1, MAP_CELL.RACK, 1, 3);
-                gfxMap.objectColorizeLed(1, MAP_CELL.ROBOT, 1, 0, GFX_COLORS.LED_GREEN_COLOR, LED_COLOR_MODE.FLASH);
-                gfxMap.objectColorizeLed(2, MAP_CELL.ROBOT, 1, 1, GFX_COLORS.LED_RED_COLOR, LED_COLOR_MODE.FLASH);
-                gfxMap.objectColorizeLed(3, MAP_CELL.ROBOT, 1, 2, GFX_COLORS.LED_GREEN_COLOR, LED_COLOR_MODE.ON);
-                gfxMap.objectColorizeLed(4, MAP_CELL.ROBOT, 1, 3, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.ON);
-                gfxMap.objectColorize(1, MAP_CELL.GATE, 1, 0, "#12DDFF");
-                gfxMap.objectColorize(2, MAP_CELL.RACK, 1, 1, "#962FFD");
-                gfxMap.objectColorize(2, MAP_CELL.STATION, 1, 2, "#12DD55");
-                gfxMap.objectColorize(1, MAP_CELL.RACK, 1, 3, "#FD6255");
-                break;
-            case 3:
-                // gfxMap.objectRotateLeft(4, 1, 3);
-                gfxMap.objectRetreat(4, 1, 3);
-                break;
-            case 4:
-                /*gfxMap.objectOffload(4, MAP_CELL.ROBOT, 0, 3, 1, MAP_CELL.RACK);
-                gfxMap.objectDecolorize(1, MAP_CELL.RACK, 0, 3);
-                gfxMap.objectColorizeLed(4, MAP_CELL.ROBOT, 0, 3, GFX_COLORS.LED_BLUE_COLOR, LED_COLOR_MODE.OFF);*/
-                gfxMap.objectStop(4, MAP_CELL.ROBOT, 1, 3);
-                break;
-            case 5:
-                gfxMap.objectRetreat(4, 1, 3);
-                // gfxMap.objectRotateRight(4, 1, 3);
-                break;
-            case 6:
-                gfxMap.objectMove(4, 1, 3);
-                break;
-            case 7:
-                gfxMap.objectBind(4, MAP_CELL.ROBOT, 2, 3, 1, MAP_CELL.STATION);
-                gfxMap.objectColorize(1, MAP_CELL.STATION, 2, 3, "#FA15DD");
-                break;
-            case 8:
-                gfxMap.objectLoad(1, MAP_CELL.ROBOT, 2, 0, 1, MAP_CELL.RACK);
-                break;
-            case 9:
-                gfxMap.objectMove(1, 2, 0);
-                break;
-        }
-        x++;
+
     });
 
     // Key press event handler
